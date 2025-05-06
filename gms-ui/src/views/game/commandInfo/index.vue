@@ -254,4 +254,10 @@
   };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  :deep(.arco-form-item-content-flex) {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+</style>

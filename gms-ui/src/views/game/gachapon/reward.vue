@@ -13,26 +13,35 @@
       :loading="loading"
       :data="tableData"
       column-resizable
-      :pagination="false"
-      :bordered="{ cell: true }"
-      :scroll="{
-        y: 600,
+      :pagination="{
+        pageSizeOptions: [10, 20, 50],
+        showPageSize: true,
+        showJumper: true,
       }"
+      :bordered="{ cell: true }"
     >
       <template #columns>
         <a-table-column
-          title="ID"
-          data-index="id"
-          :width="120"
+          title="#"
+          data-index="index"
           align="center"
+          width="50"
+          cell-class="td-nowrap"
+        />
+        <a-table-column
+          title=" ID "
+          data-index="id"
+          width="80"
+          align="center"
+          cell-class="td-nowrap"
         />
         <a-table-column
           title="奖池ID"
           data-index="poolId"
-          :width="120"
+          :width="80"
           align="center"
         />
-        <a-table-column title="物品ID" :width="140" align="center">
+        <a-table-column title="物品ID" :width="100" align="center">
           <template #cell="{ record }">
             <span v-if="editId !== record.id"> {{ record.itemId }}</span>
             <a-input-number v-else v-model="record.itemId" />
@@ -44,18 +53,18 @@
             <a-input-number v-else v-model="record.itemId" />
           </template>
         </a-table-column>
-        <a-table-column title="物品图标" :width="140" align="center">
+        <a-table-column title="物品图标" :width="90" align="center">
           <template #cell="{ record }">
             <img :src="getIconUrl('item', record.itemId)" alt="" />
           </template>
         </a-table-column>
-        <a-table-column title="数量" :width="120" align="center">
+        <a-table-column title="数量" :width="80" align="center">
           <template #cell="{ record }">
             <span v-if="editId !== record.id"> {{ record.quantity }}</span>
             <a-input-number v-else v-model="record.quantity" />
           </template>
         </a-table-column>
-        <a-table-column title="备注">
+        <a-table-column title="备注" :width="220" align="center">
           <template #cell="{ record }">
             <span v-if="editId !== record.id"> {{ record.comment }}</span>
             <a-input v-else v-model="record.comment" />
@@ -134,7 +143,10 @@
     editId.value = -1;
     try {
       const { data } = await getRewards(curPool.value);
-      tableData.value = data;
+      tableData.value = data.map((obj: any, i: number) => ({
+        ...obj,
+        index: i + 1,
+      }));
     } finally {
       setLoading(false);
     }

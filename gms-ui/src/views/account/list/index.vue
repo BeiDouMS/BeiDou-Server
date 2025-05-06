@@ -2,77 +2,52 @@
   <div class="container" :loading="true">
     <Breadcrumb />
     <a-card class="general-card" :title="$t('menu.account.list')">
-      <a-row style="margin-bottom: 16px">
-        <a-col :flex="1">
-          <a-form
-            :model="filterForm"
-            :label-col-props="{ span: 8 }"
-            :wrapper-col-props="{ span: 16 }"
-          >
-            <a-row :gutter="16">
-              <a-col :span="6">
-                <a-form-item :label="$t('account.list.filter.id')">
-                  <a-input-number v-model="filterForm.id" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="6">
-                <a-form-item :label="$t('account.list.filter.name')">
-                  <a-input v-model="filterForm.name" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="6">
-                <a-form-item :label="$t('account.list.filter.lastLoginStart')">
-                  <a-date-picker
-                    v-model="filterForm.lastLoginStart"
-                    style="width: 100%"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="6">
-                <a-form-item :label="$t('account.list.filter.lastLoginEnd')">
-                  <a-date-picker
-                    v-model="filterForm.lastLoginEnd"
-                    style="width: 100%"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="6">
-                <a-form-item :label="$t('account.list.filter.createdAtStart')">
-                  <a-date-picker
-                    v-model="filterForm.createdAtStart"
-                    style="width: 100%"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="6">
-                <a-form-item :label="$t('account.list.filter.createdAtEnd')">
-                  <a-date-picker
-                    v-model="filterForm.createdAtEnd"
-                    style="width: 100%"
-                  />
-                </a-form-item>
-              </a-col>
-            </a-row>
-          </a-form>
-        </a-col>
-        <a-divider style="height: 84px" direction="vertical" />
-        <a-col :flex="'86px'" style="text-align: right">
-          <a-space direction="vertical" :size="18">
-            <a-button type="primary" @click="loadData()">
-              <template #icon>
-                <icon-search />
-              </template>
-              {{ $t('button.load') }}
-            </a-button>
-            <a-button @click="resetClick">
-              <template #icon>
-                <icon-refresh />
-              </template>
-              {{ $t('button.reset') }}
-            </a-button>
-          </a-space>
-        </a-col>
-      </a-row>
+      <a-form :model="filterForm" class="a-from-keyword">
+        <a-form-item :label="$t('account.list.filter.id')">
+          <a-input-number v-model="filterForm.id" />
+        </a-form-item>
+        <a-form-item :label="$t('account.list.filter.name')">
+          <a-input v-model="filterForm.name" />
+        </a-form-item>
+        <a-form-item :label="$t('account.list.filter.lastLoginStart')">
+          <a-date-picker
+            v-model="filterForm.lastLoginStart"
+            style="width: 100%"
+          />
+        </a-form-item>
+        <a-form-item :label="$t('account.list.filter.lastLoginEnd')">
+          <a-date-picker
+            v-model="filterForm.lastLoginEnd"
+            style="width: 100%"
+          />
+        </a-form-item>
+        <a-form-item :label="$t('account.list.filter.createdAtStart')">
+          <a-date-picker
+            v-model="filterForm.createdAtStart"
+            style="width: 100%"
+          />
+        </a-form-item>
+        <a-form-item :label="$t('account.list.filter.createdAtEnd')">
+          <a-date-picker
+            v-model="filterForm.createdAtEnd"
+            style="width: 100%"
+          />
+        </a-form-item>
+      </a-form>
+      <a-space class="a-space-btn">
+        <a-button type="primary" @click="loadData()">
+          <template #icon>
+            <icon-search />
+          </template>
+          {{ $t('button.load') }}
+        </a-button>
+        <a-button @click="resetClick">
+          <template #icon>
+            <icon-refresh />
+          </template>
+          {{ $t('button.reset') }}
+        </a-button>
+      </a-space>
       <a-divider />
       <a-row style="margin-bottom: 16px">
         <a-col>
@@ -93,7 +68,6 @@
         column-resizable
         :pagination="false"
         :bordered="{ cell: true }"
-        :scroll="{ y: 'calc(100vh - 502px)' }"
       >
         <template #columns>
           <a-table-column
@@ -138,7 +112,7 @@
           </a-table-column>
           <a-table-column
             :title="$t('account.list.column.gender')"
-            :width="80"
+            :width="60"
             align="center"
           >
             <template #cell="{ record }">
@@ -156,12 +130,20 @@
           <a-table-column
             :title="$t('account.list.column.lastLoginAt')"
             data-index="lastlogin"
+            :width="120"
+            align="center"
           />
           <a-table-column
             :title="$t('account.list.column.registerAt')"
             data-index="createdat"
+            :width="120"
+            align="center"
           />
-          <a-table-column :title="$t('account.list.column.operate')">
+          <a-table-column
+            :title="$t('account.list.column.operate')"
+            :width="150"
+            align="center"
+          >
             <template #cell="{ record }">
               <a-button
                 type="text"
@@ -222,7 +204,7 @@
         show-total
         show-jumper
         show-page-size
-        :page-size-options="[7, 14, 35, 70]"
+        :page-size-options="[10, 20, 50, 100]"
         @change="pageChange"
         @page-size-change="pageSizeChange"
       />
@@ -404,3 +386,47 @@
     name: 'AccountList',
   };
 </script>
+
+<style lang="less">
+  .a-from-keyword {
+    @media (min-width: @screen-sm) {
+      display: flex;
+      flex-direction: initial;
+      flex-wrap: wrap;
+      width: 100%;
+      div {
+        margin-right: 5px;
+      }
+      .arco-row {
+        width: max-content;
+        display: flex;
+      }
+      .arco-col {
+        flex: max-content;
+        width: 100%;
+      }
+      .arco-form-item-label-col,
+      .arco-form-item-label {
+        min-width: auto;
+        text-align: right;
+      }
+    }
+    @media (max-width: @screen-sm) {
+      display: block;
+      flex-direction: column;
+      .arco-row {
+        flex-flow: row wrap;
+        width: 100%;
+      }
+
+      .arco-col {
+        flex: 0 0 100%;
+        width: 100%;
+      }
+
+      .arco-form-item-label-col {
+        display: contents;
+      }
+    }
+  }
+</style>

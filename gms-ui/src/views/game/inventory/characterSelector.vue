@@ -64,24 +64,18 @@
     :width="750"
     :footer="false"
   >
-    <a-form :model="condition" layout="inline">
-      <a-form-item
-        :label="t('characterSelector.column.id')"
-        style="width: 200px"
-      >
+    <a-form :model="condition">
+      <a-form-item :label="t('characterSelector.column.id')">
         <a-input-number v-model="condition.characterId" allow-clear />
       </a-form-item>
-      <a-form-item
-        :label="t('characterSelector.column.name')"
-        style="width: 200px"
-      >
+      <a-form-item :label="t('characterSelector.column.name')">
         <a-input v-model="condition.characterName" allow-clear />
       </a-form-item>
-      <a-form-item style="width: 200px">
-        <a-button type="primary" @click="searchClick"
-          >{{ t('characterSelector.searchButton') }}
+      <a-space class="a-form-item-btn">
+        <a-button type="primary" @click="searchClick">
+          {{ t('characterSelector.searchButton') }}
         </a-button>
-      </a-form-item>
+      </a-space>
     </a-form>
     <a-table :data="tableData" row-key="characterId" :pagination="false">
       <template #columns>
@@ -131,4 +125,43 @@
   </a-modal>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+  .arco-form .arco-row {
+    display: flex;
+    width: 100%;
+    :deep(.arco-form-item-content-wrapper) {
+      max-width: 100%;
+    }
+  }
+  .a-form-item-btn {
+    margin-left: 0px;
+    margin-bottom: 15px;
+    width: 100%;
+    display: flex;
+    /* 水平居中 */
+    justify-content: right;
+    /* 垂直居中 */
+    align-items: center;
+  }
+  /* 最小宽度超过一定阈值 */
+  @media (min-width: @screen-xs) {
+    .arco-modal-body .arco-form {
+      display: flex;
+      flex-direction: initial;
+      width: 100%;
+      :deep(.arco-form-item-content-wrapper) {
+        max-width: 200px;
+      }
+    }
+    .a-form-item-btn {
+      margin-left: 10px;
+      margin-bottom: 0px;
+      width: auto;
+      display: flex;
+      /* 水平居中 */
+      justify-content: center;
+      /* 垂直居中 */
+      align-items: start;
+    }
+  }
+</style>

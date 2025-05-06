@@ -92,3 +92,57 @@ body {
     }
   }
 }
+
+.td-nowrap {
+  white-space: nowrap;//内容不换行
+}
+
+/* 仅针对 IOS 的Safari和其它浏览器的CSS，安卓没有此烦恼。 */
+@supports (-webkit-touch-callout: none) {
+  /* 针对表格的列被压缩宽度的优化 */
+  table, .arco-table, .arco-table-container, .arco-scrollbar, .arco-scrollbar-container, .arco-table-element {
+    white-space: nowrap;  //禁止换行，防止Safari对表格列进行压缩
+  }
+  /* 保证表格里选择框最小宽度 */
+  .arco-table-checkbox {
+    min-width: 30px;
+  }
+  /* 保证表格里输入框最小宽度 */
+  td .arco-table-cell .arco-input {
+    min-width: 80px;
+  }
+  /* 允许表格里按钮列自动换行 */
+  td:has(.arco-table-cell .arco-table-td-content .arco-btn) {
+    white-space: normal;
+  }
+  /* 禁止输入框缩放 */
+  input, textarea {
+    resize: none; /* 禁用右下角缩放手柄 */
+    font-size: 16px !important;  /* iOS 对小于 16px 的输入框触发自动缩放 */
+    touch-action: manipulation;  /* 禁用双指手势 */
+  }
+}
+/* 针对所有移动端的a-modal模态框进行优化 */
+@media (max-width: @screen-sm) {
+  .arco-modal {
+    width: 90% !important;
+    max-width: 600px !important;
+    top: 0 !important;
+  }
+
+  .arco-pagination-size-medium {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .arco-pagination-list {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    white-space: normal;
+  }
+
+  .arco-form .arco-form-item-label-col > .arco-form-item-label {
+    white-space: nowrap;//内容不换行
+  }
+}

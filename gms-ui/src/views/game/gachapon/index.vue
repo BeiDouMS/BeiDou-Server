@@ -33,21 +33,19 @@
           <a-table-column
             title="ID"
             data-index="id"
-            :width="80"
+            :width="60"
             align="center"
-            fixed="left"
           />
           <a-table-column
             :title="$t('gachapon.list.column.name')"
             data-index="name"
             align="center"
-            :width="200"
-            fixed="left"
+            :width="150"
           />
           <a-table-column
             :title="$t('gachapon.list.column.gachaponId')"
             align="center"
-            :width="120"
+            :width="80"
           >
             <template #cell="{ record }">
               <a-button
@@ -86,7 +84,7 @@
           <a-table-column
             :title="$t('gachapon.list.column.isPublic')"
             align="center"
-            :width="120"
+            :width="80"
           >
             <template #cell="{ record }">
               <a-tag v-if="record.isPublic" color="red">
@@ -100,7 +98,7 @@
           <a-table-column
             :title="$t('gachapon.list.column.isPublic')"
             align="center"
-            :width="120"
+            :width="80"
           >
             <template #cell="{ record }">
               <span
@@ -119,7 +117,7 @@
           <a-table-column
             :title="$t('gachapon.list.column.startTime')"
             align="center"
-            :width="230"
+            :width="140"
           >
             <template #cell="{ record }">
               {{
@@ -132,7 +130,7 @@
           <a-table-column
             :title="$t('gachapon.list.column.endTime')"
             align="center"
-            :width="230"
+            :width="140"
           >
             <template #cell="{ record }">
               {{
@@ -146,7 +144,7 @@
             :title="$t('gachapon.list.column.notification')"
             data-index="notification"
             align="center"
-            :width="120"
+            :width="60"
           >
             <template #cell="{ record }">
               <a-tag v-if="record.notification" color="green">
@@ -160,12 +158,12 @@
           <a-table-column
             :title="$t('gachapon.list.column.comment')"
             data-index="comment"
-            :width="400"
+            :width="200"
             align="center"
           />
           <a-table-column
             :title="$t('operation')"
-            :width="220"
+            :width="80"
             align="center"
             fixed="right"
           >
@@ -183,7 +181,8 @@
                 </a-button>
                 <a-popconfirm
                   type="error"
-                  content="你确定要删除这个奖池吗？"
+                  :content="$t('gachapon.button.deleteTips')"
+                  position="left"
                   @ok="deleteClick(record)"
                 >
                   <a-button size="mini" status="danger" type="text">

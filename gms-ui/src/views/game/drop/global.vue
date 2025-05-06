@@ -4,22 +4,22 @@
     <a-card class="general-card" :title="$t('menu.game.drop.global')">
       <a-row>
         <a-col>
+          <a-input-number
+            v-model="condition.continent"
+            placeholder="大区ID"
+            allow-clear
+          />
+          <a-input-number
+            v-model="condition.itemId"
+            placeholder="物品ID"
+            allow-clear
+          />
+          <a-input-number
+            v-model="condition.questId"
+            placeholder="任务ID"
+            allow-clear
+          />
           <a-space>
-            <a-input-number
-              v-model="condition.continent"
-              placeholder="地区ID"
-              allow-clear
-            />
-            <a-input-number
-              v-model="condition.itemId"
-              placeholder="物品ID"
-              allow-clear
-            />
-            <a-input-number
-              v-model="condition.questId"
-              placeholder="任务ID"
-              allow-clear
-            />
             <a-button type="primary" @click="loadData">查询</a-button>
             <a-button @click="resetClick">重置</a-button>
             <a-button type="primary" status="success" @click="insertClick">
@@ -43,7 +43,7 @@
             :width="80"
             align="center"
           />
-          <a-table-column title="地区ID" :width="160" align="center">
+          <a-table-column title="大区ID" :width="100" align="center">
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -52,7 +52,7 @@
               <span v-else>{{ record.continent }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="物品ID" :width="140" align="center">
+          <a-table-column title="物品ID" :width="150" align="center">
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -61,7 +61,7 @@
               <span v-else>{{ record.itemId }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="物品" :width="180" align="center">
+          <a-table-column title="物品" :width="230" align="center">
             <template #cell="{ record }">
               <a-button
                 v-if="record.itemId === 0"
@@ -109,7 +109,7 @@
               <span v-else>{{ record.maximumQuantity }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="爆率%" :width="140" align="right">
+          <a-table-column title="爆率%" :width="120" align="right">
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -118,7 +118,7 @@
               <span v-else>{{ (record.chance / 10000).toFixed(4) }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="任务ID" :width="120" align="center">
+          <a-table-column title="任务ID" :width="100" align="center">
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -129,13 +129,13 @@
           </a-table-column>
           <a-table-column
             title="任务"
-            :width="120"
+            :width="200"
             data-index="questName"
             align="center"
           />
           <a-table-column
             title="备注"
-            :width="180"
+            :width="250"
             data-index="comments"
             align="center"
           >
@@ -144,7 +144,7 @@
               <span v-else>{{ record.comments }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="操作" :width="200" fixed="right">
+          <a-table-column title="操作" :width="80">
             <template #cell="{ record }">
               <a-button
                 v-if="editId !== record.id"
@@ -171,15 +171,16 @@
               >
                 保存
               </a-button>
-              <a-button
+              <a-popconfirm
                 v-if="editId === record.id"
-                type="text"
-                size="mini"
-                status="danger"
-                @click="deleteClick(record)"
+                content="确定要删除吗？"
+                position="left"
+                @ok="() => deleteClick(record)"
               >
-                删除
-              </a-button>
+                <a-button type="text" size="mini" status="danger">
+                  删除
+                </a-button>
+              </a-popconfirm>
             </template>
           </a-table-column>
         </template>
@@ -329,4 +330,19 @@
   };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  :deep(.arco-card-body, .arco-row) {
+    width: 100%;
+  }
+  .arco-card-body > .arco-row > .arco-col > .arco-input-wrapper {
+    margin-right: 0;
+    margin-bottom: 5px;
+    width: 100%;
+  }
+  @media (min-width: 500px) {
+    .arco-card-body > .arco-row > .arco-col > .arco-input-wrapper {
+      margin-right: 8px;
+      width: 140px;
+    }
+  }
+</style>

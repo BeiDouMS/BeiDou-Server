@@ -15,9 +15,11 @@ export default {
   'gachapon.isPublic.true.desc': 'PublicPool',
   'gachapon.isPublic.false.desc': 'OrdinaryPool',
   'gachapon.startTime.default': 'Started',
+  'gachapon.endTime.default': 'Started',
   'gachapon.notification.true.desc': 'Yes',
   'gachapon.notification.false.desc': 'No',
 
   'gachapon.button.detail': 'Rewards',
   'gachapon.button.operate': 'Operate',
+  'gachapon.button.deleteTips': 'Are you sure to delete?',
 };

@@ -25,7 +25,7 @@
         :title="$t('workplace.gameServer.serverControl')"
         :bordered="false"
       >
-        <a-space>
+        <a-space class="button-group" :size="16">
           <a-button
             v-for="(btn, index) in serverControlButtons"
             :key="index"
@@ -48,7 +48,7 @@
         :title="$t('workplace.dataReload')"
         :bordered="false"
       >
-        <a-space>
+        <a-space class="button-group" :size="16">
           <a-button
             v-for="(btn, index) in dataReloadButtons"
             :key="index + 'reload'"
@@ -64,10 +64,11 @@
         </a-space>
       </a-card>
 
-      <!-- Shutdown Confirmation Modal -->
+      <!-- 完全停服并退出BAT的确认框 -->
       <a-modal
         v-model:visible="shutdownConfirmVisible"
-        :width="400"
+        class="arco-modal-auto"
+        draggable
         @ok="handleShutdownConfirm"
         @cancel="handleShutdownCancel"
       >
@@ -77,10 +78,24 @@
         <p>{{ $t('workplace.button.shutdown.confirm') }}</p>
       </a-modal>
 
-      <!-- Stop Configuration Modal -->
+      <!-- 重启服务端的确认框 -->
+      <a-modal
+        v-model:visible="restartConfirmVisible"
+        modal-class="arco-modal-auto"
+        draggable
+        @ok="handleRestartConfirm"
+        @cancel="handleRestartCancel"
+      >
+        <template #title>
+          {{ $t('workplace.button.restart') }}
+        </template>
+        <p>{{ $t('workplace.button.restart.confirm') }}</p>
+      </a-modal>
+
+      <!-- 停服倒计时配置框 -->
       <a-modal
         v-model:visible="stopConfigVisible"
-        :width="600"
+        modal-class="arco-modal-auto"
         draggable
         @ok="handleStopConfigOk"
         @cancel="handleStopConfigCancel"
@@ -118,13 +133,13 @@
 
             <a-row :gutter="[16, 16]">
               <a-col :span="24">
-                <a-input v-model="stopConfigData.shutdownMsg" />
+                <a-textarea v-model="stopConfigData.shutdownMsg" />
               </a-col>
             </a-row>
           </a-card>
 
           <a-card :title="$t('workplace.stop.messageTypes')" :bordered="false">
-            <a-space>
+            <a-space class="button-group" :size="16">
               <a-checkbox v-model="stopConfigData.showServerMsg">
                 {{ $t('workplace.stop.showServerMsg') }}
               </a-checkbox>
@@ -166,6 +181,7 @@
   const serverStatus = ref<'resting' | 'running'>('resting');
   const stopConfigVisible = ref(false);
   const shutdownConfirmVisible = ref(false); // 新增用于确认关机的模态框可见性控制
+  const restartConfirmVisible = ref(false); // 新增用于确认重启的模态框可见性控制
   const router = useRouter();
   const stopConfigData = reactive({
     minutes: 0,
@@ -239,6 +255,10 @@
       shutdownConfirmVisible.value = true;
       return;
     }
+    if (action === 'restart') {
+      restartConfirmVisible.value = true;
+      return;
+    }
 
     setLoading(true);
     try {
@@ -296,6 +316,23 @@
     shutdownConfirmVisible.value = false;
   };
 
+  const handleRestartConfirm = async () => {
+    try {
+      setLoading(true);
+      await restartServer();
+      Message.success(t('common.operationSuccess'));
+    } catch (err) {
+      console.error(err);
+      Message.error(t('common.requestFailed'));
+    } finally {
+      restartConfirmVisible.value = false;
+      setLoading(false);
+    }
+  };
+
+  const handleRestartCancel = () => {
+    restartConfirmVisible.value = false;
+  };
   const handleStopConfigOk = async () => {
     try {
       setLoading(true);
@@ -347,4 +384,10 @@
   };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+</style>

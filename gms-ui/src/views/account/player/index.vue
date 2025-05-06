@@ -2,50 +2,39 @@
   <div class="container" :loading="true">
     <Breadcrumb />
     <a-card class="general-card" :title="$t('menu.account.player')">
-      <a-row style="margin-bottom: 16px">
-        <a-col :flex="1">
-          <a-form
-            :model="filterForm"
-            :label-col-props="{ span: 8 }"
-            :wrapper-col-props="{ span: 16 }"
-          >
-            <a-row :gutter="16">
-              <a-col :span="6">
-                <a-form-item :label="$t('account.player.id')">
-                  <a-input-number v-model="filterForm.id" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="6">
-                <a-form-item :label="$t('account.player.name')">
-                  <a-input v-model="filterForm.name" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="6">
-                <a-form-item :label="$t('account.player.mapId')">
-                  <a-input-number v-model="filterForm.map" />
-                </a-form-item>
-              </a-col>
-            </a-row>
-          </a-form>
-        </a-col>
-        <a-divider style="height: 84px" direction="vertical" />
-        <a-col :flex="'86px'" style="text-align: right">
-          <a-space direction="vertical" :size="18">
-            <a-button type="primary" @click="loadData()">
-              <template #icon>
-                <icon-search />
-              </template>
-              {{ $t('button.load') }}
-            </a-button>
-            <a-button @click="resetClick">
-              <template #icon>
-                <icon-refresh />
-              </template>
-              {{ $t('button.reset') }}
-            </a-button>
-          </a-space>
-        </a-col>
-      </a-row>
+      <a-form :model="filterForm" class="a-from-keyword">
+        <a-row :gutter="16">
+          <a-col :span="6">
+            <a-form-item :label="$t('account.player.id')">
+              <a-input-number v-model="filterForm.id" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item :label="$t('account.player.name')">
+              <a-input v-model="filterForm.name" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="6">
+            <a-form-item :label="$t('account.player.mapId')">
+              <a-input-number v-model="filterForm.map" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+      </a-form>
+      <a-space>
+        <a-button type="primary" @click="loadData()">
+          <template #icon>
+            <icon-search />
+          </template>
+          {{ $t('button.load') }}
+        </a-button>
+        <a-button @click="resetClick">
+          <template #icon>
+            <icon-refresh />
+          </template>
+          {{ $t('button.reset') }}
+        </a-button>
+      </a-space>
       <a-divider />
       <a-row style="margin-bottom: 16px">
         <a-col>
@@ -72,13 +61,12 @@
         column-resizable
         :pagination="false"
         :bordered="{ cell: true }"
-        :scroll="{ y: 'calc(100vh - 502px)' }"
       >
         <template #columns>
           <a-table-column
             :title="$t('account.player.id')"
             data-index="id"
-            :width="100"
+            :width="80"
             align="center"
           />
           <a-table-column
@@ -90,31 +78,31 @@
           <a-table-column
             :title="$t('account.player.map')"
             data-index="map"
-            :width="200"
+            :width="120"
             align="center"
           />
           <a-table-column
             :title="$t('account.player.job')"
             data-index="job"
-            :width="200"
+            :width="80"
             align="center"
           />
           <a-table-column
             :title="$t('account.player.jobName')"
             data-index="jobName"
-            :width="200"
+            :width="160"
             align="center"
           />
           <a-table-column
             :title="$t('account.player.level')"
             data-index="level"
-            :width="200"
+            :width="70"
             align="center"
           />
           <a-table-column
             :title="$t('account.player.gm.level')"
             data-index="gm"
-            :width="200"
+            :width="70"
             align="center"
           />
           <a-table-column :title="$t('account.list.column.operate')">
@@ -134,7 +122,7 @@
         show-total
         show-jumper
         show-page-size
-        :page-size-options="[7, 14, 35, 70]"
+        :page-size-options="[10, 20, 50, 100]"
         @change="pageChange"
         @page-size-change="pageSizeChange"
       />
@@ -518,3 +506,47 @@
     name: 'Player',
   };
 </script>
+
+<style lang="less">
+  .a-from-keyword {
+    @media (min-width: @screen-sm) {
+      display: flex;
+      flex-direction: initial;
+      flex-wrap: wrap;
+      width: 100%;
+      div {
+        margin-right: 5px;
+      }
+      .arco-row {
+        width: max-content;
+        display: flex;
+      }
+      .arco-col {
+        flex: max-content;
+        width: 100%;
+      }
+      .arco-form-item-label-col,
+      .arco-form-item-label {
+        min-width: auto;
+        text-align: right;
+      }
+    }
+    @media (max-width: @screen-sm) {
+      display: block;
+      flex-direction: column;
+      .arco-row {
+        flex-flow: row wrap;
+        width: 100%;
+      }
+
+      .arco-col {
+        flex: 0 0 100%;
+        width: 100%;
+      }
+
+      .arco-form-item-label-col {
+        display: contents;
+      }
+    }
+  }
+</style>

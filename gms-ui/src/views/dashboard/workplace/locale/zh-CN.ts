@@ -4,12 +4,14 @@ export default {
   'workplace.gameServer.serverControl': '服务端控制',
   'workplace.running': '运行中...',
   'workplace.stopped': '休息中',
-  'workplace.button.start': '启动服务端',
-  'workplace.button.stop': '停止服务端',
-  'workplace.button.restart': '重启服务',
-  'workplace.button.shutdown': '停服',
+  'workplace.button.start': '启动',
+  'workplace.button.stop': '停止',
+  'workplace.button.restart': '重启',
+  'workplace.button.shutdown': '结束',
   'workplace.button.shutdown.confirm':
     '此操作将立即停止所有相关服务，需要在服务器中手动启动服务，确定停服吗？',
+  'workplace.button.restart.confirm':
+    '此操作将立即强制所有玩家下线并重新启动服务端，确定重启吗？',
   'workplace.stop.minutes': '倒计时分钟',
   'workplace.stop.shutdownMsg': '停服消息',
   'workplace.stop.showServerMsg': '顶部黄字公告',

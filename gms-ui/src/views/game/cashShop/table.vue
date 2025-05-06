@@ -1,37 +1,39 @@
 <template>
   <a-card class="general-card">
-    <a-row>
-      <a-col>
-        <a-space>
-          <a-button
-            :disabled="condition.onSale === 1"
-            type="primary"
-            status="success"
-            @click="changeOnSaleFilter(1)"
-          >
-            上架中
-          </a-button>
-          <a-button
-            :disabled="condition.onSale === 0"
-            type="primary"
-            status="danger"
-            @click="changeOnSaleFilter(0)"
-          >
-            待售
-          </a-button>
-          <a-button
-            :disabled="condition.onSale === undefined"
-            type="primary"
-            @click="changeOnSaleFilter(undefined)"
-          >
-            全部
-          </a-button>
-          <a-input-number v-model="condition.itemId" placeholder="物品ID" />
-          <a-button @click="loadData">搜索</a-button>
-          <a-button type="primary" @click="showBatchForm">批量编辑</a-button>
-        </a-space>
-      </a-col>
-    </a-row>
+    <a-space>
+      <a-space>
+        <a-button
+          :disabled="condition.onSale === 1"
+          type="primary"
+          status="success"
+          @click="changeOnSaleFilter(1)"
+        >
+          上架中
+        </a-button>
+        <a-button
+          :disabled="condition.onSale === 0"
+          type="primary"
+          status="danger"
+          @click="changeOnSaleFilter(0)"
+        >
+          待售
+        </a-button>
+        <a-button
+          :disabled="condition.onSale === undefined"
+          type="primary"
+          @click="changeOnSaleFilter(undefined)"
+        >
+          全部
+        </a-button>
+      </a-space>
+      <a-space class="a-input">
+        <a-input-number v-model="condition.itemId" placeholder="物品ID" />
+      </a-space>
+      <a-space>
+        <a-button @click="loadData">搜索</a-button>
+        <a-button type="primary" @click="showBatchForm">批量编辑</a-button>
+      </a-space>
+    </a-space>
     <a-table
       v-model:selectedKeys="selectedKeys"
       row-key="sn"
@@ -48,15 +50,9 @@
           title="SN"
           data-index="sn"
           align="center"
-          :width="140"
-          fixed="left"
-        />
-        <a-table-column
-          title="物品图标"
-          align="center"
           :width="100"
-          fixed="left"
-        >
+        />
+        <a-table-column title="物品图标" align="center" :width="70">
           <template #cell="{ record }">
             <img
               :src="getIconUrl('item', record.itemId)"
@@ -68,21 +64,19 @@
           title="物品ID"
           data-index="itemId"
           align="center"
-          :width="140"
-          fixed="left"
+          :width="100"
         />
         <a-table-column
           title="物品名称"
           data-index="itemName"
           align="center"
           :width="140"
-          fixed="left"
         />
         <a-table-column
           title="数量"
           data-index="count"
           align="center"
-          :width="80"
+          :width="70"
         />
         <a-table-column
           title="优先级"
@@ -94,14 +88,14 @@
           title="售价"
           data-index="price"
           align="center"
-          :width="120"
+          :width="80"
         />
         <a-table-column title="Bonus" data-index="bonus" align="center" />
         <a-table-column
           title="有效期"
           data-index="period"
           align="center"
-          :width="120"
+          :width="80"
         >
           <template #cell="{ record }"> {{ record.period }} 天 </template>
         </a-table-column>
@@ -112,7 +106,12 @@
           data-index="forPremiumUser"
           align="center"
         />
-        <a-table-column title="性别" align="center">
+        <a-table-column
+          title="性别"
+          data-index="gender"
+          align="center"
+          :width="80"
+        >
           <template #cell="{ record }">
             <a-tag v-if="record.gender === 0" color="blue"> 男 </a-tag>
             <a-tag v-else-if="record.gender === 1" color="red"> 女 </a-tag>
@@ -123,7 +122,7 @@
           title="上架"
           data-index="onSale"
           align="center"
-          :width="120"
+          :width="90"
         >
           <template #cell="{ record }">
             <a-tag v-if="record.onSale" color="green">上架中</a-tag>
@@ -147,7 +146,7 @@
           data-index="packageSn"
           align="center"
         />
-        <a-table-column title="操作" fixed="right">
+        <a-table-column title="操作">
           <template #cell="{ record }">
             <a-button type="text" size="mini" @click="editClick(record)">
               编辑
@@ -316,3 +315,24 @@
     name: 'CashShopTable',
   };
 </script>
+
+<style scoped lang="less">
+  :deep(.arco-card-body .a-input .arco-space-item) {
+    width: 100%;
+  }
+  :deep(.arco-card-body .arco-space) {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  :deep(.arco-card-body > .arco-space > .arco-space-item) {
+    margin-bottom: 5px;
+    margin-right: 0px;
+  }
+  :deep(.arco-card-body > .arco-space > .arco-space-item:nth-child(2)) {
+    width: 100%;
+    max-width: 400px;
+  }
+  :deep(.arco-card-body .arco-space .arco-space-item .arco-input-wrapper) {
+    width: 100%;
+  }
+</style>

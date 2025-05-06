@@ -3,7 +3,7 @@
     v-model:visible="visible"
     :ok-loading="loading"
     :on-before-ok="handleBeforeOk"
-    :width="800"
+    :width="600"
     @cancel="handleCancel"
   >
     <template #title> {{ title }} </template>
@@ -114,9 +114,9 @@
               title="名称"
               data-index="name"
               align="center"
-              :width="200"
+              :width="180"
             />
-            <a-table-column title="公共池" align="center" :width="120">
+            <a-table-column title="公共池" align="center" :width="100">
               <template #cell="{ record }">
                 <a-tag v-if="record.isPublic" color="red">公共池</a-tag>
                 <a-tag v-else color="blue">非公共池</a-tag>
@@ -126,9 +126,9 @@
               title="权重"
               data-index="weight"
               align="center"
-              :width="120"
+              :width="100"
             />
-            <a-table-column title="真实概率" align="center">
+            <a-table-column title="真实概率" align="center" :width="90">
               <template #cell="{ record }">
                 {{ record.realProb / 10000 }} %
               </template>
