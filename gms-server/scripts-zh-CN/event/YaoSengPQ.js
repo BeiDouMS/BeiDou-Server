@@ -384,8 +384,8 @@ function monsterKilled(mob, eim) {
             var mapObj = mob.getMap();
             var dropper = eim.getPlayers().get(0);
             mapObj.spawnItemDropList(BossDropList,mob,dropper,mob.getPosition());
+            clearPQ(eim);
         }
-        clearPQ(eim);
     } catch (err) {
         console.error(err);
     } // PQ not started yet
