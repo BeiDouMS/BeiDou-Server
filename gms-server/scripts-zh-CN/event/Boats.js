@@ -20,14 +20,13 @@
 const PacketCreator = Java.type('org.gms.util.PacketCreator');  //获取封包数据实例
 
 function init() {
-    console.log("当前函数名:", getCurrentFunctionName());
-    // 初始化函数，用于设置时间和获取地图实例。
+    // 初始化函数，用于修正交通工具旅行时间和获取地图实例。
     closeTime = em.getTransportationTime(closeTime);
     beginTime = em.getTransportationTime(beginTime);
     rideTime = em.getTransportationTime(rideTime);
     invasionStartTime = em.getTransportationTime(invasionStartTime);
     invasionDelayTime = em.getTransportationTime(invasionDelayTime);
-    console.log(closeTime/1000,beginTime/1000,rideTime/1000,invasionStartTime/1000,invasionDelayTime/1000);
+
     // 获取地图实例
     Orbis_btf = em.getChannelServer().getMapFactory().getMap(200000112);    //候船室<开往魔法密林>
     Ellinia_btf = em.getChannelServer().getMapFactory().getMap(101000301);  //候船室<开往天空之城>
@@ -48,7 +47,6 @@ function init() {
 }
 
 function scheduleNew() {
-    console.log("scheduleNew");
     // 设置属性，并安排关闭入口和起飞的任务
     em.setProperty("docked", "true");
     em.setProperty("entry", "true");
@@ -57,8 +55,6 @@ function scheduleNew() {
     // 安排关闭入口和起飞的时间点
     em.schedule("stopentry", closeTime);
     em.schedule("takeoff", beginTime);
-    // setClock(Ellinia_docked,closeTime);
-    // setClock(Orbis_docked,closeTime);
 }
 
 function stopentry() {
@@ -69,8 +65,6 @@ function stopentry() {
 }
 
 function takeoff() {
-    console.log("takeoff");
-
     // 玩家被传送至船上，广播船只离开的消息
     Orbis_btf.warpEveryone(Boat_to_Ellinia.getId());
     Ellinia_btf.warpEveryone(Boat_to_Orbis.getId());
@@ -87,15 +81,9 @@ function takeoff() {
 
     // 安排到达目的地的时间点
     em.schedule("arrived", rideTime);
-    // em.startInstance(1,);
-    // eim.startEventTimer(rideTime);  // 启动事件计时器
-    // setClock(Boat_to_Ellinia,rideTime);
-    // setClock(Boat_to_Orbis,rideTime);
 }
 
 function arrived() {
-    console.log("arrived");
-    // end();
     // 玩家到达目的地后被传送至对应站点或码头
     Boat_to_Orbis.warpEveryone(Orbis_Station.getId(), 0);
     Orbis_Boat_Cabin.warpEveryone(Orbis_Station.getId(), 0);
@@ -116,7 +104,6 @@ function arrived() {
 }
 
 function approach() {
-    console.log("approach");
     // 处理蝙蝠魔船只接近的情况
     if (Math.floor(Math.random() * 10) < 10) {
         em.setProperty("haveBalrog", "true");
@@ -134,7 +121,6 @@ function approach() {
 }
 
 function invasion() {
-    console.log("invasion");
     // 生成偶遇蝙蝠魔
     const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
 
@@ -152,165 +138,35 @@ function invasion() {
 /**
  * 取消预定的事件/任务调度
  */
-function cancelSchedule() {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
-
-function setClock(MapObj,Time) {
-    console.log("setClock",MapObj,Time);
-    const players = MapObj.getCharacters(); //获取当前地图的所有角色
-    console.log(players);
-    if (players.length > 0){
-        players.map(player => { //遍历角色
-            player.sendPacket(PacketCreator.getClock(Time));    //发送创建倒计时封包
-        });
-    }
-}
+function cancelSchedule() {}
 
 // ---------- 辅助函数 ----------
+function dispose() {}
 
-/**
- * 释放/清理资源
- */
-function dispose() {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function setup(eim, leaderid) {}
 
-/**
- * 初始化副本实例（Event Instance Management）
- * @param {Object} eim - 副本实例对象
- * @param {number} leaderid - 队伍领袖ID
- */
-function setup(level, lobbyid) {
-    console.log("当前函数名:", getCurrentFunctionName());
-    var eim = em.newInstance("Boats_takeoff");
-    var Maplist = [Boat_to_Ellinia,Boat_to_Orbis,Orbis_Boat_Cabin,Ellinia_Boat_Cabin];
-    Maplist.map(obj => eim.getInstanceMap(obj.getId()).resetPQ(1));
-    eim.startEventTimer(rideTime);  // 启动事件计时器
-    return eim;
-}
-
-/**
- * 获取指定怪物的数值（经验/掉落等）
- * @param {Object} eim - 副本实例对象
- * @param {number} mobid - 怪物ID
- * @return {number} 怪物数值
- */
 function monsterValue(eim, mobid) {return 0;}
 
-/**
- * 解散队伍
- * @param {Object} eim - 副本实例对象
- * @param {Object} player - 玩家对象
- */
-function disbandParty(eim, player) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function disbandParty(eim, player) {}
 
-/**
- * 玩家断开连接处理
- * @param {Object} eim - 副本实例对象
- * @param {Object} player - 玩家对象
- */
-function playerDisconnected(eim, player) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function playerDisconnected(eim, player) {}
 
-/**
- * 玩家进入副本处理
- * @param {Object} eim - 副本实例对象
- * @param {Object} player - 玩家对象
- */
-function playerEntry(eim, player) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function playerEntry(eim, player) {}
 
-/**
- * 怪物被击杀处理
- * @param {Object} mob - 怪物对象
- * @param {Object} eim - 副本实例对象
- */
-function monsterKilled(mob, eim) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function monsterKilled(mob, eim) {}
 
-/**
- * 预定超时触发
- * @param {Object} eim - 副本实例对象
- */
-function scheduledTimeout(eim) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function scheduledTimeout(eim) {}
 
-/**
- * 副本设置完成后执行
- * @param {Object} eim - 副本实例对象
- */
-function afterSetup(eim) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function afterSetup(eim) {}
 
-/**
- * 队伍领袖变更处理
- * @param {Object} eim - 副本实例对象
- * @param {Object} leader - 新领袖对象
- */
-function changedLeader(eim, leader) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function changedLeader(eim, leader) {}
 
-/**
- * 玩家退出副本处理
- * @param {Object} eim - 副本实例对象
- * @param {Object} player - 玩家对象
- */
-function playerExit(eim, player) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function playerExit(eim, player) {}
 
-/**
- * 玩家离开队伍处理
- * @param {Object} eim - 副本实例对象
- * @param {Object} player - 玩家对象
- */
-function leftParty(eim, player) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function leftParty(eim, player) {}
 
-/**
- * 清理副本任务（Party Quest）
- * @param {Object} eim - 副本实例对象
- */
-function clearPQ(eim) {
-    console.log("当前函数名:", getCurrentFunctionName());
-    eim.stopEventTimer();
-    eim.setEventCleared();
-}
+function clearPQ(eim) {}
 
-/**
- * 所有怪物被击杀处理
- * @param {Object} eim - 副本实例对象
- */
-function allMonstersDead(eim) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
+function allMonstersDead(eim) {}
 
-/**
- * 玩家注销/取消注册处理
- * @param {Object} eim - 副本实例对象
- * @param {Object} player - 玩家对象
- */
-function playerUnregistered(eim, player) {
-    console.log("当前函数名:", getCurrentFunctionName());
-}
-function end(eim) {
-    eim.dispose();
-}
-function getCurrentFunctionName() {
-    const stack = new Error().stack;
-    const stackLines = stack.split('\n');
-    // 不同浏览器/环境格式不同，可能需要调整
-    const callerLine = stackLines[2]; // 通常是调用者的行
-    const functionName = callerLine.match(/at (.*?) /)?.[1] || 'anonymous';
-    return functionName;
-}
+function playerUnregistered(eim, player) {}
