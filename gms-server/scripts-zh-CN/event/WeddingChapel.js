@@ -53,19 +53,19 @@ function getMaxLobbies() {
 }
 
 function setEventExclusives(eim) {
-    var itemSet = [4031217, 4000313];    // golden key, golden maple leaf
+    var itemSet = [4031217, 4000313];    //金钥匙，金枫叶
     eim.setExclusiveItems(itemSet);
 }
 
 function setEventRewards(eim) {
     var itemSet, itemQty, evLevel, expStages;
 
-    evLevel = 1;    //Rewards at clear PQ
+    evLevel = 1;    //清晰PQ奖励
     itemSet = [];
     itemQty = [];
     eim.setEventRewards(evLevel, itemSet, itemQty);
 
-    expStages = [];    //bonus exp given on CLEAR stage signal
+    expStages = [];    //CLEAR舞台信号提供额外体验
     eim.setEventClearStageExp(expStages);
 }
 
@@ -81,7 +81,7 @@ function spawnCakeBoss(eim) {
 function setup(level, lobbyid) {
     var eim = em.newMarriage("Wedding" + lobbyid);
     eim.setProperty("weddingId", "0");
-    eim.setProperty("weddingStage", "0");   // 0: gathering time, 1: wedding time, 2: ready to fulfill the wedding, 3: just married
+    eim.setProperty("weddingStage", "0");   //0:聚会时间，1:婚礼时间，2:准备完成婚礼，3:刚刚结婚
     eim.setProperty("guestBlessings", "0");
     eim.setProperty("isPremium", "1");
     eim.setProperty("canJoin", "1");
@@ -122,7 +122,7 @@ function playerEntry(eim, player) {
 
 function stopBlessings(eim) {
     var mapobj = eim.getMapInstance(entryMap + 10);
-    mapobj.dropMessage(6, "Wedding Assistant: Alright people, our couple are preparing their vows to each other right now.");
+    mapobj.dropMessage(6, "[婚礼助手] 各位宾客请注意，新人正在互相准备誓言。");
 
     eim.setIntProperty("weddingStage", 2);
 }
@@ -178,7 +178,7 @@ function scheduledTimeout(eim) {
             chr.changeMap(entryMap + 10, "we00");
         }
 
-        mapobj.dropMessage(6, "Wedding Assistant: The couple are heading to the altar, hurry hurry talk to me to arrange your seat.");
+        mapobj.dropMessage(6, "[婚礼助手] 新人即将走向圣坛，请尽快与我交谈安排座位。");
 
         eim.setIntProperty("weddingStage", 1);
         eim.schedule("showStartMsg", startMsgTime * 60 * 1000);
@@ -223,7 +223,7 @@ function changedLeader(eim, leader) {}
 
 function playerDead(eim, player) {}
 
-function playerRevive(eim, player) { // player presses ok on the death pop up.
+function playerRevive(eim, player) { // 玩家在死亡弹出窗口上按ok。
     if (isMarrying(eim, player)) {
         eim.unregisterPlayer(player);
         end(eim);

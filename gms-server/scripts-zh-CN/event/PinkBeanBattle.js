@@ -96,7 +96,7 @@ function setEventRewards(eim) {
 }
 
 function afterSetup(eim) {
-    eim.dropMessage(5, "The first wave will start within 15 seconds, prepare yourselves.");
+    eim.dropMessage(5, "第一波攻击将在15秒后开始，请做好准备。");
     eim.schedule("startWave", 15 * 1000);
 }
 
@@ -128,7 +128,7 @@ function setup(channel) {
 }
 
 function playerEntry(eim, player) {
-    eim.dropMessage(5, "[Expedition] " + player.getName() + " has entered the map.");
+    eim.dropMessage(5, "[远征队] " + player.getName() + " 已进入地图。");
     var map = eim.getMapInstance(entryMap);
     player.changeMap(map, map.getPortal(0));
 }
@@ -141,10 +141,10 @@ function changedMap(eim, player, mapid) {
     if (mapid < minMapId || mapid > maxMapId) {
         if (eim.isExpeditionTeamLackingNow(true, minPlayers, player)) {
             eim.unregisterPlayer(player);
-            eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
+            eim.dropMessage(5, "[远征队] 队长已退出远征队或队伍人数不足最低要求，无法继续。");
             end(eim);
         } else {
-            eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the expedition.");
+            eim.dropMessage(5, "[远征队] " + player.getName() + " 已离开远征队。");
             eim.unregisterPlayer(player);
         }
     }
@@ -159,12 +159,12 @@ function playerDead(eim, player) {
     eim.setIntProperty("fallenPlayers", count);
 
     if (count == 5) {
-        eim.dropMessage(5, "[Expedition] Too many players have fallen, Pink Bean is now deemed undefeatable; the expedition is over.");
+        eim.dropMessage(5, "[远征队] 太多队员阵亡，品克缤现在被视为不可战胜，远征结束。");
         end(eim);
     } else if (count == 4) {
-        eim.dropMessage(5, "[Expedition] Pink Bean is growing stronger than ever, last stand mode everyone!");
+        eim.dropMessage(5, "[远征队] 品克缤变得比以往更强大，大家进入背水一战模式！");
     } else if (count == 3) {
-        eim.dropMessage(5, "[Expedition] Casualty count is starting to get out of control. Battle with care.");
+        eim.dropMessage(5, "[远征队] 伤亡人数开始失控，请小心战斗。");
     }
 }
 
@@ -181,10 +181,10 @@ function monsterRevive(eim, mob) {
 function playerDisconnected(eim, player) {
     if (eim.isExpeditionTeamLackingNow(true, minPlayers, player)) {
         eim.unregisterPlayer(player);
-        eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
+        eim.dropMessage(5, "[远征队] 队长已退出远征队或队伍人数不足最低要求，无法继续。");
         end(eim);
     } else {
-        eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the expedition.");
+        eim.dropMessage(5, "[远征队] " + player.getName() + " 已离开远征队。");
         eim.unregisterPlayer(player);
     }
 }
@@ -272,12 +272,12 @@ function monsterKilled(mob, eim) {
                 mapObj.spawnItemDrop(dropper, dropper, itemObj, reactObj.getPosition(), true, true);
 
 
-                eim.dropMessage(6, "With the last of its guardians fallen, Pink Bean loses its invulnerability. The real fight starts now!");
+                eim.dropMessage(6, "随着最后的守护者倒下，品克缤失去了无敌状态。真正的战斗现在开始！");
             } else {
                 stage++;
                 eim.setIntProperty("stage", stage);
 
-                eim.dropMessage(5, "The next wave will start within 15 seconds, prepare yourselves.");
+                eim.dropMessage(5, "下一波攻击将在15秒后开始，请做好准备。");
                 eim.schedule("startWave", 15 * 1000);
             }
         }

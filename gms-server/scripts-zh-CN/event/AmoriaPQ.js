@@ -70,9 +70,9 @@ function setEventRequirements() {
         reqStr += minLevel;
     }
 
-    reqStr += "\r\n    At least 1 of both genders";
+    reqStr += "\r\n    至少一男一女";
     if (onlyMarriedPlayers) {
-        reqStr += "\r\n    All married";
+        reqStr += "\r\n    都结婚了";
     }
 
     reqStr += "\r\n   时间限制: ";

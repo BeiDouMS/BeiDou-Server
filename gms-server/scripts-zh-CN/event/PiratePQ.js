@@ -368,7 +368,7 @@ function monsterKilled(mob, eim) {
     var map = mob.getMap();
 
     if (isLordPirate(mob)) {  // lord pirate defeated, spawn the little fella!
-        map.broadcastStringMessage(5, "As Lord Pirate dies, Wu Yang is released!");
+        map.broadcastStringMessage(5, "随着海盗领主死亡，无恙被释放了！");
         eim.spawnNpc(2094001, new java.awt.Point(777, 140), mob.getMap());
     }
 

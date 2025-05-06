@@ -370,7 +370,7 @@ function snowmanSnackFake(eim) {
         eim.setIntProperty("snowmanStep", step - 1);
     }
 
-    eim.dropMessage(5, "The snowman absorbed a Fake Snow Vigor!");
+    eim.dropMessage(5, "雪人吸收了假的雪之精气!");
 }
 
 

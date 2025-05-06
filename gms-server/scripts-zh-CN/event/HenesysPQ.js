@@ -160,7 +160,7 @@ function scheduledTimeout(eim) {
 }
 
 function bunnyDefeated(eim) {
-    eim.dropMessage(5, "Due to your failure to protect the Moon Bunny, you have been transported to the Exile Map.");
+    eim.dropMessage(5, "因未能守护月兔，你已被传送至流放之地！");
     end(eim);
 }
 
