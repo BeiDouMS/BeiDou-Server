@@ -44,6 +44,8 @@ if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果
     minLevel = 1 , maxLevel = 999;
 }
 
+const PacketCreator = Java.type('org.gms.util.PacketCreator');
+
 function init() {
     setEventRequirements();
 }
@@ -160,7 +162,7 @@ function scheduledTimeout(eim) {
 }
 
 function bunnyDefeated(eim) {
-    eim.dropMessage(5, "因未能守护月兔，你已被传送至流放之地！");
+    eim.dropMessage(5, "因未能保护好玉兔月妙导致其重伤，你已被传送至流放之地！");
     end(eim);
 }
 
@@ -264,9 +266,7 @@ function friendlyItemDrop(eim, mob) {
     if (mob.getId() == 9300061) {
         var cakes = eim.getIntProperty("bunnyCake") + 1;
         eim.setIntProperty("bunnyCake", cakes);
-
-        const PacketCreator = Java.type('org.gms.util.PacketCreator');
-        mob.getMap().broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny made rice cake number " + cakes + "."));
+        mob.getMap().broadcastMessage(PacketCreator.serverNotice(6, `玉兔月妙成功捣出了第 ${cakes} 份年糕！`));
     }
 }
 
@@ -274,9 +274,10 @@ function friendlyDamaged(eim, mob) {
     if (mob.getId() == 9300061) {
         var bunnyDamage = eim.getIntProperty("bunnyDamaged") + 1;
         if (bunnyDamage > 5) {
-            const PacketCreator = Java.type('org.gms.util.PacketCreator');
-            broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny is feeling sick. Please protect it so it can make delicious rice cakes."));
+            mob.getMap().broadcastMessage(PacketCreator.serverNotice(5, "玉兔月妙受到了伤害，请保护好它，这样它才能继续做出美味的年糕！"));
             eim.setIntProperty("bunnyDamaged", 0);
+        } else {
+            eim.setIntProperty("bunnyDamaged", bunnyDamage);
         }
     }
 }
