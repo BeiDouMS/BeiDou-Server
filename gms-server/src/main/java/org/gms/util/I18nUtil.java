@@ -6,6 +6,7 @@ import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
 import org.springframework.context.MessageSource;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -22,7 +23,11 @@ public class I18nUtil {
     public static String getMessage(String code, Object... args) {
         // 如果当前存在客户端请求，则以客户端的语言为准。如果当前非客户端请求，是服务端主动发给客户端的，则以服务端语言为准
         Locale clientLang = CharsetConstants.getLanguageLocale(ThreadLocalUtil.getClientLang());
-        return messageSource.getMessage(code, args, clientLang);
+        // 确保所有参数转为字符串，包括数字类型（避免千分符问题）
+        String[] stringArgs = Arrays.stream(args)
+                .map(String::valueOf)
+                .toArray(String[]::new);
+        return messageSource.getMessage(code, stringArgs, clientLang);
     }
 
     public static String getMessage(Locale locale, String code, Object... args) {
