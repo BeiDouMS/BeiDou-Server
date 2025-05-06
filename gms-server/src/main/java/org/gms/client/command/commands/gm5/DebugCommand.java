@@ -26,8 +26,10 @@ package org.gms.client.command.commands.gm5;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.client.inventory.Item;
 import org.gms.constants.id.NpcId;
 import org.gms.net.server.Server;
+import org.gms.server.ItemInformationProvider;
 import org.gms.server.TimerManager;
 import org.gms.server.life.Monster;
 import org.gms.server.life.SpawnPoint;
@@ -43,6 +45,7 @@ import java.util.List;
 
 public class DebugCommand extends Command {
     private final static String[] debugTypes = {"monster", "packet", "portal", "spawnpoint", "pos", "map", "mobsp", "event", "areas", "reactors", "servercoupons", "playercoupons", "timer", "marriage", "buff", ""};
+    private final static ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
     {
         setDescription(I18nUtil.getMessage("DebugCommand.message1"));
@@ -73,7 +76,7 @@ public class DebugCommand extends Command {
                 for (MapObject monstermo : monsters) {
                     Monster monster = (Monster) monstermo;
                     Character controller = monster.getController();
-                    player.message(I18nUtil.getMessage("DebugCommand.message4", monster.getId(), controller != null ? I18nUtil.getMessage("DebugCommand.message5", controller.getName(), monster.isControllerHasAggro(), monster.isControllerKnowsAboutAggro()) : "<none>"));
+                    player.message(I18nUtil.getMessage("DebugCommand.message4",monster.getName(), monster.getId(), controller != null ? I18nUtil.getMessage("DebugCommand.message5", controller.getName(), monster.isControllerHasAggro(), monster.isControllerKnowsAboutAggro()) : "<none>"));
                 }
                 break;
 
@@ -100,7 +103,7 @@ public class DebugCommand extends Command {
                 break;
 
             case "pos":
-                player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message10", player.getPosition().getX(), player.getPosition().getY()));
+                player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message10", (int) player.getPosition().getX(), (int) player.getPosition().getY()));
                 break;
 
             case "map":
@@ -141,20 +144,20 @@ public class DebugCommand extends Command {
             case "servercoupons":
             case "coupons":
                 String s = I18nUtil.getMessage("DebugCommand.message18");
-                for (Integer i : Server.getInstance().getActiveCoupons()) {
-                    s += (i + " ");
-                }
-
                 player.dropMessage(6, s);
+                for (Integer i : Server.getInstance().getActiveCoupons()) {
+                    s = ii.getName(i) + "  (" + i + ");";
+                    player.dropMessage(6, s);
+                }
                 break;
 
             case "playercoupons":
-                String st = I18nUtil.getMessage("DebugCommand.message19");
+                s = I18nUtil.getMessage("DebugCommand.message19");
+                player.dropMessage(6, s);
                 for (Integer i : player.getActiveCoupons()) {
-                    st += (i + " ");
+                    s = ii.getName(i) + "  (" + i + ");";
+                    player.dropMessage(6, s);
                 }
-
-                player.dropMessage(6, st);
                 break;
 
             case "timer":
@@ -169,6 +172,8 @@ public class DebugCommand extends Command {
             case "buff":
                 c.getPlayer().debugListAllBuffs();
                 break;
+            default:
+                player.dropMessage(5, I18nUtil.getMessage("DebugCommand.message21"));
         }
     }
 }
