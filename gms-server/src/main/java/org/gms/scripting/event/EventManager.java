@@ -1194,14 +1194,22 @@ public class EventManager {
     }
 
     /**
-     * 获取运输时间
+     * 修正运输时间
      * @param travelTime 旅行时间
-     * @return 运输时间
+     * @return 修正后的运输时间
      */
     public int getTransportationTime(int travelTime) {
         return this.getWorldServer().getTransportationTime(travelTime);
     }
 
+    /**
+     * 修正Boss刷新时间
+     * @param BossTime刷新时间
+     * @return 修正后的Boss刷新时间
+     */
+    public int getBossTime(int BossTime) {
+        return (int) (BossTime * GameConfig.getServerFloat("boss_respawn_mob_time_rate"));
+    }
     /**
      * 填充EIM队列
      */
