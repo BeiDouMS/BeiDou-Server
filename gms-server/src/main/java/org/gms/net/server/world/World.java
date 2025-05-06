@@ -432,7 +432,7 @@ public class World {
     }
 
     public int getTransportationTime(int travelTime) {
-        return NumberTool.floatToInt(travelTime / travelRate);
+        return NumberTool.floatToInt(travelTime * travelRate);//交通工具、旅行时间倍率，由于支持小数，所以需要改为相乘
     }
 
     public void loadAccountCharactersView(Integer accountId, List<Character> chars) {
