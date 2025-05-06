@@ -29,7 +29,7 @@ function enter(pi) {
         pi.warp(670010200, 4);
         return true;
     } else {
-        pi.getPlayer().dropMessage(5, "You cannot proceed past here.");
+        pi.getPlayer().dropMessage(5, "女生无法从这里继续前进。");
         return false;
     }
 }

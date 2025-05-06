@@ -15,7 +15,7 @@ function enter(pi) {
             pi.warp(920030000, 2);
             return true;
         } else {
-            pi.message("Someone is already challenging the area.");
+            pi.message("该区域已被其他玩家挑战中。");
             return false;
         }
     } else {

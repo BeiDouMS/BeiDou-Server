@@ -11,7 +11,7 @@ function enter(pi) {
             pi.warp(120000103);
             return true;
         } else {
-            pi.getPlayer().dropMessage(5, "Your milk jug is not full...");
+            pi.getPlayer().dropMessage(5, "牛奶罐还未装满...");
             return false;
         }
     } else {

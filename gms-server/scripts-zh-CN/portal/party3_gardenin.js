@@ -4,7 +4,7 @@ function enter(pi) {
         pi.getEventInstance().warpEventTeam(920010100);
         return true;
     } else {
-        pi.playerMessage(5, "Please get the leader in this portal, make sure you have the Root of Life.");
+        pi.playerMessage(5, "请让队长进入此传送门，并确保持有生命草。");
         return false;
     }
 }

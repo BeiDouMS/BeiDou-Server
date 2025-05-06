@@ -25,6 +25,6 @@ function enter(pi) {
         pi.warp(910500200, "out00");
         return true;
     }
-    pi.getPlayer().dropMessage(5, "You must defeat all the monsters first.");
+    pi.getPlayer().dropMessage(5, "你需要先清除所有怪物。");
     return true;
 }

@@ -2,26 +2,26 @@
 
 function enter(pi) {
     if (!pi.haveItem(4000381)) {
-        pi.playerMessage(5, "You do not have White Essence.");
+        pi.playerMessage(5, "你尚未持有白色精华。");
         return false;
     } else {
         var em = pi.getEventManager("LatanicaBattle");
 
         if (pi.getParty() == null) {
-            pi.playerMessage(5, "You are currently not in a party, create one to attempt the boss.");
+            pi.playerMessage(5, "你当前未加入队伍，请创建队伍后再挑战BOSS。");
             return false;
         } else if (!pi.isLeader()) {
-            pi.playerMessage(5, "Your party leader must enter the portal to start the battle.");
+            pi.playerMessage(5, "你的队伍队长必须进入传送门才能开始战斗。");
             return false;
         } else {
             var eli = em.getEligibleParty(pi.getParty());
             if (eli.size() > 0) {
                 if (!em.startInstance(pi.getParty(), pi.getPlayer().getMap(), 1)) {
-                    pi.playerMessage(5, "The battle against the boss has already begun, so you may not enter this place yet.");
+                    pi.playerMessage(5, "你的队伍队长必须进入传送门才能开始战斗。");
                     return false;
                 }
             } else {  //this should never appear
-                pi.playerMessage(5, "You cannot start this battle yet, because either your party is not in the range size, some of your party members are not eligible to attempt it or they are not in this map. If you're having trouble finding party members, try Party Search.");
+                pi.playerMessage(5, "你暂时无法开始这场战斗，可能是因为队伍人数不符合要求、部分队员未满足挑战条件或不在当前地图。若组队遇到困难，请尝试使用队伍搜索功能。");
                 return false;
             }
 

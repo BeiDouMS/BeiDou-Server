@@ -8,7 +8,7 @@ function enter(pi) {
         pi.warp(910510100, 0);
         return true;
     } else {
-        pi.message("An ominous power prevents you from passing here.");
+        pi.message("一股不祥的力量阻止你通过此处。");
         return false;
     }
 }

@@ -11,7 +11,7 @@ function enter(pi) {
         pi.warp(926100301 + reg, 0); //next
         return true;
     } else {
-        pi.playerMessage(5, "This room is already being explored.");
+        pi.playerMessage(5, "该房间正在被探索中。");
         return false;
     }
 }

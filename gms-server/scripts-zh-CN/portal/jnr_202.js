@@ -4,7 +4,7 @@ function enter(pi) {
         pi.warp(926110200, 2);
         return true;
     } else {
-        pi.playerMessage(5, "The door is not opened yet.");
+        pi.playerMessage(5, "传送门尚未开启。");
         return false;
     }
 }

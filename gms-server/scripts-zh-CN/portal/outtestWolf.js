@@ -6,11 +6,11 @@ function enter(pi) {
             pi.warp(140010210, 0);
             return true;
         } else {
-            pi.playerMessage(5, "Free a slot on your inventory before receiving the couse clear's token.");
+            pi.playerMessage(5, "请在背包中的其它栏目预留至少1个空位以领取通关奖励");
             return false;
         }
     } else {
-        pi.playerMessage(5, "Defeat all wolves before exiting the stage.");
+        pi.playerMessage(5, "离场前需消灭所有狼群");
         return false;
     }
 }

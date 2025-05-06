@@ -1,6 +1,6 @@
 function enter(pi) {
     if (pi.getMap().countMonster(2220100) > 0) {
-        pi.getPlayer().message("Cannot leave until all Blue Mushrooms have been defeated.");
+        pi.getPlayer().message("必须清除所有蓝蘑菇后才能离开副本");
         return false;
     } else {
         var eim = pi.getEventInstance();

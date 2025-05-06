@@ -29,7 +29,7 @@ function enter(pi) {
         pi.warp(990000430, 0);
         return true;
     } else {
-        pi.getPlayer().dropMessage(5, "The door is still blocked.");
+        pi.getPlayer().dropMessage(5, "入口仍处于封锁状态");
         return false;
     }
 }

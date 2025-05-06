@@ -25,7 +25,7 @@ function enter(pi) {
         pi.warp(926130000, "out00");
         return true;
     } else {
-        pi.playerMessage(5, "This pipe seems too dark to venture inside.");
+        pi.playerMessage(5, "这个管道太黑了，不敢贸然进入...");
         return false;
     }
 }

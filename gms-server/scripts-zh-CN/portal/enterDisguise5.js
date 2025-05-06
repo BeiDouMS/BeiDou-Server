@@ -28,12 +28,12 @@ function enter(pi) {
     if (pi.isQuestStarted(20301) || pi.isQuestStarted(20302) || pi.isQuestStarted(20303) || pi.isQuestStarted(20304) || pi.isQuestStarted(20305)) {
         var map = pi.getClient().getChannelServer().getMapFactory().getMap(108010600 + (10 * jobtype));
         if (map.countPlayers() > 0) {
-            pi.message("Someone else is already searching the area.");
+            pi.message("已有其他玩家正在该区域搜索。");
             return false;
         }
 
         if (pi.haveItem(4032101 + jobtype, 1)) {
-            pi.message("You have already challenged the Master of Disguise, report your success to the Chief Knight.");
+            pi.message("你已挑战过变身术士，请向骑士长报告你的成功。");
             return false;
         }
 

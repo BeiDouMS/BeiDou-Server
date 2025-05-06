@@ -7,11 +7,11 @@ function enter(pi) {
             eim.warpEventTeam(930000800);
             return true;
         } else {
-            pi.playerMessage(5, "Wait for the leader to pass through the portal.");
+            pi.playerMessage(5, "请等待队长先通过传送门");
             return false;
         }
     } else {
-        pi.playerMessage(5, "Please eliminate the Poison Golem.");
+        pi.playerMessage(5, "请先消灭剧毒魔像");
         return false;
     }
 }

@@ -3,7 +3,7 @@ function enter(pi) {
         pi.playPortalSound();
         pi.warp(100030103, "west00");
     } else {
-        pi.playerMessage(5, "You cannot go to the Back Yard without a reason");
+        pi.playerMessage(5, "后院区域需完成任务后方可进入！");
     }
     return true;
 }  

@@ -21,7 +21,7 @@
 */
 function enter(pi) {
     if (!pi.haveItem(4031346)) {
-        pi.getPlayer().dropMessage(6, "You need a magic seed to use this portal.");
+        pi.getPlayer().dropMessage(6, "需要【魔法种子】才能启动时空门。");
         return false;
     }
     if (pi.getPlayer().getMapId() == 240010100) {

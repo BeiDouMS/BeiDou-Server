@@ -24,7 +24,7 @@
 */
 function enter(pi) {
     if (!pi.isQuestCompleted(21013)) {
-        pi.message("You must complete the quest before proceeding to the next map..");
+        pi.message("你必须完成任务后才能进入下一张地图。");
         return false;
     }
     pi.playPortalSound();

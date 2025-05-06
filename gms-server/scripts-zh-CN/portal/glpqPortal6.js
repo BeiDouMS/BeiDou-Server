@@ -2,7 +2,7 @@ function enter(pi) {
     var eim = pi.getEventInstance();
     if (eim != null) {
         if (eim.getIntProperty("glpq6") < 3) {
-            pi.playerMessage(5, "The portal is not opened yet.");
+            pi.playerMessage(5, "传送门尚未开启。");
             return false;
         } else {
             pi.playPortalSound();

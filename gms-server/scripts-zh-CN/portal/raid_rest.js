@@ -28,7 +28,7 @@ function enter(pi) {
     var evLevel = ((pi.getMapId() - 1) % 5) + 1;
 
     if (pi.getPlayer().getEventInstance().isEventLeader(pi.getPlayer()) && pi.getPlayer().getEventInstance().getPlayerCount() > 1) {
-        pi.message("Being the party leader, you cannot leave before your teammates leave first or you pass leadership.");
+        pi.message("作为队长，你必须在队友全部离开或移交队长权限后才能退出副本。");
         return false;
     }
 
@@ -37,7 +37,7 @@ function enter(pi) {
         pi.warp(970030000);
         return true;
     } else {
-        pi.message("Make a room available on all EQUIP, USE, SET-UP and ETC inventory to claim an instance prize.");
+        pi.message("请确保背包的 装备、消耗、设置、其它 位均有至少1个空格子，才能领取副本奖励。");
         return false;
     }
 }

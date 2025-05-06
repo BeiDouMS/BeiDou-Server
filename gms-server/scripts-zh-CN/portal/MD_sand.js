@@ -37,7 +37,7 @@ function enter(pi) {
                     }
                 }
             } else {
-                pi.playerMessage(5, "Only solo or party leaders are supposed to enter the Mini-Dungeon.");
+                pi.playerMessage(5, "只有单人玩家或队伍队长才能进入迷你地下城");
                 return false;
             }
         } else {
@@ -49,7 +49,7 @@ function enter(pi) {
                 }
             }
         }
-        pi.playerMessage(5, "All of the Mini-Dungeons are in use right now, please try again later.");
+        pi.playerMessage(5, "当前所有迷你地下城都在使用中，请稍后再试");
         return false;
     } else {
         pi.playPortalSound();

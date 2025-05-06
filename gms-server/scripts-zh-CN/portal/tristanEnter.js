@@ -4,7 +4,7 @@ function enter(pi) {
         pi.warp(105100101, "in00");
         return true;
     } else {
-        pi.message("A mysterious force won't let you in.");
+        pi.message("一股神秘的力量阻止你进入。");
         return false;
     }
 }

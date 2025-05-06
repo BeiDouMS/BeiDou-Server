@@ -3,7 +3,7 @@ function enter(pi) {
         pi.playPortalSound();
         pi.warp(100030310, 0);
     } else {
-        pi.playerMessage(5, "Cannot enter the Lush Forest without a reason.");
+        pi.playerMessage(5, "未满足条件，无法进入茂密森林！");
     }
     return true;
 }

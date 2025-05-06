@@ -32,7 +32,7 @@ function enter(pi) {
 
             return true;
         } else {
-            pi.getPlayer().message("Make room on your ETC to receive the quest item.");
+            pi.getPlayer().message("请先确保背包的[其它栏]至少有1个空格子可以接收任务物品");
             return false;
         }
     } else {

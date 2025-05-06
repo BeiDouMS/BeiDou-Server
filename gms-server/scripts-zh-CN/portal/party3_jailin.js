@@ -35,7 +35,7 @@ function enterLeverSequence(pi) {
             map.broadcastMessage(PacketCreator.showEffect("quest/party/wrong_kor"));
             map.broadcastMessage(PacketCreator.playSound("Party1/Failed"));
 
-            pi.playerMessage(5, "The right combination of levers is needed to pass. " + countMiss + " lever(s) are misplaced.");
+            pi.playerMessage(5, "需要通过正确的拉杆组合才能继续前进。当前有 " + countMiss + " 个拉杆位置错误。");
             return false;
         }
 
@@ -54,7 +54,7 @@ function enterNoMobs(pi) {
     var mobcount = map.countMonster(9300044);
 
     if (mobcount > 0) {
-        pi.playerMessage(5, "Please use the levers to defeat all the threats before you proceed.");
+        pi.playerMessage(5, "请先使用控制杆清除所有威胁再继续前进");
         return false;
     } else {
         pi.playPortalSound();
