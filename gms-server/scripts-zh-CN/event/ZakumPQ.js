@@ -42,8 +42,10 @@ const maxLobbies = 1;
 
 // 从游戏配置获取是否启用单人远征队设置
 const GameConfig = Java.type('org.gms.config.GameConfig');
-minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;
-
+minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
+if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果解除远征队等级限制，则最低1级，最高999级。
+    minLevel = 1 , maxLevel = 999;
+}
 /**
  * 初始化事件，设置事件要求
  */
