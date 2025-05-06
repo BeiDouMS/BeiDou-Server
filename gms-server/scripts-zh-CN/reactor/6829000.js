@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function act() { //wtf is this?
-    rm.playerMessage(5, "Enjoy Halloween!");
+    rm.playerMessage(5, "万圣狂欢夜！");
     rm.spawnMonster(9400202, 10);
 }

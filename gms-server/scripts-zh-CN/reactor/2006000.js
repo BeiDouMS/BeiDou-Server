@@ -26,6 +26,6 @@
   */
 
 function act() {
-    rm.mapMessage(5, "As the light flickers, someone appears out of the light.");
+    rm.mapMessage(5, "光影闪烁间，有人自光芒中现身！");
     rm.spawnNpc(2013001);
 }

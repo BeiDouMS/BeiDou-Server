@@ -7,7 +7,7 @@ function act() {
         eim.setProperty("stage", newStage);
         react.forceHitReactor(react.getState() + 1);
         if (eim.getProperty("stage") === "6") {
-            rm.mapMessage(6, "Protect the Moon Bunny!!!");
+            rm.mapMessage(6, "守护月妙！！！");
             var map = eim.getMapInstance(rm.getReactor().getMap().getId());
             map.allowSummonState(true);
             map.spawnMonsterOnGroundBelow(9300061, -183, -433);

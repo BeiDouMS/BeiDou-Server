@@ -1,7 +1,7 @@
 var fid = "glpq_s";
 
 function action() {
-    rm.mapMessage(6, "All stirges have disappeared.");
+    rm.mapMessage(6, "所有吸血蝙蝠已消失！");
     rm.getMap().killAllMonsters(true);
     eim.setIntProperty(fid, 777);
 }

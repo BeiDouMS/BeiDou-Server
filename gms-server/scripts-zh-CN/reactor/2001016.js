@@ -28,5 +28,5 @@ function act() {
     rm.getMap().killAllMonsters();
     rm.getMap().allowSummonState(false);
     rm.spawnMonster(9300039, 260, 490);
-    rm.mapMessage(5, "As the air on the tower outskirts starts to become more dense, Papa Pixie appears.");
+    rm.mapMessage(5, "塔楼外围空气骤凝，远古精灵现身！");
 }

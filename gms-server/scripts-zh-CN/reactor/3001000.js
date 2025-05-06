@@ -1,4 +1,4 @@
 function act() {
-    rm.playerMessage(5, "Poison Golem has been spawned.");
+    rm.playerMessage(5, "毒液石头人已苏醒！");
     rm.spawnMonster(9300180, 1);
 }

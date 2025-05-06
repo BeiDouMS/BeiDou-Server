@@ -26,6 +26,6 @@
 */
 
 function act() {
-    rm.playerMessage(5, "Oh noes! Monsters in the chest!");
+    rm.playerMessage(5, "【危险警报】宝箱中潜伏着怪物！");
     rm.spawnMonster(9300004, 3);
 }

@@ -28,5 +28,5 @@
 
 function act() {
     rm.spawnMonster(7130400);
-    rm.mapMessage(5, "Here comes Yellow King Goblin!");
+    rm.mapMessage(5, "黄色鬼怪破土而出！");
 }

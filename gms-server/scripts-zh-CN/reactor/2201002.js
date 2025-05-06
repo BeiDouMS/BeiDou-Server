@@ -25,6 +25,6 @@
  */
 
 function act() {
-    rm.mapMessage(5, "Rombard has been summoned somewhere in the map.");
+    rm.mapMessage(5, "战甲吹泡泡鱼正在地图某处苏醒...");
     rm.spawnMonster(9300010, 1, -211);
 }
