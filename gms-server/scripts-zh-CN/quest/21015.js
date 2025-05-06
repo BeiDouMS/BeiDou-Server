@@ -17,11 +17,11 @@ function start(mode, type, selection) {
 	qm.sendYesNo("体力就是战力！英雄的基础就是体力！ ... 您没听过这些话吗？当然要先做#b基础体力锻炼#k ... 啊！ 您丧失记忆所以什么都忘了。不知道也没关系。那么现在就进入基础体力锻炼吧！");
     } else if (status == 3) {
         if (mode == 0) {
-            qm.sendNext("What are you so hesitant about? You're a hero! You gotta strike while the iron is hot! Come on, let's do this!");
+            qm.sendNext("你还犹豫什么？你可是英雄啊！机不可失，时不再来！来吧，我们上！");
             qm.dispose();
         } else {
             qm.forceStartQuest();
-            qm.sendNext("The population of Rien may be mostly Penguins, but even this island has monsters. You'll find #o0100131#s if you go to #b#m140020000##k, located on the right side of the town. Please defeat #r10 of those #o0100131#s#k. I'm sure you'll have no trouble defeating the #o0100131#s that even the slowest penguins here can defeat.", 1);
+            qm.sendNext("虽然里恩岛的居民大多是企鹅，但这座岛上也有怪物。如果你前往位于城镇右侧的#b#m140020000##k，你会发现#o0100131#s。请击败#r10只#o0100131#s#k。我相信这对你来说轻而易举，毕竟就连这里最菜的企鹅都能打败它们。", 1);
         }
     } else if (status == 4) {
         qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
