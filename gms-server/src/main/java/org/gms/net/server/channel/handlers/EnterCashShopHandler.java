@@ -58,6 +58,13 @@ public class EnterCashShopHandler extends AbstractPacketHandler {
             if (mc.getCashShop().isOpened()) {
                 return;
             }
+            /* 防止极端情况下点券为负数导致无法进入商城 */
+            for (int i = 0; i < 3; i++) {
+                int quantity = mc.getCashShop().getCash(i);
+                if (quantity < 0) {
+                    mc.getCashShop().gainCash(i,-quantity);
+                }
+            }
 
             mc.closePlayerInteractions();
             mc.closePartySearchInteractions();
