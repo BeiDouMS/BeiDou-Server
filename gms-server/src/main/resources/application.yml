@@ -40,6 +40,9 @@ spring:
     multipart:
       max-file-size: 1MB
       max-request-size: 10MB
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
 
 gms:
   service:
