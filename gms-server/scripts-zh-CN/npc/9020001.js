@@ -150,7 +150,7 @@ function action(mode, type, selection) {
                     var data = eim.gridCheck(cm.getPlayer());
 
                     if (data == 0) {
-                        cm.sendNext("谢谢你带来了优惠券。请把通行证交给你的队伍领袖继续。");
+                        cm.sendNext("谢谢你带来了优惠券。请把通行证交给你的队伍队长继续。");
                     } else if (data == -1) {
                         data = Math.floor(Math.random() * stage1Questions.length) + 1;   //data will be counted from 1
                         eim.gridInsert(cm.getPlayer(), data);
@@ -161,13 +161,13 @@ function action(mode, type, selection) {
                         var answer = stage1Answers[data - 1];
 
                         if (cm.itemQuantity(4001007) == answer) {
-                            cm.sendNext("这是正确的答案！为此，你刚刚获得了一个#b通行证#k。请将它交给队伍的领袖。");
+                            cm.sendNext("这是正确的答案！为此，你刚刚获得了一个#b通行证#k。请将它交给队伍的队长。");
                             cm.gainItem(4001007, -answer);
                             cm.gainItem(4001008, 1);
                             eim.gridInsert(cm.getPlayer(), 0);
                         } else {
                             var question = stage1Questions[eim.gridCheck(cm.getPlayer()) - 1];
-                            cm.sendNext("对不起，但那不是正确的答案！\r\n" + 问题);
+                            cm.sendNext("对不起，但那不是正确的答案！\r\n" + question);
                         }
                     }
                 }
@@ -177,14 +177,12 @@ function action(mode, type, selection) {
                 var stgProperty = "stg2Property";
                 var stgCombos = stage2Combos;
                 var stgAreas = stage2Rects;
-
-                var nthtext = "2nd", nthobj = "ropes", nthverb = "hang", nthpos = "hang on the ropes too low";
                 var nextStgId = 103000802;
 
                 if (!eim.isEventLeader(cm.getPlayer())) {
                     cm.sendOk("跟随你的队长给出的指示来完成这个阶段。");
                 } else if (eim.getProperty(stgProperty) == null) {
-                    cm.sendNext("嗨。欢迎来到第" + nthtext + "阶段。在我旁边，你会看到一些" + nthobj + "。在这些" + nthobj + "中，有#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3名队伍成员找到正确的" + nthobj + "并对其进行" + nthverb + "#k\r\n但是，如果你" + nthpos + "，这不算作答案；请确保靠近" + nthobj + "的中间位置才算作正确答案。此外，你的队伍只允许有3名成员站在" + nthobj + "上。当他们在上面" + nthverb + "时，队伍的领袖必须#b双击我来检查答案是否正确#k。现在，找到正确的" + nthobj + "进行" + nthverb + "吧！");
+                    cm.sendNext("嗨。欢迎来到第二阶段。在我旁边，你会看到一些绳子，在这些绳子中，有#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3名队伍成员找到正确的绳子然后挂在上面#k\r\n但是，如果你挂得太低，这不算作答案；请确保靠近绳子中间位置才算作正确答案。此外，你的队伍只允许有3名成员挂在绳子上，队伍的队长必须#b双击我来检查答案是否正确#k。现在，寻找正确的绳子挂上去吧！");
                     var c = Math.floor(Math.random() * stgCombos.length);
                     eim.setProperty(stgProperty, c.toString());
                 } else {
@@ -195,7 +193,7 @@ function action(mode, type, selection) {
                         cm.sendNext("请赶紧前往下一个阶段，传送门已经打开了！");
                     } else {
                         eim.showWrongEffect();
-                        cm.sendNext("看起来你还没有找到第3个" + nthobj + "。请考虑不同的" + nthobj + "组合。只允许在" + nthobj + "上进行3次" + nthverb + "，如果你" + nthpos + "它可能不算作答案，所以请记住这一点。继续努力！");
+                        cm.sendNext("看起来你还没有找到正确的绳子。请考虑不同的组合。只允许3名成员挂在绳子上，如果你挂太低，它可能不算作答案，所以请记住这一点。继续努力！");
                     }
                 }
 
@@ -205,13 +203,12 @@ function action(mode, type, selection) {
                 var stgCombos = stage3Combos;
                 var stgAreas = stage3Rects;
 
-                var nthtext = "3rd", nthobj = "platforms", nthverb = "stand", nthpos = "stand too close to the edges";
                 var nextStgId = 103000803;
 
                 if (!eim.isEventLeader(cm.getPlayer())) {
                     cm.sendOk("跟随你的队长给出的指示来完成这个阶段。");
                 } else if (eim.getProperty(stgProperty) == null) {
-                    cm.sendNext("嗨。欢迎来到第" + nthtext + "阶段。在我旁边，你会看到一些" + nthobj + "。在这些" + nthobj + "中，#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3个队员找到正确的" + nthobj + "并对其进行" + nthverb + "#k\r\n但是，如果你" + nthpos + "，这不算作答案；请确保靠近" + nthobj + "的中间位置才算作正确答案。此外，你的队伍只允许有3名成员站在" + nthobj + "上。一旦他们在上面" + nthverb + "，队伍的队长必须#b双击我来检查答案是否正确#k。现在，找到正确的" + nthobj + "进行" + nthverb + "吧！");
+                    cm.sendNext("嗨。欢迎来到第三阶段。在我旁边，你会看到一些平台。在这些平台中，#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3个队员找到正确的平台站上去#k\r\n但是，如果你站得太靠边，是不行的；请确保靠近平台的中间位置才算作正确答案。此外，你的队伍只允许有3名成员站在平台上。一旦他们在上面，队伍的队长必须#b双击我来检查答案是否正确#k。现在，寻找正确的平台吧！");
                     var c = Math.floor(Math.random() * stgCombos.length);
                     eim.setProperty(stgProperty, c.toString());
                 } else {
@@ -222,7 +219,7 @@ function action(mode, type, selection) {
                         cm.sendNext("请赶紧前往下一个阶段，传送门已经打开了！");
                     } else {
                         eim.showWrongEffect();
-                        cm.sendNext("看起来你还没有找到第3个" + nthobj + "。请考虑不同的" + nthobj + "组合。只允许在" + nthobj + "上" + nthverb + "3次，如果你" + nthpos + "它可能不算作答案，所以请记住这一点。继续努力！");
+                        cm.sendNext("看起来你还没有找到正确的平台。请考虑不同的组合。只允许在3名成员站在平台上，如果你站得太靠边它可能不算作答案，所以请记住这一点。继续努力！");
                     }
                 }
 
@@ -232,13 +229,12 @@ function action(mode, type, selection) {
                 var stgCombos = stage4Combos;
                 var stgAreas = stage4Rects;
 
-                var nthtext = "4th", nthobj = "barrels", nthverb = "stand", nthpos = "stand too close to the edges";
                 var nextStgId = 103000804;
 
                 if (!eim.isEventLeader(cm.getPlayer())) {
                     cm.sendOk("跟随你的队长给出的指示来完成这个阶段。");
                 } else if (eim.getProperty(stgProperty) == null) {
-                    cm.sendNext("嗨。欢迎来到第" + nthtext + "阶段。在我旁边，你会看到一些" + nthobj + "。在这些" + nthobj + "中，#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3个队员找到正确的" + nthobj + "并对其进行" + nthverb + "#k\r\n但是，如果你" + nthpos + "，这不算作答案；请站在" + nthobj + "的中间才算作正确答案。此外，你的队伍只允许有3名成员站在" + nthobj + "上。当他们在上面" + nthverb + "时，队伍的领袖必须#b双击我来检查答案是否正确#k。现在，找到正确的" + nthobj + "进行" + nthverb + "吧！");
+                    cm.sendNext("嗨。欢迎来到第四阶段。在我旁边，你会看到一些木桶。在这些木桶中，#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3个队员找到正确的木桶站上去#k\r\n但是，如果你站得太靠边，这不算作答案；请站在木桶的中间才算作正确答案。此外，你的队伍只允许有3名成员站在木桶上。队伍的队长必须#b双击我来检查答案是否正确#k。现在，寻找正确的木桶站上去吧！");
                     var c = Math.floor(Math.random() * stgCombos.length);
                     eim.setProperty(stgProperty, c.toString());
                 } else {
@@ -249,7 +245,7 @@ function action(mode, type, selection) {
                         cm.sendNext("请赶紧前往下一个阶段，传送门已经打开了！");
                     } else {
                         eim.showWrongEffect();
-                        cm.sendNext("看起来你还没有找到第3个" + nthobj + "。请考虑不同的" + nthobj + "组合。只允许在" + nthobj + "上" + nthverb + "3次，如果你" + nthpos + "它可能不算作答案，所以请记住这一点。继续努力！");
+                        cm.sendNext("看起来你还没有找到第3个木桶。请考虑不同的木桶组合。只允许3名成员站在木桶上，如果你站得太靠边，它可能不算作答案，所以请记住这一点。继续努力！");
                     }
                 }
 
@@ -263,7 +259,7 @@ function action(mode, type, selection) {
                         clearStage(stage, eim, curMap);
                         eim.clearPQ();
                     } else {
-                        cm.sendNext("你好。欢迎来到第五个也是最后一个阶段。在地图上四处走动，你会找到一些Boss怪物。打败它们，收集#b通行证#k，然后把它们交给我。一旦你获得了通行证，你的队伍领袖会收集它们，然后在收集齐#b通行证#k后再把它们交给我。这些怪物可能对你来说很熟悉，但它们可能比你想象的要强大，所以请小心。祝你好运！");
+                        cm.sendNext("你好。欢迎来到第五个也是最后一个阶段。在地图上四处走动，你会找到一些Boss怪物。打败它们，收集#b通行证#k，然后把它们交给我。一旦你获得了通行证，你的队伍队长会收集它们，然后在收集齐#b通行证#k后再把它们交给我。这些怪物可能对你来说很熟悉，但它们可能比你想象的要强大，所以请小心。祝你好运！");
                     }
                 } else {
                     cm.sendNext("欢迎来到第五个也是最后一个阶段。在地图上四处走动，你将能够找到一些Boss怪物。打败它们，收集#b通行证#k，并将它们#b交给你的队长#k。完成后，回到我这里领取你的奖励。");
