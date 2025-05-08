@@ -449,12 +449,11 @@ public class GiveService {
         long sum = (long) exp + (long) quantity;
         // 最低只能把经验清0
         if (sum < 0) {
-            quantity = -exp;
+            sum = -exp;
+        } else {
+            sum = quantity;
         }
-        if (sum > Integer.MAX_VALUE) {
-            quantity = Integer.MAX_VALUE - exp;
-        }
-        chr.gainExp(quantity);
+        chr.gainExp((int) sum);
     }
 
     private void doGainMeso(Character chr, int quantity) {
