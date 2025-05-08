@@ -1877,44 +1877,74 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public boolean applyConsumeOnPickup(final int itemId) {
-        if (itemId / 1000000 != 2) {
-            return false;
+    /**
+     * 处理拾取后立即消耗的道具逻辑
+     *
+     * @param itemId 物品的唯一标识ID，应符合游戏物品ID规范（消耗品类ID以2开头）
+     * @return boolean 消耗是否成功应用：
+     *                 - true: 道具效果已应用/处理完成
+     *                 - false: 非消耗品或无需立即使用
+     * @throws NullPointerException 如果无法获取物品信息或效果对象可能抛出
+     *
+     * @description
+     * 实现以下核心逻辑：
+     * 1. 验证物品是否为可消耗类型（ID首数字为2）
+     * 2. 检查物品的"拾取即用"标记
+     * 3. 处理队伍道具的特殊场景：
+     *    - 普通队伍道具：对同地图存活队友应用效果
+     *    - 全体治疗道具：解除队友异常状态
+     * 4. 处理怪物卡片收集（ID 238xxxx类型）
+     *
+     * @example
+     * // 典型使用场景
+     * if(applyConsumeOnPickup(2001000)) {
+     *     removeFromInventory(item); // 消耗后移除物品
+     * }
+     *
+     * @note
+     * - 物品ID格式约定：
+     *   - 第1位：物品大类（2=消耗品）
+     *   - 第2-4位：物品子类（238=怪物卡片）
+     * - 队伍道具效果只会影响同地图的存活队友
+     */
+    public boolean applyConsumeOnPickup(final int itemId) {// 判断拾取后是否立即消耗道具的方法
+        if (itemId / 1000000 != 2) {// 检查物品ID是否属于消耗品类（假设ID以2开头）
+            return false; // 非消耗品直接返回不处理
         }
-        ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        if (!ii.isConsumeOnPickup(itemId)) {
-            return false;
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();// 获取物品信息提供器实例
+        if (!ii.isConsumeOnPickup(itemId)) {// 检查该物品是否标记为"拾取后立即使用"
+            return false; // 无需立即使用则返回
         }
-        if (ItemConstants.isPartyItem(itemId)) {
-            List<Character> partyMembers = this.getPartyMembersOnSameMap();
-            if (!ItemId.isPartyAllCure(itemId)) {
-                StatEffect mse = ii.getItemEffect(itemId);
+        if (ItemConstants.isPartyItem(itemId)) {// 判断是否为队伍共享类道具
+            List<Character> partyMembers = this.getPartyMembersOnSameMap();// 获取同一地图内的队伍成员列表
+            if (!ItemId.isPartyAllCure(itemId)) {// 处理非全体治疗类道具
+                StatEffect mse = ii.getItemEffect(itemId);// 获取道具效果对象
                 if (!partyMembers.isEmpty()) {
-                    for (Character mc : partyMembers) {
+                    for (Character mc : partyMembers) {// 遍历存活队友并施加效果
                         if (mc.isAlive()) {
                             mse.applyTo(mc);
                         }
                     }
                 } else if (this.isAlive()) {
-                    mse.applyTo(this);
+                    mse.applyTo(this);// 无队友时对自己生效
                 }
             } else {
-                if (!partyMembers.isEmpty()) {
+                if (!partyMembers.isEmpty()) {// 处理全体治疗类道具（如解除异常状态）
                     for (Character mc : partyMembers) {
-                        mc.dispelDebuffs();
+                        mc.dispelDebuffs(); // 解除队友debuff
                     }
                 } else {
-                    this.dispelDebuffs();
+                    this.dispelDebuffs(); // 无队友时解除自身
                 }
             }
         } else {
-            ii.getItemEffect(itemId).applyTo(this);
+            ii.getItemEffect(itemId).applyTo(this);// 非队伍道具直接对自身生效
         }
 
-        if (itemId / 10000 == 238) {
-            this.getMonsterBook().addCard(client, itemId);
+        if (itemId / 10000 == 238) {// 特殊处理怪物卡片收集（ID格式238xxxx）
+            this.getMonsterBook().addCard(client, itemId); // 添加到怪物图鉴
         }
-        return true;
+        return true; // 成功执行消耗操作
     }
 
     public final void pickupItem(MapObject ob) {
@@ -2032,7 +2062,7 @@ public class Character extends AbstractCharacterObject {
                             showHint(I18nUtil.getMessage("Character.pickupItem.message1", nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)), 300);
                             //showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                         }
-                    //} else if (applyConsumeOnPickup(mItem.getItemId())) {//这个不知道干嘛的，空的判断，注释掉。
+                    } else if (applyConsumeOnPickup(mItem.getItemId())) {//此段判断为处理捡取治疗道具和怪物卡加入图鉴
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
                         if (mItem.getItemId() == ItemId.ARPQ_SPIRIT_JEWEL) {
                             updateAriantScore();
