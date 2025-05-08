@@ -25,13 +25,13 @@
           title="#"
           data-index="index"
           align="center"
-          width="50"
+          :width=50
           cell-class="td-nowrap"
         />
         <a-table-column
           title=" ID "
           data-index="id"
-          width="80"
+          :width=80
           align="center"
           cell-class="td-nowrap"
         />
