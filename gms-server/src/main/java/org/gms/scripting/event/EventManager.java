@@ -209,7 +209,7 @@ public class EventManager {
             try {
                 iv.invokeFunction(methodName, eim);
             } catch (ScriptException | NoSuchMethodException ex) {
-                log.error("eim（"+eim+"），methodName（"+methodName+"），Event script schedule（事件脚本时间表）", ex);
+                log.error("eim（{}），methodName（{}），Event script schedule（事件脚本时间表）", eim,methodName,ex);
             }
         };
 
