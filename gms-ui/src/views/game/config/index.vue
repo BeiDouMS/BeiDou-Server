@@ -30,48 +30,40 @@
           </a-radio-group>
         </a-form-item>
         <a-form-item :hide-label="true">
-          <a-row :wrap="false">
-            <a-col :span="15" :offset="0">
-              <a-space>
-                <a-input
-                  v-model="condition.filter"
-                  :placeholder="$t('config.placeholder.filter')"
-                />
-                <a-button type="primary" @click="searchData">
-                  {{ $t('button.search') }}
-                </a-button>
-                <a-button @click="resetSearch">
-                  {{ $t('button.reset') }}
-                </a-button>
-                <a-button
-                  type="primary"
-                  status="success"
-                  :disabled="selectedKeys.length > 0"
-                  @click="addClick"
-                >
-                  {{ $t('button.add') }}
-                </a-button>
-                <a-button
-                  type="primary"
-                  status="danger"
-                  :disabled="selectedKeys.length === 0"
-                  @click="delClick"
-                >
-                  {{ $t('button.delete') }}
-                </a-button>
-              </a-space>
-            </a-col>
-            <a-col :span="6" :offset="3">
-              <a-space>
-                <a-button type="primary" @click="importClick">
-                  {{ $t('config.extra.import') }}
-                </a-button>
-                <a-button type="primary" @click="exportClick">
-                  {{ $t('config.extra.export') }}
-                </a-button>
-              </a-space>
-            </a-col>
-          </a-row>
+          <a-col :offset="0">
+            <a-input
+              v-model="condition.filter"
+              :placeholder="$t('config.placeholder.filter')"
+            />
+            <a-button type="primary" @click="searchData">
+              {{ $t('button.search') }}
+            </a-button>
+            <a-button @click="resetSearch">
+              {{ $t('button.reset') }}
+            </a-button>
+            <a-button
+              type="primary"
+              status="success"
+              :disabled="selectedKeys.length > 0"
+              @click="addClick"
+            >
+              {{ $t('button.add') }}
+            </a-button>
+            <a-button
+              type="primary"
+              status="danger"
+              :disabled="selectedKeys.length === 0"
+              @click="delClick"
+            >
+              {{ $t('button.delete') }}
+            </a-button>
+            <a-button type="primary" @click="importClick">
+              {{ $t('config.extra.import') }}
+            </a-button>
+            <a-button type="primary" @click="exportClick">
+              {{ $t('config.extra.export') }}
+            </a-button>
+          </a-col>
         </a-form-item>
       </a-space>
       <a-table
@@ -116,7 +108,7 @@
           <a-table-column
             :title="$t('config.column.clazz')"
             data-index="configClazz"
-            :width="100"
+            :width="120"
             align="center"
           >
             <template #cell="{ record }">
@@ -128,7 +120,7 @@
           <a-table-column
             :title="$t('config.column.code')"
             data-index="configCode"
-            :width="100"
+            :width="200"
             align="center"
           />
           <a-table-column
@@ -140,7 +132,7 @@
           <a-table-column
             :title="$t('config.column.desc')"
             data-index="configDesc"
-            :width="200"
+            :width="400"
             align="center"
           />
           <a-table-column
@@ -549,4 +541,49 @@
   };
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+  :deep(.arco-form-item-content-flex) {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  :deep(.arco-space-horizontal, .arco-col arco-col-24) {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  :deep(.arco-row-align-start > .arco-col) {
+    flex-wrap: wrap;
+  }
+  :deep(.arco-card-body > .arco-space-vertical) {
+    width: 100% !important;
+  }
+  :deep(.arco-space-item .arco-input-wrapper) {
+    width: 100% !important;
+    max-width: 400px !important;
+  }
+  :deep(.arco-space-item) {
+    width: 100%;
+  }
+  :deep(.arco-form-item-content > div) {
+    width: 100%;
+  }
+  :deep(.arco-form-item-content > div > *) {
+    margin-right: 5px;
+    margin-top: 5px;
+  }
+  :deep(.arco-table-th) {
+    min-width: 30px;
+  }
+  :deep(.arco-table-th:nth-child(4)) {
+    min-width: 70px;
+  }
+  :deep(.arco-table-th:nth-child(5)) {
+    min-width: 100px;
+  }
+  :deep(.arco-table-th:nth-child(6)) {
+    min-width: 100px;
+  }
+  :deep(.arco-table-th:nth-child(7)) {
+    min-width: 250px;
+  }
+</style>

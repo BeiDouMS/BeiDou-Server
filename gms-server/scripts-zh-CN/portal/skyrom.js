@@ -25,7 +25,7 @@ function enter(pi) {
             pi.warp(926000010, 0);
             return true;
         } else {
-            pi.message("Someone is already trying this map.");
+            pi.message("当前地图已有其他玩家正在挑战，请稍后再试。");
             return false;
         }
     } else {

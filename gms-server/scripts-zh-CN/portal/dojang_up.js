@@ -38,7 +38,7 @@ function enter(pi) {
                 pi.getPlayer().setVanquisherKills(pi.getPlayer().getVanquisherKills() + 1);
             }
         } else {
-            pi.getPlayer().message("There are still some monsters remaining.");
+            pi.getPlayer().message("当前区域仍有怪物未清除。");
         }
         pi.enableActions();
         return true;

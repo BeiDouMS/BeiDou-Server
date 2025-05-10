@@ -22,6 +22,6 @@
 function enter(pi) {
     pi.playPortalSound();
     pi.warp(300000100, "out00");
-    pi.playerMessage(5, "Now passing the Time Gate.");
+    pi.playerMessage(5, "正在穿越时空之门。");
     return true;
 }

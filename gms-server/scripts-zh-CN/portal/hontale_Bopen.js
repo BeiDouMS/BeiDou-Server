@@ -39,7 +39,7 @@ function enter(pi) {
         avail = eim.getProperty("1stageclear");
         if (avail == null) {
             // do nothing; send message to player
-            pi.getPlayer().dropMessage(6, "Horntail\'s Seal is Blocking this Door.");
+            pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着这扇门！");
             return false;
         } else {
             pi.playPortalSound();
@@ -55,7 +55,7 @@ function enter(pi) {
         avail = eim.getProperty("2stageclear");
         if (avail == null) {
             // do nothing; send message to player
-            pi.getPlayer().dropMessage(6, "Horntail\'s Seal is Blocking this Door.");
+            pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着这扇门！");
             return false;
         } else {
             pi.playPortalSound();
@@ -71,7 +71,7 @@ function enter(pi) {
         avail = eim.getProperty("3stageclear");
         if (avail == null) {
             // do nothing; send message to player
-            pi.getPlayer().dropMessage(6, "Horntail\'s Seal is Blocking this Door.");
+            pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着这扇门！");
             return false;
         } else {
             pi.playPortalSound();
@@ -87,7 +87,7 @@ function enter(pi) {
         avail = eim.getProperty("4stageclear");
         if (avail == null) {
             // do nothing; send message to player
-            pi.getPlayer().dropMessage(6, "Horntail\'s Seal is Blocking this Door.");
+            pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着这扇门！");
             return false;
         } else {
             pi.playPortalSound();
@@ -104,13 +104,13 @@ function enter(pi) {
         if (avail == null) {
             if (pi.haveItem(4001092) && pi.isEventLeader()) {
                 eim.showClearEffect();
-                pi.getPlayer().dropMessage(6, "The leader's key break the seal for a flash...");
+                pi.getPlayer().dropMessage(6, "队长的红色钥匙瞬间打破了封印...");
                 pi.playPortalSound();
                 pi.getPlayer().changeMap(target, targetPortal);
                 eim.setIntProperty("5stageclear", 1);
                 return true;
             } else {
-                pi.getPlayer().dropMessage(6, "Horntail\'s Seal is blocking this door. Only the leader with the key can lift this seal.");
+                pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着入口！需队长持有钥匙方可解除。");
                 return false;
             }
         } else {

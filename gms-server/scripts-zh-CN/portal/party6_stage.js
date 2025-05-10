@@ -11,13 +11,13 @@ function enter(pi) {
                 pi.warp(930000200, 0);
                 return true;
             } else {
-                pi.playerMessage(5, "Eliminate all the monsters.");
+                pi.playerMessage(5, "请消灭所有怪物。");
                 return false;
             }
             break;
         case 930000200:
             if (pi.getMap().getReactorByName("spine") != null && pi.getMap().getReactorByName("spine").getState() < 4) {
-                pi.playerMessage(5, "The spine blocks the way.");
+                pi.playerMessage(5, "尖刺障碍物阻挡了道路。");
                 return false;
             } else {
                 pi.playPortalSound();
@@ -27,7 +27,7 @@ function enter(pi) {
             break;
 
         default:
-            pi.playerMessage(5, "This portal leads to an unbound path.");
+            pi.playerMessage(5, "该传送门通往未绑定的路径。");
             return false;
     }
 }

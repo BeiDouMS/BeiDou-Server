@@ -31,7 +31,7 @@ function enter(pi) {
         pi.warp(990000611, 1);
         return true;
     } else {
-        pi.playerMessage(5, "This door is closed.");
+        pi.playerMessage(5, "大门已关闭。");
         return false;
     }
 }

@@ -20,6 +20,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+const Point = Java.type('java.awt.Point');
+const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
+const PacketCreator = Java.type('org.gms.util.PacketCreator');
+const LoggerFactory = Java.type('org.slf4j.LoggerFactory');
+var log = null;
+var channel = null;
+var isinit = false;
+
+var MapID = 221040301;
+var BossID = 6220001;
+var BossName = "朱诺";
+/**刷新时间，分钟;  Generation time in minutes*/
+var BossTime = 180;
+/**指定Boss刷新的XY坐标位置; Specify the XY coordinate position for Boss refresh*/
+var point = new Point(-4224, 776);
+var BossNotice= "伴随重型机械轰鸣声现世！";
+
+const methodName = "start";     //指定当前事件刷新Boss的函数，无需改动
 /**
  -- Odin JavaScript --------------------------------------------------------------------------------
  Zeno Spawner
@@ -27,11 +45,14 @@
  ThreeStep - based on xQuasar's King Clang spawner
  **/
 function init() {
+    channel = em.getChannelServer().getId();
+    log = LoggerFactory.getLogger(em.getName());
+  
     scheduleNew();
 }
 
 function scheduleNew() {
-    setupTask = em.schedule("start", 0);    //spawns upon server start. Each 3 hours an server event checks if boss exists, if not spawns it instantly.
+    setupTask = em.schedule(methodName, 0);    //服务器启动时生成。每指定时间，服务器事件会检查boss是否存在，如果不存在，会立即生成boss。
 }
 
 function cancelSchedule() {
@@ -41,21 +62,28 @@ function cancelSchedule() {
 }
 
 function start() {
-    var graysPrairie = em.getChannelServer().getMapFactory().getMap(221040301);
+    var graysPrairie = em.getChannelServer().getMapFactory().getMap(MapID);
+    var Timer = em.getBossTime(BossTime * 60 * 1000);  //转为毫秒并加载时间倍率修正
 
-    if (graysPrairie.getMonsterById(6220001) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+    if (graysPrairie.getMonsterById(BossID) != null) {
+        em.schedule(methodName, Timer);
         return;
     }
+    const BossObj = LifeFactory.getMonster(BossID);
+    BossName = BossObj.getName() || BossName;
+    try {
+        graysPrairie.spawnMonsterOnGroundBelow(BossObj, point);
+        if(isinit) {
+            log.info(`[事件脚本-野外BOSS] ${em.getName()} 已在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x} , ${point.y}) 生成 ${BossName}(${BossID})，检测间隔：${Timer / 60 / 1000} 分钟`);
+        } else {
+            isinit = true;
+        }
+    } catch (e) {
+        console.error(`[事件脚本-野外BOSS] ${em.getName()} 在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x} , ${point.y}) 生成 ${BossName}(${BossID}) 时出错`,e);
+    }
+    graysPrairie.broadcastMessage(PacketCreator.serverNotice(6, `[野外BOSS] ${BossName}  ${BossNotice}`));     //聊天框输出当前地图范围的Boss登场消息
 
-    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
-    const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('org.gms.util.PacketCreator');
-
-    var zeno = LifeFactory.getMonster(6220001);
-    graysPrairie.spawnMonsterOnGroundBelow(zeno, new Point(-4224, 776));
-    graysPrairie.broadcastMessage(PacketCreator.serverNotice(6, "Zeno has appeared with a heavy sound of machinery."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule(methodName, Timer);
 }
 
 // ---------- FILLER FUNCTIONS ----------

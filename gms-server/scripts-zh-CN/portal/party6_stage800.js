@@ -8,7 +8,7 @@ function enter(pi) {
     var spring = pi.getMap().getReactorById(3008000);  // thanks Chloek3, seth1 for noticing fragments not being awarded properly
     if (spring != null && spring.getState() > 0) {
         if (!pi.canHold(4001198, 1)) {
-            pi.playerMessage(5, "Check for a free space on your ETC inventory before entering this portal.");
+            pi.playerMessage(5, "进入传送门前请给背包的 其它栏 空出至少1个空格子。");
             return false;
         }
 

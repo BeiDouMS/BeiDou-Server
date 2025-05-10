@@ -48,27 +48,27 @@ function end(mode, type, selection) {
         status++;
     } else {
         if (status == 2) {
-            qm.sendNext("Are you reluctant to leave your instructor? *Sniff sniff* I'm so moved, but you can't stop here. You are destined for bigger and better things!");
+            qm.sendNext("你是不舍得离开我这个老头子吗？*抽泣* 我真的很感动，但你不能在这里停下脚步。你注定要成就更伟大的事业！");
             qm.dispose();
             return;
         }
         status--;
     }
     if (status == 0) {
-        qm.sendNext("Ah, you've come back after defeating all 30 #o9300343#s. I knew you had it in you... Even though you have no memories and few abilities, I could see that you were different! How? Because you're carrying around a Polearm, obviously!");
+        qm.sendNext("这么快就打倒了30只#o9300343#……我这老头子果然没有看错。虽然你失去了曾经的记忆，失去了曾经的能力，但你仍然是个英雄！只要手上的长矛还在！");
     } else if (status == 1) {
-        qm.sendNextPrev("#b(Is he pulling your leg?)#k'", 2);
+        qm.sendNextPrev("#b(这么说是为了安慰我吗？)#k", 2);
     } else if (status == 2) {
-        qm.sendYesNo("I have nothing more to teach you, as you've surpassed my level of skill. Go now! Don't look back! This old man is happy to have served as your instructor.");
+        qm.sendYesNo("我已经没什么可继续教你的了。你已经超越了我这个老头子。你可以下山了……唉，没什么好忧郁的。我这老头子能够有机会指导你，已经很满足了。");
     } else if (status == 3) {
         if (qm.isQuestStarted(21703)) {
             qm.forceCompleteQuest();
             qm.teachSkill(21000000, qm.getPlayer().getSkillLevel(21000000), 10, -1);   // Combo Ability Skill
             qm.gainExp(2800);
         }
-        qm.sendNext("(You remembered the #bCombo Ability#k skill! You were skeptical of the training at first, since the old man suffers from Alzheimer's and all, but boy, was it effective!)", 2);
+        qm.sendNext("(我想起了技能#b连击能力#k！ 我还想跟着有点痴呆的老头子训练有没有效果呢，没想到真的有效！)", 2);
     } else if (status == 4) {
-        qm.sendPrev("Now report back to #p1201000#. I know she'll be ecstatic when she sees the progress you've made!");
+        qm.sendPrev("现在你回去找#p1201000#吧。她看到你的进步会很高兴的！");
     } else if (status == 5) {
         qm.dispose();
     }

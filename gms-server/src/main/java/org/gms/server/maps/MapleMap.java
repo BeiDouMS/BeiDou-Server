@@ -1359,21 +1359,27 @@ public class MapleMap {
         return false;
     }
 
+    // 巴洛古(Balrog)讨伐胜利广播
     public void broadcastBalrogVictory(String leaderName) {
-        getWorldServer().dropMessage(6, "[Victory] " + leaderName + "'s party has successfully defeated the Balrog! Praise to them, they finished with " + countAlivePlayers() + " players alive.");
+        getWorldServer().dropMessage(6,"[远征凯旋] " + leaderName + "的远征队成功讨伐了火焰魔神巴洛古！" + "让我们歌颂这支队伍，他们以" + countAlivePlayers() + "名幸存者的战绩完成了壮举！");
     }
 
+    // 暗黑龙王(Horntail)讨伐胜利广播
     public void broadcastHorntailVictory() {
-        getWorldServer().dropMessage(6, "[Victory] To the crew that have finally conquered Horned Tail after numerous attempts, I salute thee! You are the true heroes of Leafre!!");
+        getWorldServer().dropMessage(6,"[远征凯旋] 致历经无数次挑战最终征服暗黑龙王的勇士们：" + "谨以此礼赞献给真正的神木村英雄！");
     }
 
+    // 扎昆(Zakum)讨伐胜利广播
     public void broadcastZakumVictory() {
-        getWorldServer().dropMessage(6, "[Victory] At last, the tree of evil that for so long overwhelmed Ossyria has fallen. To the crew that managed to finally conquer Zakum, after numerous attempts, victory! You are the true heroes of Ossyria!!");
+        getWorldServer().dropMessage(6,"[远征凯旋] 长久笼罩天空之城的邪恶之树终于倾倒！" +"致那些历经无数次尝试最终征服扎昆的远征队，胜利属于你们！" +"你们是天空之城真正的传说！");
     }
 
+    // 品克缤(PinkBean)讨伐胜利广播
     public void broadcastPinkBeanVictory(int channel) {
-        getWorldServer().dropMessage(6, "[Victory] In a swift stroke of sorts, the crew that has attempted Pink Bean at channel " + channel + " has ultimately defeated it. The Temple of Time shines radiantly once again, the day finally coming back, as the crew that managed to finally conquer it returns victoriously from the battlefield!!");
+        getWorldServer().dropMessage(6,"[远征凯旋] 在" + channel + "频道挑战品克缤的远征队，" +  "以雷霆之势完成了终极讨伐！时间神殿重现璀璨光辉，" + "当英雄们从战场凯旋之时，被夺走的白昼终于归来！"
+        );
     }
+
 
     private boolean removeKilledMonsterObject(Monster monster) {
         monster.lockMonster();
@@ -1385,7 +1391,7 @@ public class MapleMap {
             spawnedMonstersOnMap.decrementAndGet();
             removeMapObject(monster);
             monster.disposeMapObject();
-            if (monster.hasBossHPBar()) {   // thanks resinate for noticing boss HPbar not clearing after mob defeat in certain scenarios
+            if (monster.hasBossHPBar()) {   // thanks resinate for noticing boss HPbar not clearing after mob defeat in certain scenarios   //感谢resinate注意到在某些情况下暴徒失败后老板HPbar没有清除
                 broadcastBossHpMessage(monster, monster.hashCode(), monster.makeBossHPBarPacket(), monster.getPosition());
             }
 
@@ -1414,7 +1420,7 @@ public class MapleMap {
             if (removeKilledMonsterObject(monster)) {
                 try {
                     if (monster.getStats().getLevel() >= chr.getLevel() + 30 && !chr.isGM()) {
-                        AutobanFactory.GENERAL.alert(chr, " for killing a " + monster.getName() + " which is over 30 levels higher.");
+                        AutobanFactory.GENERAL.alert(chr, "因击杀超过自身30级的怪物[" + monster.getName() + "]被系统警告");
                     }
 
                     /*if (chr.getQuest(Quest.getInstance(29400)).getStatus().equals(QuestStatus.Status.STARTED)) {
@@ -2002,7 +2008,7 @@ public class MapleMap {
             }
         }
 
-        if (monster.getDropPeriodTime() > 0) { //9300102 - Watchhog, 9300061 - Moon Bunny (HPQ), 9300093 - Tylus
+        if (monster.getDropPeriodTime() > 0) { //9300102 - Watchhog, 9300061 - Moon Bunny (HPQ), 9300093 - Tylus    //9300102-护卫用小浣猪，9300061-月妙（HPQ），9300093-冒牌泰勒斯
             if (monster.getId() == MobId.WATCH_HOG) {
                 monsterItemDrop(monster, monster.getDropPeriodTime());
             } else if (monster.getId() == MobId.MOON_BUNNY) {
@@ -2012,7 +2018,7 @@ public class MapleMap {
             } else if (monster.getId() == MobId.GIANT_SNOWMAN_LV5_EASY || monster.getId() == MobId.GIANT_SNOWMAN_LV5_MEDIUM || monster.getId() == MobId.GIANT_SNOWMAN_LV5_HARD) {
                 monsterItemDrop(monster, monster.getDropPeriodTime());
             } else {
-                log.error("UNCODED TIMED MOB DETECTED: {}", monster.getId());
+                log.error("[异常刷怪] 检测到未配置定时刷新的怪物: ID={}", monster.getId());
             }
         }
 
@@ -2086,7 +2092,7 @@ public class MapleMap {
     public Portal getDoorPortal(int doorid) {
         Portal doorPortal = portals.get(0x80 + doorid);
         if (doorPortal == null) {
-            log.warn("[Door] {} ({}) does not contain door portalid {}", mapName, mapid, doorid);
+            log.warn("[传动点] 地图 {} (ID:{}) 不存在传送门ID为 {} 的入口", mapName, mapid, doorid);
             return portals.get(0x80);
         }
 
@@ -2876,7 +2882,7 @@ public class MapleMap {
                 String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(monster.getId());
                 if (mobName != null) {
                     mobName = mobName.trim();
-                    this.dropMessage(5, "This lawn has been taken siege by " + mobName + "'s forces and will be kept hold until their defeat.");
+                    this.dropMessage(5, "这片草坪已被" + mobName + "的部队占领，击败他们才能夺回控制权！");
                 }
             }
         }
@@ -3226,10 +3232,19 @@ public class MapleMap {
     }
 
     public void reportMonsterSpawnPoints(Character chr) {
-        chr.dropMessage(6, "Mob spawnpoints on map " + getId() + ", with available Mob SPs " + monsterSpawn.size() + ", used " + spawnedMonstersOnMap.get() + ":");
+        // 输出地图刷怪点统计信息头
+        chr.dropMessage(6, "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        chr.dropMessage(6, "┃ 地图ID: " + getId() + " | 总刷怪点: " + monsterSpawn.size() +  " | 已刷怪: " + spawnedMonstersOnMap.get());
+        chr.dropMessage(6, "┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+        // 遍历所有刷怪点输出详细信息
         for (SpawnPoint sp : getAllMonsterSpawn()) {
-            chr.dropMessage(6, "  id: " + sp.getMonsterId() + " canSpawn: " + !sp.getDenySpawn() + " numSpawned: " + sp.getSpawned() + " x: " + sp.getPosition().getX() + " y: " + sp.getPosition().getY() + " time: " + sp.getMobTime() + " team: " + sp.getTeam());
+            chr.dropMessage(6,
+                    "┃ ID:" + sp.getMonsterId() + " | 可刷怪:" + (sp.getDenySpawn() ? "×" : "√") + " | 现存:" + sp.getSpawned() + "\n" +
+                    "┃ 坐标:(" +(int) sp.getPosition().getX() + " , " + (int) sp.getPosition().getY() + ") | 刷新:" + sp.getMobTime() + "ms | 阵营:" + sp.getTeam()
+            );
         }
+        chr.dropMessage(6, "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }
 
     public Map<Integer, Character> getMapPlayers() {
@@ -4040,18 +4055,19 @@ public class MapleMap {
 
     public String getEventNPC() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Talk to ");
+        sb.append("请与 "+ mapName + " 的 ");
         if (mapid == MapId.SOUTHPERRY) {
-            sb.append("Paul!");
+            sb.append("珀尔");
         } else if (mapid == MapId.LITH_HARBOUR) {
-            sb.append("Jean!");
+            sb.append("江");
         } else if (mapid == MapId.ORBIS) {
-            sb.append("Martin!");
+            sb.append("马丁");
         } else if (mapid == MapId.LUDIBRIUM) {
-            sb.append("Tony!");
+            sb.append("托尼");
         } else {
             return null;
         }
+        sb.append(" 进行对话。");
         return sb.toString();
     }
 
@@ -4259,7 +4275,7 @@ public class MapleMap {
         long timeNow = Server.getInstance().getCurrentTime();
         if (timeNow - mapOwnerLastActivityTime > 60000) {
             if (unclaimOwnership() != null) {
-                this.dropMessage(5, "This lawn is now free real estate.");
+                this.dropMessage(5, "这里现在是无主之地了。");
             }
         }
     }

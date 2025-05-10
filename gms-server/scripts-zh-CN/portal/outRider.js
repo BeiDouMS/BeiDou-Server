@@ -5,7 +5,7 @@ function enter(pi) {
         pi.warp(211050000, 4);
         return true;
     } else {
-        pi.playerMessage(5, "Free a slot on your inventory before receiving the couse clear's token.");
+        pi.playerMessage(5, "请在背包中的其它栏目预留至少1个空位以领取通关奖励");
         return false;
     }
 }

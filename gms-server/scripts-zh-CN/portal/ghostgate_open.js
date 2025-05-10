@@ -32,7 +32,7 @@ function enter(pi) {
         pi.warp(990000800, 0);
         return true;
     } else {
-        pi.playerMessage(5, "This way forward is not open yet.");
+        pi.playerMessage(5, "前方的道路尚未开放。");
         return false;
     }
 }

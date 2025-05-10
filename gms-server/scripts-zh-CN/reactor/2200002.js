@@ -25,6 +25,6 @@
  */
 
 function act() {
-    rm.mapMessage(5, "An unknown force has warped you into a trap.");
+    rm.mapMessage(5, "未知力量将你卷入致命陷阱！");
     rm.warpMap(922010201);
 }

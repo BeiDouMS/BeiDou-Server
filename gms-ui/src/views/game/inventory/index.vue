@@ -3,36 +3,38 @@
     <Breadcrumb />
     <a-card class="general-card" :title="$t('menu.game.inventory')">
       <div class="button-group">
-        <character-selector @use-character="useCharacter" />
-        <div v-if="currentCid !== undefined" class="character-info">
-          <div class="info-line"
-            >{{ $t('characterSelector.column.id') }}: {{ currentCid }}
+        <a-space>
+          <character-selector @use-character="useCharacter" />
+          <div v-if="currentCid !== undefined" class="character-info">
+            <div class="info-line">
+              {{ $t('characterSelector.column.id') }}:{{ currentCid }}
+            </div>
+            <div class="info-line">
+              {{ $t('characterSelector.column.onlineStatus') }}:
+              <span :class="{ online: isOnline, offline: !isOnline }">
+                <span class="status-dot"></span>
+                {{
+                  isOnline
+                    ? $t('inventoryList.column.online')
+                    : $t('inventoryList.column.offline')
+                }}
+              </span>
+            </div>
           </div>
-          <div class="info-line">
-            {{ $t('characterSelector.column.onlineStatus') }}:
-            <span :class="{ online: isOnline, offline: !isOnline }">
-              <span class="status-dot"></span
-              >{{
-                isOnline
-                  ? $t('inventoryList.column.online')
-                  : $t('inventoryList.column.offline')
-              }}
-            </span>
-          </div>
-        </div>
-        <a-button
-          type="primary"
-          class="margin-left"
-          :disabled="
-            !currentCid ||
-            currentType === 0 ||
-            currentType === -1 ||
-            currentType === 6
-          "
-          @click="openInventoryUI(currentCid, currentType)"
-        >
-          {{ $t('inventory.placeholder.inventoryDraw') }}
-        </a-button>
+          <a-button
+            type="primary"
+            class="margin-left"
+            :disabled="
+              !currentCid ||
+              currentType === 0 ||
+              currentType === -1 ||
+              currentType === 6
+            "
+            @click="openInventoryUI(currentCid, currentType)"
+          >
+            {{ $t('inventory.placeholder.inventoryDraw') }}
+          </a-button>
+        </a-space>
       </div>
       <a-tabs
         :default-active-key="1"
@@ -152,7 +154,6 @@
   .button-group {
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
   }
 
   .margin-left {
@@ -161,12 +162,13 @@
 
   .character-info {
     margin-left: 16px;
-    background-color: #f0f2f5;
+    //background-color: #f0f2f5;
     padding: 8px 12px;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    min-width: 150px;
   }
 
   .info-line {
@@ -201,5 +203,39 @@
 
   .offline .status-dot {
     background-color: red;
+  }
+
+  @media (max-width: @screen-sm) {
+    :deep(.arco-space) {
+      width: 100%;
+      flex-wrap: wrap;
+      display: initial;
+      align-items: center;
+    }
+
+    :deep(.button-group > .arco-space > .arco-space-item) {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .arco-space-item > .arco-input-wrapper {
+      width: 100%;
+    }
+
+    .character-info {
+      margin-left: 0px;
+      //background-color: #f0f2f5;
+      padding: 8px 12px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 150px;
+      width: 100%;
+    }
+
+    .margin-left {
+      margin-left: 0px;
+    }
   }
 </style>

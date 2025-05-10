@@ -12,7 +12,7 @@ function enter(pi) {
         pi.warp(914010200, 1);
         return true;
     } else {
-        pi.playerMessage(5, "You will be allowed to enter the Penguin Training Ground only if you are receiving a lesson from Puo.");
+        pi.playerMessage(5, "只有正在接受小企企普奥的修炼指导时，才能进入企鹅训练场。");
         return false;
     }
 }

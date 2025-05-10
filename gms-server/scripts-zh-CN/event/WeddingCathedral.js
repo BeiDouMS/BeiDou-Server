@@ -122,7 +122,7 @@ function playerEntry(eim, player) {
 
 function stopBlessings(eim) {
     var mapobj = eim.getMapInstance(entryMap + 10);
-    mapobj.dropMessage(6, "Wedding Assistant: Alright people, our couple are preparing their vows to each other right now.");
+    mapobj.dropMessage(6, "[婚礼助手] 各位宾客，新人正在准备彼此的誓言。");
 
     eim.setIntProperty("weddingStage", 2);
 }
@@ -177,7 +177,7 @@ function scheduledTimeout(eim) {
             chr.changeMap(entryMap + 10, "we00");
         }
 
-        mapobj.dropMessage(6, "Wedding Assistant: The couple are heading to the altar, hurry hurry talk to me to arrange your seat.");
+        mapobj.dropMessage(6, "[婚礼助手] 新人正走向圣坛，请尽快与我交谈安排您的座位。");
 
         eim.setIntProperty("weddingStage", 1);
         eim.schedule("showStartMsg", startMsgTime * 60 * 1000);

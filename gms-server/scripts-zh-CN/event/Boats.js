@@ -1,26 +1,26 @@
 // 渡轮相关地图变量
-var Orbis_btf; // 候船室<开往魔法密林>
-var Boat_to_Orbis; // 开往天空之城
-var Orbis_Boat_Cabin; // 船仓<开往天空之城>
-var Orbis_docked; // 码头<开往魔法密林>
+/** 候船室<开往魔法密林> */var Orbis_btf;
+/** 开往天空之城的船 */var Boat_to_Orbis;
+/** 船仓<开往天空之城> */var Orbis_Boat_Cabin;
+/** 码头<开往魔法密林> */var Orbis_docked;
+/** 候船室<开往天空之城> */var Ellinia_btf;
+/** 开往魔法密林的船 */var Boat_to_Ellinia;
+/** 船仓<开往魔法密林> */var Ellinia_Boat_Cabin;
+/** 魔法密林码头 */var Ellinia_docked;
+/** 天空之城售票处 */var Orbis_Station;
 
-var Ellinia_btf; // 候船室<开往天空之城>
-var Boat_to_Ellinia; // 开往魔法密林
-var Ellinia_Boat_Cabin; // 船仓<开往魔法密林>
-var Ellinia_docked; // 魔法密林码头
+// 时间设置（以毫秒为单位），以下变量会被getTransportationTime()函数改变时间倍率而重新赋值
+/** 关闭登船入口的时间 (4分钟) */ var closeTime = 4 * 60 * 1000;
+/** 船只启航前的准备时间 (5分钟) */ var beginTime = 5 * 60 * 1000;
+/** 到达目的地所需的时间 (10分钟) */ var rideTime = 10 * 60 * 1000;
+/** 蝙蝠魔船只接近的时间 (3分钟) */ var invasionStartTime = 3 * 60 * 1000;
+/** 蝙蝠魔船只接近的时间延迟 (1分钟) */ var invasionDelayTime = 1 * 60 * 1000;
+/** 生成蝙蝠魔的时间延迟 (5秒) */ var invasionDelay = 5 * 1000;
 
-var Orbis_Station; // 天空之城售票处
-
-// 时间设置（以毫秒为单位）
-var closeTime = 4 * 60 * 1000; // 关闭登船入口的时间
-var beginTime = 5 * 60 * 1000; // 船只启航前的准备时间
-var rideTime = 10 * 60 * 1000; // 到达目的地所需的时间
-var invasionStartTime = 3 * 60 * 1000; // 蝙蝠魔船只接近的时间
-var invasionDelayTime = 1 * 60 * 1000; // 蝙蝠魔船只接近的时间延迟
-var invasionDelay = 5 * 1000; // 生成蝙蝠魔的时间延迟
+const PacketCreator = Java.type('org.gms.util.PacketCreator');  //获取封包数据实例
 
 function init() {
-    // 初始化函数，用于设置时间和获取地图实例。
+    // 初始化函数，用于修正交通工具旅行时间和获取地图实例。
     closeTime = em.getTransportationTime(closeTime);
     beginTime = em.getTransportationTime(beginTime);
     rideTime = em.getTransportationTime(rideTime);
@@ -135,6 +135,9 @@ function invasion() {
     map2.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos2);
 }
 
+/**
+ * 取消预定的事件/任务调度
+ */
 function cancelSchedule() {}
 
 // ---------- 辅助函数 ----------

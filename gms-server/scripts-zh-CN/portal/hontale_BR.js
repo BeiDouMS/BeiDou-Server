@@ -26,7 +26,7 @@ function enter(pi) {
             pi.warp(240060100, 0);
             return true;
         } else {
-            pi.getPlayer().dropMessage(6, "Horntail\'s Seal is Blocking this Door.");
+            pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着这扇门！");
             return false;
         }
     } else if (pi.getPlayer().getMapId() == 240060100) {
@@ -35,7 +35,7 @@ function enter(pi) {
             pi.warp(240060200, 0);
             return true;
         } else {
-            pi.getPlayer().dropMessage(6, "Horntail\'s Seal is Blocking this Door.");
+            pi.getPlayer().dropMessage(6, "【暗黑龙王】的封印阻挡着这扇门！");
             return false;
         }
     }

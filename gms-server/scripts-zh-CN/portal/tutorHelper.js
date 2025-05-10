@@ -1,31 +1,12 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/*
- * @author kevintjuh93
+/**
+ * 骑士团-女皇之路（MapID：130030001）
+ * 触发召唤NPC利林跟随
+ * @param pi
+ * @returns {boolean}
  */
 function enter(pi) {
-    pi.spawnGuide();
-    pi.talkGuide("Welcome to Maple World! I'm Mimo. I'm in charge of guiding you until you reach Lv. 10 and become a Knight-In-Training. Double-click for further information!");
-    pi.blockPortal();
-    return true;
+    pi.spawnGuide();// 生成（召唤）新手引导NPC
+    pi.talkGuide("欢迎来到北斗世界！我是利琳。我会负责引导你，直到你达到10级并成为见习骑士。双击我获取更多信息！");// 让引导NPC对玩家发送消息
+    pi.blockPortal();// 阻止玩家通过传送门（防止玩家提前离开新手引导区域）
+    return true;// 返回 `true`，表示事件执行成功
 }

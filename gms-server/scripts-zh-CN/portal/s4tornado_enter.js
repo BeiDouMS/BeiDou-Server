@@ -32,7 +32,7 @@ function enter(pi) {
 
             return true;
         } else {
-            pi.getPlayer().message("Some other player is currently inside.");
+            pi.getPlayer().message("当前有其他玩家正在地图内。");
             return false;
         }
     }

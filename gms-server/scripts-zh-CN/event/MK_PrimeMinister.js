@@ -10,9 +10,37 @@ var minMapId = 106021600;
 var maxMapId = 106021600;
 
 var mobId = 3300008; //Prime Minister
+const GameConfig = Java.type('org.gms.config.GameConfig');
+minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
+if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果解除远征队等级限制，则最低1级，最高999级。
+    minLevel = 1 , maxLevel = 999;
+}
 
-function init() {}
+function init() {
+    setEventRequirements();
+}
+function setEventRequirements() {
+    var reqStr = "";
 
+    reqStr += "\r\n   组队人数: ";
+    if (maxPlayers - minPlayers >= 1) {
+        reqStr += minPlayers + " ~ " + maxPlayers;
+    } else {
+        reqStr += minPlayers;
+    }
+
+    reqStr += "\r\n   等级要求: ";
+    if (maxLevel - minLevel >= 1) {
+        reqStr += minLevel + " ~ " + maxLevel;
+    } else {
+        reqStr += minLevel;
+    }
+
+    reqStr += "\r\n   时间限制: ";
+    reqStr += eventTime + " 分钟";
+
+    em.setProperty("party", reqStr);
+}
 function getEligibleParty(party) {      //selects, from the given party, the team that is allowed to attempt this event
     var eligible = [];
     var hasLeader = false;

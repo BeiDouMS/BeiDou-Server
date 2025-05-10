@@ -30,5 +30,5 @@ function act() {
         rm.spawnMonster(i);
     }
     rm.createMapMonitor(280030000, "ps00");
-    rm.mapMessage(5, "Zakum is summoned by the force of Eye of Fire.");
+    rm.mapMessage(5, "【炎魔苏醒】火焰之眼的力量正在召唤扎昆！");
 }

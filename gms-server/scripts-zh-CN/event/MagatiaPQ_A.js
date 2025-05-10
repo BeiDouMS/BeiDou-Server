@@ -40,6 +40,10 @@ const maxLobbies = 1;
 
 const GameConfig = Java.type('org.gms.config.GameConfig');
 minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
+if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果解除远征队等级限制，则最低1级，最高999级。
+    minLevel = 1 , maxLevel = 999;
+}
+
 function init() {
     setEventRequirements();
 }
@@ -314,9 +318,9 @@ function yuleteAction(eim) {
     if (eim.getIntProperty("yuleteTalked") == 1) {
         eim.setIntProperty("yuletePassed", 1);
 
-        eim.dropMessage(5, "Yulete: Ugh, you guys disgust me. All I desired was to make this nation the greatest alchemy powerhouse of the entire world. If they won't accept this, I will make it true by myself, at any costs!!!");
+        eim.dropMessage(5, "犹泰：呃...你们真让我作呕。我想要的不过是让这个国家成为全世界最伟大的炼金术强国。如果他们不接受，我不惜一切代价也要独自实现这个目标！！！");
     } else {
-        eim.dropMessage(5, "Yulete: Hahaha... Did you really think I was going to be so disprepared knowing that the Magatia societies' dogs would be coming in my pursuit after my actions? Fools!");
+        eim.dropMessage(5, "犹泰：哈哈哈...你们真以为我会毫无准备，不知道玛加提亚协会的走狗们会来追捕我吗？愚蠢！");
     }
     eim.setIntProperty("yuleteTalked", -1);
 

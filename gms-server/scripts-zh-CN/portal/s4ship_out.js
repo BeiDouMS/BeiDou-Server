@@ -18,17 +18,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    var exit = pi.getEventInstance().getIntProperty("canLeave");
-    if (exit == 0) {
-        pi.message("You have to wait one minute before you can leave this place.");
-        return false;
-    } else if (exit == 2) {
-        pi.playPortalSound();
-        pi.warp(912010200);
-        return true;
-    } else {
-        pi.playPortalSound();
-        pi.warp(120000101);
-        return true;
+    const exitStatus = pi.getEventInstance().getIntProperty("canLeave");
+
+    switch(exitStatus) {
+        case 0: // 限制离开状态
+            pi.message("请等待1分钟后再尝试离开该区域");
+            return false;
+
+        case 2: // 特殊传送条件
+            pi.playPortalSound();
+            pi.warp(912010200); // 传送到特殊地图
+            return true;
+
+        default: // 常规传送
+            pi.playPortalSound();
+            pi.warp(120000101); // 返回主城
+            return true;
     }
 }

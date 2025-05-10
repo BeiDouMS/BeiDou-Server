@@ -6,7 +6,7 @@ function enter(pi) {
             pi.warp(map.getId(), "female01");
             return true;
         } else {
-            pi.message("This portal leads to the girls' area, try the portal at the other side.");
+            pi.message("此传送门通向女生区域，请使用另一侧的男生传送门");
             return false;
         }
     } else {
@@ -15,7 +15,7 @@ function enter(pi) {
             pi.warp(map.getId(), "male01");
             return true;
         } else {
-            pi.message("This portal leads to the boys' area, try the portal at the other side.");
+            pi.message("此传送门通向男生区域，请使用另一侧的女生传送门");
             return false;
         }
     }

@@ -42,6 +42,10 @@ const maxLobbies = 1;
 
 const GameConfig = Java.type('org.gms.config.GameConfig');
 minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
+if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果解除远征队等级限制，则最低1级，最高999级。
+    minLevel = 1 , maxLevel = 999;
+}
+
 
 function init() {
     setEventRequirements();
@@ -364,7 +368,7 @@ function monsterKilled(mob, eim) {
     var map = mob.getMap();
 
     if (isLordPirate(mob)) {  // lord pirate defeated, spawn the little fella!
-        map.broadcastStringMessage(5, "As Lord Pirate dies, Wu Yang is released!");
+        map.broadcastStringMessage(5, "随着海盗领主死亡，无恙被释放了！");
         eim.spawnNpc(2094001, new java.awt.Point(777, 140), mob.getMap());
     }
 

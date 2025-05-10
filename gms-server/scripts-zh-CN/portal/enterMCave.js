@@ -1,5 +1,5 @@
 function enter(pi) {
-    if (pi.isQuestStarted(21201)) { // Second Job
+    if (pi.isQuestStarted(21201)) { // 二转
         for (var i = 108000700; i < 108000709; i++) {
             if (pi.getPlayerCount(i) > 0 && pi.getPlayerCount(i + 10) > 0) {
                 continue;
@@ -10,11 +10,11 @@ function enter(pi) {
             pi.setQuestProgress(21202, 21203, 0);
             return true;
         }
-        pi.message("The mirror is blank due to many players recalling their memories. Please wait and try again.");
+        pi.message("由于太多玩家正在回忆，镜子暂时空白。请稍后再试。");
         return false;
-    } else if (pi.isQuestStarted(21302) && !pi.isQuestCompleted(21303)) { // Third Job
+    } else if (pi.isQuestStarted(21302) && !pi.isQuestCompleted(21303)) { // 三转
         if (pi.getPlayerCount(108010701) > 0 || pi.getPlayerCount(108010702) > 0) {
-            pi.message("The mirror is blank due to many players recalling their memories. Please wait and try again.");
+            pi.message("由于太多玩家正在回忆，镜子暂时空白。请稍后再试。");
             return false;
         } else {
             var map = pi.getClient().getChannelServer().getMapFactory().getMap(108010702);
@@ -26,7 +26,7 @@ function enter(pi) {
             return true;
         }
     } else {
-        pi.message("You have already passed your test, there is no need to access the mirror again.");
+        pi.message("你已经通过测试，无需再次使用镜子。");
         return false;
     }
 }

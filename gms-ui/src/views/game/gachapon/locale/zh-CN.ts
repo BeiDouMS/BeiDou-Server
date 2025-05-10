@@ -20,5 +20,6 @@ export default {
   'gachapon.notification.false.desc': '否',
 
   'gachapon.button.detail': '奖品',
-  'gachapon.button.operate': '显示操作按钮',
+  'gachapon.button.operate': '操作',
+  'gachapon.button.deleteTips': '你确定要删除这个奖池吗？',
 };

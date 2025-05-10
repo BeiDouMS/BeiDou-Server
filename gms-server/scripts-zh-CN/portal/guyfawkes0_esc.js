@@ -23,7 +23,7 @@ function enter(pi) {
         pi.warp(674030200, 0);
         return true;
     } else {
-        pi.message("The tunnel is currently blocked.");
+        pi.message("通道目前被堵塞无法通行");
         return false;
     }
 }

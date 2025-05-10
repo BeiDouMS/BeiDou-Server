@@ -2,7 +2,7 @@ function enter(pi) {
     if (pi.getPlayer().getMapId() != 777777777) {
         const Server = Java.type('org.gms.net.server.Server');
         if (!Server.getInstance().canEnterDeveloperRoom()) {
-            pi.message("The next room is currently unavailable.");
+            pi.message("这个房间你无法进入");
             return false;
         }
 

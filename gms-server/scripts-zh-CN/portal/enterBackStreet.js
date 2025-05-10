@@ -4,7 +4,7 @@ function enter(pi) {
         pi.warp(925040000, 0);
         return true;
     } else {
-        pi.message("You don't have permission to access this area.");
+        pi.message("你无权访问该区域。");
         return false;
     }
 }

@@ -40,6 +40,10 @@ const maxLobbies = 1;
 
 const GameConfig = Java.type('org.gms.config.GameConfig');
 minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
+if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果解除远征队等级限制，则最低1级，最高999级。
+    minLevel = 1 , maxLevel = 999;
+}
+
 
 function init() {
     setEventRequirements();
@@ -111,9 +115,21 @@ function setup(channel) {
     return eim;
 }
 
+/**
+ * 处理玩家进入远征副本事件 - 当玩家进入远征副本时触发
+ * @param {ExpeditionInstanceManager} eim - 远征副本实例管理器
+ * @param {Player} player - 进入副本的玩家对象
+ * @returns {void}
+ * @description 当玩家进入副本时发送系统消息，并将玩家传送到副本入口地图
+ */
 function playerEntry(eim, player) {
-    eim.dropMessage(5, "[Expedition] " + player.getName() + " has entered the map.");
+    // 发送玩家进入副本的系统提示消息
+    eim.dropMessage(5, "[远征队] " + player.getName() + " 已进入副本地图。");
+
+    // 获取副本入口地图实例
     var map = eim.getMapInstance(entryMap);
+
+    // 将玩家传送到入口地图的第一个传送点
     player.changeMap(map, map.getPortal(0));
 }
 
@@ -121,16 +137,19 @@ function scheduledTimeout(eim) {
     end(eim);
 }
 
+/**
+ * 处理玩家切换地图事件 - 当玩家在远征副本中切换地图时触发
+ * @param {ExpeditionInstanceManager} eim - 远征副本实例管理器
+ * @param {Player} player - 触发事件的玩家对象
+ * @param {number} mapid - 玩家切换到的地图ID
+ * @returns {void}
+ * @description 当玩家切换到副本允许范围外的地图时，执行玩家移除逻辑
+ */
 function changedMap(eim, player, mapid) {
+    // 检查地图ID是否超出副本允许范围
     if (mapid < minMapId || mapid > maxMapId) {
-        if (eim.isExpeditionTeamLackingNow(true, minPlayers, player)) {
-            eim.unregisterPlayer(player);
-            eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
-            end(eim);
-        } else {
-            eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
-            eim.unregisterPlayer(player);
-        }
+        // 检查是否因玩家退出导致队伍不满足最低人数要求
+        partyPlayersCheck(eim, player);
     }
 }
 
@@ -138,26 +157,24 @@ function changedLeader(eim, leader) {}
 
 function playerDead(eim, player) {}
 
+/**
+ * 处理玩家复活事件 - 当玩家在远征副本中复活时触发
+ * @param {ExpeditionInstanceManager} eim - 远征副本实例管理器
+ * @param {Player} player - 触发事件的玩家对象
+ * @returns {void}
+ */
 function playerRevive(eim, player) {
-    if (eim.isExpeditionTeamLackingNow(true, minPlayers, player)) {
-        eim.unregisterPlayer(player);
-        eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
-        end(eim);
-    } else {
-        eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
-        eim.unregisterPlayer(player);
-    }
+    partyPlayersCheck(eim, player);
 }
 
+/**
+ * 处理玩家断线事件 - 当玩家在远征副本中断开连接时触发
+ * @param {ExpeditionInstanceManager} eim - 远征副本实例管理器
+ * @param {Player} player - 触发事件的玩家对象
+ * @returns {void}
+ */
 function playerDisconnected(eim, player) {
-    if (eim.isExpeditionTeamLackingNow(true, minPlayers, player)) {
-        eim.unregisterPlayer(player);
-        eim.dropMessage(5, "[Expedition] Either the leader has quit the expedition or there is no longer the minimum number of members required to continue it.");
-        end(eim);
-    } else {
-        eim.dropMessage(5, "[Expedition] " + player.getName() + " has left the instance.");
-        eim.unregisterPlayer(player);
-    }
+    partyPlayersCheck(eim, player);
 }
 
 function leftParty(eim, player) {}
@@ -223,5 +240,23 @@ function updateGateState(newState) {    // thanks Conrad for noticing missing ga
 function dispose(eim) {
     if (!eim.isEventCleared()) {
         updateGateState(0);
+    }
+}
+/**
+ * 检测队伍人数是否满足最低人数要求
+ * @param {ExpeditionInstanceManager} eim - 远征副本实例管理器
+ * @param {Player} player - 触发事件的玩家对象
+ * @returns {void}
+ */
+function partyPlayersCheck(eim, player) {
+    if (eim.isExpeditionTeamLackingNow(true, minPlayers, player)) {
+        eim.unregisterPlayer(player);
+        eim.dropMessage(5, "[远征队] 队长已退出远征或者队伍人数不足最低要求，无法继续。");
+        end(eim);
+        return false;
+    } else {
+        eim.dropMessage(5, "[远征队] " + player.getName() + " 已离开副本。");
+        eim.unregisterPlayer(player);
+        return true;
     }
 }

@@ -23,5 +23,5 @@ function act() {
     rm.changeMusic("Bgm09/TimeAttack");
     rm.spawnMonster(9420513, -146, 225);
     rm.getEventInstance().setIntProperty("boss", 1);
-    rm.mapMessage(5, "As you wish, here comes Capt Latanica.");
+    rm.mapMessage(5, "如您所愿，幽灵船长即将登场！");
 }

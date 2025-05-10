@@ -435,13 +435,13 @@ public class GiveService {
         long sum = (long) cash + (long) quantity;
         // 禁止点券小于0导致商城错误
         if (sum < 0) {
-            sum = -cash;
+            quantity = -cash;
         }
         // 禁止点券大于最大值
         if (sum > Integer.MAX_VALUE) {
-            sum = Integer.MAX_VALUE - cash;
+            quantity = Integer.MAX_VALUE - cash;
         }
-        chr.getCashShop().gainCash(type, (int) sum);
+        chr.getCashShop().gainCash(type, quantity);
     }
 
     private void doGainExp(Character chr, int quantity) {
@@ -460,11 +460,11 @@ public class GiveService {
         int meso = chr.getMeso();
         long sum = (long) meso + (long) quantity;
         if (sum < 0) {
-            sum = -meso;
+            quantity = -meso;
         }
         if (sum > Integer.MAX_VALUE) {
-            sum = Integer.MAX_VALUE - meso;
+            quantity = Integer.MAX_VALUE - meso;
         }
-        chr.gainMeso((int) sum);
+        chr.gainMeso(quantity);
     }
 }

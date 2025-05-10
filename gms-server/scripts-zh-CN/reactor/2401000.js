@@ -32,5 +32,5 @@ function act() {
         var eim = rm.getEventInstance();
         eim.restartEventTimer(60 * 60000);
     }
-    rm.mapMessage(6, "From the depths of his cave, here comes Horntail!");
+    rm.mapMessage(6, "洞穴深处传来震天咆哮，暗黑龙王破岩而出！")
 }

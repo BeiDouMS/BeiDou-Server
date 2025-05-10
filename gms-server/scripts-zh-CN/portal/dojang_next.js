@@ -47,19 +47,19 @@ function enter(pi) {
                                 var chr = pIter.next();
 
                                 for (var j = i; j >= 0; j--) {
-                                    chr.message("You received " + chr.addDojoPointsByMap(mapId - 100 * j) + " training points. Your total training points score is now " + chr.getDojoPoints() + ".");
+                                    chr.message("你获得了" + chr.addDojoPointsByMap(mapId - 100 * j) + "修炼点数。当前总修炼点数为：" + chr.getDojoPoints() + "。");
                                 }
 
                                 chr.changeMap(restMapId, 0);
                             }
                         }
                     } else {
-                        pi.getPlayer().message("You received " + pi.getPlayer().addDojoPointsByMap(pi.getMapId()) + " training points. Your total training points score is now " + pi.getPlayer().getDojoPoints() + ".");
+                        pi.getPlayer().message("你获得了" + pi.getPlayer().addDojoPointsByMap(pi.getMapId()) + "修炼点数。当前总修炼点数为：" + pi.getPlayer().getDojoPoints() + "。");
                         pi.playPortalSound();
                         pi.warp(pi.getPlayer().getMap().getId() + 100, 0);
                     }
                 } else {
-                    pi.getPlayer().message("You received " + pi.getPlayer().addDojoPointsByMap(pi.getMapId()) + " training points. Your total training points score is now " + pi.getPlayer().getDojoPoints() + ".");
+                    pi.getPlayer().message("你获得了" + pi.getPlayer().addDojoPointsByMap(pi.getMapId()) + "修炼点数。当前总修炼点数为：" + pi.getPlayer().getDojoPoints() + "。");
                     pi.playPortalSound();
                     pi.warp(pi.getPlayer().getMap().getId() + 100, 0);
                 }
@@ -70,7 +70,7 @@ function enter(pi) {
             }
             return true;
         } else {
-            pi.getPlayer().message("The door is not open yet.");
+            pi.getPlayer().message("传送门尚未开启。");
             return false;
         }
     } else {

@@ -62,61 +62,79 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
- * @author Matze
- * @author Ronan
+ * 事件实例管理器类，负责管理游戏内事件实例的创建、运行和销毁。
+ * 处理玩家加入/退出、怪物生成/击杀、奖励发放、地图切换等事件相关逻辑。
+ * 提供线程安全的事件状态管理和脚本调度功能。
  */
 public class EventInstanceManager {
     private static final Logger log = LoggerFactory.getLogger(EventInstanceManager.class);
-    private final Map<Integer, Character> chars = new HashMap<>();
-    private int leaderId = -1;
-    private final List<Monster> mobs = new LinkedList<>();
-    private final Map<Character, Integer> killCount = new HashMap<>();
-    private EventManager em;
-    private EventScriptScheduler ess;
-    private MapManager mapManager;
-    private String name;
+    private final Map<Integer, Character> chars = new HashMap<>();// 存储参与事件的玩家，key为玩家ID
+    private int leaderId = -1; // 事件队伍领袖ID
+    private final List<Monster> mobs = new LinkedList<>();// 事件中生成的怪物列表
+    private final Map<Character, Integer> killCount = new HashMap<>();// 玩家击杀计数
+    private EventManager em; // 所属事件管理器
+    private EventScriptScheduler ess; // 事件脚本调度器
+    private MapManager mapManager; // 地图管理器
+    private String name; // 事件实例名称
+
+    // 事件属性存储
     private final Properties props = new Properties();
     private final Map<String, Object> objectProps = new HashMap<>();
-    private long timeStarted = 0;
-    private long eventTime = 0;
+
+    // 事件计时相关
+    private long timeStarted = 0; // 事件开始时间
+    private long eventTime = 0; // 事件总时长
+
+    // 远征队相关
     private Expedition expedition = null;
+
+    // 事件使用的地图ID列表
     private final List<Integer> mapIds = new LinkedList<>();
 
+    // 读写锁控制
     private final Lock readLock;
     private final Lock writeLock;
 
-    private final Lock propertyLock = new ReentrantLock(true);
-    private final Lock scriptLock = new ReentrantLock(true);
+    private final Lock propertyLock = new ReentrantLock(true);// 属性操作锁
+    private final Lock scriptLock = new ReentrantLock(true);// 脚本操作锁
 
-    private ScheduledFuture<?> event_schedule = null;
-    private boolean disposed = false;
-    private boolean eventCleared = false;
-    private boolean eventStarted = false;
+    private ScheduledFuture<?> event_schedule = null;// 事件调度任务
 
-    // multi-leveled PQ rewards!
+    // 状态标志
+    private boolean disposed = false; // 是否已销毁
+    private boolean eventCleared = false; // 事件是否完成
+    private boolean eventStarted = false; // 事件是否开始
+
+    // 奖励相关配置
     private final Map<Integer, List<Integer>> collectionSet = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
     private final Map<Integer, List<Integer>> collectionQty = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
     private final Map<Integer, Integer> collectionExp = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
 
-    // Exp/Meso rewards by CLEAR on a stage
+    // 清理阶段奖励
     private final List<Integer> onMapClearExp = new ArrayList<>();
     private final List<Integer> onMapClearMeso = new ArrayList<>();
 
-    // registers player status on an event (null on this Map structure equals to 0)
+    // 玩家状态网格
     private final Map<Integer, Integer> playerGrid = new HashMap<>();
 
-    // registers all opened gates on the event. Will help late characters to encounter next stages gates already opened
+    // 已开启的门记录
     private final Map<Integer, Pair<String, Integer>> openedGates = new HashMap<>();
 
-    // forces deletion of items not supposed to be held outside of the event, dealt on a player's leaving moment.
+    // 事件专属物品
     private final Set<Integer> exclusiveItems = new HashSet<>();
 
+    /**
+     * 构造函数，初始化事件实例
+     * @param em 事件管理器
+     * @param name 事件实例名称
+     */
     public EventInstanceManager(EventManager em, String name) {
         this.em = em;
         this.name = name;
         this.ess = new EventScriptScheduler();
         this.mapManager = new MapManager(this, em.getWorldServer().getId(), em.getChannelServer().getId());
 
+        // 初始化读写锁
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
         this.readLock = readWriteLock.readLock();
         this.writeLock = readWriteLock.writeLock();
@@ -237,26 +255,31 @@ public class EventInstanceManager {
         registerPlayer(chr, true);
     }
 
+    /**
+     * 注册玩家到事件实例
+     * @param chr 要注册的玩家角色
+     * @param runEntryScript 是否执行入口脚本
+     */
     public synchronized void registerPlayer(final Character chr, boolean runEntryScript) {
         if (chr == null || !chr.isLoggedInWorld() || disposed) {
             return;
         }
 
-        writeLock.lock();
+        writeLock.lock(); // 获取写锁
         try {
             if (chars.containsKey(chr.getId())) {
-                return;
+                return; // 已注册则返回
             }
 
-            chars.put(chr.getId(), chr);
-            chr.setEventInstance(this);
+            chars.put(chr.getId(), chr); // 添加玩家到集合
+            chr.setEventInstance(this); // 设置玩家事件实例
         } finally {
-            writeLock.unlock();
+            writeLock.unlock(); // 释放写锁
         }
 
         if (runEntryScript) {
             try {
-                invokeScriptFunction("playerEntry", EventInstanceManager.this, chr);
+                invokeScriptFunction("playerEntry", EventInstanceManager.this, chr);// 调用玩家进入脚本函数
             } catch (ScriptException | NoSuchMethodException ex) {
                 ex.printStackTrace();
             }
@@ -302,7 +325,7 @@ public class EventInstanceManager {
             try {
                 invokeScriptFunction("scheduledTimeout", EventInstanceManager.this);
             } catch (ScriptException | NoSuchMethodException ex) {
-                log.error("Event script {} does not implement the scheduledTimeout function", em.getName(), ex);
+                log.error("事件脚本 {} 没有封装scheduledTimeout函数", em.getName(), ex);
             }
         }, time);
     }
@@ -319,7 +342,7 @@ public class EventInstanceManager {
                     try {
                         invokeScriptFunction("scheduledTimeout", EventInstanceManager.this);
                     } catch (ScriptException | NoSuchMethodException ex) {
-                        log.error("Event script {} does not implement the scheduledTimeout function", em.getName(), ex);
+                        log.error("事件脚本 {} 没有封装scheduledTimeout函数", em.getName(), ex);
                     }
                 }, nextTime);
             }
@@ -391,7 +414,7 @@ public class EventInstanceManager {
         try {
             invokeScriptFunction("playerUnregistered", EventInstanceManager.this, chr);
         } catch (ScriptException | NoSuchMethodException ex) {
-            log.error("Event script {} does not implement the playerUnregistered function", em.getName(), ex);
+            log.error("事件脚本 {} 没有封装playerUnregistered函数", em.getName(), ex);
         }
 
         writeLock.lock();

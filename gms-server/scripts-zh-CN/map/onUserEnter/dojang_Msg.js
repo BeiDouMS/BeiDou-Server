@@ -24,17 +24,20 @@
 	Map(s):	Mu Lung Dojo Entrance
 	Desc:   Sends the entrance message or the taunt message from that dojo guy
 */
-var messages = Array("Your courage for challenging the Mu Lung Dojo is commendable!", "If you want to taste the bitterness of defeat, come on in!", "I will make you thoroughly regret challenging the Mu Lung Dojo! Hurry up!");
+var messages = [
+    "勇闯武陵道场，阁下好胆识！",
+    "想尝尝败北的滋味？尽管放马过来！",
+    "定让你后悔挑战武陵道场！速来受死！"
+];
 
 function start(ms) {
-    if (ms.getPlayer().getMap().getId() == 925020000) {
-        if (ms.getPlayer().getMap().findClosestPlayerSpawnpoint(ms.getPlayer().getPosition()).getId() == 0) {
+    if (ms.getPlayer().getMap().getId() === 925020000) {
+        if (ms.getPlayer().getMap().findClosestPlayerSpawnpoint(ms.getPlayer().getPosition()).getId() === 0) {
             ms.getPlayer().startMapEffect(messages[(Math.random() * messages.length) | 0], 5120024);
         }
-
         ms.resetDojoEnergy();
     } else {
-        ms.getPlayer().resetEnteredScript(); //in case the person dcs in here we set it at dojang_tuto portal
-        ms.getPlayer().startMapEffect("Ha! Let's see what you got! I won't let you leave unless you defeat me first!", 5120024);
+        ms.getPlayer().resetEnteredScript(); // 玩家进入道场试炼时执行的脚本// 防止断线重连时卡关，在道场传送门处重置状态
+        ms.getPlayer().startMapEffect("哼！让我看看你有几斤几两！不打败我就别想离开！", 5120024);// 启动全屏特效并显示BOSS挑衅台词
     }
 }

@@ -48,7 +48,7 @@ function act() {
                     eim.setProperty("stage1combo", prevCombo);
                     if (prevCombo.length == (3 * (stage + 3))) { //end of displaying
                         eim.setProperty("stage1status", "active");
-                        rm.mapMessage(5, "The combo has been displayed; Proceed with caution.");
+                        rm.mapMessage(5, "连击效果已触发，请小心前进。");
                         eim.setProperty("stage1guess", "");
                     }
                 }

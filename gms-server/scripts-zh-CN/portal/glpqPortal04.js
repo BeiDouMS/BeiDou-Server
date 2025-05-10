@@ -4,7 +4,7 @@ function enter(pi) {
         pi.warp(610030550, 0);
         return true;
     } else {
-        pi.playerMessage(5, "Only pirates may enter this portal.");
+        pi.playerMessage(5, "※ 仅限海盗职业进入该传送门！")
         return false;
     }
 }

@@ -19,7 +19,7 @@
 */
 function enter(pi) {
     if (!pi.getEventInstance().isEventCleared()) {
-        pi.message("You have to clear this mission before entering this portal.");
+        pi.message("请先完成当前任务才能进入此传送门。");
         return false;
     } else {
         if (pi.isQuestStarted(6410)) {

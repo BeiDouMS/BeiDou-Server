@@ -16,13 +16,13 @@ export function isValidString(data: any) {
  * @param timestamp 时间戳
  * @returns 格式化的时间字符串
  */
-export function timestampToChineseTime(timestamp: number) {
+export function timestampToChineseTime(timestamp: number | string) {
   const { locale } = useI18n();
 
   if (timestamp === -1) {
     return locale.value === 'en-US' ? 'Permanent' : '永久';
   }
-
+  if (typeof timestamp === 'string') timestamp?.replace(' ', 'T');
   const date = new Date(timestamp);
 
   // 获取年、月、日、时、分、秒
