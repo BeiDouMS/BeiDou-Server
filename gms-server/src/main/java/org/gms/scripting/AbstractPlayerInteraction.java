@@ -781,7 +781,7 @@ public class AbstractPlayerInteraction {
 
     public void removeHPQItems() {
         int[] items = {ItemId.GREEN_PRIMROSE_SEED, ItemId.PURPLE_PRIMROSE_SEED, ItemId.PINK_PRIMROSE_SEED,
-                ItemId.BROWN_PRIMROSE_SEED, ItemId.YELLOW_PRIMROSE_SEED, ItemId.BLUE_PRIMROSE_SEED, ItemId.MOON_BUNNYS_RICE_CAKE};
+                ItemId.BROWN_PRIMROSE_SEED, ItemId.YELLOW_PRIMROSE_SEED, ItemId.BLUE_PRIMROSE_SEED};
         for (int item : items) {
             removePartyItems(item);
         }

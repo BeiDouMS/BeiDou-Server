@@ -352,7 +352,6 @@ public class ItemId {
     public static final int BROWN_PRIMROSE_SEED = 4001098;
     public static final int YELLOW_PRIMROSE_SEED = 4001099;
     public static final int BLUE_PRIMROSE_SEED = 4001100;
-    public static final int MOON_BUNNYS_RICE_CAKE = 4001101;
 
     // Catch mobs items
     public static final int PHEROMONE_PERFUME = 2270000;
