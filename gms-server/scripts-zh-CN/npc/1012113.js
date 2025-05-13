@@ -38,12 +38,12 @@ function action(mode, type, selection) {
         status++;
         if (cm.getPlayer().getMap().getId() == 910010100) { //Clear map
             if (status == 0) {
-                cm.sendNext("你好！我是汤米。我们站的附近有一个猪镇。那里的猪很吵闹，无法控制，甚至偷了许多旅行者的武器。它们被赶出了自己的城镇，目前躲藏在猪镇里。");
+                cm.sendNext("你好！我是达尔米。我们所在的地方附近有个猪猪村庄。那里的猪非常吵闹且难以控制，甚至从旅行者那里偷走了许多武器。它们被原来的村庄赶了出来，现在躲在猪猪村庄里。");
             } else if (status == 1) {
                 if (cm.isEventLeader()) {
-                    cm.sendNext("你觉得和你的队员一起去那里，给那些吵闹的猪一个教训怎么样？");
+                    cm.sendYesNo("你觉得和你的队员一起去那里给那些吵闹的猪一个教训怎么样？");
                 } else {
-                    cm.sendOk("感兴趣吗？告诉你的队长和我联系，前往那里！");
+                    cm.sendOk("感兴趣吗？告诉你的队长来和我谈谈，然后前往那里！");
                     cm.dispose();
 
                 }
@@ -56,7 +56,7 @@ function action(mode, type, selection) {
             }
         } else if (cm.getPlayer().getMap().getId() == 910010200) { //Bonus map
             if (status == 0) {
-                cm.sendYesNo("你想现在退出奖励吗？");
+                cm.sendYesNo("你现在想离开猪猪村庄吗？");
             } else {
                 cm.warp(910010400);
                 cm.dispose();
@@ -64,7 +64,7 @@ function action(mode, type, selection) {
             }
         } else if (cm.getPlayer().getMap().getId() == 910010300) { //Exit map
             if (status == 0) {
-                cm.sendOk("你现在将被传送出去，谢谢你的帮助！");
+                cm.sendOk("你现在将被传送出去，感谢你的帮助！");
             } else {
                 cm.warp(100000200);
                 cm.dispose();

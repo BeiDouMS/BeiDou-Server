@@ -78,17 +78,17 @@ function setEventRequirements() {
 }
 
 function setEventExclusives(eim) {
-    var itemSet = [4001095, 4001096, 4001097, 4001098, 4001099, 4001100, 4001101];
+    var itemSet = [4001095, 4001096, 4001097, 4001098, 4001099, 4001100];
     eim.setExclusiveItems(itemSet);
 }
 
 function setEventRewards(eim) {
     var itemSet, itemQty, evLevel, expStages;
 
-    evLevel = 1;    //Rewards at clear PQ
-    itemSet = [4001158];
-    itemQty = [1];
-    eim.setEventRewards(evLevel, itemSet, itemQty);
+    // evLevel = 1;    //Rewards at clear PQ
+    // itemSet = [4001158];
+    // itemQty = [1];
+    // eim.setEventRewards(evLevel, itemSet, itemQty);
 
     expStages = [1600];    //bonus exp given on CLEAR stage signal
     eim.setEventClearStageExp(expStages);
@@ -162,7 +162,7 @@ function scheduledTimeout(eim) {
 }
 
 function bunnyDefeated(eim) {
-    eim.dropMessage(5, "因未能保护好玉兔月妙导致其重伤，你已被传送至流放之地！");
+    eim.dropMessage(5, "因未能保护好月妙导致其重伤，你已被传送至流放之地！");
     end(eim);
 }
 

@@ -51,7 +51,7 @@ function action(mode, type, selection) {
             if (status == 0) {
                 em = cm.getEventManager("HenesysPQ");
                 if (em == null) {
-                    cm.sendOk("冒险岛的废弃都市组队任务遇到了一个错误。");
+                    cm.sendOk("月妙组队任务遇到了错误。");
                     cm.dispose();
                     return;
                 } else if (cm.isUsingOldPqNpcStyle()) {
@@ -59,53 +59,53 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                cm.sendSimple("#e#b<组队任务：樱草山>\r\n#k#n" + em.getProperty("party") + "\r\n\r\n我是托里。这里是一个美丽的山丘，樱草盛开。山里有一只老虎，叫做格劳利，他似乎在寻找食物。你想前往樱草山，与你的队友一起帮助格劳利吗？#b\r\n#L0#我想参加组队任务。\r\n#L1#我想" + (cm.getPlayer().isRecvPartySearchInviteEnabled() ? "关闭" : "开启") + "组队搜索。\r\n#L2#我想了解更多细节。\r\n#L3#我想兑换一个实例帽。");
+                cm.sendSimple("#e#b<组队任务: 迎月花山丘>\r\n#k#n" + em.getProperty("party") + "\r\n\r\n我是达尔利。这里有一座美丽的山丘，迎月花在那里盛开。山丘上住着一只老虎，名叫兴儿，它似乎在找吃的。你想前往迎月花山丘，与你的队友们联手帮助兴儿吗？#b\r\n#L0#我想参加组队任务。\r\n#L1#我想" + (cm.getPlayer().isRecvPartySearchInviteEnabled() ? "禁用" : "启用") + "队伍搜索。\r\n#L2#我想了解更多详情。\r\n#L3#我想兑换一件年糕的帽子。");
             } else if (status == 1) {
                 if (selection == 0) {
                     if (cm.getParty() == null) {
-                        cm.sendOk("嗨！我是托里。这个地方充满了神秘的满月光环，没有一个人可以独自进入这里。");
+                        cm.sendOk("嗨！我是达尔利。这个地方笼罩着满月的神秘气息，任何人都不能独自进入这里。");
                         cm.dispose();
                     } else if (!cm.isLeader()) {
-                        cm.sendOk("如果你想进入这里，你们队伍的领袖必须和我交谈。和你们队伍的领袖谈谈这件事。");
+                        cm.sendOk("如果你想进入这里，你的队伍队长必须和我交谈。和你的队长说一下这件事。");
                         cm.dispose();
                     } else {
                         var eli = em.getEligibleParty(cm.getParty());
                         if (eli.size() > 0) {
                             if (!em.startInstance(cm.getParty(), cm.getPlayer().getMap(), 1)) {
-                                cm.sendOk("有人已经在尝试进行组队任务了。请等待他们完成，或者换到另一个频道。");
+                                cm.sendOk("已经有人在尝试这个组队任务了。请等待他们完成，或者寻找其他频道。");
                             }
                         } else {
-                            cm.sendOk("你目前无法开始这个组队任务，因为你的队伍可能不符合人数要求，有些队员可能不符合参与条件，或者他们不在这张地图上。如果你找不到队员，可以尝试使用组队搜索功能。");
+                            cm.sendOk("你还不能开始这个组队任务，因为你的队伍人数可能不在规定范围内，或者你的一些队员不符合参与条件，又或者他们不在这个地图里。如果你在寻找队员方面有困难，可以试试队伍搜索。");
                         }
 
                         cm.dispose();
                     }
                 } else if (selection == 1) {
                     var psState = cm.getPlayer().toggleRecvPartySearchInvite();
-                    cm.sendOk("你的组队搜索状态现在是：#b" + (psState ? "启用" : "禁用") + "#k。想要改变状态时随时找我谈谈。");
+                    cm.sendOk("你的队伍搜索状态现在是: #b" + (psState ? "启用" : "禁用") + "#k。如果你想再次更改状态，随时和我交谈。");
                     cm.dispose();
                 } else if (selection == 2) {
-                    cm.sendOk("#e#b<组队任务：樱草山>#k#n\r\n在地图的底部从花朵上收集樱草种子，并将它们放在舞台上方的平台上。樱草种子的颜色必须匹配才能生长，所以要不断尝试，直到找到正确的组合。当所有种子都被种植后，也就是任务的第二部分开始时，要在月兔准备年糕给饥饿的格罗利时进行侦查。一旦格罗利满意，你的任务就完成了。");
+                    cm.sendOk("#e#b<组队任务: 迎月花山丘>#k#n\r\n从地图底部的花朵上收集迎月花种子，然后把它们扔到舞台上方的平台旁边。迎月花种子的颜色必须匹配才能让种子生长，所以要不断尝试直到找到正确的组合。当所有种子都种下后，也就是任务的第二阶段开始了，在月妙为饥饿的兴儿准备年糕时进行侦查。一旦兴儿吃饱了，你的任务就完成了。");
                     cm.dispose();
                 } else {
-                    cm.sendYesNo("所以你想要用#b20 #b#t4001158##k来交换那个特殊设计的帽子吗？");
+                    cm.sendYesNo("所以你想用 #b20 个 #b#t4001101##k 兑换这件专属设计的帽子吗？");
                 }
             } else {
-                if (cm.hasItem(4001158, 20)) {
+                if (cm.hasItem(4001101, 20)) {
                     if (cm.canHold(1002798)) {
-                        cm.gainItem(4001158, -20);
-                        cm.gainItem(1002798, 20);
-                        cm.sendNext("这就是。尽情享受！");
+                        cm.gainItem(4001101, -20);
+                        cm.gainItem(1002798, 1);
+                        cm.sendNext("给你。尽情享用！");
                     }
                 } else {
-                    cm.sendNext("你还没有足够的 #t4001158# 来购买它！");
+                    cm.sendNext("你还没有足够的 #t4001101# 来兑换它！");
                 }
 
                 cm.dispose();
             }
         } else if (cm.getMapId() == 910010100) {
             if (status == 0) {
-                cm.sendYesNo("谢谢你帮助喂养Growlie。事实上，你的团队已经因为达到这一步而得到了奖励。现在问题已经解决，但现在又出现了另一个问题，如果你感兴趣的话，可以去#bTommy#k那里查看信息。那么，你现在要直接回到Henesys吗？");
+                cm.sendYesNo("感谢你帮助喂养兴儿。事实上，你们团队已经因走到这一步而获得了奖励。这个问题现在已经解决了，但现在又出现了另一个问题，如果你感兴趣，可以找那边的 #b达尔米#k 了解信息。那么，你现在要直接返回射手村吗？");
             } else if (status == 1) {
                 if (cm.getEventInstance().giveEventReward(cm.getPlayer())) {
                     cm.warp(100000200);
@@ -116,7 +116,7 @@ function action(mode, type, selection) {
             }
         } else if (cm.getMapId() == 910010400) {
             if (status == 0) {
-                cm.sendYesNo("那么，你现在要回到明斯港吗？");
+                cm.sendYesNo("那么，你现在要返回射手村吗？");
             } else if (status == 1) {
                 if (cm.getEventInstance() == null) {
                     cm.warp(100000200);
