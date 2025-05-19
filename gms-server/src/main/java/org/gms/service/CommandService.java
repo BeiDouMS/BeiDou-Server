@@ -87,7 +87,7 @@ public class CommandService {
         // 如果新状态是开启，那么有可能是更新了等级。如果新状态是关闭，则移除之前的注册
         if (commandInfoDO.isEnabled()) {
             // 老的nameDesc已经移除，这里直接把新的等级加进nameDesc
-            Pair<List<String>, List<String>> newPair = commandsNameDesc.get(commandInfoDO.getId());
+            Pair<List<String>, List<String>> newPair = commandsNameDesc.get(commandInfoDO.getLevel());
             newPair.getLeft().add(syntax);
             newPair.getRight().add(command.getDescription());
 
