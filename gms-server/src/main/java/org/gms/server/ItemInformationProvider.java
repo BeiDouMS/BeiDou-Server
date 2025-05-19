@@ -1913,7 +1913,7 @@ public class ItemInformationProvider {
     public ArrayList<Pair<Integer, String>> getItemDataByName(String name) {
         ArrayList<Pair<Integer, String>> ret = new ArrayList<>();
         for (Pair<Integer, String> itemPair : ItemInformationProvider.getInstance().getAllItems()) {
-            if (itemPair.getRight().toLowerCase().contains(name.toLowerCase())) {
+            if (itemPair.getRight().toLowerCase().contains(name.toLowerCase()) && getItemData(itemPair.left) != null) {
                 ret.add(itemPair);
             }
         }
