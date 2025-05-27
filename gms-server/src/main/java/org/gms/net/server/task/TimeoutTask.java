@@ -21,7 +21,8 @@ public class TimeoutTask extends BaseTask implements Runnable {
         for (Character chr : chars) {
             if (time - chr.getClient().getLastPacket() > GameConfig.getServerLong("timeout_duration")) {
                 log.info("Chr {} auto-disconnected due to inactivity", chr.getName());
-                chr.getClient().disconnect(true, chr.getCashShop().isOpened());
+                // 默认1h还没有发过任何包，那就是异常连接，直接断开
+                chr.getClient().timeoutDisconnect();
             }
         }
     }
