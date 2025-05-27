@@ -28,6 +28,10 @@ public class GuildPackets {
             p.writeByte(0);
             return p;
         }
+        if (g.getName() == null) {
+            p.writeByte(0);
+            return p;
+        }
         p.writeByte(1); //bInGuild
         p.writeInt(g.getId());
         p.writeString(g.getName());

@@ -913,6 +913,10 @@ public class Server {
             if (g != null) {
                 return g;
             }
+            // character表默认的guildId为0，导致会生成一个没有名字的guid，进而影响showGuildInfo的发包
+            if (id == 0) {
+                return null;
+            }
 
             g = new Guild(id, world);
             if (g.getId() == -1) {
