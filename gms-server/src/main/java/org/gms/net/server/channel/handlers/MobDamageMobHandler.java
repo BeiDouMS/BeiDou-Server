@@ -36,6 +36,7 @@ import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Jay Estrella
@@ -58,19 +59,50 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
         Monster damaged = map.getMonsterByOid(to);
 
         if (attacker != null && damaged != null) {
+            Character damageChr = null;
+            // 这里不能单从controller判断，因为仇恨可以被吸引转移
+            if (attacker.getController() != null) {
+                MonsterStatusEffect hadAttHypnotized = attacker.getStati(MonsterStatus.INERTMOB);
+                if (hadAttHypnotized != null) {
+                    // 心灵控制的怪物攻击其他怪物，伤害算作控制者的伤害
+                    damageChr = attacker.getController();
+                } else if (damaged.getController() != null) {
+                    MonsterStatusEffect hadDamHypnotized = damaged.getStati(MonsterStatus.INERTMOB);
+                    if (hadDamHypnotized != null) {
+                        // 心灵控制的怪物被其他怪物攻击，伤害算作被控制者的伤害
+                        damageChr = damaged.getController();
+                    }
+                }
+            } else if (damaged.getController() != null) {
+                MonsterStatusEffect hadDamHypnotized = damaged.getStati(MonsterStatus.INERTMOB);
+                if (hadDamHypnotized != null) {
+                    // 心灵控制的怪物被其他怪物攻击，伤害算作被控制者的伤害
+                    damageChr = damaged.getController();
+                }
+            }
+            if (damageChr == null) {
+                // 2个怪物都没有心灵控制，互殴？
+                log.warn("A mob from controller {} attacked another mob from controller {} without any hypnotized monsters.",
+                        Optional.ofNullable(attacker.getController()).map(ac -> String.valueOf(ac.getId())).orElse("null"),
+                        Optional.ofNullable(damaged.getController()).map(dc -> String.valueOf(dc.getId())).orElse("null"));
+                // 此次攻击无效
+                return;
+            }
+
             int maxDmg = calcMaxDamage(attacker, damaged, magic);     // thanks Darter (YungMoozi) for reporting unchecked dmg
 
             if (dmg > maxDmg) {
-                AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing hypnotize damage exploit.");   // thanks Rien dev team
+                // 伤害计算有差异，StatEffect获取的时候，damage如果不存在默认为100，如果客户端也是这个逻辑，客户端是不是算上了这个damage导致实际数值比服务端高
+//                AutobanFactory.DAMAGE_HACK.alert(damageChr, "Possible packet editing hypnotize damage exploit.");   // thanks Rien dev team
                 String attackerName = MonsterInformationProvider.getInstance().getMobNameFromId(attacker.getId());
                 String damagedName = MonsterInformationProvider.getInstance().getMobNameFromId(damaged.getId());
-                log.warn("Chr {} had hypnotized {} to attack {} with damage {} (max: {})", c.getPlayer().getName(),
+                log.warn("Chr {} had hypnotized {} to attack {} with damage {} (max: {})", damageChr.getName(),
                         attackerName, damagedName, dmg, maxDmg);
                 dmg = maxDmg;
             }
 
-            map.damageMonster(chr, damaged, dmg);
-            map.broadcastMessage(chr, PacketCreator.damageMonster(to, dmg), false);
+            map.damageMonster(damageChr, damaged, dmg);
+            map.broadcastMessage(damageChr, PacketCreator.damageMonster(to, dmg), false);
         }
     }
 
