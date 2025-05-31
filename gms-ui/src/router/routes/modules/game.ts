@@ -92,6 +92,16 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'file',
+      name: 'file',
+      component: () => import('@/views/game/file/index.vue'),
+      meta: {
+        locale: 'menu.game.file',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

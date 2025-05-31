@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import globalComponents from '@/components';
+import { loader } from '@guolao/vue-monaco-editor';
 import router from './router';
 import store from './store';
 import i18n from './locale';
@@ -24,5 +25,15 @@ app.use(store);
 app.use(i18n);
 app.use(globalComponents);
 app.use(directive);
+
+loader.config({
+  paths: {
+    vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs',
+    // vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs',
+    // vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs',
+    // vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs',
+    // vs: 'https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.52.2/min/vs',
+  },
+});
 
 app.mount('#app');
