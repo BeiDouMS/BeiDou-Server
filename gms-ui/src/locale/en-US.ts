@@ -24,6 +24,7 @@ export default {
   'menu.game.inventory': 'Inventory',
   'menu.game.gachapon': 'Gachapon',
   'menu.game.command': 'Command',
+  'menu.game.file': 'File',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
