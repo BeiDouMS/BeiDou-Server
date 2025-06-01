@@ -1,5 +1,5 @@
 /**
- * @version 0.0.1
+ * @version 0.0.2
  */
 declare global {
     const cm: NPCConversationManager;
@@ -10,31 +10,31 @@ declare global {
 
     /**
      * `ms` 是回调时的形参 定义为全局变量，类型会被覆写为any
-     *
+     * 
      * 可以使用 `jsdoc` 手动指定类型
-     *
+     * 
      * 在 `start` 方法上注释： `@param {MapScriptMethods} ms`
-     *
+     * 
      * 在 传参时或者方法内部上注释： `@type {MapScriptMethods}`
      */
     const _ms: MapScriptMethods;
     /**
      * `pi` 是回调时的形参 定义为全局变量，类型会被覆写为any
-     *
+     * 
      * 可以使用 `jsdoc` 手动指定类型
-     *
+     * 
      * 在 `enter` 方法上注释： `@param {PortalPlayerInteraction} pi`
-     *
+     * 
      * 在 传参时或者方法内部上注释： `@type {PortalPlayerInteraction}`
      */
     const _pi: PortalPlayerInteraction;
     /**
      * `eim` 是回调时的形参 定义为全局变量，类型会被覆写为any
-     *
+     * 
      * 可以使用 `jsdoc` 手动指定类型
-     *
+     * 
      * 在 事件 `event` 类型的函数 方法上注释： `@param {EventInstanceManager} eim`
-     *
+     * 
      * 在 传参时或者方法内部上注释： `@type {EventInstanceManager}`
      */
     const _eim: EventInstanceManager;
@@ -70,17 +70,17 @@ declare global {
     //=================================================================
     //     JDK internal
     //=================================================================
-    declare interface JavaMap { }
-    declare interface HashMap { }
-    declare interface Enum { }
-    declare interface Class { }
-    declare interface Optional { }
-    declare interface Consumer { }
-    declare interface JavaIterator { }
-    declare interface Spliterator { }
-    declare interface SortedMap { }
-    declare interface Properties { }
-    declare interface Point {
+    interface JavaMap { }
+    interface HashMap { }
+    interface Enum { }
+    interface Class { }
+    interface Optional { }
+    interface Consumer { }
+    interface JavaIterator { }
+    interface Spliterator { }
+    interface SortedMap { }
+    interface Properties { }
+    interface Point {
         x: number  // int
         y: number  // int
         // ===================================
@@ -100,7 +100,7 @@ declare global {
         setLocation(arg0: number, arg1: number): void
         translate(arg0: number, arg1: number): void
     }
-    declare interface Point2D {
+    interface Point2D {
         clone(): Object
         distance(arg0: Point2D): number
         distance(arg0: number, arg1: number): number
@@ -117,7 +117,7 @@ declare global {
     //=================================================================
     //     most used and powerful class
     //=================================================================
-    declare interface Channel {
+    interface Channel {
         //============ Properties =============
         //============ Functions  =============
         acceptOngoingWedding(cathedral: boolean): boolean
@@ -191,7 +191,7 @@ declare global {
         shutdown(): void
         unregisterOwnedMap(map: MapleMap): void
     }
-    declare interface Character {
+    interface Character {
         //============ Properties =============
         IDLE_MOVEMENT_PACKET_LENGTH: number
         ariantColiseum: AriantColiseum
@@ -955,7 +955,7 @@ declare global {
         withdrawMerchantMesos(): void
         yellowMessage(m: string): void
     }
-    declare interface Client {
+    interface Client {
         //============ Properties =============
         LOGIN_LOGGEDIN: number
         LOGIN_NOTLOGGEDIN: number
@@ -1084,7 +1084,7 @@ declare global {
         useVotePoints(points: number): void
         userEventTriggered(ctx: ChannelHandlerContext, event: Object): void
     }
-    declare interface Equip extends Item {
+    interface Equip extends Item {
         //============ Properties =============
         //============ Functions  =============
         copy(): Item
@@ -1143,7 +1143,7 @@ declare global {
         showEquipFeatures(c: Client): string
         wear(yes: boolean): void
     }
-    declare interface ExpTable {
+    interface ExpTable {
         //============ Properties =============
         //============ Functions  =============
         getEquipExpNeededForLevel(level: number): number
@@ -1151,7 +1151,7 @@ declare global {
         getMountExpNeededForLevel(level: number): number
         getTamenessNeededForLevel(level: number): number
     }
-    declare interface GameConfig {
+    interface GameConfig {
         //============ Properties =============
         //============ Functions  =============
         add(gameConfigDO: GameConfigDO): void
@@ -1209,7 +1209,7 @@ declare global {
         remove(gameConfigDO: GameConfigDO): void
         update(gameConfigDO: GameConfigDO): void
     }
-    declare interface GameConstants {
+    interface GameConstants {
         //============ Properties =============
         CASH_DATA: number[]
         CPQ_DISEASES: Disease[]
@@ -1264,7 +1264,7 @@ declare global {
         parseNumber(value: string): Number
         selectRandomReward(rewards: number[]): number
     }
-    declare interface InformationType {
+    interface InformationType {
         //============ Properties =============
         CASH: InformationType
         CONSUME: InformationType
@@ -1289,7 +1289,7 @@ declare global {
         valueOf(arg0: Class, arg1: string): Enum
         values(): InformationType[]
     }
-    declare interface Inventory {
+    interface Inventory {
         //============ Properties =============
         //============ Functions  =============
         addItem(item: Item): number
@@ -1335,7 +1335,7 @@ declare global {
         spliterator(): Spliterator
         unlockInventory(): void
     }
-    declare interface InventoryManipulator {
+    interface InventoryManipulator {
         //============ Properties =============
         //============ Functions  =============
         addById(c: Client, itemId: number, quantity: number): boolean
@@ -1357,7 +1357,7 @@ declare global {
         removeFromSlot(c: Client, type: InventoryType, slot: number, quantity: number, fromDrop: boolean, consume: boolean): void
         unequip(c: Client, src: number, dst: number): void
     }
-    declare interface InventoryType {
+    interface InventoryType {
         //============ Properties =============
         CANHOLD: InventoryType
         CASH: InventoryType
@@ -1385,7 +1385,7 @@ declare global {
         valueOf(arg0: Class, arg1: string): Enum
         values(): InventoryType[]
     }
-    declare interface Item {
+    interface Item {
         //============ Properties =============
         //============ Functions  =============
         compareTo(other: Item): number
@@ -1414,7 +1414,7 @@ declare global {
         setQuantity(quantity: number): void
         setSN(sn: number): void
     }
-    declare interface ItemId {
+    interface ItemId {
         //============ Properties =============
         ADVANCED_MONSTER_CRYSTAL_1: number
         ADVANCED_MONSTER_CRYSTAL_2: number
@@ -1641,7 +1641,7 @@ declare global {
         isWeddingRing(itemId: number): boolean
         isWeddingToken(itemId: number): boolean
     }
-    declare interface ItemInformationProvider {
+    interface ItemInformationProvider {
         //============ Properties =============
         //============ Functions  =============
         canPetConsume(petId: number, itemId: number): Pair
@@ -1717,7 +1717,7 @@ declare global {
         usableMasteryBooks(player: Character): []
         usableSkillBooks(player: Character): []
     }
-    declare interface Job {
+    interface Job {
         //============ Properties =============
         ARAN1: Job
         ARAN2: Job
@@ -1820,7 +1820,7 @@ declare global {
         valueOf(arg0: Class, arg1: string): Enum
         values(): Job[]
     }
-    declare interface LifeFactory {
+    interface LifeFactory {
         //============ Properties =============
         //============ Functions  =============
         getLife(id: number, type: string): AbstractLoadedLife
@@ -1830,7 +1830,7 @@ declare global {
         getNPCDefaultTalk(nid: number): string
         getNPCName(nid: number): string
     }
-    declare interface MapId {
+    interface MapId {
         //============ Properties =============
         AMHERST: number
         AMORIA: number
@@ -2005,7 +2005,7 @@ declare global {
         isPhysicalFitness(mapId: number): boolean
         isSelfLootableOnly(mapId: number): boolean
     }
-    declare interface MapleMap {
+    interface MapleMap {
         //============ Properties =============
         //============ Functions  =============
         addAllMonsterSpawn(monster: Monster, mobTime: number, team: number): void
@@ -2317,7 +2317,7 @@ declare global {
         warpEveryone(to: number, pto: number): void
         warpOutByTeam(team: number, mapid: number): void
     }
-    declare interface MobId {
+    interface MobId {
         //============ Properties =============
         ANGRY_SCARLION: number
         ANGRY_TARGA: number
@@ -2396,7 +2396,7 @@ declare global {
         isDojoBoss(mobId: number): boolean
         isZakumArm(mobId: number): boolean
     }
-    declare interface NPC {
+    interface NPC {
         //============ Properties =============
         IDLE_MOVEMENT_PACKET_LENGTH: number
         //============ Functions  =============
@@ -2430,7 +2430,7 @@ declare global {
         setRx1(rx1: number): void
         setStance(stance: number): void
     }
-    declare interface NpcId {
+    interface NpcId {
         //============ Properties =============
         BEI_DOU_NPC_BASE: number
         BILLY: number
@@ -2465,7 +2465,7 @@ declare global {
         TEMPLE_KEEPER: number
         //============ Functions  =============
     }
-    declare interface PacketCreator {
+    interface PacketCreator {
         //============ Properties =============
         EMPTY_STATUPDATE: []
         ZERO_TIME: number
@@ -2953,7 +2953,7 @@ declare global {
         viewMerchantVisitorHistory(pastVisitors: []): Packet
         wrongPic(): Packet
     }
-    declare interface Party {
+    interface Party {
         //============ Properties =============
         //============ Functions  =============
         addDoor(owner: number, door: Door): void
@@ -2985,7 +2985,7 @@ declare global {
         setLeader(victim: PartyCharacter): void
         updateMember(member: PartyCharacter): void
     }
-    declare interface PartyCharacter {
+    interface PartyCharacter {
         //============ Properties =============
         //============ Functions  =============
         getChannel(): number
@@ -3004,7 +3004,7 @@ declare global {
         setMapId(mapid: number): void
         setOnline(online: boolean): void
     }
-    declare interface PartyQuest {
+    interface PartyQuest {
         //============ Properties =============
         //============ Functions  =============
         getExp(PQ: string, level: number): number
@@ -3012,7 +3012,7 @@ declare global {
         getParty(): Party
         removeParticipant(chr: Character): void
     }
-    declare interface PlayerNPC {
+    interface PlayerNPC {
         //============ Properties =============
         //============ Functions  =============
         addPlayerNPCMapObject(map: MapleMap): void
@@ -3050,7 +3050,7 @@ declare global {
         spawnPlayerNPC(mapid: number, pos: Point, chr: Character): boolean
         updatePlayerNPCPosition(map: MapleMap, newPos: Point): void
     }
-    declare interface Quest {
+    interface Quest {
         //============ Properties =============
         //============ Functions  =============
         canComplete(chr: Character, npcid: number): boolean
@@ -3092,7 +3092,7 @@ declare global {
         restoreLostItem(chr: Character, itemid: number): boolean
         start(chr: Character, npc: number): void
     }
-    declare interface Server {
+    interface Server {
         //============ Properties =============
         uptime: number
         //============ Functions  =============
@@ -3196,7 +3196,7 @@ declare global {
         validateCharacteridInTransition(client: Client, charId: number): boolean
         worldRecommendedList(): []
     }
-    declare interface Shop {
+    interface Shop {
         //============ Properties =============
         //============ Functions  =============
         buy(c: Client, slot: number, itemId: number, quantity: number): void
@@ -3207,7 +3207,7 @@ declare global {
         sell(c: Client, type: InventoryType, slot: number, quantity: number): void
         sendShop(c: Client): void
     }
-    declare interface Skill {
+    interface Skill {
         //============ Properties =============
         //============ Functions  =============
         addLevelEffect(effect: StatEffect): void
@@ -3224,7 +3224,7 @@ declare global {
         setAnimationTime(time: number): void
         setElement(elem: Element): void
     }
-    declare interface World {
+    interface World {
         //============ Properties =============
         //============ Functions  =============
         addCashItemBought(snid: number): void
@@ -3373,126 +3373,126 @@ declare global {
     //=================================================================
     //     misc class
     //=================================================================
-    declare interface AbstractLoadedLife { }
-    declare interface Alliance { }
-    declare interface AriantColiseum { }
-    declare interface AutobanManager { }
-    declare interface BaseService { }
-    declare interface BuddyAddResult { }
-    declare interface BuddyList { }
-    declare interface BuddyOperation { }
-    declare interface BuffStat { }
-    declare interface Calendar { }
-    declare interface CashShop { }
-    declare interface ChannelHandlerContext { }
-    declare interface ChannelServices { }
-    declare interface CharacterFactoryRecipe { }
-    declare interface CharacterIdChannelPair { }
-    declare interface CharactersDO { }
-    declare interface Coconut { }
-    declare interface ConfigService { }
-    declare interface DelayedQuestUpdate { }
-    declare interface Disease { }
-    declare interface Door { }
-    declare interface DoorObject { }
-    declare interface Dragon { }
-    declare interface EventScheduledFuture { }
-    declare interface EventScriptManager { }
-    declare interface Expedition { }
-    declare interface ExpeditionType { }
-    declare interface Family { }
-    declare interface FamilyEntry { }
-    declare interface Fitness { }
-    declare interface FootholdTree { }
-    declare interface GameConfigDO { }
-    declare interface GuardianSpawnPoint { }
-    declare interface Guild { }
-    declare interface GuildCharacter { }
-    declare interface GuildSummary { }
-    declare interface HiredMerchant { }
-    declare interface Hwid { }
-    declare interface IdleStateEvent { }
-    declare interface InPacket { }
-    declare interface InetAddress { }
-    declare interface InitializationVector { }
-    declare interface Invocable { }
-    declare interface ItemInformationProvider { }
-    declare interface JSONObject { }
-    declare interface KeyBinding { }
-    declare interface Kite { }
-    declare interface MCSkill { }
-    declare interface MakerItemCreateEntry { }
-    declare interface MapItem { }
-    declare interface MapManager { }
-    declare interface MapObject { }
-    declare interface MapObjectType { }
-    declare interface Marriage { }
-    declare interface MatchCheckerCoordinator { }
-    declare interface Messenger { }
-    declare interface MessengerCharacter { }
-    declare interface MiniDungeon { }
-    declare interface MiniGame { }
-    declare interface MiniGameResult { }
-    declare interface Mist { }
-    declare interface MobSkill { }
-    declare interface MobSkillId { }
-    declare interface ModifiedCashItemDO { }
-    declare interface Monster { }
-    declare interface MonsterAggroCoordinator { }
-    declare interface MonsterBook { }
-    declare interface MonsterCarnival { }
-    declare interface MonsterCarnivalParty { }
-    declare interface MonsterStatusEffect { }
-    declare interface Mount { }
-    declare interface NewYearCardRecord { }
-    declare interface NextLevelContext { }
-    declare interface Ola { }
-    declare interface OutPacket { }
-    declare interface OxQuiz { }
-    declare interface Packet { }
-    declare interface PacketProcessor { }
-    declare interface Pair { }
-    declare interface PartyOperation { }
-    declare interface PartySearchCoordinator { }
-    declare interface Pet { }
-    declare interface PlayerBuffStorage { }
-    declare interface PlayerShop { }
-    declare interface PlayerStorage { }
-    declare interface Portal { }
-    declare interface Pyramid { }
-    declare interface QuestConsItem { }
-    declare interface QuestStatus { }
-    declare interface QuickslotBinding { }
-    declare interface Reactor { }
-    declare interface Rectangle { }
-    declare interface ResultSet { }
-    declare interface Ring { }
-    declare interface RockPaperScissor { }
-    declare interface Runnable { }
-    declare interface SavedLocation { }
-    declare interface SavedLocationType { }
-    declare interface ScheduledFuture { }
-    declare interface ScriptEngine { }
-    declare interface ScriptedItem { }
-    declare interface ScrollResult { }
-    declare interface SkillMacro { }
-    declare interface SkinColor { }
-    declare interface Snowball { }
-    declare interface SoldItem { }
-    declare interface SpawnPoint { }
-    declare interface Stat { }
-    declare interface StatEffect { }
-    declare interface Status { }
-    declare interface Summon { }
-    declare interface Throwable { }
-    declare interface Trade { }
-    declare interface TypeReference { }
-    declare interface WeaponType { }
-    declare interface WorldServices { }
+    interface AbstractLoadedLife { }
+    interface Alliance { }
+    interface AriantColiseum { }
+    interface AutobanManager { }
+    interface BaseService { }
+    interface BuddyAddResult { }
+    interface BuddyList { }
+    interface BuddyOperation { }
+    interface BuffStat { }
+    interface Calendar { }
+    interface CashShop { }
+    interface ChannelHandlerContext { }
+    interface ChannelServices { }
+    interface CharacterFactoryRecipe { }
+    interface CharacterIdChannelPair { }
+    interface CharactersDO { }
+    interface Coconut { }
+    interface ConfigService { }
+    interface DelayedQuestUpdate { }
+    interface Disease { }
+    interface Door { }
+    interface DoorObject { }
+    interface Dragon { }
+    interface EventScheduledFuture { }
+    interface EventScriptManager { }
+    interface Expedition { }
+    interface ExpeditionType { }
+    interface Family { }
+    interface FamilyEntry { }
+    interface Fitness { }
+    interface FootholdTree { }
+    interface GameConfigDO { }
+    interface GuardianSpawnPoint { }
+    interface Guild { }
+    interface GuildCharacter { }
+    interface GuildSummary { }
+    interface HiredMerchant { }
+    interface Hwid { }
+    interface IdleStateEvent { }
+    interface InPacket { }
+    interface InetAddress { }
+    interface InitializationVector { }
+    interface Invocable { }
+    interface ItemInformationProvider { }
+    interface JSONObject { }
+    interface KeyBinding { }
+    interface Kite { }
+    interface MCSkill { }
+    interface MakerItemCreateEntry { }
+    interface MapItem { }
+    interface MapManager { }
+    interface MapObject { }
+    interface MapObjectType { }
+    interface Marriage { }
+    interface MatchCheckerCoordinator { }
+    interface Messenger { }
+    interface MessengerCharacter { }
+    interface MiniDungeon { }
+    interface MiniGame { }
+    interface MiniGameResult { }
+    interface Mist { }
+    interface MobSkill { }
+    interface MobSkillId { }
+    interface ModifiedCashItemDO { }
+    interface Monster { }
+    interface MonsterAggroCoordinator { }
+    interface MonsterBook { }
+    interface MonsterCarnival { }
+    interface MonsterCarnivalParty { }
+    interface MonsterStatusEffect { }
+    interface Mount { }
+    interface NewYearCardRecord { }
+    interface NextLevelContext { }
+    interface Ola { }
+    interface OutPacket { }
+    interface OxQuiz { }
+    interface Packet { }
+    interface PacketProcessor { }
+    interface Pair { }
+    interface PartyOperation { }
+    interface PartySearchCoordinator { }
+    interface Pet { }
+    interface PlayerBuffStorage { }
+    interface PlayerShop { }
+    interface PlayerStorage { }
+    interface Portal { }
+    interface Pyramid { }
+    interface QuestConsItem { }
+    interface QuestStatus { }
+    interface QuickslotBinding { }
+    interface Reactor { }
+    interface Rectangle { }
+    interface ResultSet { }
+    interface Ring { }
+    interface RockPaperScissor { }
+    interface Runnable { }
+    interface SavedLocation { }
+    interface SavedLocationType { }
+    interface ScheduledFuture { }
+    interface ScriptEngine { }
+    interface ScriptedItem { }
+    interface ScrollResult { }
+    interface SkillMacro { }
+    interface SkinColor { }
+    interface Snowball { }
+    interface SoldItem { }
+    interface SpawnPoint { }
+    interface Stat { }
+    interface StatEffect { }
+    interface Status { }
+    interface Summon { }
+    interface Throwable { }
+    interface Trade { }
+    interface TypeReference { }
+    interface WeaponType { }
+    interface WorldServices { }
     //=================================================================
     //     Script Manager class
     //=================================================================
-    declare interface AbstractPlayerInteraction {
+    interface AbstractPlayerInteraction {
         //============ Properties =============
         c: Client
         //============ Functions  =============
@@ -3661,7 +3661,7 @@ declare global {
         warpParty(id: number, portalId: number, fromMinId: number, fromMaxId: number): void
         weakenAreaBoss(monsterId: number, message: string): void
     }
-    declare interface EventInstanceManager {
+    interface EventInstanceManager {
         //============ Properties =============
         //============ Functions  =============
         activatedAllReactorsOnMap(mapId: number, minReactorId: number, maxReactorId: number): boolean
@@ -3779,7 +3779,7 @@ declare global {
         warpEventTeamToMapSpawnPoint(warpTo: number, toSp: number): void
         warpEventTeamToMapSpawnPoint(warpFrom: number, warpTo: number, toSp: number): void
     }
-    declare interface EventManager {
+    interface EventManager {
         //============ Properties =============
         //============ Functions  =============
         addGuildToQueue(guildId: number, leaderId: number): number
@@ -3829,7 +3829,7 @@ declare global {
         startInstance(lobbyId: number, party: Party, map: MapleMap, difficulty: number, leader: Character): boolean
         startQuest(chr: Character, id: number, npcid: number): void
     }
-    declare interface MapScriptMethods extends AbstractPlayerInteraction {
+    interface MapScriptMethods extends AbstractPlayerInteraction {
         //============ Properties =============
         //============ Functions  =============
         displayAranIntro(): void
@@ -3840,7 +3840,7 @@ declare global {
         startExplorerExperience(): void
         touchTheSky(): void
     }
-    declare interface NPCConversationManager extends AbstractPlayerInteraction {
+    interface NPCConversationManager extends AbstractPlayerInteraction {
         //============ Properties =============
         //============ Functions  =============
         answerCPQChallenge(accept: boolean): void
@@ -3967,7 +3967,7 @@ declare global {
         startQuest(id: number): boolean
         upgradeAlliance(): void
     }
-    declare interface PortalPlayerInteraction extends AbstractPlayerInteraction {
+    interface PortalPlayerInteraction extends AbstractPlayerInteraction {
         //============ Properties =============
         //============ Functions  =============
         blockPortal(): void
@@ -3977,7 +3977,7 @@ declare global {
         runMapScript(): void
         unblockPortal(): void
     }
-    declare interface ReactorActionManager extends AbstractPlayerInteraction {
+    interface ReactorActionManager extends AbstractPlayerInteraction {
         //============ Properties =============
         //============ Functions  =============
         createMapMonitor(mapId: number, portal: string): void
@@ -4010,7 +4010,8 @@ declare global {
 
     type ItemScriptManager = NPCConversationManager
 
-    declare interface QuestActionManager extends NPCConversationManager {
+    // @ts-ignore
+    interface QuestActionManager extends NPCConversationManager {
         completeQuest(): void
         dispose(): void
         forceCompleteQuest(): boolean
