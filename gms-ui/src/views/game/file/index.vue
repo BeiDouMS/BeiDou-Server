@@ -9,12 +9,11 @@
               ref="treeRef"
               theme="dark"
               size="mini"
-              block-node="true"
-              :v-model:expanded-keys="expandedKeys"
+              :block-node="treeBlockMode"
               :data="treeData"
-              :load-more="onSelectDiretory"
+              :load-more="onTreeSelectDiretory"
               :virtual-list-props="{ buffer: 100 }"
-              @select="onSelectFile"
+              @select="onTreeSelectFile"
             >
               <template #switcher-icon>
                 <IconDown />
@@ -48,11 +47,12 @@
   import { useDebounceFn } from '@vueuse/core';
   import { TreeInstance, TreeNodeData } from '@arco-design/web-vue/es/tree';
   import { IconDown } from '@arco-design/web-vue/es/icon';
-  import dts from './types/beidoums-scripts.d.ts.txt?raw';
+  import localDts from './types/beidoums-scripts.d.ts.txt?raw';
 
   const treeData = ref([]);
   const treeRef = ref<TreeInstance>();
-  const editingTreeNode = ref<TreeNodeData>();
+  const treeBlockMode = ref(true);
+  const treeEditingNode = ref<TreeNodeData>();
 
   const editor = shallowRef<typeof Editor>();
   const editorContent = ref('');
@@ -91,9 +91,23 @@
     registerCodeCompletion(monacoInstance);
   }
 
-  function registerCodeCompletion(monaco: MonacoEditor) {
+  /**
+   * 添加代码提示, 优先访问网络文件（浏览器缓存）
+   */
+  async function registerCodeCompletion(monaco: MonacoEditor) {
+    let usingDts = '';
+    try {
+      const response = await fetch(
+        `https://cdn.jsdelivr.net/gh/shinobi9/beidoums-scripts-snippets/types/beidoums-scripts.d.ts`
+      );
+      usingDts = response.ok ? await response.text() : usingDts;
+    } catch (e) {
+      // 请求不到
+      usingDts = localDts;
+    }
+
     monaco.languages.typescript.javascriptDefaults.addExtraLib(
-      dts,
+      usingDts,
       'beidoums-scripts-dts'
     );
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
@@ -105,39 +119,44 @@
     });
   }
 
-  async function onSelectFile(newSelectedKeys: Array<string>, event: any) {
+  async function onTreeSelectFile(newSelectedKeys: Array<string>, event: any) {
     const node = event.node as TreeNodeData;
     const selectKey = newSelectedKeys[0];
+    // 当选择文件夹时，默认什么也不做（展开在点击图标上），这里使其展开
     if (!node.isLeaf) {
       const expanded = treeRef.value
         ?.getExpandedNodes()
         ?.some((it) => it?.key === selectKey);
       treeRef.value?.expandNode(node?.key ?? '', !expanded);
-      onSelectDiretory(event.selectedNodes[0]);
+      onTreeSelectDiretory(event.selectedNodes[0]);
       return;
     }
-    editingTreeNode.value = node;
+    // 如果是 文件，则保存状态（正在修改什么文件）
+    treeEditingNode.value = node;
     const result = await readFile({
       currentKey: selectKey,
       title: node.title ?? '',
     });
     editorContent.value = result.data;
+    // 根据文件扩展名，设置文件高亮
     const ext = node.title?.split('.')?.pop()?.toLowerCase();
-
     if (ext)
       editorLangeguage.value = languageMap[ext as LanguageMapKey] ?? 'txt';
   }
 
-  async function onSelectDiretory(nodeData: TreeNodeData) {
+  async function onTreeSelectDiretory(nodeData: TreeNodeData) {
     const result = await treeFile({ currentKey: `${nodeData.key}` });
     nodeData.children = result.data;
   }
 
+  /**
+   * 修改文件时自动保存，防抖
+   */
   const debounceSaveFile = useDebounceFn(
     async () => {
       await writeFile({
-        currentKey: `${editingTreeNode.value?.key}` ?? '',
-        title: editingTreeNode.value?.title ?? '',
+        currentKey: `${treeEditingNode.value?.key}` ?? '',
+        title: treeEditingNode.value?.title ?? '',
         content: editorContent.value ?? '',
       });
     },
@@ -145,8 +164,11 @@
     { maxWait: 10_000 }
   );
 
+  /**
+   *  如果是初始化状态 或者 意外状况没有正在修改的文件，则不保存文件
+   */
   function onEditorTextChange(value: string | undefined, event: any) {
-    debounceSaveFile();
+    if (treeEditingNode.value) debounceSaveFile();
   }
 
   async function treeRoot() {
@@ -175,8 +197,6 @@
   :deep(.arco-tree-node-title-text) {
     color: #b6b6b6;
   }
-  /*  arco-tree-node-title-block */
-  /*  arco-tree-node-title */
   :deep(.arco-tree-node-title):hover {
     background-color: #181818;
   }
