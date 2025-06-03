@@ -192,7 +192,7 @@
     width: 360px;
   }
   :deep(.arco-virtual-list) {
-    height: 710px !important;
+    height: calc(100vh - 270px) !important;
   }
   :deep(.arco-tree-node-title-text) {
     color: #b6b6b6;
