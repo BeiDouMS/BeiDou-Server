@@ -45,12 +45,13 @@
   } from '@guolao/vue-monaco-editor';
   import { treeFile, readFile, writeFile } from '@/api/fileTree';
   import { useDebounceFn } from '@vueuse/core';
-  import { TreeInstance, TreeNodeData } from '@arco-design/web-vue/es/tree';
+  import type { TreeNodeData } from '@arco-design/web-vue/es/tree/interface';
+  import { Tree } from '@arco-design/web-vue';
   import { IconDown } from '@arco-design/web-vue/es/icon';
   import localDts from './types/beidoums-scripts.d.ts.txt?raw';
 
   const treeData = ref([]);
-  const treeRef = ref<TreeInstance>();
+  const treeRef = ref<typeof Tree>();
   const treeBlockMode = ref(true);
   const treeEditingNode = ref<TreeNodeData>();
 
@@ -119,14 +120,17 @@
     });
   }
 
-  async function onTreeSelectFile(newSelectedKeys: Array<string>, event: any) {
+  async function onTreeSelectFile(
+    newSelectedKeys: (string | number)[],
+    event: any
+  ) {
     const node = event.node as TreeNodeData;
-    const selectKey = newSelectedKeys[0];
+    const selectKey = String(newSelectedKeys[0]);
     // 当选择文件夹时，默认什么也不做（展开在点击图标上），这里使其展开
     if (!node.isLeaf) {
       const expanded = treeRef.value
         ?.getExpandedNodes()
-        ?.some((it) => it?.key === selectKey);
+        ?.some((it: TreeNodeData) => it?.key === selectKey);
       treeRef.value?.expandNode(node?.key ?? '', !expanded);
       onTreeSelectDiretory(event.selectedNodes[0]);
       return;
