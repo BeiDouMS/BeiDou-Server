@@ -130,8 +130,8 @@
     if (!node.isLeaf) {
       const expanded = treeRef.value
         ?.getExpandedNodes()
-        ?.some((it: TreeNodeData) => it?.key === selectKey);
-      treeRef.value?.expandNode(node?.key ?? '', !expanded);
+        ?.some((it: TreeNodeData) => String(it.key) === selectKey);
+      treeRef.value?.expandNode(String(node.key), !expanded);
       onTreeSelectDiretory(event.selectedNodes[0]);
       return;
     }
@@ -149,7 +149,7 @@
   }
 
   async function onTreeSelectDiretory(nodeData: TreeNodeData) {
-    const result = await treeFile({ currentKey: `${nodeData.key}` });
+    const result = await treeFile({ currentKey: String(nodeData.key) });
     nodeData.children = result.data;
   }
 
@@ -158,9 +158,10 @@
    */
   const debounceSaveFile = useDebounceFn(
     async () => {
+      if (!treeEditingNode.value) return;
       await writeFile({
-        currentKey: `${treeEditingNode.value?.key}` ?? '',
-        title: treeEditingNode.value?.title ?? '',
+        currentKey: String(treeEditingNode.value.key),
+        title: treeEditingNode.value.title ?? '',
         content: editorContent.value ?? '',
       });
     },
