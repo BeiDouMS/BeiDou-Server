@@ -30,6 +30,7 @@ import org.gms.net.server.guild.Guild;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.World;
+import org.gms.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.scheduler.EventScriptScheduler;
@@ -68,7 +69,7 @@ public class EventManager {
     private final Map<String, Integer> instanceLocks = new HashMap<>();  // 实例锁定映射表
     private final Queue<Integer> queuedGuilds = new LinkedList<>();  // 排队中的公会队列
     private final Map<Integer, Integer> queuedGuildLeaders = new HashMap<>();  // 排队公会及其会长映射
-    private final List<Boolean> openedLobbys;  // 已开启的大厅列表
+    private final List<Pair<Boolean, Long>> openedLobbys;
     private final List<EventInstanceManager> readyInstances = new LinkedList<>();  // 准备就绪的实例队列
     private Integer readyId = 0, onLoadInstances = 0;  // 准备ID和加载中的实例数
     private final Properties props = new Properties();  // 属性配置
@@ -97,7 +98,7 @@ public class EventManager {
 
         this.openedLobbys = new ArrayList<>();
         for (int i = 0; i < maxLobbys; i++) {
-            this.openedLobbys.add(false);
+            this.openedLobbys.add(new Pair<>(false, 0L));
         }
     }
 
@@ -390,7 +391,7 @@ public class EventManager {
     private void setLockLobby(int lobbyId, boolean lock) {
         lobbyLock.lock();
         try {
-            openedLobbys.set(lobbyId, lock);
+            openedLobbys.set(lobbyId, new Pair<>(lock, System.currentTimeMillis()));
         } finally {
             lobbyLock.unlock();
         }
@@ -410,8 +411,9 @@ public class EventManager {
                 lobbyId = maxLobbys - 1;
             }
 
-            if (!openedLobbys.get(lobbyId)) {
-                openedLobbys.set(lobbyId, true);
+            Pair<Boolean, Long> pair = openedLobbys.get(lobbyId);
+            if (!pair.left || System.currentTimeMillis() - pair.right > getEventTimeout() || isNobodyInPQ()) {
+                openedLobbys.set(lobbyId, new  Pair<>(true, System.currentTimeMillis()));
                 return true;
             }
 
@@ -1017,6 +1019,36 @@ public class EventManager {
         }
     }
 
+    public long getEventTimeout() {
+        long timeout = 7200000L;
+        try {
+            timeout = (long) iv.invokeFunction("getEventTimeout");
+        } catch (ScriptException | NoSuchMethodException ignored) {
+
+        }
+        return timeout;
+    }
+
+    public boolean isNobodyInPQ() {
+        try {
+            boolean nobody = true;
+            Object o = iv.invokeFunction("getEventMaps");
+            if (o instanceof List<?> mapIds) {
+                for (Object mapId : mapIds) {
+                    if (mapId instanceof Integer id && !cserv.getMapFactory().getMap(id).getAllPlayers().isEmpty()) {
+                        nobody = false;
+                        break;
+                    }
+                }
+
+            }
+            return nobody;
+        } catch (Exception ignored) {
+
+        }
+        return false;
+    }
+
     /**
      * 获取怪物对象
      * @param mid 怪物ID
@@ -1204,7 +1236,7 @@ public class EventManager {
 
     /**
      * 修正Boss刷新时间
-     * @param BossTime刷新时间
+     * @param BossTime 刷新时间
      * @return 修正后的Boss刷新时间
      */
     public int getBossTime(int BossTime) {
