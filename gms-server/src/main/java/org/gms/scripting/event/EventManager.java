@@ -1020,8 +1020,10 @@ public class EventManager {
     }
 
     public long getEventTimeout() {
+        // 默认2h
         long timeout = 7200000L;
         try {
+            // 可以在事件脚本定义事件超时时间，如果超过超时时间锁仍未失效，则锁失效
             timeout = (long) iv.invokeFunction("getEventTimeout");
         } catch (ScriptException | NoSuchMethodException ignored) {
 
@@ -1032,10 +1034,21 @@ public class EventManager {
     public boolean isNobodyInPQ() {
         try {
             boolean nobody = true;
+            // 可以在事件脚本定义事件地图，如果地图上没人，则锁失效
             Object o = iv.invokeFunction("getEventMaps");
             if (o instanceof List<?> mapIds) {
                 for (Object mapId : mapIds) {
-                    if (mapId instanceof Integer id && !cserv.getMapFactory().getMap(id).getAllPlayers().isEmpty()) {
+                    int id;
+                    if (mapId instanceof Number) {
+                        id = ((Number) mapId).intValue();
+                    } else {
+                        id = Integer.parseInt(mapId.toString());
+                    }
+                    // 无效的mapId
+                    if (id <= 0) {
+                        continue;
+                    }
+                    if (!cserv.getMapFactory().getMap(id).getAllPlayers().isEmpty()) {
                         nobody = false;
                         break;
                     }
