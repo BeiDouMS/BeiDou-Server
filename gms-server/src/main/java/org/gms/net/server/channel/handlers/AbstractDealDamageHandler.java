@@ -138,7 +138,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             }
             if (display > 80) { //Hmm
                 if (!mySkill.getAction()) {
-                    AutobanFactory.FAST_ATTACK.autoban(chr, "WZ Edit; adding action to a skill: " + display);
+                    AutobanFactory.FAST_ATTACK.autoban(chr, "WZ编辑；为技能添加动作：" + display);
                     return null;
                 }
             }
@@ -168,7 +168,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 if (player.getMp() < attackEffect.getMpCon()) {
-                    AutobanFactory.MPCON.addPoint(player.getAutoBanManager(), "Skill: " + attack.skill + "; Player MP: " + player.getMp() + "; MP Needed: " + attackEffect.getMpCon());
+                    AutobanFactory.MPCON.addPoint(player.getAutoBanManager(), "技能: " + attack.skill + "; 玩家 MP: " + player.getMp() + "; MP 需要: " + attackEffect.getMpCon());
                 }
 
                 int mobCount = attackEffect.getMobCount();
@@ -199,7 +199,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 if (attack.numAttacked > mobCount) {
-                    AutobanFactory.MOB_COUNT.autoban(player, "Skill: " + attack.skill + "; Count: " + attack.numAttacked + " Max: " + attackEffect.getMobCount());
+                    AutobanFactory.MOB_COUNT.autoban(player, "技能: " + attack.skill + "; Count: " + attack.numAttacked + " Max: " + attackEffect.getMobCount());
                     return;
                 }
             }
@@ -280,7 +280,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
 
                     if (distance > distanceToDetect) {
-                        AutobanFactory.DISTANCE_HACK.alert(player, "Distance Sq to monster: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
+                        AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
                         monster.refreshMobPosition();
                     }
 
@@ -514,7 +514,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                             api.gainItem(shellId, (short) -1, false);
                                             totDamageToOneMonster *= player.getLevel();
                                         } else {
-                                            player.dropMessage(5, "You have ran out of shells to activate the hidden power of Three Snails.");
+                                            player.dropMessage(5, "你的蜗牛壳已经用完了，无法使用蜗牛投掷术。");  //蜗牛壳消耗完了
+                                            totDamageToOneMonster = 0;
                                         }
                                     } else {
                                         totDamageToOneMonster = 0;
