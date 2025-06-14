@@ -244,10 +244,10 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (player != null) {
+        if (player != null && !player.isLoggedInWorld()) {  //判断玩家不为空且不在线才进行救援
             String MapName = player.getMap().getMapName().isEmpty() ? I18nUtil.getLogMessage("SystemRescue.info.map.message1") : player.getMap().getMapName();  //读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
             log.warn(I18nUtil.getLogMessage("Client.warn.map.message1"), player, MapName , player.getMapId(), cause);
-            sysRescue.setMapChange();   // 尝试解救那些卡地图的倒霉蛋。
+            sysRescue.setMapChange(player);   // 尝试解救那些卡地图的倒霉蛋。
         }
 
         if (cause instanceof InvalidPacketHeaderException) {
@@ -326,7 +326,7 @@ public class Client extends ChannelInboundHandlerAdapter {
      */
     public void setPlayer(Character player) {
         this.player = player;
-        this.sysRescue = new SystemRescue(player);
+        this.sysRescue = new SystemRescue();
     }
 
     public AbstractPlayerInteraction getAbstractPlayerInteraction() {
