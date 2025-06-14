@@ -197,7 +197,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         try {
             remoteAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
         } catch (NullPointerException npe) {
-            log.warn("Unable to get remote address for client", npe);
+            log.warn("无法获取客户端的远程地址", npe);
         }
 
         return remoteAddress;
@@ -206,7 +206,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (!(msg instanceof InPacket packet)) {
-            log.warn("Received invalid message: {}", msg);
+            log.warn("收到无效封包: {}", msg);
             return;
         }
 
@@ -214,7 +214,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         final PacketHandler handler = packetProcessor.getHandler(opcode);
 
         if (GameConfig.getServerBoolean("use_debug_show_rcvd_packet") && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
-            log.info("Received packet id {}", String.format("0x%02X", opcode));
+            log.info("收到封包 包头ID [{}] 内容： {}", String.format("0x%02X", opcode),packet);
         }
 
         if (handler != null && handler.validateState(this)) {
@@ -223,9 +223,9 @@ public class Client extends ChannelInboundHandlerAdapter {
                 MonitoredChrLogger.logPacketIfMonitored(this, opcode, packet.getBytes());
                 handler.handlePacket(packet, this);
             } catch (final Throwable t) {
-                final String chrInfo = player != null ? player.getName() + " on map " + player.getMapId() : "?";
-                log.warn("Error in packet handler {}. Chr {}, account {}. Packet: {}", handler.getClass().getSimpleName(),
-                        chrInfo, getAccountName(), packet, t);
+                final String chrInfo = player != null ? player.getName() + " 地图 [" + player.getMap().getMapName() + "] (" + player.getMapId() + ")" : "?";
+                log.warn("封包处理器 {} 出错. 账号 {}, 玩家 {}. 封包: {}", handler.getClass().getSimpleName(),
+                        getAccountName(), chrInfo, packet, t);
                 enableActions();//解除客户端假死
             } finally {
                 ThreadLocalUtil.removeCurrentClient();
@@ -274,7 +274,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 disconnect(false, false);
             }
         } catch (Throwable t) {
-            log.warn("Account stuck", t);
+            log.warn("账号卡住", t);
         } finally {
             closeSession();
         }
@@ -411,7 +411,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 voteTime = rs.getInt("date");
             }
         } catch (SQLException e) {
-            log.error("Error getting voting time");
+            log.error("获取投票时间时出错");
             return -1;
         }
         return voteTime;
@@ -669,7 +669,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 if (rs.next()) {
                     accId = rs.getInt("id");
                     if (accId <= 0) {
-                        log.warn("Tried to log in with accId {}", accId);
+                        log.warn("尝试使用accId登录 {}", accId);
                         return 15;
                     }
 
@@ -710,7 +710,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
 
         if (loginok == 0 || loginok == 4) {
-            AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
+            AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);  //loginok == 4，但是会导致限制多开参数 deterred_multi_client == true 时密码错误一次返回REMOTE_REACHED_LIMIT，需要重开客户端
 
             return switch (res) {
                 case SUCCESS -> {
@@ -770,7 +770,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     public static long dottedQuadToLong(String dottedQuad) throws RuntimeException {
         String[] quads = dottedQuad.split("\\.");
         if (quads.length != 4) {
-            throw new RuntimeException("Invalid IP Address format.");
+            throw new RuntimeException("IP地址格式无效。");
         }
         long ipAddress = 0;
         for (int i = 0; i < 4; i++) {
@@ -859,7 +859,7 @@ public class Client extends ChannelInboundHandlerAdapter {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
-                        throw new RuntimeException("getLoginState - Client AccID: " + getAccID());
+                        throw new RuntimeException("获取登录状态-客户端账号：" + getAccID());
                     }
 
                     birthday = Calendar.getInstance();
@@ -895,7 +895,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         } catch (SQLException e) {
             loggedIn = false;
             e.printStackTrace();
-            throw new RuntimeException("login state");
+            throw new RuntimeException("登录状态");
         }
     }
 
@@ -966,7 +966,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             }
 
         } catch (final Throwable t) {
-            log.error("Account stuck", t);
+            log.error("账号卡住", t);
         }
     }
 
@@ -1045,7 +1045,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                     }
                 }
             } catch (final Exception e) {
-                log.error("Account stuck", e);
+                log.error("账号卡住", e);
             } finally {
                 if (!this.serverTransition) {
                     if (chrg != null) {
@@ -1180,7 +1180,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             try {
                 if (lastPong < pingedAt) {
                     if (ioChannel.isActive()) {
-                        log.info("Disconnected {} due to idling. Reason: {}", remoteAddress, event.state());
+                        log.info("由于空闲而断开连接 {}。原因：{}", remoteAddress, event.state());
 //                        updateLoginState(Client.LOGIN_NOTLOGGEDIN);
 //                        disconnectSession();
                         // 按正常的规则去移除这个客户端，避免client被close了，但是对象还在内存中引发后续报错
@@ -1262,7 +1262,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         for (World w : Server.getInstance().getWorlds()) {
             for (Character chr : w.getPlayerStorage().getAllCharacters()) {
                 if (accid == chr.getAccountId()) {
-                    log.warn("Chr {} has been removed from world {}. Possible Dupe attempt.", chr.getName(), GameConstants.WORLD_NAMES[w.getId()]);
+                    log.warn("玩家 {} 已从世界 {} 中删除。可能存在重复尝试。", chr.getName(), GameConstants.WORLD_NAMES[w.getId()]);
                     chr.getClient().forceDisconnect();
                     w.getPlayerStorage().removePlayer(chr.getId());
                 }
@@ -1368,7 +1368,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             digester.update(password.getBytes(StandardCharsets.UTF_8), 0, password.length());
             return HexTool.toHexString(digester.digest()).replace(" ", "").toLowerCase().equals(hash);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Encoding the string failed", e);
+            throw new RuntimeException("对字符串进行编码失败", e);
         }
     }
 
@@ -1500,14 +1500,14 @@ public class Client extends ChannelInboundHandlerAdapter {
             enableActions();
             return;
         } else if (MiniDungeonInfo.isDungeonMap(player.getMapId())) {
-            sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
+            sendPacket(PacketCreator.serverNotice(5, "在迷你地牢内时，更改频道或进入现金商店或拍卖行将被禁用。"));
             enableActions();
             return;
         }
 
         String[] socket = Server.getInstance().getInetSocket(this, getWorld(), channel);
         if (socket == null) {
-            sendPacket(PacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
+            sendPacket(PacketCreator.serverNotice(1, "频道 " + channel + " 当前已禁用。请尝试其他频道。"));
             enableActions();
             return;
         }
