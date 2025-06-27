@@ -73,7 +73,7 @@ function doSelect(selection) {
             openNpc("每日签到");
             break;
         case 2:
-            openNpc("在线奖励");
+            openNpc("在线奖励_nextlevel");
             break;
         case 3:
             cm.getPlayer().saveLocation("FREE_MARKET");
