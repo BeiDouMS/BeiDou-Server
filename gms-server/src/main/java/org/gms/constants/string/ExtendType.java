@@ -40,12 +40,12 @@ public enum ExtendType {
         Map<String, Date> map = new HashMap<>();
         Calendar mondayStart = Calendar.getInstance();
         mondayStart.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        mondayStart.set(Calendar.HOUR, 0);
+        mondayStart.set(Calendar.HOUR_OF_DAY, 0);
         mondayStart.set(Calendar.MINUTE, 0);
         mondayStart.set(Calendar.SECOND, 0);
 
         Calendar todayStart = Calendar.getInstance();
-        todayStart.set(Calendar.HOUR, 0);
+        todayStart.set(Calendar.HOUR_OF_DAY, 0);
         todayStart.set(Calendar.MINUTE, 0);
         todayStart.set(Calendar.SECOND, 0);
 
