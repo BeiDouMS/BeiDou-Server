@@ -52,7 +52,7 @@ function action(mode, type, selection) {
         }
         status++;
         if (status == 1) {
-            cm.sendSimple("我们提供两种房间供您选择。请选择您喜欢的一种。\r\n#b#L0#普通桑拿房（每次使用" + regcost + " 枚迷宫币）#l\r\n#L1#VIP桑拿房（每次使用" + vipcost + " 枚迷宫币）#l");
+            cm.sendSimple("我们提供两种房间供您选择。请选择您喜欢的一种。\r\n#b#L0#普通桑拿房（每次使用" + regcost + " 枚金币）#l\r\n#L1#VIP桑拿房（每次使用" + vipcost + " 枚金币）#l");
             iwantreg = 1;
         } else if (status == 2) {
             if (selection == 0) {
