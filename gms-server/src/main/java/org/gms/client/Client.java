@@ -1527,6 +1527,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         player.cancelDiseaseExpireTask();
         player.cancelSkillCooldownTask();
         player.cancelQuestExpirationTask();
+        player.cancelExpirationTask();
         //Cancelling magicdoor? Nope
         //Cancelling mounts? Noty
 
