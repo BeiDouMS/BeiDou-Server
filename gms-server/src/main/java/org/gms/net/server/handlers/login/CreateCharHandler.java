@@ -104,7 +104,13 @@ public final class CreateCharHandler extends AbstractPacketHandler {
                 status = !GameConfig.getServerBoolean("enable_knights_of_cygnus") ? -3 : NoblesseCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
                 break;
             case 1: // Adventurer #冒险家
-                status = !GameConfig.getServerBoolean("enable_adventurers") ? -3 : BeginnerCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
+                if (!GameConfig.getServerBoolean("enable_adventurers")) {
+                    log.info("config disable adventurers");
+                    status = -3;
+                } else {
+                    status = BeginnerCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
+                    log.info("create adventurers resp: {}", status);
+                }
                 break;
             case 2: // Aran #战神
                 status = !GameConfig.getServerBoolean("enable_the_lord_of_war") ? -3 : LegendCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);

@@ -214,7 +214,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         final PacketHandler handler = packetProcessor.getHandler(opcode);
 
         if (GameConfig.getServerBoolean("use_debug_show_rcvd_packet") && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
-            log.info("收到封包 包头ID [{}] 内容： {}", String.format("0x%02X", opcode),packet);
+            log.info("收到封包 包头ID [{}] 内容： {}", String.format("0x%02X", opcode), packet);
         }
 
         if (handler != null && handler.validateState(this)) {
@@ -246,7 +246,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (player != null && !player.isLoggedInWorld()) {  //判断玩家不为空且不在线才进行救援
             String MapName = player.getMap().getMapName().isEmpty() ? I18nUtil.getLogMessage("SystemRescue.info.map.message1") : player.getMap().getMapName();  //读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
-            log.warn(I18nUtil.getLogMessage("Client.warn.map.message1"), player, MapName , player.getMapId(), cause);
+            log.warn(I18nUtil.getLogMessage("Client.warn.map.message1"), player, MapName, player.getMapId(), cause);
             sysRescue.setMapChange(player);   // 尝试解救那些卡地图的倒霉蛋。
         }
 
@@ -322,6 +322,7 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     /**
      * 设置角色
+     *
      * @param player
      */
     public void setPlayer(Character player) {
@@ -959,7 +960,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 if (MapId.isDojo(mapId)) {
                     this.getChannelServer().freeDojoSectionIfEmpty(mapId);
                 }
-                
+
                 if (player.getMap().getHPDec() > 0) {
                     getWorldServer().removePlayerHpDecrease(player);
                 }
@@ -1127,6 +1128,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean deleteCharacter(int cid, int senderAccId) {
+        log.info("user delete character: cid: {}, senderAccId: {}", cid, senderAccId);
         try {
             Character chr = Character.loadCharFromDB(cid, this, false);
 

@@ -40,6 +40,7 @@ public abstract class CharacterFactory {
     private static final Logger log = LoggerFactory.getLogger(CharacterFactory.class);
 
     protected synchronized static int createNewCharacter(Client c, String name, int face, int hair, int skin, int gender, CharacterFactoryRecipe recipe) {
+        log.info("获取用户现有卡槽：getAvailableCharacterSlots: {}; getAvailableCharacterWorldSlots: {}", c.getAvailableCharacterSlots(), c.getAvailableCharacterWorldSlots());
         if (GameConfig.getServerBoolean("collective_chr_slot") ? c.getAvailableCharacterSlots() <= 0 : c.getAvailableCharacterWorldSlots() <= 0) {
             return -3;
         }
