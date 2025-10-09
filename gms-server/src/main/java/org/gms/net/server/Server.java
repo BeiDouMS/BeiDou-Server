@@ -1271,7 +1271,7 @@ public class Server {
         } finally {
             lgnWLock.unlock();
         }
-    
+
         for (World wserv : this.getWorlds()) {
             wserv.clearAccountCharacterView(accountid);
             wserv.unregisterAccountStorage(accountid);
