@@ -6546,20 +6546,13 @@ public class PacketCreator {
             for (DueyPackage dp : packages) {
                 p.writeInt(dp.getPackageId());
                 p.writeFixedString(dp.getSender());
-                for (int i = dp.getSender().length(); i < 13; i++) {
-                    p.writeByte(0);
-                }
-
                 p.writeInt(dp.getMesos());
                 p.writeLong(getTime(dp.sentTimeInMilliseconds()));
 
                 String msg = dp.getMessage();
                 if (msg != null) {
                     p.writeInt(1);
-                    p.writeFixedString(msg);
-                    for (int i = msg.length(); i < 200; i++) {
-                        p.writeByte(0);
-                    }
+                    p.writeFixedString(msg, 200);
                 } else {
                     p.writeInt(0);
                     p.skip(200);
