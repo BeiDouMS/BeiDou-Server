@@ -6956,7 +6956,7 @@ public class PacketCreator {
         }
         p.writeFixedString(StringUtil.getRightPaddedStr(item.getGiftFrom(), '\0', 13));
         if (isGift) {
-            p.writeFixedString(StringUtil.getRightPaddedStr(giftMessage, '\0', 73));
+            p.writeFixedString(giftMessage, 73);
             return;
         }
         addExpirationTime(p, item.getExpiration());
