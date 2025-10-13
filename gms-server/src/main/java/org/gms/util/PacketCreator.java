@@ -21,6 +21,7 @@
 package org.gms.util;
 
 import com.mybatisflex.annotation.Column;
+import lombok.extern.slf4j.Slf4j;
 import org.gms.client.BuddylistEntry;
 import org.gms.client.BuffStat;
 import org.gms.client.Character;
@@ -116,6 +117,7 @@ import java.util.stream.Collectors;
 /**
  * @author Frz
  */
+@Slf4j
 public class PacketCreator {
 
     public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
@@ -844,6 +846,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.SERVER_IP);
         p.writeShort(0);
         byte[] addr = inetAddr.getAddress();
+        log.info("send server ip: {}", inetAddr.getHostAddress());
         p.writeBytes(addr);
         p.writeShort(port);
         p.writeInt(clientId);
