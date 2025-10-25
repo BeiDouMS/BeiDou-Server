@@ -14,6 +14,7 @@ public interface OutPacket extends Packet {
     void writeBool(boolean value);
     void writeString(String value);
     void writeFixedString(String value);
+    void writeFixedString(String value, int fixed);
     void writePos(Point value);
     void skip(int numberOfBytes);
 
