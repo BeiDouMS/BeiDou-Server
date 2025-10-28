@@ -2830,8 +2830,10 @@ public class Character extends AbstractCharacterObject {
     public void gainGachaExp() {
         int expgain = 0;
         long currentgexp = gachaExp.get();
-        if ((currentgexp + exp.get()) >= ExpTable.getExpNeededForLevel(level)) {
-            expgain += ExpTable.getExpNeededForLevel(level) - exp.get();
+
+        int levelUpNeed = ExpTable.getExpNeededForLevel(level) - exp.get();
+        if (currentgexp >= levelUpNeed) {
+            expgain += Math.max(0, levelUpNeed);
 
             int nextneed = ExpTable.getExpNeededForLevel(level + 1);
             if (currentgexp - expgain >= nextneed) {
