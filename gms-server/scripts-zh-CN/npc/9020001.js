@@ -138,22 +138,19 @@ function action(mode, type, selection) {
                 if (cm.isEventLeader()) {
                     var numpasses = eim.getPlayerCount()- 1 || 1;
 					
-					var needItem = 4001007; 				//需求证书
-					var passItem = 4001008; 				//同行许可证
-					var needCount = numpasses * 5;   		//需求数量(队员数*需求数)
-					var ItemCount = cm.hasItem(needItem, needCount); 	//查看身上拥有数量是否充足
-                    if (ItemCount) {
-                        cm.sendNext("你已收集满足" + needCount + "张通行证！恭喜你通过了这个关卡！我会制作一个传送你到下一个关卡的传送门。到那里有时间限制，所以请赶快。祝你们好运！");
+					var needItem = 4001007; 						//需求证书
+					var passItem = 4001008; 						//通行许可证
+					var needCount = numpasses * 5;   				//需求数量(队员数*需求数)
+					var isOK = cm.hasItem(needItem, needCount); 	//查看身上拥有数量是否充足
+					var isPass = !isOK && cm.hasItem(passItem, 1) 	//是否使用通行许可证
+                    if (isOK || isPass) {
+                        cm.sendNext("你已收集满足通关条件！恭喜你通过了这个关卡！我会制作一个传送你到下一个关卡的传送门。到那里有时间限制，所以请赶快。祝你们好运！");
                         clearStage(stage, eim, curMap);
                         eim.gridClear();
-                        cm.gainItem(needItem, -needCount);
-					} else if(cm.hasItem(passItem,1)){
-						cm.sendNext("你居然有通行许可证！恭喜你通过了这个关卡！我会制作一个传送你到下一个关卡的传送门。到那里有时间限制，所以请赶快。祝你们好运！");
-                        clearStage(stage, eim, curMap);
-                        eim.gridClear();
-                        cm.gainItem(passItem, -1);
+						if(isOK)cm.gainItem(needItem, -needCount);
+						if(isPass)cm.gainItem(passItem, -1);
                     } else {
-                        cm.sendNext("对不起，但你的通行证数量不够。你需要给我正确数量的通行证；应该是你队伍成员数量减去队长的数量，在这种情况下需要 " + needCount + " 张通行证来通过这个关卡。告诉你的队伍成员解决问题，收集通行证，然后交给你。");
+                        cm.sendNext("对不起，你的通行证数量不够。你需要给我正确数量的通行证；应该是你队伍成员数量减去队长的数量，至少需要 " + needCount + " 张通行证来通过这个关卡。告诉你的队伍成员解决问题，收集通行证，然后交给你。");
                     }
                 } else {
                     var data = eim.gridCheck(cm.getPlayer());
