@@ -36,9 +36,9 @@ var cd_cost = 25000;
 
 function start() {
     cm.getPlayer().setCS(true);
-    var selStr = "A dragon's power is not to be underestimated. If you like, I can add its power to one of your weapons. However, the weapon must be powerful enough to hold its potential...#b"
-    var options = ["What's a stimulator?", "Create a Warrior weapon", "Create a Bowman weapon", "Create a Magician weapon", "Create a Thief weapon", "Create a Pirate Weapon",
-        "Create a Warrior weapon with a Stimulator", "Create a Bowman weapon with a Stimulator", "Create a Magician weapon with a Stimulator", "Create a Thief weapon with a Stimulator", "Create a Pirate Weapon with a Stimulator"];
+    var selStr = "龙的力量不容小觑。如果你愿意，我可以将龙之力注入你的某件武器中。但前提是，这件武器的潜力足以承载龙之力……#b";
+    var options = ["什么是刺激剂？", "制作战士武器", "制作弓箭手武器", "制作魔法师武器", "制作盗贼武器", "制作海盗武器",
+        "使用刺激剂制作战士武器", "使用刺激剂制作弓箭手武器", "使用刺激剂制作魔法师武器", "使用刺激剂制作盗贼武器", "使用刺激剂制作海盗武器"];
 
     if (cm.isQuestStarted(7301) || cm.isQuestStarted(7303)) {
         options.push("Make #t4001078#");
@@ -66,46 +66,46 @@ function action(mode, type, selection) {
             stimulator = false;
         }
         if (selectedType == 0) { //What's a stim?
-            cm.sendNext("A stimulator is a special potion that I can add into the process of creating certain items. It gives it stats as though it had dropped from a monster. However, it is possible to have no change, and it is also possible for the item to be below average. There's also a 10% chance of not getting any item when using a stimulator, so please choose wisely.")
+            cm.sendNext("刺激剂是一种特殊药剂，我可以在制作特定物品时加入它。它能让物品生成类似怪物掉落的随机属性。但也有可能毫无变化，甚至属性低于平均值。而且使用刺激剂时有10%的概率无法获得任何物品，所以请谨慎选择。");
             cm.dispose();
         } else if (selectedType == 1) { //warrior weapon
-            var selStr = "Very well, then which Warrior weapon shall receive a dragon's power?#b";
-            var weapon = ["Dragon Carbella#k - Lv. 110 One-Handed Sword#b", "Dragon Axe#k - Lv. 110 One-Handed Axe#b", "Dragon Mace#k - Lv. 110 One-Handed BW#b", "Dragon Claymore#k - Lv. 110 Two-Handed Sword#b", "Dragon Battle Axe#k - Lv. 110 Two-Handed Axe#b", "Dragon Flame#k - Lv. 110 Two-Handed BW#b",
-                "Dragon Faltizan#k - Lv. 110 Spear#b", "Dragon Chelbird#k - Lv. 110 Polearm#b"];
+            var selStr = "好的，那你想让哪件战士武器承载龙之力？#b";
+            var weapon = ["狂龙闪电剑#k - 110级 单手剑#b", "狂龙怒斩#k - 110级 单手斧#b", "狂龙地锤#k - 110级 单手钝器#b", "飞龙巨剑#k - 110级 双手剑#b", "炼狱魔龙斧#k - 110级 双手斧#b", "金龙轰天锤#k - 110级 双手钝器#b",
+                "盘龙七冲枪#k - 110级 长枪#b", "血龙神斧#k - 110级 长杖#b"]; // BW：Blunt Weapon（钝器）
             for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 2) { //bowman weapon
-            var selStr = "Very well, then which Bowman weapon shall receive a dragon's power?#b";
-            var weapon = ["Dragon Shiner Bow#k - Lv. 110 Bow#b", "Dragon Shiner Cross#k - Lv. 110 Crossbow#b"];
+            var selStr = "好的，那你想让哪件弓箭手武器承载龙之力？#b";
+            var weapon = ["金龙振翅弓#k - 110级 弓#b", "黄金飞龙弩#k - 110级 十字弓#b"];
             for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 3) { //magician weapon
-            var selStr = "Very well, then which Magician weapon shall receive a dragon's power?#b";
-            var weapon = ["Dragon Wand#k - Lv. 108 Wand#b", "Dragon Staff#k - Lv. 110 Staff#b"];
+            var selStr = "好的，那你想让哪件魔法师武器承载龙之力？#b";
+            var weapon = ["佘太君龙杖#k - 108级 魔杖#b", "黑精灵王杖#k - 110级 法杖#b"];
             for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 4) { //thief weapon
-            var selStr = "Very well, then which Thief weapon shall receive a dragon's power?#b";
-            var weapon = ["Dragon Kanzir#k - Lv. 110 STR Dagger#b", "Dragon Kreda#k - Lv. 110 LUK Dagger#b", "Dragon Green Sleve#k - Lv. 110 Claw#b"];
-            for (var i = 0; i < weapon.length; i++) {
+            var selStr = "好的，那你想让哪件盗贼武器承载龙之力？#b";
+            var weapon = ["蝉翼龙牙破#k - 110级 力量型匕首#b", "半月龙鳞裂#k - 110级 运气型匕首#b", "寒木升龙拳#k - 110级 飞镖#b"]; // Claw：盗贼使用的飞镖武器
+			for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 5) { //pirate weapon
-            var selStr = "Very well, then which Pirate weapon shall receive a dragon's power?#b";
-            var weapon = ["Dragon Slash Claw#k - Lv. 110 Knuckle#b", "Dragonfire Revolver#k - Lv. 110 Gun#b"];
+            var selStr = "好的，那你想让哪件海盗武器承载龙之力？#b";
+            var weapon = ["撕裂者#k - 110级 指虎#b", "枭龙#k - 110级 手枪#b"]; // Knuckle：海盗（拳手）使用的指虎武器
             for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 11) { //cornian's dagger
-            var selStr = "Oh, are you trying to sneak into these lizards to save Moira? I will support your cause wherever I can. Bring me a couple of resources and I will make you an almost identical piece of #t4001078#.";
+            var selStr = "哦，你是想混进这些蜥蜴怪里去救莫伊拉（Moira）吗？我会尽全力支持你。给我一些材料，我就能帮你做一把和#t4001078#几乎一样的匕首。";
             cm.sendNext(selStr);
         }
     } else if (status == 2) {
@@ -164,7 +164,7 @@ function action(mode, type, selection) {
             cost = cd_cost;
         }
 
-        var prompt = "You want me to make a #t" + item + "#? In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
+        var prompt = "你想让我制作一把 #t"+ item +"# 吗？这样的话，我需要你提供一些特定的材料才能制作。不过要确保你的背包里有足够的空间哦！#b";
         if (stimulator) {
             stimID = getStimID(item);
             prompt += "\r\n#i" + stimID + "# 1 #t" + stimID + "#";
@@ -188,7 +188,7 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         } else if (cm.getMeso() < cost) {
-            cm.sendOk("我的费用是为了利益所有的利弗尔人。如果你付不起，那就滚吧。");
+            cm.sendOk("你没有满足我需要的物资。");
             cm.dispose();
             return;
         } else {
