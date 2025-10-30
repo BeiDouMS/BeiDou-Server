@@ -136,21 +136,22 @@ function action(mode, type, selection) {
                 }
             } else if (curMap == 103000800) {   // stage 1
                 if (cm.isEventLeader()) {
-                    var numpasses = eim.getPlayerCount()- 1 || 1;
+					var numpasses = eim.getPlayerCount()- 1 || 1;
 					
 					var needItem = 4001007; 						//需求证书
 					var passItem = 4001008; 						//通行许可证
 					var needCount = numpasses * 5;   				//需求数量(队员数*需求数)
-					var isOK = cm.hasItem(needItem, needCount); 	//查看身上拥有数量是否充足
-					var isPass = !isOK && cm.hasItem(passItem, 1) 	//是否使用通行许可证
+					var haveItem = cm.getItemQuantity(needItem); 	//获得对查看身上拥有证书数量数量
+					var isOK = haveItem >= needCount; 				//证书是否达到需求量
+					var isPass = !isOK && cm.hasItem(passItem, 1); 	//是否使用通行许可证
                     if (isOK || isPass) {
                         cm.sendNext("你已收集满足通关条件！恭喜你通过了这个关卡！我会制作一个传送你到下一个关卡的传送门。到那里有时间限制，所以请赶快。祝你们好运！");
                         clearStage(stage, eim, curMap);
                         eim.gridClear();
-						if(isOK)cm.gainItem(needItem, -needCount);
-						if(isPass)cm.gainItem(passItem, -1);
+						cm.gainItem(needItem, -haveItem);
+						if(!isOK && isPass)cm.gainItem(passItem, -1);
                     } else {
-                        cm.sendNext("对不起，你的通行证数量不够。你需要给我正确数量的通行证；应该是你队伍成员数量减去队长的数量，至少需要 " + needCount + " 张通行证来通过这个关卡。告诉你的队伍成员解决问题，收集通行证，然后交给你。");
+                        cm.sendNext("你的通行证数量不够。你需要给我正确数量的通行证；应该是你队伍成员数量减去队长的数量，至少 #b需要 " + needCount + " 张证书或通行许可证#k 来通过这个关卡。告诉你的队伍成员解决问题，收集通行证，然后交给你。");
                     }
                 } else {
                     var data = eim.gridCheck(cm.getPlayer());
