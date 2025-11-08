@@ -187,6 +187,7 @@ function afterSetup(eim) {
         var rnd = Math.floor(Math.random() * 4);
         eim.applyEventPlayersItemBuff(2022090 + rnd);
     }
+    eim.dropAllExclusiveItems();
 }
 
 function respawnStages(eim) {}
