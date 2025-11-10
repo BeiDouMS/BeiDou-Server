@@ -11,9 +11,8 @@ function enter(pi) {
         }else{
             pi.playerMessage(5, "背包需空出1格来接收奖励。");
         }
-       
     } else {
         pi.playerMessage(5, "请先消灭石头人");
-        return false;
     }
+    return false;
 }
