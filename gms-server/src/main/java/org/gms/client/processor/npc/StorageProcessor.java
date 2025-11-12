@@ -93,8 +93,6 @@ public class StorageProcessor {
                         if (chr.getMeso() < takeoutFee) {
                             c.sendPacket(PacketCreator.getStorageError((byte) 0x0B));
                             return;
-                        } else {
-                            chr.gainMeso(-takeoutFee, false);
                         }
 
                         if (InventoryManipulator.checkSpace(c, item.getItemId(), item.getQuantity(), item.getOwner())) {
@@ -103,6 +101,7 @@ public class StorageProcessor {
 
                                 KarmaManipulator.toggleKarmaFlagToUntradeable(item);
                                 InventoryManipulator.addFromDrop(c, item, false);
+                                chr.gainMeso(-takeoutFee, false);
 
                                 String itemName = ii.getName(item.getItemId());
                                 log.debug("Chr {} took out {}x {} ({})", c.getPlayer().getName(), item.getQuantity(), itemName, item.getItemId());
