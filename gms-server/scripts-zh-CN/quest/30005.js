@@ -23,68 +23,57 @@ AllowFunction-could use directly
 var status = -1; 
 var text;
 //Start
-function start(mode, type, selection)
-{
-	if (CheckStatus(mode))
-	{
-	    if (status == 0)
-	    {
-			//第一层对话
-			qm.sendNext("大事不好了，邪恶的气息正在侵袭冒险岛世界，勇士，请听我说...");
-	    }
-		else if (status == 1 )
-		{
-			//第二层对话
-			if (mode == 0)
-			{
-				qm.sendOk("不要这么冷漠嘛，冒险岛世界的安危也需要你的力量！");
-				qm.dispose();
-			}
-			else
-			{
-			    text = "本来冒险岛世界的怪物都非常祥和，可是不知道发生了什么事，最近北斗气象台检测到冒险世界正在被一股强大的黑暗力量吞噬，最先发现异常的地区是位于#b魔法密林郊区#k的猴子森林！";
-			    text += "猴子们受到黑暗力量的影响一个接一个的死去，并且产生变异。有人甚至看到死去的猴子竟复活过来，对人类进行无差别的攻击！这可能还只是个开始。";
-			    qm.sendNextPrev(text);				
-			}
-		}
-		else if (status == 2 )
-		{
-			qm.sendAcceptDecline("勇士，我知道您很强大，还请#r帮帮我们，我可以送您过去！！#k");
-		}
-		else if (status == 3)
-		{
-			if (qm.getLevel() < 40)
-			{
+function start(mode, type, selection){
+	
+	if (CheckStatus(mode)) {
+		
+	    if (status == 0) {
+			
+			text = "冒险世界的怪物都非常祥和，不知道发生了什么，位于#b魔法密林郊区#k的猴子森林！";
+			text += "猴子们受到黑暗力量的影响一个接一个的死去，并且产生变异，对人类进行无差别的攻击！这可能还只是个开始。";
+			text += "\r\n\r\n你愿意过去帮忙吗？完成之后将获得一定的奖励哦！#r我可以帮你送过去！"
+			qm.sendAcceptDecline(text);			
+			    
+	    } else if (status == 1 ) {
+		
+			if (qm.getLevel() < 40) {
 				qm.sendOk("还是等你40级以后再去吧，你现在去会死翘翘的。");
-				qm.dispose();
-			}
-			else if(qm.getMapId() == 300000012) {
+			} else if(qm.getMapId() == 300000012) {
 				qm.sendOk("等您刑满释放了我再来接您！");
-				qm.dispose();
-			} else
-			{
-				qm.warp(100040103);
-			    qm.sendOk("谢谢您，请帮我消灭200只，但愿这样可以让冒险岛世界的黑暗气息能有效地被遏制一些。");
-			    qm.forceStartQuest(); 
-                qm.dispose();				
+			} else {
+				if(qm.getMapId() != 100040103)qm.warp(100040103);
+				
+				qm.sendOk("谢谢您，请帮我消灭100只，但愿这样可以让冒险岛世界的黑暗气息能有效地被遏制一些。");
+				
+				qm.forceStartQuest(); 
+				
 			}
-
-		}
+			qm.dispose();					
+		
+		} 
+	}else{
+		qm.forceCompleteQuest();
+		qm.sendOk("好吧，我先找别人帮忙吧，预测明天那些猴子还会更多，明天有时间再去吧！");
+		qm.dispose();
 	}
 }
 
-function end(mode, type, selection)
-{
-	if (CheckStatus(mode))
-	{
-	    if (status == 0)
-	    {
+
+function end(mode, type, selection){
+	
+	if (CheckStatus(mode)){
+		
+	    if (status == 0) {
 			//第一层对话
             qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！");		
 			qm.forceCompleteQuest();
-	    }
-		else
-		{
+			qm.getPlayer().getCashShop().gainCash(1, 100);
+			qm.getPlayer().getCashShop().gainCash(2, 200);
+			qm.gainMeso(10000);
+			qm.dropMessage(5,"获取点券 (+100)");
+			qm.message("获取抵用券 (+200)");
+			qm.gainExp(5000);
+	    } else {
 			//最后一层对话完继续循环至此，退出结束
 			qm.dispose();
 		}
@@ -92,25 +81,20 @@ function end(mode, type, selection)
 			
 }
 
-function CheckStatus(mode)
-{
-	if (mode == -1)
-	{
+function CheckStatus(mode) {
+	
+	if (mode == -1) {
 		qm.dispose();
 		return false;
 	}
 	
-	if (mode == 1)
-	{
+	if (mode == 1) {
 		status++;
-	}
-	else
-	{
+	} else {
 		status--;
 	}
 	
-	if (status == -1)
-	{
+	if (status == -1) {
 		qm.dispose();
 		return false;
 	}	
