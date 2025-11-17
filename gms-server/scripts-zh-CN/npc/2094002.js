@@ -82,7 +82,7 @@ function action(mode, type, selection) {
                 break;
             case 925100200:
             case 925100300:
-"To assault the pirate ship, we must destroy the guards first."
+                cm.sendNext("要攻打海盗船，我们必须先消灭守卫。");
                 cm.dispose();
                 break;
             case 925100201:
