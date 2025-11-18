@@ -111,7 +111,7 @@ function action(mode, type, selection) {
                 break;
             case 925100202:
             case 925100302:
-"These are the Captains and Krus that devote their lives to the Lord Pirate. Kill them as you see fit."
+                cm.sendNext("他们是效忠于老海盗的凯丁和克鲁。随你处置。");
                 cm.dispose();
                 break;
             case 925100400:
