@@ -65,23 +65,33 @@ public class PortalScriptManager extends AbstractScriptManager {
         return script;
     }
 
+    /**
+     * 处理执行传送门脚本
+     *
+     * @param portal 传送门对象，包含传送门的基本信息和脚本名称
+     * @param c 客户端对象，代表与服务器连接的玩家客户端
+     * @return boolean 脚本执行成功返回true，执行失败或出现异常返回false
+     */
     public boolean executePortalScript(Portal portal, Client c) {
         try {
+            // 获取传送门脚本名称
             String strPortalName = portal.getScriptName();
-            if (GameConfig.getServerBoolean("use_debug") && c.getPlayer().isGM() )
-            {
+            // GM调试模式下显示脚本关联信息
+            if (GameConfig.getServerBoolean("use_debug") && c.getPlayer().isGM()) {
                 c.getPlayer().dropMessage("您已建立与传送门脚本: " + strPortalName + ".js 的关联。");
             }
+            // 获取并执行传送门脚本
             PortalScript script = getPortalScript(strPortalName);
             if (script != null) {
-                return script.enter(new PortalPlayerInteraction(c, portal));
+                PortalPlayerInteraction portalPlayerInteraction = new PortalPlayerInteraction(c, portal);
+                return script.enter(portalPlayerInteraction);
             }
         } catch (Exception e) {
-
             log.warn("Portal script error in: {}", portal.getScriptName(), e);
         }
         return false;
     }
+
 
     public void reloadPortalScripts() {
         scripts.clear();
