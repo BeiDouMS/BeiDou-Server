@@ -11,6 +11,6 @@ function start(ms) {
 
         const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
-        map.spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), new Point(-1027, 216));
+        map.spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), new Point(624, 180));
     }
 }
