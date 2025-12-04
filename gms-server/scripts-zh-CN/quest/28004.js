@@ -48,7 +48,7 @@ function start(mode, type, selection) {
         } else if (status == 2) {
             var level = qm.getPlayer().getLevel();
 
-            qm.warp(level <= 30 ? 889100000 : (level <= 40 ? 889100010 : 889100020));
+            qm.warp(level <= 30 ? 889100000 : level <= 40 ? 889100010 : 889100020);
             qm.dispose();
         }
     }
