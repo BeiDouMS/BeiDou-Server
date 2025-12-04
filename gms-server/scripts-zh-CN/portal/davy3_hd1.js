@@ -2,7 +2,7 @@ var windowTime = 10 * 1000;
 
 function enter(pi) {
     var eim = pi.getEventInstance();
-    var level = eim.getProperty("level");
+    var level = eim.getIntProperty("level");
     if (eim.getProperty("stage3b") == "0") {
         pi.getMap(925100302).spawnAllMonstersFromMapSpawnList(level, true);
         eim.setProperty("stage3b", "1");
