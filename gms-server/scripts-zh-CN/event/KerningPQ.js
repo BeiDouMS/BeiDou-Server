@@ -128,7 +128,9 @@ function setup(level, lobbyid) {
     return eim;
 }
 
-function afterSetup(eim) {}
+function afterSetup(eim) {
+    eim.dropAllExclusiveItems();
+}
 
 function respawnStages(eim) {
     eim.getMapInstance(103000800).instanceMapRespawn();
