@@ -44,10 +44,10 @@ function action(mode, type, selection) {
                 var progress = cm.getQuestProgressInt(23339, 1);
 
                 if (progress == 3) {
-                    cm.sendGetText("The pipe reacts as the water starts flowing. A secret compartment with a keypad shows up. #bPassword#k!");
+                    cm.sendGetText("当水流开始流动时，那根管道发生了反应；一个装有键盘的秘密隔间随即显现了出来。#b密码#k!");
                 } else if (progress == 2) {
                     cm.setQuestProgress(23339, 1, 3);
-                    cm.sendGetText("The pipe reacts as the water starts flowing. A secret compartment with a keypad shows up. #bPassword#k!");
+                    cm.sendGetText("当水流开始流动时，那根管道发生了反应；一个装有键盘的秘密隔间随即显现了出来。#b密码#k!");
                 } else if (progress < 3) {
                     cm.setQuestProgress(23339, 1, 0);
                     cm.dispose();
@@ -63,7 +63,7 @@ function action(mode, type, selection) {
                 cm.dispose();
             }
         } else if (status == 1) {
-            if (cm.getText() == "my love Phyllia") {
+            if (cm.getText() == "琵丽雅是我的爱") {
                 cm.setQuestProgress(23339, 1, 4);
                 cm.warp(261000001, 1);
                 cm.dispose();

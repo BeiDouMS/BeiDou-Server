@@ -46,10 +46,10 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendAcceptDecline("You can operate the automated security system using the control unit. Would you like to deactivate the automated security system?");
+            cm.sendAcceptDecline("你可以使用控制单元来操作自动安全系统。是否要关闭自动安全系统？");
             return;
         } else if (status == 1) {
-            cm.weakenAreaBoss(7090000, "The automated security system has been deactivated. The intruder alarm will shut down.");
+            cm.weakenAreaBoss(7090000, "自动安全系统已关闭，入侵警报也将停止工作。");
         }
 
         cm.dispose();
