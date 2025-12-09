@@ -47,11 +47,9 @@ function action(mode, type, selection) {
 
         if (status == 0) {
             cm.sendAcceptDecline("你可以使用控制单元来操作自动安全系统。是否要关闭自动安全系统？");
-            return;
         } else if (status == 1) {
             cm.weakenAreaBoss(7090000, "自动安全系统已关闭，入侵警报也将停止工作。");
+			cm.dispose();
         }
-
-        cm.dispose();
     }
 }
