@@ -46,7 +46,7 @@ function start(mode, type, selection) {
         } else if (status == 4) {
             qm.sendNext("哦，如果可以的话，我还有一个私人请求。我担心我的妻子，#b#p2111004##k。自从胡罗伊德事件以来，我没能向她传达消息，这一定对她造成了很大的负担... 如果可以的话，你能去#b家里#k找回#b银色吊坠#k，代我送给她吗？我很后悔没有在她的生日时立刻把这件东西送给她... 也许现在给她，能让她安心一晚上。");
         } else if (status == 5) {
-            qm.sendNext("#r记住这个顺序！#k 我把吊坠藏在我家里，水管后面的一个容器里。水管必须按顺序打开：上、下、中。然后，输入秘密密码：'#rmy love Phyllia#k'。");
+            qm.sendNext("#r记住这个顺序！#k 我把吊坠藏在我家里，水管后面的一个容器里。水管必须按顺序打开：上、下、中。然后，输入秘密密码：'#r琵丽雅是我的爱#k'。");
             qm.forceStartQuest();
         } else if (status == 6) {
             qm.dispose();

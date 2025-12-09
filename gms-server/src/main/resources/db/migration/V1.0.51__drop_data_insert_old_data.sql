@@ -33963,11 +33963,14 @@ WHERE dropperid = 9300157;
 DELETE
 FROM drop_data
 WHERE dropperid = 9500100;
-DELETE
-FROM drop_data
-where dropperid >= 9300141
-  AND dropperid <= 9300154
-  AND (itemid < 4001130 OR itemid >= 4001136);
+
+# 不知道为啥要删除这些可能后续任务比较复杂懒得修了
+# 有人说要相信前人的智慧，我就想修好任务我先把前人任务注释了 哈哈
+# DELETE
+# FROM drop_data
+# where dropperid >= 9300141
+#   AND dropperid <= 9300154
+#   AND (itemid < 4001130 OR itemid >= 4001136);
 
 # remove drop data from mobs which respawns as other mobs
 DELETE
@@ -35293,7 +35296,8 @@ VALUES (100122, 0, 35, 52, 0, 400000),
        (9500369, 0, 49, 72, 0, 400000),
        (9500370, 0, 49, 72, 0, 400000),
        (9500371, 0, 49, 72, 0, 400000),
-       (9500372, 0, 49, 72, 0, 400000);
+       (9500372, 0, 49, 72, 0, 400000),
+       (9300141, 4031709, 1, 1, 3310, 20000); #(LV70) 卡森的考试 （蒙特鸠和失踪的炼金术士）任务需要这个道具
 
 DELETE
 FROM drop_data

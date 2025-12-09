@@ -1,8 +1,6 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+    This file is part of the HeavenMS MapleStory Server
+    Copyleft (L) 2016 - 2018 RonanLana
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -20,38 +18,34 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
-	Incomplete Magic Square
- */
+var status = -1;
 
-var status;
-
-function start() {
-    status = -1;
-    action(1, 0, 0);
-}
-
-function action(mode, type, selection) {
+function end(mode, type, selection) {
     if (mode == -1) {
-        cm.dispose();
+        qm.dispose();
     } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
+        if (mode == 0 && type > 0) {
+            qm.dispose();
             return;
         }
-        if (mode == 1) {
+
+        if (mode == 1)
             status++;
-        } else {
+        else
             status--;
-        }
 
         if (status == 0) {
-            cm.sendAcceptDecline("这个魔法五角星还没有完成。您想完成这个魔法五角星的绘制吗？");
-            return;
-        } else if (status == 1) {
-            cm.weakenAreaBoss(8090000, "魔法五角星已经完成。用于消除迪特（Deet）和罗伊（Roi）的咒语已经被启动了。");
+            if (qm.getQuestProgress(3345, 0) == 4) {
+                qm.sendNext("看来你已经成功了。这样一来，玛加提亚城迫在眉睫的危机总算得以避免，做得好，勇敢的冒险着！");
+                qm.forceCompleteQuest();
+
+                qm.gainExp(20000);
+            } else {
+                qm.sendNext("难道你还没有封印#r玛迦提亚城地下的魔法阵#k吗？此事关系重大，还请你加快行动。");
+            }
+
+            qm.dispose();
         }
 
-        cm.dispose();
     }
 }
