@@ -115,7 +115,7 @@ function action(mode, type, selection) {
             if (!cm.haveItem(4031367 + nanaLoc, 1)) {
                 if (cm.isQuestCompleted(100401 + nanaLoc)) {
                     state = 1;
-                    cm.sendAcceptDecline("Did you lost the #k#t4031367##k I gave to you? Well, I can share another one with you, but you will need to redo the favor I asked last time, is that ok? I need you to bring me #r50 #t" + questItems[nanaLoc] + "#'s.#k");
+                    cm.sendAcceptDecline("你是不是把我给你的#k#t4031367##k弄丢了？也罢，我可以再给你一个，不过你得重新完成我上次交代的差事，没问题吧？我需要你去给我找来#r50个#t" + questItems[nanaLoc] + "#。#k");
                 } else if (cm.isQuestStarted(100401 + nanaLoc)) {
                     if (processNanaQuest()) {
                         cm.gainExp(questExp[nanaLoc] * cm.getPlayer().getExpRate());
@@ -125,7 +125,7 @@ function action(mode, type, selection) {
                     cm.dispose();
                 } else {
                     state = 0;
-                    cm.sendAcceptDecline("Are you searching for #k#t4031367#'s#k? I can share one with you, but you must do a favor for me, is that ok?");
+                    cm.sendAcceptDecline("你是在找#k#t4031367#吗？#k我可以给你一个，不过你得先帮我办件事，没问题吧？");
                 }
             } else {
                 cm.sendOk("嘿，你好。你已经从其他娜娜那里得到了#t4031367#了吗？");
