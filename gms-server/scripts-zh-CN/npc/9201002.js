@@ -170,8 +170,8 @@ function action(mode, type, selection) {
                 }
 
                 if (hasEngagement) {
-                    var text = "Hi there. How can I help you?";
-                    var choice = new Array("We're ready to get married.");
+                    var text = "你好。我能为你提供什么帮助？";
+                    var choice = new Array("我们已经准备好举办婚礼了。");
                     for (x = 0; x < choice.length; x++) {
                         text += "\r\n#L" + x + "##b" + choice[x] + "#l";
                     }
@@ -372,12 +372,12 @@ function action(mode, type, selection) {
 
                                             giveCoupleBlessings(eim, player, partner);
 
-                                            cm.getMap().dropMessage(6, "High Priest John: By the power vested in me through the mighty Maple tree, I now pronounce you  Husband and Wife. You may kiss the bride!");
+                                            cm.getMap().dropMessage(6, "大主教约翰：以神圣冒险岛世界之树赋予我的权柄，我在此宣布你们结为夫妻。现在，你可以亲吻新娘了！");
                                             eim.schedule("showMarriedMsg", 2 * 1000);
                                         }
                                     } else {
                                         eim.setIntProperty("confirmedVows", player.getId());
-                                        cm.getMap().dropMessage(6, "Wedding Assistant: " + player.getName() + " has confirmed vows! Alright, one step away to make it official. Tighten your seatbelts!");
+                                        cm.getMap().dropMessage(6, "婚礼助手：" + player.getName() + "已许下爱的誓言！好了，距离正式结为夫妻就差最后一步啦！准备好迎接幸福时刻吧！");
                                     }
 
                                     break;
