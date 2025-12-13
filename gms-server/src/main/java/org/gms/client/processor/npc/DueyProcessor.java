@@ -481,8 +481,8 @@ public class DueyProcessor {
         }
     }
 
-    public static void dueyCreatePackage(Item item, int mesos, String sender, int recipientCid) {
-        int packageId = createPackage(mesos, null, sender, recipientCid, false);
+    public static void dueyCreatePackage(Item item, int mesos, String sender, int recipientCid,boolean quick) {
+        int packageId = createPackage(mesos, null, sender, recipientCid, quick);
         if (packageId != -1) {
             insertPackageItem(packageId, item);
         }
