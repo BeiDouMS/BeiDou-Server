@@ -1,120 +1,197 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-					   Matthias Butz <matze@odinms.de>
-					   Jan Christian Meyer <vimes@odinms.de>
+ *  通用野外BOSS事件脚本模板 (Standalone Area Boss Script Template)
+ *  
+ *  功能：
+ *  1. 自动生成指定 BOSS。
+ *  2. 监听 BOSS 死亡事件。
+ *  3. 死亡后依指定时间准确重置刷新。
+ *  4. [新增] 只有当玩家进入地图且冷却时间已到时才生成 (Lazy Spawn)。
+ *
+ *  使用说明：
+ *  - 自动更新脚本生成
+ */
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
+// ============================================================================
+//                              配置区域 (Configuration)
+// ============================================================================
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+// 地图 ID (BOSS 生成的地图)
+const MapID = 220050100;
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// BOSS ID (要生成的怪物 ID)
+const BossID = 5220003;
 
-const Point = Java.type('java.awt.Point');
+// BOSS 名称 (默认名称，若数据库有读取到会自动更新)
+var BossName = "提莫";
+
+// 刷新冷却时间 (单位：分钟)
+const BossTime = 180;
+
+// BOSS 生成坐标 (X, Y)
+const SpawnPoint = new java.awt.Point(Math.floor((Math.random() * 770) - 770), 1030);
+
+// BOSS 出现时的全服公告内容
+const BossNotice = "嘀嗒...嘀嗒...！时间精灵提莫在轻声提醒。";
+
+// ============================================================================
+//                            核心逻辑 (Core Logic)
+// ============================================================================
+
 const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
 const PacketCreator = Java.type('org.gms.util.PacketCreator');
 const LoggerFactory = Java.type('org.slf4j.LoggerFactory');
+
 var log = null;
 var channel = null;
-var isinit = false;
 
-var MapID = 220050100;
-var BossID = 5220003;
-var BossName = "提莫";
-/**刷新时间，分钟;  Generation time in minutes*/
-var BossTime = 180;
-/**指定Boss刷新的XY坐标位置; Specify the XY coordinate position for Boss refresh*/
-var point = new Point(Math.floor((Math.random() * 770) - 770), 1030);
-var BossNotice= "嘀嗒...嘀嗒...！时间精灵提莫在轻声提醒。";
+// 事件实例名称 (自动获取，无需修改)
+const EventName = "AreaBossTimer2";
 
-const methodName = "start";     //指定当前事件刷新Boss的函数，无需改动
-/**
- -- Odin JavaScript --------------------------------------------------------------------------------
- Zeno Spawner
- -- Edited by --------------------------------------------------------------------------------------
- ThreeStep - based on xQuasar's King Clang spawner
- **/
 function init() {
     channel = em.getChannelServer().getId();
     log = LoggerFactory.getLogger(em.getName());
-  
     scheduleNew();
 }
 
 function scheduleNew() {
-    setupTask = em.schedule(methodName, 0);    //服务器启动时生成。每指定时间，服务器事件会检查boss是否存在，如果不存在，会立即生成boss。
+    setupEventInstance();
+
+    var eim = getOrCreateEventInstance();
+    // 标记：冷却已就绪 (服务器重启默认为就绪)
+    eim.setProperty("canSpawn", "true");
+
+    // 关键修正：必须启动事件，monsterKilled 等监听器才会生效
+    try { eim.startEvent(); } catch (e) { }
+
+    // 尝试生成
+    // 如果地图已经有人，立即生成
+    // 如果地图没人，不做任何事，等待玩家进入
+    checkAndSpawn(eim);
 }
 
 function cancelSchedule() {
-    if (setupTask != null) {
-        setupTask.cancel(true);
+    var eim = em.getInstance(EventName);
+    if (eim != null) {
+        eim.dispose();
     }
 }
 
-function start() {
-    var graysPrairie = em.getChannelServer().getMapFactory().getMap(MapID);
-    var Timer = em.getBossTime(BossTime * 60 * 1000);  //转为毫秒并加载时间倍率修正
+// 辅助函数：获取或创建实例
+function getOrCreateEventInstance() {
+    var eim = em.getInstance(EventName);
+    if (eim == null) {
+        try {
+            eim = em.newInstance(EventName);
+        } catch (e) {
+            eim = em.getInstance(EventName);
+        }
+    }
+    return eim;
+}
 
-    if (graysPrairie.getMonsterById(BossID) != null) {
-        em.schedule(methodName, Timer);
+function setupEventInstance() {
+    var eim = getOrCreateEventInstance();
+    var map = em.getChannelServer().getMapFactory().getMap(MapID);
+    // 绑定地图到EIM
+    map.setEventInstance(eim);
+}
+
+// 核心监测函数：替代 playerEntry 的轮询机制
+function checkAndSpawn(eim) {
+    if (eim == null) return;
+    
+    var canSpawn = eim.getProperty("canSpawn");
+    // 如果不能刷（已经刷了，或正在CD），直接停止监测
+    if (canSpawn != "true") {
         return;
     }
-    const BossObj = LifeFactory.getMonster(BossID);
-    BossName = BossObj.getName() || BossName;
-    try {
-        graysPrairie.spawnMonsterOnGroundBelow(BossObj, point);
-        if(isinit) {
-            log.info(`[事件脚本-野外BOSS] ${em.getName()} 已在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x} , ${point.y}) 生成 ${BossName}(${BossID})，检测间隔：${Timer / 60 / 1000} 分钟`);
-        } else {
-            isinit = true;
-        }
-    } catch (e) {
-        console.error(`[事件脚本-野外BOSS] ${em.getName()} 在频道 ${channel} 的 ${graysPrairie.getMapName()}(${MapID}) ${point.x} , ${point.y}) 生成 ${BossName}(${BossID}) 时出错`,e);
-    }
-    graysPrairie.broadcastMessage(PacketCreator.serverNotice(6, `[野外BOSS] ${BossName}  ${BossNotice}`));     //聊天框输出当前地图范围的Boss登场消息
 
-    em.schedule(methodName, Timer);
+    var map = em.getChannelServer().getMapFactory().getMap(MapID);
+
+    // 1. 检查人数
+    if (map.getCharacters().size() > 0) {
+        // 有人，嘗試生成
+        spawnBoss(eim, map);
+    }
 }
 
-// ---------- FILLER FUNCTIONS ----------
 
-function dispose() {}
+function spawnBoss(eim, map) {
+    try {
+        // 双重保险：检查 BOSS 是否已存在
+        if (map.getMonsterById(BossID) != null) {
+            eim.setProperty("canSpawn", "false");
+            return;
+        }
 
-function setup(eim, leaderid) {}
+        // 准备 BOSS 对象
+        var bossMob = LifeFactory.getMonster(BossID);
+        if (bossMob.getName()) {
+            BossName = bossMob.getName();
+        }
 
-function monsterValue(eim, mobid) {return 0;}
+        // 生成 BOSS
+        map.spawnMonsterOnGroundBelow(bossMob, SpawnPoint);
 
-function disbandParty(eim, player) {}
+        // 标记为不可刷新
+        eim.setProperty("canSpawn", "false");
 
-function playerDisconnected(eim, player) {}
+        if (log) log.info(`[野外BOSS] ${EventName} 已在频道 ${channel} 生成 ${BossName}(${BossID})`);
 
-function playerEntry(eim, player) {}
+        // 发送公告
+        map.broadcastMessage(PacketCreator.serverNotice(6, `[野外BOSS] ${BossName}  ${BossNotice}`));
 
-function monsterKilled(mob, eim) {}
+    } catch (e) {
+        if (log) log.error(`[野外BOSS] ${EventName} 生成失败`, e);
+    }
+}
 
-function scheduledTimeout(eim) {}
+// ============================================================================
+//                            事件回调 (Event Hooks)
+// ============================================================================
 
-function afterSetup(eim) {}
+// 玩家进入地图触发 (Field Boss 特供 hook)
+function onMapUserEnter(eim, player) {
+    if (log) log.info(`[野外BOSS] ${EventName} 玩家进入地图检测`);
+    checkAndSpawn(eim);
+}
 
-function changedLeader(eim, leader) {}
+function monsterKilled(mob, eim) {
+    // 判断死亡的怪物是否为目标 BOSS
+    if (mob.getId() == BossID) {
+        var nextRespawnTime = em.getBossTime(BossTime * 60 * 1000);
 
-function playerExit(eim, player) {}
+        if (log) log.info(`[野外BOSS] ${BossName}(${BossID}) 被击杀, ${nextRespawnTime / 60000} 分钟后刷新`);
 
-function leftParty(eim, player) {}
+        // 设定倒数计时，时间到后执行 cooldownFinished
+        em.schedule("cooldownFinished", nextRespawnTime);
+    }
+}
 
-function clearPQ(eim) {}
+// 计时器回调：冷却结束
+function cooldownFinished() {
+    var eim = getOrCreateEventInstance();
+    // 标记冷却结束
+    eim.setProperty("canSpawn", "true");
 
-function allMonstersDead(eim) {}
+    // 启动监测
+    if (log) log.info(`[野外BOSS] ${EventName} 冷却结束，等待玩家触发`);
+    checkAndSpawn(eim);
+}
 
-function playerUnregistered(eim, player) {}
-
+// 必须保留的空函数
+function playerEntry(eim, player) { }
+function dispose() { }
+function setup(eim, leaderid) { }
+function monsterValue(eim, mobid) { return 0; }
+function disbandParty(eim, player) { }
+function playerDisconnected(eim, player) { }
+function scheduledTimeout(eim) { }
+function afterSetup(eim) { }
+function changedLeader(eim, leader) { }
+function playerExit(eim, player) { }
+function leftParty(eim, player) { }
+function clearPQ(eim) { }
+function allMonstersDead(eim) { }
+function playerUnregistered(eim, player) { }
+function playerRevive(eim, player) { return true; }
