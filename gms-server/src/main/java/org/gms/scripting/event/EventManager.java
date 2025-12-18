@@ -1253,7 +1253,7 @@ public class EventManager {
      * @return 修正后的Boss刷新时间
      */
     public int getBossTime(int BossTime) {
-        return (int) (BossTime * GameConfig.getServerFloat("boss_respawn_mob_time_rate"));
+        return (int) (BossTime / GameConfig.getServerFloat("boss_respawn_mob_time_rate"));
     }
     /**
      * 填充EIM队列

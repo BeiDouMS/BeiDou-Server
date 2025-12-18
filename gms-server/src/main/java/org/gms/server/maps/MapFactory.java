@@ -118,7 +118,7 @@ public class MapFactory {
             }
             if (monster.isBoss()) {
                 mobRespawnRate = 1;
-                mobTime = NumberTool.floatToInt(mobTime * mobTimeRate);
+                mobTime = NumberTool.floatToInt(mobTime / mobTimeRate);
             }
             // 如果是事件地图，刷新倍率保持不变
             if (map.getEventInstance() != null) {

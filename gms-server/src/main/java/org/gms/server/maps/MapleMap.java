@@ -2560,6 +2560,16 @@ public class MapleMap {
             objectWLock.unlock();
         }
 
+        if (getEventInstance() != null) {
+            try {
+                getEventInstance().invokeScriptFunction("onMapUserEnter", getEventInstance(), chr);
+            } catch (NoSuchMethodException ex) {
+                // ignore
+            } catch (Exception ex) {
+                log.error("Error executing onMapUserEnter for map " + mapid, ex);
+            }
+        }
+
         if (chr.getPlayerShop() != null) {
             addMapObject(chr.getPlayerShop());
         }
