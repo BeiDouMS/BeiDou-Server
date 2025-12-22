@@ -43,7 +43,7 @@ public final class DeleteCharHandler extends AbstractPacketHandler {
     public void handlePacket(InPacket p, Client c) {
         String pic = p.readString();
         int cid = p.readInt();
-        if (c.checkPic(pic)) {
+        if (c.checkPicStrict(pic)) {
             //check for family, guild leader, pending marriage, world transfer
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement("SELECT `world`, `guildid`, `guildrank`, `familyId` FROM characters WHERE id = ?");
