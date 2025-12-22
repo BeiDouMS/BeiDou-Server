@@ -1,52 +1,30 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/* guild emblem npc */
+/* by ziqiming */
 
 var status = 0;
-var sel;
-
-function start() {
-    cm.sendSimple("你想做什么？\r\n#b#L0#创建/更改你的家族徽标#l#k");
+var change_emblem_cost = 0;
+const GameConfig = Java.type('org.gms.config.GameConfig');
+function start()  {
+  status = -1;
+  change_emblem_cost = GameConfig.getServerInt('change_emblem_cost')
+  action(1, 0, 0);
 }
-
 function action(mode, type, selection) {
-    if (mode < 1) {
+    if (mode === 1) {
+        status++;
+    } else {
+        status--;
+    }
+    if(status == 0){
+        if (cm.getPlayer().getGuildId() < 1 || cm.getPlayer().getGuildRank() > 2) {
+            cm.sendOk("你不是家族管理者，因此你不能更改徽标。");
+            cm.dispose();
+        }else{
+            cm.sendYesNo(`创建或更改家族徽标需要 #r${change_emblem_cost} 金币 #k您确定要继续吗？`);
+        }
+    } else if (status == 1) {
+        cm.getPlayer().genericGuildMessage(17);
         cm.dispose();
     } else {
-        status++;
-        if (status == 1) {
-            sel = selection;
-            if (sel == 0) {
-                if (cm.getPlayer().getGuildRank() == 1) {
-                    cm.sendYesNo("创建或更改家族徽标需要 #b 5000000 金币#k，您确定要继续吗？");
-                } else {
-                    cm.sendOk("你必须是家族族长才能更改徽标。请告诉你的族长与我交谈。");
-                }
-            }
-        } else if (status == 2 && sel == 0) {
-            cm.getPlayer().genericGuildMessage(17);
-            cm.dispose();
-        } else {
-            cm.dispose();
-        }
+        cm.dispose();
     }
 }
