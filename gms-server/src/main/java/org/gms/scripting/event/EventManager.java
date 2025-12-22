@@ -80,6 +80,7 @@ public class EventManager {
 
     private final Set<Integer> playerPermit = new HashSet<>();  // 玩家许可集合
     private final Semaphore startSemaphore = new Semaphore(7);  // 启动信号量
+    private final Set<Integer> mapListeners = new HashSet<>(); // 地图监听器集合
 
     private static final int maxLobbys = 8;     // 一个事件管理器最多支持同时运行的大厅数量
 
@@ -1324,6 +1325,45 @@ public class EventManager {
         @Override
         public void run() {
             instantiateQueuedInstance();
+        }
+    }
+
+    /**
+     * 注册地圖監聽器
+     * @param mapId 地圖ID
+     */
+    public void registerMapListener(int mapId) {
+        synchronized (mapListeners) {
+            mapListeners.add(mapId);
+        }
+    }
+
+    /**
+     * 註銷地圖監聽器
+     * @param mapId 地圖ID
+     */
+    public void unregisterMapListener(int mapId) {
+        synchronized (mapListeners) {
+            mapListeners.remove(mapId);
+        }
+    }
+
+    /**
+     * 觸發腳本中的地圖進入事件
+     * @param chr 玩家
+     * @param mapId 地圖ID
+     */
+    public void onMapPlayerEnter(Character chr, int mapId) {
+        synchronized (mapListeners) {
+            if (!mapListeners.contains(mapId)) {
+                return;
+            }
+        }
+
+        try {
+            iv.invokeFunction("onMapPlayerEnter", this, chr, mapId);
+        } catch (ScriptException | NoSuchMethodException ex) {
+            // optional
         }
     }
 }

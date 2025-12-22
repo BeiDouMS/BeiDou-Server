@@ -486,6 +486,13 @@ public class EventInstanceManager {
         } // optional
     }
 
+    public void onPlayerEnter(final Character chr, final MapleMap map) {
+        try {
+            invokeScriptFunction("onPlayerEnter", EventInstanceManager.this, chr, map);
+        } catch (ScriptException | NoSuchMethodException ex) {
+        } // optional
+    }
+
     public void afterChangedMap(final Character chr, final int mapId) {
         try {
             invokeScriptFunction("afterChangedMap", EventInstanceManager.this, chr, mapId);

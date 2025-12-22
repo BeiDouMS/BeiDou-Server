@@ -51,6 +51,10 @@ const EventName = "AreaBossMano";
 function init() {
     channel = em.getChannelServer().getId();
     log = LoggerFactory.getLogger(em.getName());
+    
+    // [新系统] 注册地图监听器，避免绑定玩家 EIM
+    em.registerMapListener(MapID);
+    
     scheduleNew();
 }
 
@@ -137,7 +141,7 @@ function spawnBoss(eim, map) {
         // 标记为不可刷新
         eim.setProperty("canSpawn", "false");
 
-        if (log) log.info(`[野外BOSS] ${EventName} 已在频道 ${channel} 生成 ${BossName}(${BossID})`);
+        
 
         // 发送公告
         map.broadcastMessage(PacketCreator.serverNotice(6, `[野外BOSS] ${BossName}  ${BossNotice}`));
@@ -151,12 +155,18 @@ function spawnBoss(eim, map) {
 //                            事件回调 (Event Hooks)
 // ============================================================================
 
-// 玩家进入地图触发 (Field Boss 特供 hook)
-function onMapUserEnter(eim, player) {
-    if (log) log.info(`[野外BOSS] ${EventName} 玩家进入地图检测`);
-    checkAndSpawn(eim);
+/**
+ * [新系统] 当玩家进入监听地图时触发
+ */
+function onMapPlayerEnter(em, player, mapId) {
+    if (mapId != MapID) return;
+    
+    var eim = em.getInstance(EventName);
+    if (eim != null) {
+        
+        checkAndSpawn(eim);
+    }
 }
-
 function monsterKilled(mob, eim) {
     // 判断死亡的怪物是否为目标 BOSS
     if (mob.getId() == BossID) {
@@ -176,7 +186,7 @@ function cooldownFinished() {
     eim.setProperty("canSpawn", "true");
 
     // 启动监测
-    if (log) log.info(`[野外BOSS] ${EventName} 冷却结束，等待玩家触发`);
+    
     checkAndSpawn(eim);
 }
 

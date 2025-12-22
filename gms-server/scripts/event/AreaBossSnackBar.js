@@ -60,7 +60,8 @@ const EventName = "AreaBossSnackBar";
 function init() {
     channel = em.getChannelServer().getId();
     log = LoggerFactory.getLogger(em.getName());
-    scheduleNew();
+    em.registerMapListener(MapID);
+    scheduleNew(); // [New] Global map listener to avoid player EIM binding
 }
 
 function scheduleNew() {
@@ -147,7 +148,7 @@ function spawnBoss(eim, map) {
         // Mark as non-spawnable
         eim.setProperty("canSpawn", "false");
 
-        if (log) log.info(`[Field Boss] ${EventName} spawned ${BossName}(${BossID}) on channel ${channel}`);
+        
 
         // Send Broadcast
         map.broadcastMessage(PacketCreator.serverNotice(6, `[Field Boss] ${BossName}  ${BossNotice}`));
@@ -161,10 +162,17 @@ function spawnBoss(eim, map) {
 //                            Event Hooks
 // ============================================================================
 
-// Triggered when player enters map (Field Boss specific hook)
-function onMapUserEnter(eim, player) {
-    if (log) log.info(`[Field Boss] ${EventName} player entry check`);
-    checkAndSpawn(eim);
+/**
+ * [New System] Triggered when player enters a registered map
+ */
+function onMapPlayerEnter(em, player, mapId) {
+    if (mapId != MapID) return;
+    
+    var eim = em.getInstance(EventName);
+    if (eim != null) {
+        
+        checkAndSpawn(eim);
+    }
 }
 
 function monsterKilled(mob, eim) {
@@ -186,7 +194,7 @@ function cooldownFinished() {
     eim.setProperty("canSpawn", "true");
 
     // Start monitoring
-    if (log) log.info(`[Field Boss] ${EventName} cooldown finished, waiting for player`);
+    
     checkAndSpawn(eim);
 }
 
