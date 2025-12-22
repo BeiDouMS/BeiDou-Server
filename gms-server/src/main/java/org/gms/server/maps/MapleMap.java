@@ -2430,6 +2430,11 @@ public class MapleMap {
 
             msm.runMapScript(chr.getClient(), "onUserEnter/" + onUserEnter, false);
         }
+
+        Channel ch = getChannelServer();
+        if (ch != null) {
+            ch.getEventSM().onMapPlayerEnter(chr, mapid);
+        }
         if (FieldLimit.CANNOTUSEMOUNTS.check(fieldLimit) && chr.getBuffedValue(BuffStat.MONSTER_RIDING) != null) {
             chr.cancelEffectFromBuffStat(BuffStat.MONSTER_RIDING);
             chr.cancelBuffStats(BuffStat.MONSTER_RIDING);

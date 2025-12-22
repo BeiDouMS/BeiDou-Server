@@ -22,6 +22,7 @@
 package org.gms.scripting.event;
 
 import org.gms.net.server.channel.Channel;
+import org.gms.client.Character;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractScriptManager;
 import org.gms.scripting.SynchronizedInvocable;
@@ -173,6 +174,17 @@ public class EventScriptManager extends AbstractScriptManager {
         active = false; // 标记为未激活
         for (EventEntry entry : eventEntries) {
             entry.em.cancel(); // 取消所有事件
+        }
+    }
+
+    /**
+     * 觸發所有事件監聽器中的地圖進入事件
+     * @param chr 玩家
+     * @param mapId 地圖ID
+     */
+    public void onMapPlayerEnter(Character chr, int mapId) {
+        for (EventEntry entry : events.values()) {
+            entry.em.onMapPlayerEnter(chr, mapId);
         }
     }
 }
