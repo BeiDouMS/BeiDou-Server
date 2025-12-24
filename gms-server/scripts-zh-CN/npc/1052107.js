@@ -46,12 +46,10 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendAcceptDecline("This is a small lamp with a switch. Would you like to turn it on?");
-            return;
+            cm.sendAcceptDecline("这是一盏带开关的小灯具，是否要将其点亮？");
         } else if (status == 1) {
-            cm.weakenAreaBoss(5090000, "You have turned the lamp on. Shade's strength will rapidly weaken due to the light.");
+            cm.weakenAreaBoss(5090000, "你已点亮灯具！暗影之力会因光照快速减弱。");
+			cm.dispose();
         }
-
-        cm.dispose();
     }
 }
