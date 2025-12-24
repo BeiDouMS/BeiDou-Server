@@ -26,7 +26,8 @@
 */
 
 function enter(pi) {
-    if (pi.getPlayer().getMap().getReactorByName("speargate").getState() == 4) {
+	var eim = pi.getPlayer().getEventInstance();
+    if (eim.getIntProperty("speargate") == 4) {
         pi.playPortalSound();
         pi.warp(990000401, 0);
         return true;
