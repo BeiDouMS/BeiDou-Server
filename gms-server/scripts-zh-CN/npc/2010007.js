@@ -1,53 +1,46 @@
 /*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+    by ziqiming
+ */
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/* guild creation npc */
-var status = 0;
+var status;
 var sel;
 
+var create_guild_cost = 0; //创建家族金额
+var expand_guild_cost = 0;  //扩展人数需求金额
+const GameConfig = Java.type('org.gms.config.GameConfig');
 function start() {
-    cm.sendSimple("欢迎来到家族公馆，你现在想做什么呢?\r\n#b#L0#创建家族#l\r\n#L1#解散家族#l\r\n#L2#增加家族成员人数上限#l#k");
+    create_guild_cost =  GameConfig.getServerInt('create_guild_cost')
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode < 0) {
         cm.dispose();
     } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
+       if (mode == 1) {
             status++;
         } else {
             status--;
         }
-        if (status == 1) {
+
+        if(status == 0){
+            var text = "欢迎来到家族中心，你现在想做什么呢？\r\n";
+            text += "#b"
+            text += "#L0#创建家族#l\r\n";
+            text += "#L1#解散家族#l\r\n";
+            text += "#L2#增加家族成员人数上限#l\r\n"
+            cm.sendSimple(text);
+
+        } else if (status == 1) {
+
             sel = selection;
             if (selection == 0) {
                 if (cm.getPlayer().getGuildId() > 0) {
                     cm.sendOk("你已经拥有家族了，不能再创建家族。");
                     cm.dispose();
                 } else {
-                    cm.sendYesNo("创建一个新的家族需要 #b 1500000 金币#k，你确定继续创建一个新的家族吗？");
+                    cm.sendYesNo(`创建一个新的家族需要 #b ${create_guild_cost} 金币#k，你确定继续创建一个新的家族吗？`);
                 }
             } else if (selection == 1) {
                 if (cm.getPlayer().getGuildId() < 1 || cm.getPlayer().getGuildRank() != 1) {
@@ -57,27 +50,32 @@ function action(mode, type, selection) {
                     cm.sendYesNo("你确定真的要解散你的家族？当解散后你将不能恢复所有家族相关资料以及GP的数值，是否继续？");
                 }
             } else if (selection == 2) {
-                if (cm.getPlayer().getGuildId() < 1 || cm.getPlayer().getGuildRank() != 1) {
-                    cm.sendOk("你不是族长，因此你将不能增加家族成员的人数上限.");
+
+                //GS有单独处理，家族人数大于30人增加扣费金额，因此需获取需要扣的金币数量
+                var Guild = Java.type("org.gms.net.server.guild.Guild");
+                var memeber = cm.getPlayer().getGuild().getCapacity();
+                expand_guild_cost = Guild.getIncreaseGuildCost(memeber)
+                
+                if (cm.getPlayer().getGuildId() < 1 || cm.getPlayer().getGuildRank() > 2) {
+                    cm.sendOk("你不是家族管理者，因此你将不能增加家族成员的人数上限.");
                     cm.dispose();
                 } else {
-                    var Guild = Java.type("org.gms.net.server.guild.Guild");  // thanks Conrad for noticing an issue due to call on a static method here
-                    cm.sendYesNo("家族成员人数每增加 #b5#k 位需要支付#b " + Guild.getIncreaseGuildCost(cm.getPlayer().getGuild().getCapacity()) + "金币#k，你确定要继续吗？");
+                    cm.sendYesNo(`家族成员上限增加 #r5#k 位需支付 #r${expand_guild_cost}金币。#k你确定要继续吗？`);
                 }
             }
         } else if (status == 2) {
-            if (sel == 0 && cm.getPlayer().getGuildId() <= 0) {
+            if (sel == 0) {
                 cm.getPlayer().genericGuildMessage(1);
-                cm.dispose();
-            } else if (cm.getPlayer().getGuildId() > 0 && cm.getPlayer().getGuildRank() == 1) {
-                if (sel == 1) {
-                    cm.getPlayer().disbandGuild();
-                    cm.dispose();
-                } else if (sel == 2) {
-                    cm.getPlayer().increaseGuildCapacity();
-                    cm.dispose();
-                }
+            } else if (sel == 1) {
+                cm.getPlayer().disbandGuild();
+            } else if (sel == 2) {
+                cm.getPlayer().increaseGuildCapacity();
             }
+
+            cm.dispose();
+            
+        }else{
+            cm.dispose();
         }
     }
 }
