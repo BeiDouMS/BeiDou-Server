@@ -90,8 +90,8 @@ function action(mode, type, selection) {
             }
 
             if (hasEngagement) {
-                var text = "Hi there. How about skyrocket the day with your fiancee baby~?";
-                var choice = new Array("We're ready to get married.");
+                var text = "你好呀。要不要和你的未婚妻一起，让今天变得超甜蜜呢~？";
+                var choice = new Array("我们已经准备好举行婚礼了。");
                 for (x = 0; x < choice.length; x++) {
                     text += "\r\n#L" + x + "##b" + choice[x] + "#l";
                 }
