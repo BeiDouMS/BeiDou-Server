@@ -67,7 +67,7 @@ function action(mode, type, selection) {
                 return;
             }
 
-            cm.sendYesNo("哦，你对组建家族联盟感兴趣吗？目前这项操作的费用是 #b" + allianceCost + " 冒险币#k。");
+            cm.sendYesNo("哦，你对组建家族联盟感兴趣吗？目前这项操作的费用是 #b" + allianceCost + " 金币#k。");
         } else if (selection == 3) {
             if (cm.getPlayer().getMGC() == null) {
                 cm.sendOk("如果你没有公会，就无法扩展家族联盟。");
@@ -77,7 +77,7 @@ function action(mode, type, selection) {
 
             var rank = cm.getPlayer().getMGC().getAllianceRank();
             if (rank == 1) {
-                cm.sendYesNo("你想要增加你的家族联盟 #rone guild#k 的位置吗？这个手续的费用是 #b" + increaseCost + " 冒险币#k。");
+                cm.sendYesNo("你想要增加 #r1个家族联盟#k 位置吗？这个手续的费用是 #b" + increaseCost + " 金币#k。");
             } else {
                 cm.sendNext("只有家族联盟会长才能扩大家族联盟中的公会数量。");
                 cm.dispose();
@@ -104,7 +104,7 @@ function action(mode, type, selection) {
                 cm.dispose();
                 return;
             }
-            cm.sendGetText("Now please enter the name of your new Guild Union. (max. 12 letters)");
+            cm.sendGetText("请输入新家族联盟的名称（最多12个字符）。");
         } else if (choice == 3) {
             if (cm.getAllianceCapacity() == allianceLimit) {
                 cm.sendOk("你的联盟已经达到了公会的最大容量。");
