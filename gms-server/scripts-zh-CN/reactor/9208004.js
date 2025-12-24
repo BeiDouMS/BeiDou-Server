@@ -22,5 +22,9 @@
 // Stage 2 GP for Guild Quest
 
 function act() {
-    rm.getGuild().gainGP(20);
+    //封印锁击败后进入传送门增加了20GP。这里重复增加了20GP是不对的
+    //rm.getGuild().gainGP(20);
+
+    //4把隆奇努斯之枪放入完成进入本图时自动将封印锁消除
+    rm.message("封印被解开了！");
 }
