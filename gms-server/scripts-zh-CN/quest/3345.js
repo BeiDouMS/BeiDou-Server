@@ -36,7 +36,7 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (qm.getQuestProgress(3345, 0) == 4) {
-                qm.sendNext("看来你已经成功了。这样一来，玛加提亚城迫在眉睫的危机总算得以避免，做得好，勇敢的冒险着！");
+                qm.sendNext("看来你已经成功了。这样一来，玛加提亚城迫在眉睫的危机总算得以避免，做得好，勇敢的冒险者！");
                 qm.forceCompleteQuest();
 
                 qm.gainExp(20000);

@@ -64,10 +64,22 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
 
                         if (healedFactor > 0.0f) {
                             mount.setExp(mount.getExp() + (int) Math.ceil(healedFactor * (2 * mount.getLevel() + 6)));
+                            //坐骑目前等级
                             int level = mount.getLevel();
-                            boolean levelup = mount.getExp() >= ExpTable.getMountExpNeededForLevel(level) && level < 31;
-                            if (levelup) {
-                                mount.setLevel(level + 1);
+                            //最高等级
+                            int maxMountLevel = ExpTable.getMountMaxLevel();
+                            //是否升级
+                            boolean levelup = false;
+                            //如果没满级
+                            if (level < maxMountLevel) {
+                                //如果经验值达到升级条件
+                                if (mount.getExp() >= ExpTable.getMountExpNeededForLevel(level)) {
+                                    levelup = true;
+                                    mount.setLevel(level + 1);
+                                }
+                            //如果满级
+                            } else if (level == maxMountLevel) {
+                                chr.dropMessage(5, "坐骑已达到最高等级");
                             }
 
                             mountLevelup = levelup;
