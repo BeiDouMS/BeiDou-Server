@@ -451,12 +451,15 @@ public final class RingActionHandler extends AbstractPacketHandler {
                                 }
                             } else {
                                 c.getPlayer().dropMessage(5, "Wedding is already under way. You cannot invite any more guests for the event.");
+                                return;
                             }
                         } else {
                             c.getPlayer().dropMessage(5, "'" + name + "' is already invited for your marriage.");
+                            return;
                         }
                     } else {
                         c.getPlayer().dropMessage(5, "Invitation was not sent to '" + name + "'. Either the time for your marriage reservation already came or it was not found.");
+                        return;
                     }
 
                 } catch (Exception ex) {
