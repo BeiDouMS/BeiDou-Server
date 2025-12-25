@@ -41,7 +41,7 @@ function action(mode, type, selection) {
             arena.clearAriantScore(cm.getPlayer());
             cm.removeAll(4031868);
 
-            cm.getPlayer().gainExp(92 * cm.getPlayer().getExpRate() * copns, true, true);
+            cm.getPlayer().gainExp(Math.ceil(92 * cm.getPlayer().getExpRate() * copns, true, true));
             cm.getPlayer().gainAriantPoints(copns);
             cm.sendOk("好的！下次再给我更多的宝石！啊哈哈哈哈哈！");
             cm.dispose();
