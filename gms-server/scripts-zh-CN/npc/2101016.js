@@ -28,7 +28,7 @@ function action(mode, type, selection) {
         }
         if (status == 0) {
             copns = arena.getAriantScore(cm.getPlayer());
-            if (copns < 1 && !cm.getPlayer().isGM()) {
+            if (copns < 1) {
                 cm.sendOk("太糟糕了，你没有得到任何珠宝！");
                 cm.dispose();
             } else {
