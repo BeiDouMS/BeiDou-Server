@@ -261,11 +261,10 @@ public class AriantColiseum {
 
     private void enterKingsRoom() {
         exped.removeChannelExpedition(map.getChannelServer());
-        cancelAriantSchedules();
-
         for (Character chr : map.getAllPlayers()) {
             chr.changeMap(MapId.ARPQ_KINGS_ROOM, 0);
         }
+        cancelAriantSchedules();
     }
 
     private synchronized void dispose() {
