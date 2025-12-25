@@ -27,8 +27,11 @@ function action(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            menuStr = generateSelectionMenu(["I would like to check my battle points! / I would like to exchange (1) Palm Tree Beach Chair", "I would like to know more about the points of the Battle Arena."]);
-            cm.sendSimple("你好，我能为你做些什么？");
+            menuStr = generateSelectionMenu([
+                "我想查看或用点数兑换#t3010018#", 
+                "我想了解更多关于战斗竞技场点数的相关信息"
+            ]);
+            cm.sendSimple("你好，我能为你做些什么？\r\n" + menuStr);
         } else if (status == 1) {
             if (selection == 0) {
                 apqpoints = cm.getPlayer().getAriantPoints();
