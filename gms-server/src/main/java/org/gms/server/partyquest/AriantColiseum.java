@@ -227,7 +227,6 @@ public class AriantColiseum {
         int firstTop = -1, secondTop = -1;
         Character winner = null;
         List<Integer> runnerups = new ArrayList<>();
-
         for (Entry<Character, Integer> e : score.entrySet()) {
             Integer s = e.getValue();
             if (s > firstTop) {
@@ -237,12 +236,15 @@ public class AriantColiseum {
             } else if (s > secondTop) {
                 secondTop = s;
             }
-
             runnerups.add(s);
-            rewardTier.put(e.getKey(), (int) Math.floor(s / 10));
+			if (rewardTier != null) {
+				rewardTier.put(e.getKey(), (int) Math.floor(s / 10));
+			}
         }
-
-        runnerups.remove(firstTop);
+		if (runnerups.contains(firstTop)) {
+			//runnerups.remove(firstTop);
+			runnerups.remove(Integer.valueOf(firstTop));
+		}
         if (isUnfairMatch(firstTop, secondTop, map.getDroppedItemsCountById(ItemId.ARPQ_SPIRIT_JEWEL) + lostShards, runnerups)) {
             rewardTier.put(winner, 1);
         }
