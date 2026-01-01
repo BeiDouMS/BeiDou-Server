@@ -49,8 +49,15 @@ function action(mode, type, selection) {
         cm.sendYesNo("施主既然有此决心，贫僧就助你一臂之力。不过要提醒施主，一旦剃度，可就没有回头路了...确定要剃度吗？");
     } else if (status == 6) {
         if (mode === 1 && selection === -1 && type === 1) { // 玩家选择是
-            // 将玩家变成光头
-            let baldHair = 30030; // 光头发型ID
+            //判断性别
+            let baldHair;// 光头发型ID
+            // 将玩家变成光头 30437 男生大光头
+            if (cm.getPlayer().getGender() === 0) {
+                baldHair = 30437;
+            } else {
+                // 将玩家变成光头 31437 女生大光头
+                baldHair = 31437;
+            }
             cm.setHair(baldHair);
             cm.sendNext("阿弥陀佛！施主已剃度成功！从此烦恼丝尽断，心如明镜台。");
         } else {
