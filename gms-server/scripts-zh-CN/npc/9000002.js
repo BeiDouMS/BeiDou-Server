@@ -40,17 +40,16 @@ function action(mode, type, selection) {
         if (status == 0) {
             cm.sendNext("轰隆隆隆！！你已经从#b活动#k中赢得了游戏。恭喜你走到了这一步！");
         } else if (status == 1) {
-            cm.sendNext("你将获得#b秘密卷轴#k作为胜利奖励。卷轴上写有古代文字的秘密信息。");
+            cm.sendNext("你将获得#b#t4031019##k作为胜利奖励。卷轴上写有古代文字的秘密信息。");
         } else if (status == 2) {
-            cm.sendNext("“秘密卷轴可以由鲁德斯里姆的#r春姬#k或#r吉尼#k解读。带上它，一定会发生好事。”");
+            cm.sendNext("“#t4031019#可以由鲁德斯里姆的#r春姬#k或#r吉尼#k解读。带上它，一定会发生好事。”");
         } else if (status == 3) {
             if (cm.canHold(4031019)) {
                 cm.gainItem(4031019);
-                cm.warp(cm.getPlayer().getSavedLocation("EVENT"));
-                cm.dispose();
-            } else {
-                cm.sendNext("我认为你的杂项窗口已经满了。请腾出空间，然后和我交谈。");
-            }
+            } 
+            cm.warp(cm.getPlayer().getSavedLocation("EVENT"));
+            cm.dispose();
+
         } else if (status == 4) {
             cm.dispose();
         }
