@@ -45,23 +45,24 @@ function action(mode, type, selection) {
                     marr.setCustomData("0");
                 }
                 var dat = parseInt(marr.getCustomData());
+                var c = cm.getClient().getChannelServer();
                 if (dat + 3600000 >= cm.getCurrentTime()) {
                     cm.sendNext("你在过去的一个小时内已经参加了这个活动。");
                 } else if (!cm.canHold(4031019)) {
                     cm.sendNext("在你的背包里留点空间。");
-                } else if (cm.getChannelServer().getEvent() > -1 && !cm.haveItem(4031019)) {
+                } else if (c.getEvent() && !cm.haveItem(4031019)) {
                     cm.getPlayer().saveLocation("EVENT");
                     cm.getPlayer().setChalkboard(null);
                     marr.setCustomData("" + cm.getCurrentTime());
-                    cm.warp(cm.getChannelServer().getEvent(), cm.getChannelServer().getEvent() == 109080000 || cm.getChannelServer().getEvent() == 109080010 ? 0 : "join00");
+                    cm.warp(c.getEvent(), c.getEvent() == 109080000 || c.getEvent() == 109080010 ? 0 : "join00");
                 } else {
                     cm.sendNext("要么活动还没有开始，你已经拥有了#b秘密卷轴#k，或者你在过去24小时内已经参与了这个活动。请稍后再试！");
                 }
                 cm.dispose();
             } else if (selection == 3) {
-                var selStr = "Which Certificate of straight Win do you wish to exchange?";
+                var selStr = "你想要兑换哪一张连胜证书？";
                 for (var i = 0; i < quantities.length; i++) {
-                    selStr += "\r\n#b#L" + i + "##t" + (4031332 + i) + "# Exchange(" + quantities[i] + ")#l";
+                    selStr += "\r\n#b#L" + i + "##t" + (4031332 + i) + "# 兑换(" + quantities[i] + ")#l";
                 }
                 cm.sendSimple(selStr);
                 status = 9;
