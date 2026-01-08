@@ -32,6 +32,7 @@ import org.gms.client.command.commands.gm3.*;
 import org.gms.client.command.commands.gm4.*;
 import org.gms.client.command.commands.gm5.*;
 import org.gms.client.command.commands.gm6.*;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.manager.ServerManager;
 import org.gms.service.CommandService;
@@ -97,6 +98,12 @@ public class CommandsExecutor {
     private void handleInternal(Client client, String message) {
         if (client.getPlayer().getMapId() == MapId.JAIL && !client.getPlayer().isGM()) {
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message1"));
+            return;
+        }
+        // GM commands
+        char heading = message.charAt(0);
+        if (!client.getPlayer().isGM() && heading == USER_HEADING && GameConfig.getServerBoolean("deterred_player_command")) {
+            client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message4"));
             return;
         }
         final String splitRegex = "[ ]";
