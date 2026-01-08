@@ -46,8 +46,11 @@ function action(mode, type, selection) {
         } else if (status == 3) {
             if (cm.canHold(4031019)) {
                 cm.gainItem(4031019);
-            } 
-            cm.warp(cm.getPlayer().getSavedLocation("EVENT"));
+                cm.warp(cm.getPlayer().getSavedLocation("EVENT"));
+            } else {
+                cm.sendNext("背包空间不足或你已拥有#t4031019#。");
+            }
+            
             cm.dispose();
 
         } else if (status == 4) {
