@@ -13,9 +13,19 @@
             placeholder="怪物ID"
             allow-clear
           />
+          <a-input
+            v-model="condition.dropperName"
+            placeholder="怪物名称"
+            allow-clear
+          />
           <a-input-number
             v-model="condition.itemId"
             placeholder="物品ID"
+            allow-clear
+          />
+          <a-input
+            v-model="condition.itemName"
+            placeholder="物品名称"
             allow-clear
           />
           <a-input-number
@@ -275,7 +285,9 @@
 
   const resetClick = () => {
     condition.value.dropperId = undefined;
+    condition.value.dropperName = undefined;
     condition.value.itemId = undefined;
+    condition.value.itemName = undefined;
     condition.value.questId = undefined;
     condition.value.pageNo = 1;
     loadData();

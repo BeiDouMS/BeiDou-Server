@@ -14,6 +14,11 @@
             placeholder="物品ID"
             allow-clear
           />
+          <a-input
+            v-model="condition.itemName"
+            placeholder="物品名称"
+            allow-clear
+          />
           <a-input-number
             v-model="condition.questId"
             placeholder="任务ID"
@@ -257,6 +262,7 @@
   const resetClick = () => {
     condition.value.continent = undefined;
     condition.value.itemId = undefined;
+    condition.value.itemName = undefined;
     condition.value.questId = undefined;
     condition.value.pageNo = 1;
     loadData();

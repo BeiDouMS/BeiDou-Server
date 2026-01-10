@@ -13,7 +13,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class DropSearchReqDTO extends BasePageDTO {
     private Integer dropperId;
+    private String dropperName;
     private Integer continent;
     private Integer itemId;
+    private String itemName;
     private Integer questId;
 }
