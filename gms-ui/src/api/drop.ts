@@ -3,8 +3,10 @@ import { DropState } from '@/store/modules/drop/type';
 
 export interface DropConditionState {
   dropperId?: number;
+  dropperName?: string;
   continent?: number;
   itemId?: number;
+  itemName?: string;
   questId?: number;
   pageNo?: number;
   pageSize?: number;

@@ -2375,4 +2375,15 @@ public class ItemInformationProvider {
         public long addTime;
 
     }
+
+    public static ArrayList<Pair<Integer, String>> getItemsIDsFromName(String search) {
+        ArrayList<Pair<Integer, String>> retItems = new ArrayList<>();
+        List<Pair<Integer, String>> allItems = getInstance().getAllItems();
+        for (Pair<Integer, String> itemPair : allItems) {
+            if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
+                retItems.add(itemPair);
+            }
+        }
+        return retItems;
+    }
 }

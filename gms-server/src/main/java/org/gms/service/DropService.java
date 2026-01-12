@@ -12,7 +12,11 @@ import org.gms.model.dto.DropSearchRtnDTO;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.quest.Quest;
+import org.gms.util.Pair;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -27,7 +31,22 @@ public class DropService {
             if (data.getItemId() != null) dropDataGlobalDO.setItemid(data.getItemId());
             if (data.getQuestId() != null) dropDataGlobalDO.setQuestid(data.getQuestId());
 
-            Page<DropDataGlobalDO> paginate = dropDataGlobalMapper.paginate(data.getPageNo(), data.getPageSize(), QueryWrapper.create(dropDataGlobalDO));
+            QueryWrapper queryWrapper = QueryWrapper.create(dropDataGlobalDO);
+            // 物品名称模糊查询
+            if (data.getItemName() != null && !data.getItemName().isEmpty()) {
+                List<Integer> itemIds = ItemInformationProvider.getItemsIDsFromName(data.getItemName())
+                        .stream()
+                        .map(Pair::getLeft)
+                        .toList();
+                if (!itemIds.isEmpty()) {
+                    queryWrapper.and(DropDataGlobalDO::getItemid).in(itemIds);
+                } else {
+                    // 如果没有匹配的物品，返回空结果
+                    return new Page<>(Collections.emptyList(), data.getPageNo(), data.getPageSize(), 0);
+                }
+            }
+
+            Page<DropDataGlobalDO> paginate = dropDataGlobalMapper.paginate(data.getPageNo(), data.getPageSize(), queryWrapper);
             return new Page<>(
                     paginate.getRecords().stream()
                             .map(record -> DropSearchRtnDTO.builder()
@@ -53,7 +72,35 @@ public class DropService {
             if (data.getItemId() != null) dropDataDO.setItemid(data.getItemId());
             if (data.getQuestId() != null) dropDataDO.setQuestid(data.getQuestId());
 
-            Page<DropDataDO> paginate = dropDataMapper.paginate(data.getPageNo(), data.getPageSize(), QueryWrapper.create(dropDataDO));
+            QueryWrapper queryWrapper = QueryWrapper.create(dropDataDO);
+            // 怪物名称模糊查询
+            if (data.getDropperName() != null && !data.getDropperName().isEmpty()) {
+                List<Integer> mobIds = MonsterInformationProvider.getMobsIDsFromName(data.getDropperName())
+                        .stream()
+                        .map(Pair::getLeft)
+                        .toList();
+                if (!mobIds.isEmpty()) {
+                    queryWrapper.and(DropDataDO::getDropperid).in(mobIds);
+                } else {
+                    // 如果没有匹配的怪物，返回空结果
+                    return new Page<>(Collections.emptyList(), data.getPageNo(), data.getPageSize(), 0);
+                }
+            }
+            // 物品名称模糊查询
+            if (data.getItemName() != null && !data.getItemName().isEmpty()) {
+                List<Integer> itemIds = ItemInformationProvider.getItemsIDsFromName(data.getItemName())
+                        .stream()
+                        .map(Pair::getLeft)
+                        .toList();
+                if (!itemIds.isEmpty()) {
+                    queryWrapper.and(DropDataDO::getItemid).in(itemIds);
+                } else {
+                    // 如果没有匹配的物品，返回空结果
+                    return new Page<>(Collections.emptyList(), data.getPageNo(), data.getPageSize(), 0);
+                }
+            }
+
+            Page<DropDataDO> paginate = dropDataMapper.paginate(data.getPageNo(), data.getPageSize(), queryWrapper);
             return new Page<>(
                     paginate.getRecords().stream()
                             .map(record -> DropSearchRtnDTO.builder()
