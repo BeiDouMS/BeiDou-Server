@@ -100,6 +100,8 @@ import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -113,6 +115,8 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
 
     public static class AttackInfo {
 
@@ -275,13 +279,15 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         distanceToDetect += 40000;
                     } else if (attack.skill == DragonKnight.DRAGON_ROAR || attack.skill == SuperGM.SUPER_DRAGON_ROAR) {
                         distanceToDetect += 250000;
-                    } else if (attack.skill == Shadower.BOOMERANG_STEP) {
+                    } else if (attack.skill == Shadower.BOOMERANG_STEP || attack.skill == ILArchMage.CHAIN_LIGHTNING) {
                         distanceToDetect += 60000;
                     }
 
                     if (distance > distanceToDetect) {
-                        AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
-                        monster.refreshMobPosition();
+//                        AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
+                        AutobanFactory.DISTANCE_HACK.addPoint(player.getAutoBanManager(), "玩家：" + player.getName() + "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
+                        log.warn("玩家：{}距离Sq到怪物: {} SID: {} MID: {}", player.getName(), distance, attack.skill, monster.getId());
+
                     }
 
                     int totDamageToOneMonster = 0;
@@ -600,6 +606,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     protected AttackInfo parseDamage(InPacket p, Character chr, boolean ranged, boolean magic) {
         //2C 00 00 01 91 A1 12 00 A5 57 62 FC E2 75 99 10 00 47 80 01 04 01 C6 CC 02 DD FF 5F 00
+
+        detectionAttackInterval(chr);
+
         AttackInfo ret = new AttackInfo();
         p.readByte();
         ret.numAttackedAndDamage = p.readByte();
@@ -937,7 +946,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     damage = -Integer.MAX_VALUE + damage - 1;
                 }
 
-                if(effect != null) {
+                if (effect != null) {
                     int maxattack = Math.max(effect.getBulletCount(), effect.getAttackCount());
                     if (shadowPartner) {
                         maxattack = maxattack * 2;
@@ -959,6 +968,28 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             ret.position.setLocation(p.readShort(), p.readShort());
         }
         return ret;
+    }
+
+    /**
+     * 检测攻击间隔
+     *
+     * @param chr
+     */
+    private static void detectionAttackInterval(Character chr) {
+        long serverTime = System.currentTimeMillis();
+//        System.out.println("服务器时间：" + serverTime);
+//        System.out.println("上次攻击时间：" + chr.getLastAttackTime());
+//        System.out.println("攻击间隔：" + (serverTime - chr.getLastAttackTime()));
+        if (serverTime - chr.getLastAttackTime() < 350) {
+            // 检测攻击间隔 小于350mm封号
+            AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - chr.getLastAttackTime()));
+            log.warn("玩家{}地图ID：{}攻击间隔: {}", chr.getName(), chr.getMapId(), serverTime - chr.getLastAttackTime());
+        } else if (serverTime - chr.getLastAttackTime() < 450) {
+            // 检测攻击间隔 小于500mm警告
+            AutobanFactory.ATTACK_INTERVAL.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - chr.getLastAttackTime()));
+            log.warn("玩家{}地图ID：{}攻击间隔: {}", chr.getName(), chr.getMapId(), serverTime - chr.getLastAttackTime());
+        }
+        chr.setLastAttackTime(serverTime);
     }
 
     private static int rand(int l, int u) {
