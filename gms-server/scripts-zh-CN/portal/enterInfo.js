@@ -4,7 +4,7 @@ function enter(pi) {
         const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
         mapobj.spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300345), new Point(0, 0));
-        pi.setQuestProgress(21733, 21762, 2);
+        pi.setQuestProgress(21733, 21762, "2");
     }
 
     pi.playPortalSound();

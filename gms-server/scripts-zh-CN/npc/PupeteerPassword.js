@@ -19,7 +19,7 @@ function action(mode, type, selection) {
     if (status == 0) {
         if (cm.isQuestStarted(21728)) {
             cm.sendOk("你寻找着线索，试图找到操纵者的蛛丝马迹，但似乎有一股强大的力量挡住了你的去路……最好返回找 #b#p1061019##k。");
-            cm.setQuestProgress(21728, 21761, 0);
+            cm.setQuestProgress(21728, 21761, "0");
             cm.dispose();
             return;
         }
