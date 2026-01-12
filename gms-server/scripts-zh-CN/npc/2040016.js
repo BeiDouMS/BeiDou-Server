@@ -145,10 +145,10 @@ function action(mode, type, selection) {
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
         } else if (selectedType == 3) { //crystal refine
-            var itemSet = [4005000, 4005001, 4005002, 4005003];
-            var matSet = [4004000, 4004001, 4004002, 4004003];
-            var matQtySet = [10, 10, 10, 10];
-            var costSet = [4500, 4500, 4500, 4500];
+            var itemSet = [4005000, 4005001, 4005002, 4005003, 4005004];
+            var matSet = [4004000, 4004001, 4004002, 4004003, 4004004];
+            var matQtySet = [10, 10, 10, 10, 10];
+            var costSet = [4500, 4500, 4500, 4500, 1000000];
             item = itemSet[selectedItem];
             mats = matSet[selectedItem];
             matQty = matQtySet[selectedItem];
