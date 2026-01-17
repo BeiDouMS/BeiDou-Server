@@ -930,9 +930,6 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * @param chr
      */
     private static void detectionAttackInterval(Character chr, AttackInfo ret) {
-//        System.out.println("服务器时间：" + serverTime);
-//        System.out.println("上次攻击时间：" + chr.getLastAttackTime());
-//        System.out.println("攻击间隔：" + (serverTime - chr.getLastAttackTime()));
         //需要跳过检测的技能 比如弓箭手的暴风箭雨 火枪手的金属风暴
         if (!SKIP_SKILL_ID_SET.contains(ret.skill)) {
             long serverTime = System.currentTimeMillis();
