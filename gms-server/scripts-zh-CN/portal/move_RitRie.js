@@ -1,0 +1,3 @@
+function enter() {
+    return true;
+}
