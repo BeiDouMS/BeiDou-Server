@@ -63,7 +63,7 @@ public enum AutobanFactory {
     /**
      * 攻击频率
      */
-    ATTACK_INTERVAL(25, SECONDS.toMillis(30));
+    ATTACK_INTERVAL(60, SECONDS.toMillis(60));
 
     private static final Logger log = LoggerFactory.getLogger(AutobanFactory.class);
     private static final Set<Integer> ignoredChrIds = new HashSet<>();

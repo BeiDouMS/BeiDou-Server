@@ -936,11 +936,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         //需要跳过检测的技能 比如弓箭手的暴风箭雨 火枪手的金属风暴
         if (!SKIP_SKILL_ID_SET.contains(ret.skill)) {
             long serverTime = System.currentTimeMillis();
-            if (serverTime - chr.getLastAttackTime() < 350) {
+            if (serverTime - chr.getLastAttackTime() < 250) {
                 // 检测攻击间隔 小于350mm封号
                 AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - chr.getLastAttackTime()));
                 log.warn("玩家{}地图ID：{}攻击间隔: {}", chr.getName(), chr.getMapId(), serverTime - chr.getLastAttackTime());
-            } else if (serverTime - chr.getLastAttackTime() < 450) {
+            } else if (serverTime - chr.getLastAttackTime() < 350) {
                 // 检测攻击间隔 小于500mm警告
                 AutobanFactory.ATTACK_INTERVAL.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - chr.getLastAttackTime()));
                 log.warn("玩家{}地图ID：{}攻击间隔: {}", chr.getName(), chr.getMapId(), serverTime - chr.getLastAttackTime());
