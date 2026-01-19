@@ -34,51 +34,7 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
-import org.gms.constants.skills.Aran;
-import org.gms.constants.skills.Assassin;
-import org.gms.constants.skills.Bandit;
-import org.gms.constants.skills.Beginner;
-import org.gms.constants.skills.Bishop;
-import org.gms.constants.skills.BlazeWizard;
-import org.gms.constants.skills.Bowmaster;
-import org.gms.constants.skills.Brawler;
-import org.gms.constants.skills.Buccaneer;
-import org.gms.constants.skills.ChiefBandit;
-import org.gms.constants.skills.Cleric;
-import org.gms.constants.skills.Corsair;
-import org.gms.constants.skills.Crossbowman;
-import org.gms.constants.skills.Crusader;
-import org.gms.constants.skills.DawnWarrior;
-import org.gms.constants.skills.DragonKnight;
-import org.gms.constants.skills.Evan;
-import org.gms.constants.skills.FPArchMage;
-import org.gms.constants.skills.FPMage;
-import org.gms.constants.skills.FPWizard;
-import org.gms.constants.skills.Fighter;
-import org.gms.constants.skills.Gunslinger;
-import org.gms.constants.skills.Hermit;
-import org.gms.constants.skills.Hero;
-import org.gms.constants.skills.Hunter;
-import org.gms.constants.skills.ILArchMage;
-import org.gms.constants.skills.ILMage;
-import org.gms.constants.skills.Legend;
-import org.gms.constants.skills.Marauder;
-import org.gms.constants.skills.Marksman;
-import org.gms.constants.skills.NightLord;
-import org.gms.constants.skills.NightWalker;
-import org.gms.constants.skills.Noblesse;
-import org.gms.constants.skills.Outlaw;
-import org.gms.constants.skills.Page;
-import org.gms.constants.skills.Paladin;
-import org.gms.constants.skills.Ranger;
-import org.gms.constants.skills.Rogue;
-import org.gms.constants.skills.Shadower;
-import org.gms.constants.skills.Sniper;
-import org.gms.constants.skills.Spearman;
-import org.gms.constants.skills.SuperGM;
-import org.gms.constants.skills.ThunderBreaker;
-import org.gms.constants.skills.WhiteKnight;
-import org.gms.constants.skills.WindArcher;
+import org.gms.constants.skills.*;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.PlayerBuffValueHolder;
@@ -100,19 +56,19 @@ import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
 
     public static class AttackInfo {
 
@@ -275,13 +231,15 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         distanceToDetect += 40000;
                     } else if (attack.skill == DragonKnight.DRAGON_ROAR || attack.skill == SuperGM.SUPER_DRAGON_ROAR) {
                         distanceToDetect += 250000;
-                    } else if (attack.skill == Shadower.BOOMERANG_STEP) {
+                    } else if (attack.skill == Shadower.BOOMERANG_STEP || attack.skill == ILArchMage.CHAIN_LIGHTNING) {
                         distanceToDetect += 60000;
                     }
 
                     if (distance > distanceToDetect) {
-                        AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
-                        monster.refreshMobPosition();
+//                        AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
+                        AutobanFactory.DISTANCE_HACK.addPoint(player.getAutoBanManager(), "玩家：" + player.getName() + "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
+                        log.warn("玩家：{}距离Sq到怪物: {} SID: {} MID: {}", player.getName(), distance, attack.skill, monster.getId());
+
                     }
 
                     int totDamageToOneMonster = 0;
@@ -600,6 +558,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     protected AttackInfo parseDamage(InPacket p, Character chr, boolean ranged, boolean magic) {
         //2C 00 00 01 91 A1 12 00 A5 57 62 FC E2 75 99 10 00 47 80 01 04 01 C6 CC 02 DD FF 5F 00
+
+
         AttackInfo ret = new AttackInfo();
         p.readByte();
         ret.numAttackedAndDamage = p.readByte();
@@ -609,6 +569,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         ret.skill = p.readInt();
         ret.ranged = ranged;
         ret.magic = magic;
+
+        detectionAttackInterval(chr, ret);
+
 
         if (ret.skill > 0) {
             ret.skilllevel = chr.getSkillLevel(ret.skill);
@@ -937,7 +900,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     damage = -Integer.MAX_VALUE + damage - 1;
                 }
 
-                if(effect != null) {
+                if (effect != null) {
                     int maxattack = Math.max(effect.getBulletCount(), effect.getAttackCount());
                     if (shadowPartner) {
                         maxattack = maxattack * 2;
@@ -960,6 +923,39 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
         return ret;
     }
+
+    /**
+     * 检测攻击间隔
+     *
+     * @param chr
+     */
+    private static void detectionAttackInterval(Character chr, AttackInfo ret) {
+        //需要跳过检测的技能 比如弓箭手的暴风箭雨 火枪手的金属风暴
+        if (!SKIP_SKILL_ID_SET.contains(ret.skill)) {
+            long serverTime = System.currentTimeMillis();
+            if (serverTime - chr.getLastAttackTime() < 250) {
+                // 检测攻击间隔 小于350mm封号
+                AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - chr.getLastAttackTime()));
+                log.warn("玩家{}地图ID：{}攻击间隔: {}", chr.getName(), chr.getMapId(), serverTime - chr.getLastAttackTime());
+            } else if (serverTime - chr.getLastAttackTime() < 350) {
+                // 检测攻击间隔 小于500mm警告
+                AutobanFactory.ATTACK_INTERVAL.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - chr.getLastAttackTime()));
+                log.warn("玩家{}地图ID：{}攻击间隔: {}", chr.getName(), chr.getMapId(), serverTime - chr.getLastAttackTime());
+            }
+            chr.setLastAttackTime(serverTime);
+        }
+    }
+
+    /**
+     * 跳过攻击速度检测的技能ID
+     */
+    private static final Set<Integer> SKIP_SKILL_ID_SET = Set.of(
+            // 弓箭 暴风箭雨
+            Bowmaster.HURRICANE,
+            // 火枪 金属风暴
+            Corsair.RAPID_FIRE
+    );
+
 
     private static int rand(int l, int u) {
         return (int) ((Math.random() * (u - l + 1)) + l);

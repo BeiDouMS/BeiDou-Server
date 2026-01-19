@@ -58,7 +58,12 @@ public enum AutobanFactory {
     ITEM_VAC,
     FAST_ITEM_PICKUP(5, SECONDS.toMillis(30)),
     FAST_ATTACK(10, SECONDS.toMillis(30)),
-    MPCON(25, SECONDS.toMillis(30));
+    MPCON(25, SECONDS.toMillis(30)),
+
+    /**
+     * 攻击频率
+     */
+    ATTACK_INTERVAL(60, SECONDS.toMillis(60));
 
     private static final Logger log = LoggerFactory.getLogger(AutobanFactory.class);
     private static final Set<Integer> ignoredChrIds = new HashSet<>();

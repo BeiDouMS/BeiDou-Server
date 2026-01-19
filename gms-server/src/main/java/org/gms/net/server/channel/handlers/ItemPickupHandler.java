@@ -23,6 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.autoban.AutobanFactory;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
@@ -53,8 +54,10 @@ public final class ItemPickupHandler extends AbstractPacketHandler {
         Point charPos = chr.getPosition();
         Point obPos = ob.getPosition();
         if (Math.abs(charPos.getX() - obPos.getX()) > 800 || Math.abs(charPos.getY() - obPos.getY()) > 600) {
-            log.warn("Chr {} tried to pick up an item too far away. Mapid: {}, player pos: {}, object pos: {}",
-                    c.getPlayer().getName(), chr.getMapId(), charPos, obPos);
+
+//            AutobanFactory.DISTANCE_HACK.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + Math.abs(charPos.getX() - obPos.getX()) + " " + Math.abs(charPos.getY() - obPos.getY()));
+            AutobanFactory.DISTANCE_HACK.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + Math.abs(charPos.getX() - obPos.getX()) + " " + Math.abs(charPos.getY() - obPos.getY()));
+            log.warn("玩家{}地图ID：{}距离物品: {} {}", chr.getName(), chr.getMapId(), Math.abs(charPos.getX() - obPos.getX()), Math.abs(charPos.getY() - obPos.getY()));
             return;
         }
 
