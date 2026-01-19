@@ -40,15 +40,18 @@ function action(mode, type, selection) {
     if (status == 0) {
         if (!cm.hasMerchant() && cm.hasMerchantItems()) {
             cm.showFredrick();
-            cm.dispose();
         } else {
             if (cm.hasMerchant()) {
-                cm.sendOk("你有一个商人窗口打开。");
-                cm.dispose();
+				var tan = cm.getClient().getWorldServer().getHiredMerchant(cm.getPlayer().getId());
+				var text = "你雇佣的商店已开设"
+				text += `\r\n摊位在 #r频道${tan.getChannel()} 自由市场〈#r#e${tan.getMapId() - 910000000}#n〉#k`;
+                cm.sendOk(text);
             } else {
                 cm.sendOk("你没有任何物品或金币可以取回。");
-                cm.dispose();
             }
         }
+        cm.dispose();
+    }else{
+        cm.dispose();
     }
 }
