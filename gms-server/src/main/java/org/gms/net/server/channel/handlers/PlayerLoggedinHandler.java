@@ -229,6 +229,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (GameConfig.getServerBoolean("use_server_auto_pot")) {
                 // 同步HP MP提醒 考虑上面player.newClient(c)，如果在此之前发包，可能会造成错误
                 player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
+                // 仅回显给自己，可在该包尾部扩展系统设置字段
+                player.sendPacket(PacketCreator.updateClientSettings(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
             }
             cserv.addPlayer(player);
             wserv.addPlayer(player);
