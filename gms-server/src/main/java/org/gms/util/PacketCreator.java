@@ -7505,12 +7505,6 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateHpMpAlert(byte hp, byte mp) {
-        OutPacket p = OutPacket.create(SendOpcode.UPDATE_HPMPAALERT);
-        p.writeByte(hp);
-        p.writeByte(mp);
-        return p;
-    }
 
     /**
      * 客户端系统设置回显（目前仅 HP/MP 警报阈值）。

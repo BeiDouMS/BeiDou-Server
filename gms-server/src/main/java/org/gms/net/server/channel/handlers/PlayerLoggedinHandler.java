@@ -227,10 +227,11 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
             // 增加参数判断，避免给客户端发未知包导致异常
             if (GameConfig.getServerBoolean("use_server_auto_pot")) {
-                // 同步HP MP提醒 考虑上面player.newClient(c)，如果在此之前发包，可能会造成错误
-                player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
-                // 仅回显给自己，可在该包尾部扩展系统设置字段
-                player.sendPacket(PacketCreator.updateClientSettings(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
+                byte hpAlert = hpMpAlertService.getHpAlert(player.getId());
+                byte mpAlert = hpMpAlertService.getMpAlert(player.getId());
+                // 仅同步给本人：该包属于客户端本地设置且不含角色标识，广播给他人可能污染其本地配置。
+                // 后续如需扩展系统设置字段，可在该包尾部追加，保持前两个字节为 HP/MP 警报。
+                player.sendPacket(PacketCreator.updateClientSettings(hpAlert, mpAlert));
             }
             cserv.addPlayer(player);
             wserv.addPlayer(player);
@@ -398,7 +399,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     */
                 if (player.isGM()) {
                     Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.earnTitleMessage((player.gmLevel() < 6 ? "GM " : "Admin ") + player.getName() + " 登录了游戏"));
-                }else {
+                } else {
                     if (GameConfig.getServerBoolean("use_login_notification")) {
                         String msg = I18nUtil.getMessage("Character.login.globalNotice", player.getName());
                         Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(3, c.getChannel(), msg));
