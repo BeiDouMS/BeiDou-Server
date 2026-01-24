@@ -7505,7 +7505,12 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateHpMpAlert(byte hp, byte mp) {
+
+    /**
+     * 客户端系统设置回显（目前仅 HP/MP 警报阈值）。
+     * 后续如需扩展系统设置字段，可在该包尾部追加，保持前两个字节为 HP/MP 警报。
+     */
+    public static Packet updateClientSettings(byte hp, byte mp) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_HPMPAALERT);
         p.writeByte(hp);
         p.writeByte(mp);
