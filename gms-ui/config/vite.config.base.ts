@@ -6,6 +6,9 @@ import svgLoader from 'vite-svg-loader';
 import configArcoStyleImportPlugin from './plugin/arcoStyleImport';
 
 export default defineConfig({
+    build: {
+        outDir: '../gms-server/src/main/resources/static',  // 设置输出目录
+    },
   plugins: [
     vue(),
     vueJsx(),

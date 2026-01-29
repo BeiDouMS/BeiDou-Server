@@ -50,6 +50,7 @@
           v-model="condition.filter"
           :placeholder="$t('informationSearch.placeholder.filter')"
           class="a-space-son"
+          @keydown.enter="searchData"
         />
         <a-button type="primary" @click="searchData">
           {{ $t('button.search') }}

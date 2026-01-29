@@ -27,7 +27,7 @@
         </a-button>
       </a-space>
       <a-space class="a-input">
-        <a-input-number v-model="condition.itemId" placeholder="物品ID" />
+        <a-input-number v-model="condition.itemId" placeholder="物品ID" @keydown.enter="loadData"/>
       </a-space>
       <a-space>
         <a-button @click="loadData">搜索</a-button>
