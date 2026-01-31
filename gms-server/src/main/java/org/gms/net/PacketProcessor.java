@@ -21,7 +21,9 @@
  */
 package org.gms.net;
 
+import org.gms.constants.net.ServerConstants;
 import org.gms.net.netty.LoginServer;
+import org.gms.net.opcodes.Opcode;
 import org.gms.net.opcodes.RecvOpcode;
 import org.gms.net.server.channel.handlers.*;
 import org.gms.net.server.handlers.CustomPacketHandler;
@@ -95,11 +97,11 @@ public final class PacketProcessor {
         return handler;
     }
 
-    public void registerHandler(RecvOpcode code, PacketHandler handler) {
+    public void registerHandler(Opcode code, PacketHandler handler) {
         try {
             handlers[code.getValue()] = handler;
         } catch (ArrayIndexOutOfBoundsException e) {
-            log.error("Error registering handler {}", code.name(), e);
+            log.error("Error registering handler {}", code.getName(), e);
         }
     }
 
@@ -117,12 +119,19 @@ public final class PacketProcessor {
     public void reset(int channel) {
         handlers = new PacketHandler[handlers.length];
 
-        registerCommonHandlers();
+        switch (ServerConstants.VERSION) {
+            case 83:
+                registerCommonHandlers();
 
-        if (channel < 0) {
-            registerLoginHandlers();
-        } else {
-            registerChannelHandlers();
+                if (channel < 0) {
+                    registerLoginHandlers();
+                } else {
+                    registerChannelHandlers();
+                }
+                break;
+            default:
+                log.warn("找不到指定的版本注册 Opcode Handler");
+                break;
         }
     }
 

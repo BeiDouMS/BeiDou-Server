@@ -21,7 +21,7 @@
  */
 package org.gms.net.opcodes;
 
-public enum SendOpcode {
+public enum SendOpcode implements Opcode {
 
     LOGIN_STATUS(0x00), // 登录状态
     GUEST_ID_LOGIN(0x01), // 游客ID登录
@@ -364,7 +364,13 @@ public enum SendOpcode {
         this.code = code;
     }
 
+    @Override
     public int getValue() {
         return code;
+    }
+
+    @Override
+    public String getName() {
+        return this.name();
     }
 }

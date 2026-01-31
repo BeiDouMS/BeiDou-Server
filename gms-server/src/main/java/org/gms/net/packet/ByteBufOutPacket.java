@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import net.jcip.annotations.NotThreadSafe;
+import org.gms.net.opcodes.Opcode;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.util.ThreadLocalUtil;
 
@@ -21,7 +22,7 @@ public class ByteBufOutPacket implements OutPacket {
         this.byteBuf = Unpooled.buffer();
     }
 
-    public ByteBufOutPacket(SendOpcode op) {
+    public ByteBufOutPacket(Opcode op) {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeShortLE((short) op.getValue());
         this.byteBuf = byteBuf;
