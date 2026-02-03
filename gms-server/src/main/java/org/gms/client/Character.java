@@ -2610,6 +2610,7 @@ public class Character extends AbstractCharacterObject {
     public void doHurtHp() {
         if (!(this.getInventory(InventoryType.EQUIPPED).findById(getMap().getHPDecProtect()) != null || buffMapProtection())) {
             addHP(-getMap().getHPDec());
+            sendPacket(PacketCreator.onNotifyHPDecByField(getMap().getHPDec()));
         }
     }
 
