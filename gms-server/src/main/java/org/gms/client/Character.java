@@ -6597,6 +6597,7 @@ public class Character extends AbstractCharacterObject {
                 break;
             }
         }
+        usedSafetyCharm = false;
         if (possesed > 0 && !MapId.isDojo(getMapId())) {
             message(I18nUtil.getMessage("Character.useItem.message1"));  //使用安全护符，不扣经验
             InventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true, false);
