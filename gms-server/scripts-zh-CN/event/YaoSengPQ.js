@@ -398,7 +398,7 @@ function monsterKilled(mob, eim) {
  * @param {EventInstanceManager} eim - 事件实例管理器。
  */
 function allMonstersDead(eim) {
-    clearPQ(eim);
+    //clearPQ(eim);
 }
 
 /**
