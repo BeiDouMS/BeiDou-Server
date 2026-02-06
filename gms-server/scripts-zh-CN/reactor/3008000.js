@@ -9,7 +9,7 @@ function hit() {
     var players = rm.getMap().getAllPlayers().toArray();
 
     for (var i = 0; i < players.length; i++) {
-        rm.giveCharacterExp(52000, players[i]);
+        players[i].gainExp(52000);
     }
 }
 
