@@ -75,9 +75,6 @@ function doSelect(selection) {
         case 69:
             openNpc("快速转职");
             break;
-        case 72:
-            openNpc("转世重生");
-            break;
         case 70:
             openNpc("技能学习");
             break;
