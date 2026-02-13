@@ -178,7 +178,7 @@ function processSkill(skillId, keyCode, skillName, keyName, keySymbol) {
     var hasSkill = player.getSkillLevel(skillId) > 0;
     
     if (!hasSkill) {
-        // 学习技能
+        // 学习技能 - 直接学习，跳过职业检查
         var learnResult = learnSkill(skillId, skillName);
         if (learnResult.success) {
             messages.push(learnResult.message);
@@ -208,7 +208,7 @@ function processSkill(skillId, keyCode, skillName, keyName, keySymbol) {
     };
 }
 
-// 学习技能的函数
+// 学习技能的函数 - 修改版，跳过职业检查
 function learnSkill(skillId, skillName) {
     var player = cm.getPlayer();
     
@@ -224,35 +224,28 @@ function learnSkill(skillId, skillName) {
             return {success: false, message: "技能不存在"};
         }
         
-        var jobId = player.getJob().getId();
-        var isInJobTree = true;
-        
-        try {
-            var GameConstants = Java.type('org.gms.constants.game.GameConstants');
-            isInJobTree = GameConstants.isInJobTree(skillId, jobId);
-        } catch (e) {}
-        
-        if (!player.isGM() && !isInJobTree) {
-            return {success: false, message: "职业无法学习"};
-        }
-        
+        // 获取技能最大等级
         var maxLevel = 20;
         try {
             maxLevel = skill.getMaxLevel();
-        } catch (e) {}
-        
-        if (maxLevel <= 0) {
+            if (maxLevel <= 0) {
+                maxLevel = 20;
+            }
+        } catch (e) {
             maxLevel = 20;
         }
         
+        // 直接学习技能，不检查职业限制
         player.changeSkillLevel(skill, maxLevel, maxLevel, -1);
         
-        return {success: true, 
-                message: "#g学会" + skillName + "#k\r\n" +
-                         "等级：" + maxLevel + "/" + maxLevel};
+        return {
+            success: true, 
+            message: "#g学会" + skillName + "#k\r\n" +
+                     "等级：" + maxLevel + "/" + maxLevel
+        };
         
     } catch (e) {
-        return {success: false, message: "学习出错：" + e};
+        return {success: false, message: "学习出错：" + e.toString()};
     }
 }
 
@@ -310,7 +303,7 @@ function bindSkill(skillId, skillName, keyCode, keyName, keySymbol, alreadyLearn
             return {success: true, message: message};
             
         } catch (e2) {
-            return {success: false, message: "绑定出错：" + e2};
+            return {success: false, message: "绑定出错：" + e2.toString()};
         }
     }
 }
