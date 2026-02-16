@@ -221,7 +221,8 @@ function action(mode, type, selection) {
                 cm.getPlayer().removePartyQuestItem("JB3");
                 cm.getPlayer().setPartyQuestItemObtained("JBP");
             }
-            cm.sendNextPrev("我的分身相当强大，他会使用特殊技能，你应该跟他一对一战斗，击败他并带回#b#t4031059##k，祝你好运！");
+            cm.sendNext("我的分身相当强大，他会使用特殊技能，你应该跟他一对一战斗，击败他并带回#b#t4031059##k，祝你好运！");
+			cm.dispose();
         }
     } else if (actionx["3thJobC"]) {
         cm.getPlayer().removePartyQuestItem("JBP");
