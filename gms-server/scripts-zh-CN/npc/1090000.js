@@ -229,17 +229,19 @@ function action(mode, type, selection) {
                 var map = 0;
                 if (cm.isQuestStarted(2191)) {
                     map = 108000502;
-                } else {
+                } else if (cm.isQuestStarted(2192)) {
                     map = 108000501;
                 }
-                if (cm.getPlayerCount(map) > 0) {
-                    cm.sendOk("所有的训练地图目前正在使用中。请稍后再试。");
-                    cm.dispose();
-                } else {
-                    cm.warp(map, 0);
-                    cm.dispose();
-
-                }
+				if(map > 0){
+	                if (cm.getPlayerCount(map) > 0) {
+	                    cm.sendOk("所有的训练地图目前正在使用中。请稍后再试。");
+	                } else {
+	                    cm.warp(map, 0);
+	                }
+				} else {
+					cm.sendOk("你还没有接到转职任务！");
+				}
+				cm.dispose();
             } else {
                 if (cm.isQuestCompleted(2191) && cm.isQuestCompleted(2192)) {
                     job = (Math.random() < 0.5) ? 510 : 520;
