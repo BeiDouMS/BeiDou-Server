@@ -19,6 +19,7 @@
 */
 package org.gms.constants.net;
 
+import org.gms.net.opcodes.Opcode;
 import org.gms.net.opcodes.RecvOpcode;
 import org.gms.net.opcodes.SendOpcode;
 
@@ -33,13 +34,19 @@ public class OpcodeConstants {
     public static Map<Integer, String> recvOpcodeNames = new HashMap<>();
 
     public static void generateOpcodeNames() {
-        for (SendOpcode op : SendOpcode.values()) {
-            sendOpcodeNames.put(op.getValue(), op.name());
-        }
-
-        for (RecvOpcode op : RecvOpcode.values()) {
-            recvOpcodeNames.put(op.getValue(), op.name());
+        switch (ServerConstants.VERSION) {
+            case 83  -> init(SendOpcode.values(), RecvOpcode.values());
+            default  -> throw new RuntimeException("不支援的版本: " + ServerConstants.VERSION);
         }
     }
 
+    public static void init(Opcode[] sendValues, Opcode[] recvValues) {
+        for (Opcode op : sendValues) {
+            sendOpcodeNames.put(op.getValue(), op.getName());
+        }
+
+        for (Opcode op : recvValues) {
+            recvOpcodeNames.put(op.getValue(), op.getName());
+        }
+    }
 }
