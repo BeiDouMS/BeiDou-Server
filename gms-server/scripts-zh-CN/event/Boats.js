@@ -38,10 +38,6 @@ function init() {
     Orbis_Station = em.getChannelServer().getMapFactory().getMap(200000100);    //天空之城售票处
     Orbis_docked = em.getChannelServer().getMapFactory().getMap(200000111);     //码头<开往魔法密林>
 
-    // 设置码头状态为已停靠
-    Ellinia_docked.setDocked(true);
-    Orbis_docked.setDocked(true);
-
     // 安排新的周期性任务
     scheduleNew();
 }
@@ -52,12 +48,20 @@ function scheduleNew() {
     em.setProperty("entry", "true");
     em.setProperty("haveBalrog", "false");
 
+    //初始化必定有船只进入
+    Ellinia_docked.broadcastShip(true);  // 广播魔法密林头船只进入消息
+    Orbis_docked.broadcastShip(true);    // 广播天空之城码头船只进入消息
+
     // 安排关闭入口和起飞的时间点
     em.schedule("stopentry", closeTime);
     em.schedule("takeoff", beginTime);
 }
 
 function stopentry() {
+
+    Ellinia_docked.broadcastShip(false); // 广播魔法密林头船只离开消息
+    Orbis_docked.broadcastShip(false);   // 广播天空之城码头船只离开消息
+
     // 关闭入口后清除船舱内的对象（例如箱子）
     em.setProperty("entry", "false");
     Orbis_Boat_Cabin.clearMapObjects();   // 清除船舱内的对象
@@ -65,12 +69,11 @@ function stopentry() {
 }
 
 function takeoff() {
+
     // 玩家被传送至船上，广播船只离开的消息
     Orbis_btf.warpEveryone(Boat_to_Ellinia.getId());
     Ellinia_btf.warpEveryone(Boat_to_Orbis.getId());
-    Ellinia_docked.broadcastShip(false); // 广播魔法密林头船只离开消息
-    Orbis_docked.broadcastShip(false);   // 广播天空之城码头船只离开消息
-
+    
     // 设置码头状态为未停靠
     em.setProperty("docked", "false");
 
@@ -91,8 +94,6 @@ function arrived() {
     Ellinia_Boat_Cabin.warpEveryone(Ellinia_docked.getId(), 1);
 
     // 播放船只到达的消息并重置蝙蝠魔状态
-    Orbis_docked.broadcastShip(true);
-    Ellinia_docked.broadcastShip(true);
     Boat_to_Orbis.broadcastEnemyShip(false);
     Boat_to_Ellinia.broadcastEnemyShip(false);
     Boat_to_Orbis.killAllMonsters();
