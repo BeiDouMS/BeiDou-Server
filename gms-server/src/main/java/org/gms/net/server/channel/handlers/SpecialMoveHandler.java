@@ -97,8 +97,6 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             int num = p.readInt();
             for (int i = 0; i < num; i++) {
                 int mobOid = p.readInt();
-                byte success = p.readByte();
-                chr.getMap().broadcastMessage(chr, PacketCreator.catchMonster(mobOid, success), false);
                 Monster monster = chr.getMap().getMonsterByOid(mobOid);
                 if (monster != null) {
                     if (!monster.isBoss()) {
@@ -108,6 +106,10 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                         // thanks onechord for pointing out Magnet crashing the caster (issue would actually happen upon failing to catch mob)
                         // thanks Conrad for noticing Magnet crashing when trying to pull bosses and fixed mobs
                         monster.aggroSwitchController(chr, true);
+
+						// 磁石技能吸的不是BOSS时广播给图内的其他玩家（因客户端问题）
+						byte success = p.readByte();
+						chr.getMap().broadcastMessage(chr, PacketCreator.catchMonster(mobOid, success), false);
                     }
                 }
             }
