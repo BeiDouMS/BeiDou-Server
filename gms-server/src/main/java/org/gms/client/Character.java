@@ -510,7 +510,8 @@ public class Character extends AbstractCharacterObject {
      */
     @Setter
     @Getter
-    private long lastAttackTime = 0;
+    private final ConcurrentHashMap<Integer, Long> lastAttackTimes = new ConcurrentHashMap<>();
+
 
     private Character() {
         super.setListener(new CharacterListener(this));
