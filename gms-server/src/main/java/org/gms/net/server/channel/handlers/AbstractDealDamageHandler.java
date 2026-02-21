@@ -62,6 +62,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -930,22 +931,24 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * @param chr
      */
     private static void detectionAttackInterval(Character chr, AttackInfo ret) {
+        ConcurrentHashMap<Integer, Long> lastAttackTimeMap = chr.getLastAttackTimes();
+        int skill = ret.skill;
         //需要跳过检测的技能 比如弓箭手的暴风箭雨 火枪手的金属风暴
-        if (!SKIP_SKILL_ID_SET.contains(ret.skill)) {
+        if (!SKIP_SKILL_ID_SET.contains(skill)) {
+            long lastAttackTime = lastAttackTimeMap.get(skill) != null ? lastAttackTimeMap.get(skill) : 0L;
             long serverTime = System.currentTimeMillis();
-            if (serverTime - chr.getLastAttackTime() < 250) {
+            if (serverTime - lastAttackTime < 250) {
                 // 检测攻击间隔 小于350mm封号
-                AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - chr.getLastAttackTime()));
-                log.warn("玩家{}地图ID：{}攻击间隔: {}", chr.getName(), chr.getMapId(), serverTime - chr.getLastAttackTime());
-            } else if (serverTime - chr.getLastAttackTime() < 350) {
+                AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - lastAttackTime) + "技能ID：" + skill);
+                log.warn("玩家{}地图ID：{}攻击间隔: {}技能ID：{}", chr.getName(), chr.getMapId(), serverTime - lastAttackTime, skill);
+            } else if (serverTime - lastAttackTime < 350) {
                 // 检测攻击间隔 小于500mm警告
-                AutobanFactory.ATTACK_INTERVAL.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - chr.getLastAttackTime()));
-                log.warn("玩家{}地图ID：{}攻击间隔: {}", chr.getName(), chr.getMapId(), serverTime - chr.getLastAttackTime());
+                AutobanFactory.ATTACK_INTERVAL.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + (serverTime - lastAttackTime) + "技能ID：" + skill);
+                log.warn("玩家{}地图ID：{}攻击间隔: {}技能ID：{}", chr.getName(), chr.getMapId(), serverTime - lastAttackTime, skill);
             }
-            chr.setLastAttackTime(serverTime);
+            lastAttackTimeMap.put(skill, serverTime);
         }
     }
-
     /**
      * 跳过攻击速度检测的技能ID
      */
