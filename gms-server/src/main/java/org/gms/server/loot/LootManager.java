@@ -33,6 +33,10 @@ import java.util.List;
 public class LootManager {
 
     private static boolean isRelevantDrop(MonsterDropEntry dropEntry, List<Character> players, List<LootInventory> playersInv) {
+        if (dropEntry.questid <= 0) {
+            return true;
+        }
+        
         int qStartAmount = 0, qCompleteAmount = 0;
         Quest quest = Quest.getInstance(dropEntry.questid);
         if (quest != null) {
