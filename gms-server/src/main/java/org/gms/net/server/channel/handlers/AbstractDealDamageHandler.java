@@ -976,22 +976,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
 
         Point playerPos = player.getPosition();
-        Point mobPos = monster.getPosition();
-
-        int minX;
-        int maxX;
-        if (monster.isFacingLeft()) {
-            // 面向左：直接叠加相对 lt/rb
-            minX = mobPos.x + stats.getBboxMinX();
-            maxX = mobPos.x + stats.getBboxMaxX();
-        } else {
-            // 面向右：需要镜像
-            minX = mobPos.x - stats.getBboxMaxX();
-            maxX = mobPos.x - stats.getBboxMinX();
-        }
-
-        int minY = mobPos.y + stats.getBboxMinY();
-        int maxY = mobPos.y + stats.getBboxMaxY();
+        int[] bbox = getWorldBbox(monster, stats);
+        int minX = bbox[0];
+        int maxX = bbox[1];
+        int minY = bbox[2];
+        int maxY = bbox[3];
 
         // 计算点到矩形的最短距离
         int dx = 0;
@@ -1023,22 +1012,14 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             return "BBOX{use=" + useBbox + ", valid=false, playerPos=" + playerPos + ", mobPos=" + mobPos + ", facingLeft=" + facingLeft + "}";
         }
 
-        int minX;
-        int maxX;
-        if (facingLeft) {
-            // 面向左：直接叠加相对 lt/rb
-            minX = mobPos.x + stats.getBboxMinX();
-            maxX = mobPos.x + stats.getBboxMaxX();
-        } else {
-            // 面向右：需要镜像
-            minX = mobPos.x - stats.getBboxMaxX();
-            maxX = mobPos.x - stats.getBboxMinX();
-        }
-
-        int minY = mobPos.y + stats.getBboxMinY();
-        int maxY = mobPos.y + stats.getBboxMaxY();
+        int[] bbox = getWorldBbox(monster, stats);
+        int minX = bbox[0];
+        int maxX = bbox[1];
+        int minY = bbox[2];
+        int maxY = bbox[3];
         int width = Math.max(0, maxX - minX);
         int height = Math.max(0, maxY - minY);
+        boolean noFlip = stats.getFixedStance() != 0;
 
         return "BBOX{use=" + useBbox
                 + ", rel=(" + stats.getBboxMinX() + "," + stats.getBboxMinY() + ")-(" + stats.getBboxMaxX() + "," + stats.getBboxMaxY() + ")"
@@ -1047,7 +1028,38 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 + ", playerPos=" + playerPos
                 + ", mobPos=" + mobPos
                 + ", facingLeft=" + facingLeft
+                + ", noFlip=" + noFlip
                 + "}";
+    }
+
+    /**
+     * 获取怪物碰撞框的世界坐标（考虑 noFlip）
+     * @param monster 怪物
+     * @param stats 怪物属性
+     * @return [minX, maxX, minY, maxY]
+     */
+    private static int[] getWorldBbox(Monster monster, MonsterStats stats) {
+        Point mobPos = monster.getPosition();
+        int minX = stats.getBboxMinX();
+        int maxX = stats.getBboxMaxX();
+        int minY = stats.getBboxMinY();
+        int maxY = stats.getBboxMaxY();
+
+        // noFlip 怪物不允许镜像，避免把碰撞框翻到反方向
+        boolean noFlip = stats.getFixedStance() != 0;
+        if (!noFlip && !monster.isFacingLeft()) {
+            int mirroredMinX = -maxX;
+            int mirroredMaxX = -minX;
+            minX = mirroredMinX;
+            maxX = mirroredMaxX;
+        }
+
+        return new int[]{
+                mobPos.x + minX,
+                mobPos.x + maxX,
+                mobPos.y + minY,
+                mobPos.y + maxY
+        };
     }
 
     /**
