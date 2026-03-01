@@ -13,6 +13,18 @@ RUN mvn clean package -DskipTests
 
 RUN mkdir result && mv ./gms-server/target/BeiDou.jar ./result/BeiDou.jar
 
+# 构建前端 UI
+FROM node:20 AS ui-builder
+
+WORKDIR /opt/ui
+
+COPY gms-ui/package*.json ./
+RUN npm install
+
+COPY gms-ui/ ./
+RUN npm run build
+
+# 最终镜像
 FROM ubuntu:22.04
 
 ENV LANG=zh_CN.UTF-8
@@ -31,6 +43,7 @@ COPY gms-server/wz ./wz
 COPY gms-server/wz-zh-CN ./wz-zh-CN
 COPY gms-server/scripts ./scripts
 COPY gms-server/scripts-zh-CN ./scripts-zh-CN
+COPY --from=ui-builder /opt/ui/dist ./ui
 
 EXPOSE 8686 8484 7575 7576 7577
 
