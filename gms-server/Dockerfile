@@ -15,7 +15,13 @@ RUN mkdir result && mv ./gms-server/target/BeiDou.jar ./result/BeiDou.jar
 
 FROM ubuntu:22.04
 
-RUN apt-get update && apt-get install -y openjdk-21-jre-headless && apt-get clean && rm -rf /var/lib/apt/lists/*
+ENV LANG=zh_CN.UTF-8
+ENV LC_ALL=zh_CN.UTF-8
+
+RUN apt-get update && apt-get install -y openjdk-21-jre-headless locales && \
+    sed -i 's/# zh_CN.UTF-8/zh_CN.UTF-8/' /etc/locale.gen && \
+    locale-gen && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/server
 
