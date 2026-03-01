@@ -23,12 +23,40 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.inventory.Pet;
 import org.gms.net.packet.InPacket;
+import org.gms.server.maps.MapObject;
+import org.gms.server.maps.MapObjectType;
 import org.gms.server.movement.LifeMovementFragment;
 import org.gms.util.PacketCreator;
 import org.gms.exception.EmptyMovementException;
 
+import java.awt.Point;
+import java.util.Arrays;
 import java.util.List;
+
+// public final class MovePetHandler extends AbstractMovementPacketHandler {
+//     @Override
+//     public final void handlePacket(InPacket p, Client c) {
+//         int petId = p.readInt();
+//         p.readLong();
+// //        Point startPos = StreamUtil.readShortPoint(slea);
+//         List<LifeMovementFragment> res;
+// 
+//         try {
+//             res = parseMovement(p);
+//         } catch (EmptyMovementException e) {
+//             return;
+//         }
+//         Character player = c.getPlayer();
+//         byte slot = player.getPetIndex(petId);
+//         if (slot == -1) {
+//             return;
+//         }
+//         player.getPet(slot).updatePosition(res);
+//         player.getMap().broadcastMessage(player, PacketCreator.movePet(player.getId(), petId, slot, res), false);
+//     }
+// }
 
 public final class MovePetHandler extends AbstractMovementPacketHandler {
     @Override
@@ -50,5 +78,14 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
         }
         player.getPet(slot).updatePosition(res);
         player.getMap().broadcastMessage(player, PacketCreator.movePet(player.getId(), petId, slot, res), false);
+        itemVac(player,slot);
+    }
+    public void itemVac(Character player,byte slot) {
+        Pet pet = player.getPet(slot);
+        if (pet == null) return;
+        List<MapObject> list = player.getMap().getMapObjectsInRange(pet.getPos(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.ITEM));//获取全屏物品列表
+        for (MapObject item : list) {  // 遍历地图上的物品列表
+            player.pickupItem(item, (int) slot);  // 执行拾取操作
+        }
     }
 }
