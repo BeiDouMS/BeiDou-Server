@@ -414,6 +414,7 @@ public class Character extends AbstractCharacterObject {
     private boolean banned = false;
     private boolean blockCashShop = false;
     private boolean allowExpGain = true;
+    private boolean mobVacEnabled = false;
     private byte pendantExp = 0, doorSlot = -1;
     private final List<Integer> trockmaps = new ArrayList<>();
     private final List<Integer> viptrockmaps = new ArrayList<>();
@@ -834,6 +835,14 @@ public class Character extends AbstractCharacterObject {
 
     public void toggleExpGain() {
         allowExpGain = !allowExpGain;
+    }
+
+    public boolean isMobVacEnabled() {
+        return mobVacEnabled;
+    }
+
+    public void toggleMobVac() {
+        mobVacEnabled = !mobVacEnabled;
     }
 
     public void newClient(Client c) {
