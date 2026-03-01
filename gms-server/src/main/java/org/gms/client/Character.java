@@ -845,6 +845,13 @@ public class Character extends AbstractCharacterObject {
         mobVacEnabled = !mobVacEnabled;
     }
 
+    public void disableMobVac() {
+        if (mobVacEnabled) {
+            mobVacEnabled = false;
+            dropMessage(5, "MobVac disabled due to map change!");
+        }
+    }
+
     public void newClient(Client c) {
         this.loggedIn = true;
         c.setAccountName(this.client.getAccountName());//No null's for accountName
@@ -1710,6 +1717,7 @@ public class Character extends AbstractCharacterObject {
         this.clearBanishPlayerData();
         Trade.cancelTrade(this, Trade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         this.closePlayerInteractions();
+        this.disableMobVac();
 
         Party e = null;
         if (this.getParty() != null && this.getParty().getEnemy() != null) {

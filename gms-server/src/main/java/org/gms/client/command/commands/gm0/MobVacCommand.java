@@ -53,13 +53,7 @@ public class MobVacCommand extends Command {
         
         if (currentTask != null && currentPlayer != null && currentPlayer.getId() == player.getId()) {
             // Disable
-            currentTask.cancel();
-            currentTask = null;
-            currentPlayer = null;
-            vacPosition = null;
-            player.toggleMobVac();
-            player.dropMessage(5, "MobVac disabled!");
-            log.info("[MobVac] Disabled for player {}", player.getName());
+            disableMobVac(player);
         } else {
             // Enable - cancel any existing
             if (currentTask != null) {
@@ -68,9 +62,8 @@ public class MobVacCommand extends Command {
             
             player.toggleMobVac();
             currentPlayer = player;
-            
-            // Save the position where mobvac was activated
             vacPosition = new Point(player.getPosition());
+            final int mapId = player.getMapId();
             
             currentTask = new TimerTask() {
                 @Override
@@ -85,6 +78,12 @@ public class MobVacCommand extends Command {
                             return;
                         }
                         
+                        // Check if player changed maps
+                        if (currentPlayer.getMapId() != mapId) {
+                            disableMobVac(currentPlayer);
+                            return;
+                        }
+                        
                         executeMobVac(currentPlayer, vacPosition);
                     } catch (Exception e) {
                         log.error("[MobVac] Error", e);
@@ -95,6 +94,22 @@ public class MobVacCommand extends Command {
             mobVacTimer.scheduleAtFixedRate(currentTask, 0, 2000);
             player.dropMessage(5, "MobVac enabled!");
             log.info("[MobVac] Enabled for player {} at position {}", player.getName(), vacPosition);
+        }
+    }
+    
+    private void disableMobVac(Character player) {
+        if (currentTask != null) {
+            currentTask.cancel();
+            currentTask = null;
+        }
+        if (currentPlayer != null && currentPlayer.getId() == player.getId()) {
+            if (currentPlayer.isMobVacEnabled()) {
+                currentPlayer.toggleMobVac();
+            }
+            currentPlayer = null;
+            vacPosition = null;
+            player.dropMessage(5, "MobVac disabled!");
+            log.info("[MobVac] Disabled for player {}", player.getName());
         }
     }
     
