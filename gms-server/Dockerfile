@@ -43,7 +43,7 @@ COPY gms-server/wz ./wz
 COPY gms-server/wz-zh-CN ./wz-zh-CN
 COPY gms-server/scripts ./scripts
 COPY gms-server/scripts-zh-CN ./scripts-zh-CN
-COPY --from=ui-builder /opt/ui/dist ./ui
+COPY --from=ui-builder /opt/ui/dist ./static
 
 EXPOSE 8686 8484 7575 7576 7577
 
