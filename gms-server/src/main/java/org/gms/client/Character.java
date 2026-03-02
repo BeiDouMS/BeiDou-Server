@@ -401,6 +401,8 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private final Set<Integer> disabledPartySearchInvites = new LinkedHashSet<>();
     private long portaldelay = 0;
+    // 记录最近一次“瞬移类位移”发生时间（用于短时间内的距离检测防误判）
+    private volatile long lastTeleportLikeMoveTime = 0;
     @Getter
     @Setter
     private long lastCombo = 0;
@@ -8897,6 +8899,20 @@ public class Character extends AbstractCharacterObject {
 
     public long portalDelay() {
         return portaldelay;
+    }
+
+    /**
+     * 标记一次瞬移类位移（例如树洞/传送动作）。
+     */
+    public void markTeleportLikeMove() {
+        this.lastTeleportLikeMoveTime = Server.getInstance().getCurrentTime();
+    }
+
+    /**
+     * 获取最近一次瞬移类位移时间戳。
+     */
+    public long getLastTeleportLikeMoveTime() {
+        return lastTeleportLikeMoveTime;
     }
 
     public void blockPortal(String scriptName) {

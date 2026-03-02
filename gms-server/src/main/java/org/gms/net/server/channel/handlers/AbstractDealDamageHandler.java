@@ -70,6 +70,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
+    // 传送/树洞等瞬移后，短时间内跳过距离外挂记分，避免“位移包与攻击包相邻”造成误封
+    private static final long TELEPORT_DISTANCE_GRACE_MS = 300L;
 
     public static class AttackInfo {
 
@@ -164,7 +166,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 return;
             }
 
-            final boolean skipDistanceHack = isFullScreenDistanceExempt(attack.skill);
+            // 统一封装距离检测豁免策略，避免主流程出现过多判定细节
+            final boolean skipDistanceHack = shouldSkipDistanceHack(player, attack.skill);
             final boolean isChainLightning = attack.skill == ILArchMage.CHAIN_LIGHTNING;
             boolean chainLightningCheckedFirst = false;
 
@@ -951,6 +954,30 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 || skillId == ILArchMage.BLIZZARD
                 || skillId == FPArchMage.METEOR_SHOWER
                 || skillId == BlazeWizard.METEOR_SHOWER;
+    }
+
+    /**
+     * 是否跳过本次距离外挂检测。
+     */
+    private static boolean shouldSkipDistanceHack(Character player, int skillId) {
+        // 1) 全屏技能本身豁免
+        if (isFullScreenDistanceExempt(skillId)) {
+            return true;
+        }
+
+        // 2) 传送/树洞后的短时保护窗口
+        return isTeleportDistanceGrace(player);
+    }
+
+    /**
+     * 瞬移后短窗口豁免距离检测，降低同帧位移+施法导致的误判概率。
+     */
+    private static boolean isTeleportDistanceGrace(Character player) {
+        long lastTeleportLikeMoveTime = player.getLastTeleportLikeMoveTime();
+        if (lastTeleportLikeMoveTime <= 0) {
+            return false;
+        }
+        return currentServerTime() - lastTeleportLikeMoveTime <= TELEPORT_DISTANCE_GRACE_MS;
     }
 
     /**

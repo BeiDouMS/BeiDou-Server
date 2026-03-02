@@ -21,6 +21,7 @@
  */
 package org.gms.net.server.channel.handlers;
 
+import org.gms.client.Character;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
@@ -195,14 +196,28 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     break;
                 }
                 case 3:
-                case 4: // tele... -.-
+                case 4: { // teleport disappear/appear
+                    // 修复点：瞬移动作必须同步服务器坐标，否则下一帧攻击会拿旧坐标参与反外挂距离判定
+                    short xpos = p.readShort();
+                    short ypos = p.readShort();
+                    p.skip(4); // xwobble / ywobble
+                    target.setPosition(new Point(xpos, ypos + yOffset));
+                    byte newstate = p.readByte();
+                    target.setStance(newstate);
+
+                    // 仅玩家记录“瞬移类位移时间”，供攻击距离检测短窗口豁免使用
+                    if (target instanceof Character chr) {
+                        chr.markTeleportLikeMove();
+                    }
+                    break;
+                }
                 case 7: // assaulter
                 case 8: // assassinate
                 case 9: // rush
                 case 11: //chair
                 {
-//                case 14: {
-                    //Teleport movement - same as above
+//                case 14: { 
+                    // 这类位移在服务端只关心姿态，不做坐标覆盖，保持原逻辑
                     p.skip(8); //xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort();
                     byte newstate = p.readByte();
                     target.setStance(newstate);
