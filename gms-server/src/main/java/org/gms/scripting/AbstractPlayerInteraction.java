@@ -695,6 +695,10 @@ public class AbstractPlayerInteraction {
         getPlayer().getMap().broadcastMessage(PacketCreator.serverNotice(type, message));
     }
 
+    public void serverMessage(int type, String message){
+        Server.getInstance().broadcastMessage(getPlayer().getWorld(),PacketCreator.serverNotice(type,message));
+   	}
+
     public void mapEffect(String path) {
         c.sendPacket(PacketCreator.mapEffect(path));
     }
