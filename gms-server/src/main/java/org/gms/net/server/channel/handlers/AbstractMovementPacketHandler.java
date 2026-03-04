@@ -197,30 +197,18 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                 }
                 case 3:
                 case 4: { // teleport disappear/appear
-                    // 修复点：瞬移动作必须同步服务器坐标，否则下一帧攻击会拿旧坐标参与反外挂距离判定
-                    short xpos = p.readShort();
-                    short ypos = p.readShort();
-                    p.skip(4); // xwobble / ywobble
-                    target.setPosition(new Point(xpos, ypos + yOffset));
-                    byte newstate = p.readByte();
-                    target.setStance(newstate);
-
-                    // 仅玩家记录“瞬移类位移时间”，供攻击距离检测短窗口豁免使用
-                    if (target instanceof Character chr) {
-                        chr.markTeleportLikeMove();
-                    }
+                    handleTeleportMove(p, target, yOffset);
                     break;
                 }
                 case 7: // assaulter
                 case 8: // assassinate
-                case 9: // rush
+                case 9: { // rush
+                    handleDashLikeMove(p, target, yOffset);
+                    break;
+                }
                 case 11: //chair
                 {
-//                case 14: { 
-                    // 这类位移在服务端只关心姿态，不做坐标覆盖，保持原逻辑
-                    p.skip(8); //xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort();
-                    byte newstate = p.readByte();
-                    target.setStance(newstate);
+                    handleChairMove(p, target);
                     break;
                 }
                 case 14:
@@ -242,11 +230,7 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     break;
                 }*/
                 case 15: {
-                    //Jump down movement - stance only
-                    p.skip(12); //short xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort(); fh = lea.readShort(); ofh = lea.readShort();
-                    byte newstate = p.readByte();
-                    target.setStance(newstate);
-                    p.readShort(); // duration
+                    handleJumpDownMove(p, target, yOffset);
                     break;
                 }
                 case 21: {//Causes aran to do weird stuff when attacking o.o
@@ -262,5 +246,68 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     throw new EmptyMovementException(p);
             }
         }
+    }
+
+    /**
+     * 处理瞬移动作（3/4）：同步坐标并在玩家对象上记录传送前后坐标。
+     */
+    private static void handleTeleportMove(InPacket p, AnimatedMapObject target, int yOffset) {
+        Point beforePos = snapshotPosition(target);
+        Point afterPos = readPositionWithOffset(p, yOffset);
+        p.skip(4); // xwobble / ywobble
+        byte newstate = p.readByte();
+        applyPositionAndStance(target, afterPos, newstate);
+
+        // 仅玩家记录“瞬移前后坐标”，供攻击距离双坐标校验使用
+        if (target instanceof Character chr) {
+            chr.markTeleportLikeMove(beforePos, afterPos);
+        }
+    }
+
+    /**
+     * 处理突进类位移（7/8/9）：同步服务端坐标，降低位移后首包攻击误判概率。
+     */
+    private static void handleDashLikeMove(InPacket p, AnimatedMapObject target, int yOffset) {
+        Point afterPos = readPositionWithOffset(p, yOffset);
+        p.skip(4); // xwobble / ywobble
+        byte newstate = p.readByte();
+        applyPositionAndStance(target, afterPos, newstate);
+    }
+
+    /**
+     * 椅子动作（11）：保持原逻辑，仅同步姿态不覆盖坐标。
+     */
+    private static void handleChairMove(InPacket p, AnimatedMapObject target) {
+        p.skip(8); // xpos / ypos / xwobble / ywobble
+        byte newstate = p.readByte();
+        target.setStance(newstate);
+    }
+
+    /**
+     * 处理 jump down（15）：同步坐标，其余字段按协议顺序跳过。
+     */
+    private static void handleJumpDownMove(InPacket p, AnimatedMapObject target, int yOffset) {
+        Point afterPos = readPositionWithOffset(p, yOffset);
+        target.setPosition(afterPos);
+        p.skip(8); // xwobble / ywobble / fh / ofh
+        byte newstate = p.readByte();
+        target.setStance(newstate);
+        p.readShort(); // duration
+    }
+
+    private static Point snapshotPosition(AnimatedMapObject target) {
+        Point currentPos = target.getPosition();
+        return currentPos != null ? new Point(currentPos) : null;
+    }
+
+    private static Point readPositionWithOffset(InPacket p, int yOffset) {
+        short xpos = p.readShort();
+        short ypos = p.readShort();
+        return new Point(xpos, ypos + yOffset);
+    }
+
+    private static void applyPositionAndStance(AnimatedMapObject target, Point position, byte newstate) {
+        target.setPosition(position);
+        target.setStance(newstate);
     }
 }

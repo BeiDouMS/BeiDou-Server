@@ -401,8 +401,17 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private final Set<Integer> disabledPartySearchInvites = new LinkedHashSet<>();
     private long portaldelay = 0;
-    // 记录最近一次“瞬移类位移”发生时间（用于短时间内的距离检测防误判）
+    // 记录最近一次“瞬移类位移”发生时间（单调时钟纳秒，用于短时间内的距离检测防误判）
     private volatile long lastTeleportLikeMoveTime = 0;
+    // 传送距离误判修正上下文：用于“传送前坐标 + 当前坐标”双坐标校验
+    private static final long TELEPORT_DISTANCE_CONTEXT_EXPIRE_NS = MILLISECONDS.toNanos(1200L); // 保护窗口，过长会增加可利用面
+    private static final byte TELEPORT_DISTANCE_CONTEXT_MAX_ATTACK_CHECKS = 2; // 最多保护 2 次攻击包
+    private static final double TELEPORT_DISTANCE_CONTEXT_MIN_SHIFT_SQ = 1600.0; // 至少 40px 位移才建立上下文
+    private Point teleportBeforePos = null; // 传送前服务端坐标（用于双坐标距离复核）
+    private Point teleportAfterPos = null; // 传送后服务端坐标（用于确认确实发生了传送位移）
+    private int teleportContextMapId = MapId.NONE; // 传送上下文所属地图，跨图后自动失效
+    private long teleportContextExpireTime = 0L; // 传送上下文过期时间戳（单调时钟纳秒）
+    private byte teleportContextRemainingChecks = 0; // 传送上下文剩余可用攻击校验次数
     @Getter
     @Setter
     private long lastCombo = 0;
@@ -1698,6 +1707,8 @@ public class Character extends AbstractCharacterObject {
         if (getMap(to.getId(), true) == null) return; //判断地图不存在则直接返回并发送提示消息。
 
         this.mapTransitioning.set(true);
+        // 显式清空“传送距离校验上下文”，避免跨图后旧上下文残留
+        clearTeleportDistanceContext();
 
         this.unregisterChairBuff();
         this.clearBanishPlayerData();
@@ -8905,14 +8916,106 @@ public class Character extends AbstractCharacterObject {
      * 标记一次瞬移类位移（例如树洞/传送动作）。
      */
     public void markTeleportLikeMove() {
-        this.lastTeleportLikeMoveTime = Server.getInstance().getCurrentTime();
+        this.lastTeleportLikeMoveTime = monotonicNow();
     }
 
     /**
-     * 获取最近一次瞬移类位移时间戳。
+     * 标记一次瞬移类位移，并记录传送前后坐标用于后续攻击距离双坐标校验。
+     *
+     * <p>只在位移明显时建立上下文，避免普通小步移动误入传送保护逻辑。</p>
+     */
+    public synchronized void markTeleportLikeMove(Point beforePos, Point afterPos) {
+        long now = monotonicNow();
+        this.lastTeleportLikeMoveTime = now;
+
+        if (!shouldBuildTeleportDistanceContext(beforePos, afterPos)) {
+            clearTeleportDistanceContextLocked();
+            return;
+        }
+
+        this.teleportBeforePos = copyPoint(beforePos);
+        this.teleportAfterPos = copyPoint(afterPos);
+        this.teleportContextMapId = getMapId();
+        this.teleportContextExpireTime = now + TELEPORT_DISTANCE_CONTEXT_EXPIRE_NS;
+        this.teleportContextRemainingChecks = TELEPORT_DISTANCE_CONTEXT_MAX_ATTACK_CHECKS;
+    }
+
+    /**
+     * 获取最近一次瞬移类位移时间戳（单调时钟纳秒）。
      */
     public long getLastTeleportLikeMoveTime() {
         return lastTeleportLikeMoveTime;
+    }
+
+    /**
+     * 获取用于攻击距离校验的“传送前坐标”。
+     *
+     * <p>仅在上下文仍有效时返回，超时/跨图/次数耗尽会自动清理。</p>
+     */
+    public synchronized Point getTeleportBeforePositionForDistanceCheck() {
+        if (!isTeleportDistanceContextActiveLocked(monotonicNow())) {
+            clearTeleportDistanceContextLocked();
+            return null;
+        }
+        return copyPoint(teleportBeforePos);
+    }
+
+    /**
+     * 消费一次传送距离保护校验次数（按攻击包维度消费）。
+     */
+    public synchronized void consumeTeleportDistanceCheckContext() {
+        if (!isTeleportDistanceContextActiveLocked(monotonicNow())) {
+            clearTeleportDistanceContextLocked();
+            return;
+        }
+
+        teleportContextRemainingChecks--;
+        if (teleportContextRemainingChecks <= 0) {
+            clearTeleportDistanceContextLocked();
+        }
+    }
+
+    /**
+     * 显式清空“传送距离校验上下文”。
+     *
+     * <p>用于跨图切换等关键状态变更点，确保不会携带旧地图上下文参与后续判定。</p>
+     */
+    public synchronized void clearTeleportDistanceContext() {
+        clearTeleportDistanceContextLocked();
+        lastTeleportLikeMoveTime = 0L;
+    }
+
+    private boolean isTeleportDistanceContextActiveLocked(long now) {
+        return teleportBeforePos != null
+                && teleportAfterPos != null
+                && teleportContextRemainingChecks > 0
+                && now <= teleportContextExpireTime
+                && teleportContextMapId == getMapId();
+    }
+
+    private void clearTeleportDistanceContextLocked() {
+        teleportBeforePos = null;
+        teleportAfterPos = null;
+        teleportContextMapId = MapId.NONE;
+        teleportContextExpireTime = 0L;
+        teleportContextRemainingChecks = 0;
+    }
+
+    /**
+     * 仅当传送前后坐标有效且位移幅度足够大时，才建立距离校验上下文。
+     */
+    private static boolean shouldBuildTeleportDistanceContext(Point beforePos, Point afterPos) {
+        return beforePos != null
+                && afterPos != null
+                && beforePos.distanceSq(afterPos) >= TELEPORT_DISTANCE_CONTEXT_MIN_SHIFT_SQ;
+    }
+
+    private static Point copyPoint(Point pos) {
+        return pos == null ? null : new Point(pos);
+    }
+
+    private static long monotonicNow() {
+        return System.nanoTime();
     }
 
     public void blockPortal(String scriptName) {

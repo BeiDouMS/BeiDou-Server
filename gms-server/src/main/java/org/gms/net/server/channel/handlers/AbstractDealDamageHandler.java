@@ -70,8 +70,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
-    // 传送/树洞等瞬移后，短时间内跳过距离外挂记分，避免“位移包与攻击包相邻”造成误封
-    private static final long TELEPORT_DISTANCE_GRACE_MS = 300L;
 
     public static class AttackInfo {
 
@@ -114,6 +112,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         Skill theSkill = null;
         StatEffect attackEffect = null;
         final int job = player.getJob().getId();
+        boolean consumeTeleportDistanceContext = false;
         try {
             if (player.isBanned()) {
                 return;
@@ -166,8 +165,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 return;
             }
 
-            // 统一封装距离检测豁免策略，避免主流程出现过多判定细节
-            final boolean skipDistanceHack = shouldSkipDistanceHack(player, attack.skill);
+            // 全屏技能直接跳过距离反外挂；其余技能继续走严格校验
+            final boolean skipDistanceHack = shouldSkipDistanceHack(attack.skill);
+            // 传送上下文：用于“传送前坐标 + 当前坐标”双坐标判定，降低内传送后的误报
+            final Point teleportBeforePos = player.getTeleportBeforePositionForDistanceCheck();
+            consumeTeleportDistanceContext = teleportBeforePos != null;
             final boolean isChainLightning = attack.skill == ILArchMage.CHAIN_LIGHTNING;
             boolean chainLightningCheckedFirst = false;
 
@@ -253,13 +255,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             }
                         }
                         if (checkDistance) {
-                            boolean useBbox = shouldUseBoundingBox(monster);
-                            double distance = calculateDistanceSq(player, monster, useBbox);
-//                          AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
-                            if (distance > distanceToDetect) {
-                                String bboxInfo = buildBboxInfo(player, monster, useBbox);
-                                AutobanFactory.DISTANCE_HACK.addPoint(player.getAutoBanManager(), "玩家：" + player.getName() + "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId() + " " + bboxInfo);
-                                log.warn("玩家：{}距离Sq到怪物: {} SID: {} MID: {} {}", player.getName(), distance, attack.skill, monster.getId(), bboxInfo);
+                            DistanceHackCheckResult checkResult = evaluateDistanceHack(player, monster, teleportBeforePos, distanceToDetect);
+                            if (checkResult.shouldFlag()) {
+                                reportDistanceHack(player, attack.skill, monster, teleportBeforePos, checkResult);
                             }
                         }
                     }
@@ -553,8 +551,14 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            // 放在 finally 中，确保任何提前 return 都会消费一次上下文，避免保护窗口异常拉长
+            if (consumeTeleportDistanceContext) {
+                player.consumeTeleportDistanceCheckContext();
+            }
         }
     }
 
@@ -947,6 +951,95 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     }
 
     /**
+     * 距离外挂判定结果载体：把主流程中的判定细节收敛到单个对象，便于维护。
+     */
+    private static final class DistanceHackCheckResult {
+        private final boolean shouldFlag;
+        private final boolean useBbox;
+        private final double currentDistanceSq;
+        private final double beforeDistanceSq;
+        private final boolean hasBeforeDistance;
+
+        private DistanceHackCheckResult(boolean shouldFlag, boolean useBbox, double currentDistanceSq, double beforeDistanceSq, boolean hasBeforeDistance) {
+            this.shouldFlag = shouldFlag;
+            this.useBbox = useBbox;
+            this.currentDistanceSq = currentDistanceSq;
+            this.beforeDistanceSq = beforeDistanceSq;
+            this.hasBeforeDistance = hasBeforeDistance;
+        }
+
+        private static DistanceHackCheckResult safe() {
+            return new DistanceHackCheckResult(false, false, 0, -1, false);
+        }
+
+        private static DistanceHackCheckResult flag(boolean useBbox, double currentDistanceSq, double beforeDistanceSq, boolean hasBeforeDistance) {
+            return new DistanceHackCheckResult(true, useBbox, currentDistanceSq, beforeDistanceSq, hasBeforeDistance);
+        }
+
+        private boolean shouldFlag() {
+            return shouldFlag;
+        }
+    }
+
+    /**
+     * 评估本次攻击目标是否应触发距离外挂记分。
+     *
+     * <p>规则：当前坐标超限后，若存在“传送前坐标”且前坐标未超限，则判定为可疑性不足并放行。</p>
+     */
+    private static DistanceHackCheckResult evaluateDistanceHack(Character player, Monster monster, Point teleportBeforePos, double distanceToDetect) {
+        boolean useBbox = shouldUseBoundingBox(monster);
+        double currentDistance = calculateDistanceSq(player, monster, useBbox);
+        if (currentDistance <= distanceToDetect) {
+            return DistanceHackCheckResult.safe();
+        }
+
+        if (teleportBeforePos == null) {
+            return DistanceHackCheckResult.flag(useBbox, currentDistance, -1, false);
+        }
+
+        double beforeDistance = calculateDistanceSq(teleportBeforePos, monster, useBbox);
+        if (beforeDistance <= distanceToDetect) {
+            return DistanceHackCheckResult.safe();
+        }
+
+        return DistanceHackCheckResult.flag(useBbox, currentDistance, beforeDistance, true);
+    }
+
+    /**
+     * 统一上报距离异常日志，避免主循环重复拼接字符串。
+     */
+    private static void reportDistanceHack(Character player, int skillId, Monster monster, Point teleportBeforePos, DistanceHackCheckResult checkResult) {
+        String bboxInfo = buildBboxInfo(player, monster, checkResult.useBbox);
+        String tpInfo = buildTeleportDistanceInfo(teleportBeforePos, checkResult);
+        AutobanFactory.DISTANCE_HACK.addPoint(
+                player.getAutoBanManager(),
+                "玩家：" + player.getName() + "距离Sq到怪物: " + checkResult.currentDistanceSq + " SID: " + skillId + " MID: " + monster.getId() + " " + bboxInfo + tpInfo
+        );
+        log.warn(
+                "玩家：{}距离Sq到怪物: {} SID: {} MID: {} {}{}",
+                player.getName(),
+                checkResult.currentDistanceSq,
+                skillId,
+                monster.getId(),
+                bboxInfo,
+                tpInfo
+        );
+    }
+
+    /**
+     * 传送上下文调试信息：仅在判定里真正用到“传送前坐标”时输出。
+     */
+    private static String buildTeleportDistanceInfo(Point teleportBeforePos, DistanceHackCheckResult checkResult) {
+        if (!checkResult.hasBeforeDistance || teleportBeforePos == null) {
+            return "";
+        }
+        return " TP{beforePos=" + teleportBeforePos
+                + ", beforeDistanceSq=" + checkResult.beforeDistanceSq
+                + ", currentDistanceSq=" + checkResult.currentDistanceSq
+                + "}";
+    }
+
+    /**
      * 全屏/大范围技能跳过距离检测
      */
     private static boolean isFullScreenDistanceExempt(int skillId) {
@@ -959,25 +1052,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     /**
      * 是否跳过本次距离外挂检测。
      */
-    private static boolean shouldSkipDistanceHack(Character player, int skillId) {
-        // 1) 全屏技能本身豁免
-        if (isFullScreenDistanceExempt(skillId)) {
-            return true;
-        }
-
-        // 2) 传送/树洞后的短时保护窗口
-        return isTeleportDistanceGrace(player);
-    }
-
-    /**
-     * 瞬移后短窗口豁免距离检测，降低同帧位移+施法导致的误判概率。
-     */
-    private static boolean isTeleportDistanceGrace(Character player) {
-        long lastTeleportLikeMoveTime = player.getLastTeleportLikeMoveTime();
-        if (lastTeleportLikeMoveTime <= 0) {
-            return false;
-        }
-        return currentServerTime() - lastTeleportLikeMoveTime <= TELEPORT_DISTANCE_GRACE_MS;
+    private static boolean shouldSkipDistanceHack(int skillId) {
+        return isFullScreenDistanceExempt(skillId);
     }
 
     /**
@@ -993,16 +1069,26 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * useBbox=true 时按碰撞框最短距离计算
      */
     private static double calculateDistanceSq(Character player, Monster monster, boolean useBbox) {
+        return calculateDistanceSq(player.getPosition(), monster, useBbox);
+    }
+
+    /**
+     * 计算任意给定坐标到怪物的距离平方。
+     * useBbox=true 时按碰撞框最短距离计算
+     */
+    private static double calculateDistanceSq(Point playerPos, Monster monster, boolean useBbox) {
+        if (playerPos == null) {
+            return Double.MAX_VALUE;
+        }
+
         if (!useBbox) {
-            return player.getPosition().distanceSq(monster.getPosition());
+            return playerPos.distanceSq(monster.getPosition());
         }
 
         MonsterStats stats = monster.getStats();
         if (stats == null || !stats.hasBbox()) {
-            return player.getPosition().distanceSq(monster.getPosition());
+            return playerPos.distanceSq(monster.getPosition());
         }
-
-        Point playerPos = player.getPosition();
         int[] bbox = getWorldBbox(monster, stats);
         int minX = bbox[0];
         int maxX = bbox[1];
