@@ -27,6 +27,7 @@
                 <a-input
                   v-model="condition.syntax"
                   :placeholder="$t('command.placeholder.syntax')"
+                  @keydown.enter="searchData"
                 />
                 <a-button type="primary" @click="searchData">
                   {{ $t('button.search') }}
