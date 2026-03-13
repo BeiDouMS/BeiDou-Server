@@ -7063,11 +7063,14 @@ public class PacketCreator {
 
     public static Packet showCashInventory(Client c) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
+        List<Item> inventory = c.getPlayer().getCashShop().getInventory();
+        int itemCount = Math.min(inventory.size(), CashShop.MAX_CASH_INVENTORY_SAFE);
 
         p.writeByte(0x4B);
-        p.writeShort(c.getPlayer().getCashShop().getInventory().size());
+        p.writeShort(itemCount);
 
-        for (Item item : c.getPlayer().getCashShop().getInventory()) {
+        for (int i = 0; i < itemCount; i++) {
+            Item item = inventory.get(i);
             addCashItemInformation(p, item, c.getAccID());
         }
 
