@@ -69,6 +69,7 @@ public class CashShop {
     public static final int NX_CREDIT = 1;
     public static final int MAPLE_POINT = 2;
     public static final int NX_PREPAID = 4;
+    public static final int MAX_CASH_INVENTORY_SAFE = 1000;
 
     private final int accountId;
     private final int characterId;
@@ -113,6 +114,7 @@ public class CashShop {
             for (Pair<Item, InventoryType> item : factory.loadItems(accountId, false)) {
                 inventory.add(item.getLeft());
             }
+            trimToSafeInventoryLimit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -335,10 +337,36 @@ public class CashShop {
         return null;
     }
 
-    public void addToInventory(Item item) {
+    public boolean addToInventory(Item item) {
         lock.lock();
         try {
+            if (inventory.size() >= MAX_CASH_INVENTORY_SAFE) {
+                return false;
+            }
             inventory.add(item);
+            return true;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public boolean canAddToInventory(int itemCount) {
+        lock.lock();
+        try {
+            return inventory.size() + itemCount <= MAX_CASH_INVENTORY_SAFE;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public int getInventoryLimit() {
+        return MAX_CASH_INVENTORY_SAFE;
+    }
+
+    public int getInventorySize() {
+        lock.lock();
+        try {
+            return inventory.size();
         } finally {
             lock.unlock();
         }
@@ -393,11 +421,18 @@ public class CashShop {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        notes++;
                         ModifiedCashItemDO cItem = CashItemFactory.getItem(rs.getInt("sn"));
                         Item item = cItem.toItem();
                         Equip equip = null;
                         item.setGiftFrom(rs.getString("from"));
+                        int itemsToStore = 1;
+                        if (CashItemFactory.isPackage(cItem.getItemId())) {
+                            itemsToStore = CashItemFactory.getPackage(cItem.getItemId()).size();
+                        }
+                        if (!canAddToInventory(itemsToStore)) {
+                            continue;
+                        }
+                        notes++;
                         if (item.getInventoryType().equals(InventoryType.EQUIP)) {
                             equip = (Equip) item;
                             equip.setRingId(rs.getInt("ringid"));
@@ -520,6 +555,18 @@ public class CashShop {
         lock.lock();
         try {
             return inventory.size();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private void trimToSafeInventoryLimit() {
+        lock.lock();
+        try {
+            if (inventory.size() <= MAX_CASH_INVENTORY_SAFE) {
+                return;
+            }
+            inventory.subList(MAX_CASH_INVENTORY_SAFE, inventory.size()).clear();
         } finally {
             lock.unlock();
         }

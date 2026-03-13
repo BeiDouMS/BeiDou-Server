@@ -64,6 +64,25 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         this.noteService = noteService;
     }
 
+
+    /**
+     * 检查现金仓库库存容量是否足够
+     *
+     * @param c 客户端对象，用于发送通知消息
+     * @param cs 现金商店对象，用于检查库存容量和限制
+     * @param itemsToAdd 需要添加的道具数量
+     * @return 如果容量足够返回 true，否则发送通知消息后返回 false
+     */
+    private static boolean ensureCashInventoryCapacity(Client c, CashShop cs, int itemsToAdd) {
+        if (cs.canAddToInventory(itemsToAdd)) {
+            return true;
+        }
+        c.sendPacket(PacketCreator.serverNotice(1,
+                "现金仓库已满，最多只能保留 " + cs.getInventoryLimit() + " 个道具。"));
+        c.enableCSActions();
+        return false;
+    }
+
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
@@ -93,7 +112,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.enableCSActions();
                             return;
                         } else if (ItemConstants.isRateCoupon(cItem.getItemId()) && !GameConfig.getServerBoolean("use_supply_rate_coupons")) {
-                            chr.dropMessage(1, "Rate coupons are currently unavailable to purchase.");
+                            chr.dropMessage(1, "当前无法购买倍率券。");
                             c.enableCSActions();
                             return;
                         } else if (ItemConstants.isMapleLife(cItem.getItemId()) && chr.getLevel() < 30) {
@@ -102,13 +121,18 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         }
 
                         Item item = cItem.toItem();
+                        if (!ensureCashInventoryCapacity(c, cs, 1)) {
+                            return;
+                        }
                         cs.gainCash(useNX, cItem, chr.getWorld());  // thanks Rohenn for noticing cash operations after item acquisition
                         cs.addToInventory(item);
                         c.sendPacket(PacketCreator.showBoughtCashItem(item, c.getAccID()));
                     } else { // Package
-                        cs.gainCash(useNX, cItem, chr.getWorld());
-
                         List<Item> cashPackage = CashItemFactory.getPackage(cItem.getItemId());
+                        if (!ensureCashInventoryCapacity(c, cs, cashPackage.size())) {
+                            return;
+                        }
+                        cs.gainCash(useNX, cItem, chr.getWorld());
                         for (Item item : cashPackage) {
                             cs.addToInventory(item);
                         }
@@ -140,7 +164,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.showGiftSucceed(charactersDO.getName(), cItem));
                     c.sendPacket(PacketCreator.showCash(chr));
 
-                    String noteMessage = chr.getName() + " has sent you a gift! Go check out the Cash Shop.";
+                    String noteMessage = chr.getName() + " 给你送了一份礼物！快去现金商城查看吧。";
                     noteService.sendNormal(noteMessage, chr.getName(), charactersDO.getName());
 
                     Character receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(charactersDO.getName());
@@ -306,12 +330,15 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.enableCSActions();
                         return;
                     } else if (c.getPlayer().getPetIndex(item.getPetId()) > -1) {
-                        chr.getClient().sendPacket(PacketCreator.serverNotice(1, "You cannot put the pet you currently equip into the Cash Shop inventory."));
+                        chr.getClient().sendPacket(PacketCreator.serverNotice(1, "当前正在装备中的宠物无法放入现金仓库。"));
                         c.enableCSActions();
                         return;
                     } else if (ItemId.isWeddingRing(item.getItemId()) || ItemId.isWeddingToken(item.getItemId())) {
-                        chr.getClient().sendPacket(PacketCreator.serverNotice(1, "You cannot put relationship items into the Cash Shop inventory."));
+                        chr.getClient().sendPacket(PacketCreator.serverNotice(1, "关系类道具无法放入现金仓库。"));
                         c.enableCSActions();
+                        return;
+                    }
+                    if (!ensureCashInventoryCapacity(c, cs, 1)) {
                         return;
                     }
                     cs.addToInventory(item);
@@ -327,7 +354,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         ModifiedCashItemDO itemRing = CashItemFactory.getItem(SN);
                         Character partner = c.getChannelServer().getPlayerStorage().getCharacterByName(recipientName);
                         if (partner == null) {
-                            chr.sendPacket(PacketCreator.serverNotice(1, "The partner you specified cannot be found.\r\nPlease make sure your partner is online and in the same channel."));
+                            chr.sendPacket(PacketCreator.serverNotice(1, "找不到你指定的对象。\r\n请确认对方在线且与你处于同一频道。"));
                         } else {
 
                           /*  if (partner.getGender() == chr.getGender()) {
@@ -336,6 +363,9 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 return;
                             }*/ //Gotta let them faggots marry too, hence why this is commented out <3 
 
+                            if (!ensureCashInventoryCapacity(c, cs, 1)) {
+                                return;
+                            }
                             if (itemRing.toItem() instanceof Equip eqp) {
                                 Pair<Integer, Integer> rings = Ring.createRing(itemRing.getItemId(), chr, partner);
                                 eqp.setRingId(rings.getLeft());
@@ -395,6 +425,9 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xBE));
                         } else {
                             // Need to check to make sure its actually an equip and the right SN...
+                            if (!ensureCashInventoryCapacity(c, cs, 1)) {
+                                return;
+                            }
                             if (itemRing.toItem() instanceof Equip eqp) {
                                 Pair<Integer, Integer> rings = Ring.createRing(itemRing.getItemId(), chr, partner);
                                 eqp.setRingId(rings.getLeft());
@@ -431,6 +464,9 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.enableCSActions();
                             return;
                         }
+                        if (!ensureCashInventoryCapacity(c, cs, 1)) {
+                            return;
+                        }
                         if (chr.registerNameChange(newName)) { //success
                             Item item = cItem.toItem();
                             c.sendPacket(PacketCreator.showNameChangeSuccess(item, c.getAccID()));
@@ -460,6 +496,8 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             return;
                         } else if (c.getAvailableCharacterWorldSlots(newWorldSelection) < 1 || Server.getInstance().getAccountWorldCharacterCount(c.getAccID(), newWorldSelection) >= 3) {
                             c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xDF));
+                            return;
+                        } else if (!ensureCashInventoryCapacity(c, cs, 1)) {
                             return;
                         } else if (chr.registerWorldTransfer(newWorldSelection)) {
                             Item item = cItem.toItem();
