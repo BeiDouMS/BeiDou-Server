@@ -48,6 +48,7 @@ import org.gms.server.life.MobSkillFactory;
 import org.gms.server.life.MobSkillId;
 import org.gms.server.life.MobSkillType;
 import org.gms.server.life.Monster;
+import org.gms.server.life.MonsterStats;
 import org.gms.server.life.MonsterDropEntry;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.maps.MapItem;
@@ -163,12 +164,20 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 return;
             }
 
+            final boolean skipDistanceHack = isFullScreenDistanceExempt(attack.skill);
+            final boolean isChainLightning = attack.skill == ILArchMage.CHAIN_LIGHTNING;
+            boolean chainLightningCheckedFirst = false;
+
             //WTF IS THIS F3,1
             /*if (attackCount != attack.numDamage && attack.skill != ChiefBandit.MESO_EXPLOSION && attack.skill != NightWalker.VAMPIRE && attack.skill != WindArcher.WIND_SHOT && attack.skill != Aran.COMBO_SMASH && attack.skill != Aran.COMBO_FENRIR && attack.skill != Aran.COMBO_TEMPEST && attack.skill != NightLord.NINJA_AMBUSH && attack.skill != Shadower.NINJA_AMBUSH) {
                 return;
             }*/
 
             int totDamage = 0;
+            Monster distanceHackWorstMonster = null;
+            double distanceHackWorstDistance = Double.NEGATIVE_INFINITY;
+            double distanceHackWorstThreshold = 0.0;
+            boolean distanceHackWorstUseBbox = false;
 
             if (attack.skill == ChiefBandit.MESO_EXPLOSION) {
                 int delay = 0;
@@ -208,7 +217,6 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             for (Integer oned : attack.allDamage.keySet()) {
                 final Monster monster = map.getMonsterByOid(oned);
                 if (monster != null) {
-                    double distance = player.getPosition().distanceSq(monster.getPosition());
                     double distanceToDetect = 200000.0;
 
                     if (attack.ranged) {
@@ -235,11 +243,32 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         distanceToDetect += 60000;
                     }
 
-                    if (distance > distanceToDetect) {
-//                        AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
-                        AutobanFactory.DISTANCE_HACK.addPoint(player.getAutoBanManager(), "玩家：" + player.getName() + "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
-                        log.warn("玩家：{}距离Sq到怪物: {} SID: {} MID: {}", player.getName(), distance, attack.skill, monster.getId());
-
+                    if (!skipDistanceHack) {
+                        boolean checkDistance = true;
+                        if (isChainLightning) {
+                            // 链式技能后续目标来源于跳跃，不以玩家距离判断
+                            if (chainLightningCheckedFirst) {
+                                checkDistance = false;
+                            } else {
+                                chainLightningCheckedFirst = true;
+                            }
+                        }
+                        if (checkDistance) {
+                            boolean useBbox = shouldUseBoundingBox(monster);
+                            double distance = calculateDistanceSq(player, monster, useBbox);
+//                          AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
+                            if (distance > distanceToDetect && distance > distanceHackWorstDistance) {
+                                distanceHackWorstMonster = monster;
+                                distanceHackWorstDistance = distance;
+                                distanceHackWorstThreshold = distanceToDetect;
+                                distanceHackWorstUseBbox = useBbox;
+                            }
+                            if (false && distance > distanceToDetect) {
+                                String bboxInfo = buildBboxInfo(player, monster, useBbox);
+                                AutobanFactory.DISTANCE_HACK.addPoint(player.getAutoBanManager(), "玩家：" + player.getName() + "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId() + " " + bboxInfo);
+                                log.warn("玩家：{}距离Sq到怪物: {} SID: {} MID: {} {}", player.getName(), distance, attack.skill, monster.getId(), bboxInfo);
+                            }
+                        }
                     }
 
                     int totDamageToOneMonster = 0;
@@ -530,6 +559,27 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     }
                 }
+            }
+            if (distanceHackWorstMonster != null) {
+                String bboxInfo = buildBboxInfo(player, distanceHackWorstMonster, distanceHackWorstUseBbox);
+                AutobanFactory.DISTANCE_HACK.addPoint(
+                        player.getAutoBanManager(),
+                        "Player: " + player.getName()
+                                + " maxDistanceSqToMob: " + distanceHackWorstDistance
+                                + " thresholdSq: " + distanceHackWorstThreshold
+                                + " SID: " + attack.skill
+                                + " MID: " + distanceHackWorstMonster.getId()
+                                + " " + bboxInfo
+                );
+                log.warn(
+                        "Player: {} maxDistanceSqToMob: {} thresholdSq: {} SID: {} MID: {} {}",
+                        player.getName(),
+                        distanceHackWorstDistance,
+                        distanceHackWorstThreshold,
+                        attack.skill,
+                        distanceHackWorstMonster.getId(),
+                        bboxInfo
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -922,6 +972,125 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             ret.position.setLocation(p.readShort(), p.readShort());
         }
         return ret;
+    }
+
+    /**
+     * 全屏/大范围技能跳过距离检测
+     */
+    private static boolean isFullScreenDistanceExempt(int skillId) {
+        return skillId == Bishop.GENESIS
+                || skillId == ILArchMage.BLIZZARD
+                || skillId == FPArchMage.METEOR_SHOWER
+                || skillId == BlazeWizard.METEOR_SHOWER;
+    }
+
+    /**
+     * 是否使用碰撞框距离检测（Boss 或大体型）
+     */
+    private static boolean shouldUseBoundingBox(Monster monster) {
+        MonsterStats stats = monster.getStats();
+        return stats != null && stats.hasBbox() && (monster.isBoss() || stats.isLargeSize());
+    }
+
+    /**
+     * 计算玩家到怪物的距离平方
+     * useBbox=true 时按碰撞框最短距离计算
+     */
+    private static double calculateDistanceSq(Character player, Monster monster, boolean useBbox) {
+        if (!useBbox) {
+            return player.getPosition().distanceSq(monster.getPosition());
+        }
+
+        MonsterStats stats = monster.getStats();
+        if (stats == null || !stats.hasBbox()) {
+            return player.getPosition().distanceSq(monster.getPosition());
+        }
+
+        Point playerPos = player.getPosition();
+        int[] bbox = getWorldBbox(monster, stats);
+        int minX = bbox[0];
+        int maxX = bbox[1];
+        int minY = bbox[2];
+        int maxY = bbox[3];
+
+        // 计算点到矩形的最短距离
+        int dx = 0;
+        if (playerPos.x < minX) {
+            dx = minX - playerPos.x;
+        } else if (playerPos.x > maxX) {
+            dx = playerPos.x - maxX;
+        }
+
+        int dy = 0;
+        if (playerPos.y < minY) {
+            dy = minY - playerPos.y;
+        } else if (playerPos.y > maxY) {
+            dy = playerPos.y - maxY;
+        }
+
+        return (double) dx * dx + (double) dy * dy;
+    }
+
+    /**
+     * 生成异常日志的碰撞框信息（便于快速定位问题）
+     */
+    private static String buildBboxInfo(Character player, Monster monster, boolean useBbox) {
+        MonsterStats stats = monster.getStats();
+        Point playerPos = player.getPosition();
+        Point mobPos = monster.getPosition();
+        boolean facingLeft = monster.isFacingLeft();
+        if (stats == null || !stats.hasBbox()) {
+            return "BBOX{use=" + useBbox + ", valid=false, playerPos=" + playerPos + ", mobPos=" + mobPos + ", facingLeft=" + facingLeft + "}";
+        }
+
+        int[] bbox = getWorldBbox(monster, stats);
+        int minX = bbox[0];
+        int maxX = bbox[1];
+        int minY = bbox[2];
+        int maxY = bbox[3];
+        int width = Math.max(0, maxX - minX);
+        int height = Math.max(0, maxY - minY);
+        boolean noFlip = stats.getFixedStance() != 0;
+
+        return "BBOX{use=" + useBbox
+                + ", rel=(" + stats.getBboxMinX() + "," + stats.getBboxMinY() + ")-(" + stats.getBboxMaxX() + "," + stats.getBboxMaxY() + ")"
+                + ", world=(" + minX + "," + minY + ")-(" + maxX + "," + maxY + ")"
+                + ", size=" + width + "x" + height
+                + ", playerPos=" + playerPos
+                + ", mobPos=" + mobPos
+                + ", facingLeft=" + facingLeft
+                + ", noFlip=" + noFlip
+                + "}";
+    }
+
+    /**
+     * 获取怪物碰撞框的世界坐标（考虑 noFlip）
+     * @param monster 怪物
+     * @param stats 怪物属性
+     * @return [minX, maxX, minY, maxY]
+     */
+    private static int[] getWorldBbox(Monster monster, MonsterStats stats) {
+        Point mobPos = monster.getPosition();
+        int minX = stats.getBboxMinX();
+        int maxX = stats.getBboxMaxX();
+        int minY = stats.getBboxMinY();
+        int maxY = stats.getBboxMaxY();
+
+        // noFlip 怪物不允许镜像，避免把碰撞框翻到反方向
+        boolean noFlip = stats.getFixedStance() != 0;
+        if (!noFlip && !monster.isFacingLeft()) {
+            int mirroredMinX = -maxX;
+            int mirroredMaxX = -minX;
+            minX = mirroredMinX;
+            maxX = mirroredMaxX;
+        }
+
+        return new int[]{
+                mobPos.x + minX,
+                mobPos.x + maxX,
+                mobPos.y + minY,
+                mobPos.y + maxY
+        };
     }
 
     /**

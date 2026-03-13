@@ -57,6 +57,11 @@ public class MonsterStats {
     public int movetype = -1;    //怪物类型，-1=未知，0=stand（陆地），1=fly（飞天）
     public int imgwidth = 0;     //第一帧图片宽度
     public int imgheight = 0;    //第一帧图片高度
+    public int bboxMinX = 0;
+    public int bboxMinY = 0;
+    public int bboxMaxX = 0;
+    public int bboxMaxY = 0;
+    public boolean bboxValid = false;
 
     public void setChange(boolean change) {
         this.changeable = change;
@@ -392,6 +397,85 @@ public class MonsterStats {
      */
     public int getImgheight() {
         return this.imgheight;
+    }
+
+    /**
+     * 设置怪物碰撞框（相对 origin 的 lt/rb）
+     */
+    public void setBbox(int minX, int minY, int maxX, int maxY) {
+        this.bboxMinX = minX;
+        this.bboxMinY = minY;
+        this.bboxMaxX = maxX;
+        this.bboxMaxY = maxY;
+        this.bboxValid = true;
+    }
+
+    /**
+     * 是否已计算碰撞框
+     */
+    public boolean hasBbox() {
+        return bboxValid;
+    }
+
+    /**
+     * 碰撞框相对 lt.x
+     */
+    public int getBboxMinX() {
+        return bboxMinX;
+    }
+
+    /**
+     * 碰撞框相对 lt.y
+     */
+    public int getBboxMinY() {
+        return bboxMinY;
+    }
+
+    /**
+     * 碰撞框相对 rb.x
+     */
+    public int getBboxMaxX() {
+        return bboxMaxX;
+    }
+
+    /**
+     * 碰撞框相对 rb.y
+     */
+    public int getBboxMaxY() {
+        return bboxMaxY;
+    }
+
+    /**
+     * 碰撞框宽度（相对值）
+     */
+    public int getBboxWidth() {
+        if (bboxValid) {
+            return Math.max(0, bboxMaxX - bboxMinX);
+        }
+        return imgwidth;
+    }
+
+    /**
+     * 碰撞框高度（相对值）
+     */
+    public int getBboxHeight() {
+        if (bboxValid) {
+            return Math.max(0, bboxMaxY - bboxMinY);
+        }
+        return imgheight;
+    }
+
+    /**
+     * 大体型判定：用于决定是否启用碰撞框距离检测
+     */
+    public boolean isLargeSize() {
+        int width = getBboxWidth();
+        int height = getBboxHeight();
+        if (width <= 0 || height <= 0) {
+            return false;
+        }
+        // 宽高或面积满足阈值即可视为大体型
+        return width >= 160 || height >= 160 || width * height >= 25000;
     }
 
     public MonsterStats copy() {
