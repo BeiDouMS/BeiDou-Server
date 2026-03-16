@@ -169,13 +169,16 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                 case 5:
                 case 17: { // Float
                     //Absolute movement - only this is important for the server, other movement can be passed to the client
+                    Point beforePos = snapshotPosition(target);
                     short xpos = p.readShort(); //is signed fine here?
                     short ypos = p.readShort();
-                    target.setPosition(new Point(xpos, ypos + yOffset));
+                    Point afterPos = new Point(xpos, ypos + yOffset);
+                    target.setPosition(afterPos);
                     p.skip(6); //xwobble = lea.readShort(); ywobble = lea.readShort(); fh = lea.readShort();
                     byte newstate = p.readByte();
                     target.setStance(newstate);
                     p.readShort(); //duration
+                    recordRegularMove(target, beforePos, afterPos);
                     break;
                 }
                 case 1:
@@ -287,12 +290,14 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
      * 处理 jump down（15）：同步坐标，其余字段按协议顺序跳过。
      */
     private static void handleJumpDownMove(InPacket p, AnimatedMapObject target, int yOffset) {
+        Point beforePos = snapshotPosition(target);
         Point afterPos = readPositionWithOffset(p, yOffset);
         target.setPosition(afterPos);
         p.skip(8); // xwobble / ywobble / fh / ofh
         byte newstate = p.readByte();
         target.setStance(newstate);
         p.readShort(); // duration
+        recordRegularMove(target, beforePos, afterPos);
     }
 
     private static Point snapshotPosition(AnimatedMapObject target) {
@@ -309,5 +314,11 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
     private static void applyPositionAndStance(AnimatedMapObject target, Point position, byte newstate) {
         target.setPosition(position);
         target.setStance(newstate);
+    }
+
+    private static void recordRegularMove(AnimatedMapObject target, Point beforePos, Point afterPos) {
+        if (target instanceof Character chr) {
+            chr.markRegularMove(beforePos, afterPos);
+        }
     }
 }

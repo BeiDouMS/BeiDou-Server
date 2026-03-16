@@ -168,6 +168,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             final boolean isChainLightning = attack.skill == ILArchMage.CHAIN_LIGHTNING;
             boolean chainLightningCheckedFirst = false;
             Point teleportBeforePosForDistanceCheck = player.getTeleportBeforePositionForDistanceCheck();
+            Point movementBeforePosForDistanceCheck = player.getMovementBeforePositionForDistanceCheck();
 
             //WTF IS THIS F3,1
             /*if (attackCount != attack.numDamage && attack.skill != ChiefBandit.MESO_EXPLOSION && attack.skill != NightWalker.VAMPIRE && attack.skill != WindArcher.WIND_SHOT && attack.skill != Aran.COMBO_SMASH && attack.skill != Aran.COMBO_FENRIR && attack.skill != Aran.COMBO_TEMPEST && attack.skill != NightLord.NINJA_AMBUSH && attack.skill != Shadower.NINJA_AMBUSH) {
@@ -181,6 +182,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             boolean distanceHackWorstUseBbox = false;
             Point distanceHackWorstCheckPos = null;
             boolean distanceHackWorstUsedTeleportContext = false;
+            boolean distanceHackWorstUsedMovementContext = false;
 
             if (attack.skill == ChiefBandit.MESO_EXPLOSION) {
                 int delay = 0;
@@ -260,18 +262,29 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 chainLightningCheckedFirst = true;
                             }
                         }
-                        if (checkDistance && !isWithinAttackBox(player, monster, attackEffect, attack, teleportBeforePosForDistanceCheck)) {
+                        if (checkDistance && !isWithinAttackBox(player, monster, attackEffect, attack, teleportBeforePosForDistanceCheck, movementBeforePosForDistanceCheck)) {
                             boolean useBbox = shouldUseBoundingBox(monster);
                             Point currentPlayerPos = player.getPosition();
                             Point checkPos = currentPlayerPos;
                             double distance = calculateDistanceSq(currentPlayerPos, monster, useBbox);
                             boolean usedTeleportContext = false;
+                            boolean usedMovementContext = false;
                             if (teleportBeforePosForDistanceCheck != null && !teleportBeforePosForDistanceCheck.equals(currentPlayerPos)) {
                                 double teleportDistance = calculateDistanceSq(teleportBeforePosForDistanceCheck, monster, useBbox);
                                 if (teleportDistance < distance) {
                                     distance = teleportDistance;
                                     checkPos = teleportBeforePosForDistanceCheck;
                                     usedTeleportContext = true;
+                                    usedMovementContext = false;
+                                }
+                            }
+                            if (movementBeforePosForDistanceCheck != null && !movementBeforePosForDistanceCheck.equals(currentPlayerPos)) {
+                                double movementDistance = calculateDistanceSq(movementBeforePosForDistanceCheck, monster, useBbox);
+                                if (movementDistance < distance) {
+                                    distance = movementDistance;
+                                    checkPos = movementBeforePosForDistanceCheck;
+                                    usedTeleportContext = false;
+                                    usedMovementContext = true;
                                 }
                             }
 //                          AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
@@ -282,9 +295,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 distanceHackWorstUseBbox = useBbox;
                                 distanceHackWorstCheckPos = new Point(checkPos);
                                 distanceHackWorstUsedTeleportContext = usedTeleportContext;
+                                distanceHackWorstUsedMovementContext = usedMovementContext;
                             }
                             if (false && distance > distanceToDetect) {
-                                String bboxInfo = buildBboxInfo(player, monster, useBbox, checkPos, teleportBeforePosForDistanceCheck, usedTeleportContext);
+                                String bboxInfo = buildBboxInfo(player, monster, useBbox, checkPos, teleportBeforePosForDistanceCheck, movementBeforePosForDistanceCheck, usedTeleportContext, usedMovementContext);
                                 AutobanFactory.DISTANCE_HACK.addPoint(player.getAutoBanManager(), "玩家：" + player.getName() + "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId() + " " + bboxInfo);
                                 log.warn("玩家：{}距离Sq到怪物: {} SID: {} MID: {} {}", player.getName(), distance, attack.skill, monster.getId(), bboxInfo);
                             }
@@ -583,6 +597,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             if (teleportBeforePosForDistanceCheck != null) {
                 player.consumeTeleportDistanceCheckContext();
             }
+            if (movementBeforePosForDistanceCheck != null) {
+                player.consumeMovementDistanceCheckContext();
+            }
             if (distanceHackWorstMonster != null) {
                 String bboxInfo = buildBboxInfo(
                         player,
@@ -590,7 +607,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         distanceHackWorstUseBbox,
                         distanceHackWorstCheckPos,
                         teleportBeforePosForDistanceCheck,
-                        distanceHackWorstUsedTeleportContext
+                        movementBeforePosForDistanceCheck,
+                        distanceHackWorstUsedTeleportContext,
+                        distanceHackWorstUsedMovementContext
                 );
                 AutobanFactory.DISTANCE_HACK.addPoint(
                         player.getAutoBanManager(),
@@ -1008,40 +1027,28 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * 优先用技能自身的范围框判断本次攻击是否合法命中怪物。
      * 命中技能框时，跳过后续基于中心点距离的 DISTANCE_HACK 检测。
      */
-    private static boolean isWithinAttackBox(Character player, Monster monster, StatEffect attackEffect, AttackInfo attack, Point alternatePlayerPos) {
+    private static boolean isWithinAttackBox(Character player, Monster monster, StatEffect attackEffect, AttackInfo attack, Point alternatePlayerPos, Point secondaryAlternatePlayerPos) {
         Rectangle monsterBounds = getMonsterBounds(monster);
         Point monsterPos = monster.getPosition();
         boolean directionFacingLeft = isFacingLeftByDirection(attack.direction);
         Point currentPlayerPos = player.getPosition();
-        if (isWithinAttackBox(currentPlayerPos, monsterBounds, monsterPos, attackEffect, directionFacingLeft)) {
-            return true;
-        }
-        if (alternatePlayerPos != null && !alternatePlayerPos.equals(currentPlayerPos)
-                && isWithinAttackBox(alternatePlayerPos, monsterBounds, monsterPos, attackEffect, directionFacingLeft)) {
+        if (intersectsAnyAttackBox(monsterBounds, monsterPos, attackEffect, directionFacingLeft, currentPlayerPos, alternatePlayerPos, secondaryAlternatePlayerPos)) {
             return true;
         }
 
         boolean stanceFacingLeft = isFacingLeftByStance(attack.stance);
-        if (stanceFacingLeft != directionFacingLeft && isWithinAttackBox(currentPlayerPos, monsterBounds, monsterPos, attackEffect, stanceFacingLeft)) {
-            return true;
-        }
-        if (alternatePlayerPos != null && !alternatePlayerPos.equals(currentPlayerPos)
-                && stanceFacingLeft != directionFacingLeft
-                && isWithinAttackBox(alternatePlayerPos, monsterBounds, monsterPos, attackEffect, stanceFacingLeft)) {
+        if (stanceFacingLeft != directionFacingLeft
+                && intersectsAnyAttackBox(monsterBounds, monsterPos, attackEffect, stanceFacingLeft, currentPlayerPos, alternatePlayerPos, secondaryAlternatePlayerPos)) {
             return true;
         }
 
         boolean currentFacingLeft = player.isFacingLeft();
         if (currentFacingLeft != directionFacingLeft
                 && currentFacingLeft != stanceFacingLeft
-                && isWithinAttackBox(currentPlayerPos, monsterBounds, monsterPos, attackEffect, currentFacingLeft)) {
+                && intersectsAnyAttackBox(monsterBounds, monsterPos, attackEffect, currentFacingLeft, currentPlayerPos, alternatePlayerPos, secondaryAlternatePlayerPos)) {
             return true;
         }
-        return alternatePlayerPos != null
-                && !alternatePlayerPos.equals(currentPlayerPos)
-                && currentFacingLeft != directionFacingLeft
-                && currentFacingLeft != stanceFacingLeft
-                && isWithinAttackBox(alternatePlayerPos, monsterBounds, monsterPos, attackEffect, currentFacingLeft);
+        return false;
     }
 
     /**
@@ -1054,6 +1061,22 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
         Rectangle attackBounds = attackEffect.calculateBoundingBox(playerPos, facingLeft);
         return attackBounds.intersects(monsterBounds) || attackBounds.contains(monsterPos);
+    }
+
+    private static boolean intersectsAnyAttackBox(Rectangle monsterBounds, Point monsterPos, StatEffect attackEffect, boolean facingLeft, Point... playerPositions) {
+        Point primaryPos = playerPositions.length > 0 ? playerPositions[0] : null;
+        for (Point playerPos : playerPositions) {
+            if (playerPos == null) {
+                continue;
+            }
+            if (primaryPos != null && playerPos != primaryPos && playerPos.equals(primaryPos)) {
+                continue;
+            }
+            if (isWithinAttackBox(playerPos, monsterBounds, monsterPos, attackEffect, facingLeft)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1148,7 +1171,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     /**
      * 生成异常日志的碰撞框信息（便于快速定位问题）
      */
-    private static String buildBboxInfo(Character player, Monster monster, boolean useBbox, Point checkPos, Point teleportBeforePos, boolean usedTeleportContext) {
+    private static String buildBboxInfo(Character player, Monster monster, boolean useBbox, Point checkPos, Point teleportBeforePos, Point movementBeforePos, boolean usedTeleportContext, boolean usedMovementContext) {
         MonsterStats stats = monster.getStats();
         Point playerPos = player.getPosition();
         Point mobPos = monster.getPosition();
@@ -1159,7 +1182,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     + ", valid=false, playerPos=" + playerPos
                     + ", checkPos=" + effectiveCheckPos
                     + ", teleportBeforePos=" + teleportBeforePos
+                    + ", movementBeforePos=" + movementBeforePos
                     + ", usedTeleportContext=" + usedTeleportContext
+                    + ", usedMovementContext=" + usedMovementContext
                     + ", mobPos=" + mobPos
                     + ", facingLeft=" + facingLeft
                     + "}";
@@ -1181,7 +1206,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 + ", playerPos=" + playerPos
                 + ", checkPos=" + effectiveCheckPos
                 + ", teleportBeforePos=" + teleportBeforePos
+                + ", movementBeforePos=" + movementBeforePos
                 + ", usedTeleportContext=" + usedTeleportContext
+                + ", usedMovementContext=" + usedMovementContext
                 + ", mobPos=" + mobPos
                 + ", facingLeft=" + facingLeft
                 + ", noFlip=" + noFlip

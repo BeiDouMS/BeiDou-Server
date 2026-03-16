@@ -412,6 +412,15 @@ public class Character extends AbstractCharacterObject {
     private int teleportContextMapId = MapId.NONE; // 传送上下文所属地图，跨图后自动失效
     private long teleportContextExpireTime = 0L; // 传送上下文过期时间戳（单调时钟纳秒）
     private byte teleportContextRemainingChecks = 0; // 传送上下文剩余可用攻击校验次数
+    // 普通移动距离误判修正上下文：只覆盖“移动包后紧跟攻击包”的极短时间窗
+    private static final long MOVEMENT_DISTANCE_CONTEXT_EXPIRE_NS = MILLISECONDS.toNanos(350L);
+    private static final byte MOVEMENT_DISTANCE_CONTEXT_MAX_ATTACK_CHECKS = 1;
+    private static final double MOVEMENT_DISTANCE_CONTEXT_MIN_SHIFT_SQ = 400.0; // 至少 20px 位移才建立上下文
+    private Point movementBeforePos = null;
+    private Point movementAfterPos = null;
+    private int movementContextMapId = MapId.NONE;
+    private long movementContextExpireTime = 0L;
+    private byte movementContextRemainingChecks = 0;
     @Getter
     @Setter
     private long lastCombo = 0;
@@ -8941,6 +8950,23 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
+     * 记录一次普通移动前后坐标，用于极短时间窗内的攻击距离双坐标校验。
+     */
+    public synchronized void markRegularMove(Point beforePos, Point afterPos) {
+        long now = monotonicNow();
+        if (!shouldBuildMovementDistanceContext(beforePos, afterPos)) {
+            clearMovementDistanceContextLocked();
+            return;
+        }
+
+        this.movementBeforePos = copyPoint(beforePos);
+        this.movementAfterPos = copyPoint(afterPos);
+        this.movementContextMapId = getMapId();
+        this.movementContextExpireTime = now + MOVEMENT_DISTANCE_CONTEXT_EXPIRE_NS;
+        this.movementContextRemainingChecks = MOVEMENT_DISTANCE_CONTEXT_MAX_ATTACK_CHECKS;
+    }
+
+    /**
      * 获取最近一次瞬移类位移时间戳（单调时钟纳秒）。
      */
     public long getLastTeleportLikeMoveTime() {
@@ -8961,6 +8987,17 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
+     * 获取用于攻击距离校验的“普通移动前坐标”。
+     */
+    public synchronized Point getMovementBeforePositionForDistanceCheck() {
+        if (!isMovementDistanceContextActiveLocked(monotonicNow())) {
+            clearMovementDistanceContextLocked();
+            return null;
+        }
+        return copyPoint(movementBeforePos);
+    }
+
+    /**
      * 消费一次传送距离保护校验次数（按攻击包维度消费）。
      */
     public synchronized void consumeTeleportDistanceCheckContext() {
@@ -8976,12 +9013,28 @@ public class Character extends AbstractCharacterObject {
     }
 
     /**
+     * 消费一次普通移动距离保护校验次数。
+     */
+    public synchronized void consumeMovementDistanceCheckContext() {
+        if (!isMovementDistanceContextActiveLocked(monotonicNow())) {
+            clearMovementDistanceContextLocked();
+            return;
+        }
+
+        movementContextRemainingChecks--;
+        if (movementContextRemainingChecks <= 0) {
+            clearMovementDistanceContextLocked();
+        }
+    }
+
+    /**
      * 显式清空“传送距离校验上下文”。
      *
      * <p>用于跨图切换等关键状态变更点，确保不会携带旧地图上下文参与后续判定。</p>
      */
     public synchronized void clearTeleportDistanceContext() {
         clearTeleportDistanceContextLocked();
+        clearMovementDistanceContextLocked();
         lastTeleportLikeMoveTime = 0L;
     }
 
@@ -8993,12 +9046,28 @@ public class Character extends AbstractCharacterObject {
                 && teleportContextMapId == getMapId();
     }
 
+    private boolean isMovementDistanceContextActiveLocked(long now) {
+        return movementBeforePos != null
+                && movementAfterPos != null
+                && movementContextRemainingChecks > 0
+                && now <= movementContextExpireTime
+                && movementContextMapId == getMapId();
+    }
+
     private void clearTeleportDistanceContextLocked() {
         teleportBeforePos = null;
         teleportAfterPos = null;
         teleportContextMapId = MapId.NONE;
         teleportContextExpireTime = 0L;
         teleportContextRemainingChecks = 0;
+    }
+
+    private void clearMovementDistanceContextLocked() {
+        movementBeforePos = null;
+        movementAfterPos = null;
+        movementContextMapId = MapId.NONE;
+        movementContextExpireTime = 0L;
+        movementContextRemainingChecks = 0;
     }
 
     /**
@@ -9008,6 +9077,12 @@ public class Character extends AbstractCharacterObject {
         return beforePos != null
                 && afterPos != null
                 && beforePos.distanceSq(afterPos) >= TELEPORT_DISTANCE_CONTEXT_MIN_SHIFT_SQ;
+    }
+
+    private static boolean shouldBuildMovementDistanceContext(Point beforePos, Point afterPos) {
+        return beforePos != null
+                && afterPos != null
+                && beforePos.distanceSq(afterPos) >= MOVEMENT_DISTANCE_CONTEXT_MIN_SHIFT_SQ;
     }
 
     private static Point copyPoint(Point pos) {
