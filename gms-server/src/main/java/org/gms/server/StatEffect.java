@@ -1214,7 +1214,17 @@ public class StatEffect {
         }
     }
 
-    private Rectangle calculateBoundingBox(Point posFrom, boolean facingLeft) {
+    /**
+     * 技能是否定义了攻击/作用范围框。
+     */
+    public boolean hasBoundingBox() {
+        return lt != null && rb != null;
+    }
+
+    /**
+     * 根据角色当前位置和朝向，计算技能范围框在地图中的实际矩形。
+     */
+    public Rectangle calculateBoundingBox(Point posFrom, boolean facingLeft) {
         Point mylt;
         Point myrb;
         if (facingLeft) {

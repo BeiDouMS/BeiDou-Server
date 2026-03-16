@@ -253,7 +253,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 chainLightningCheckedFirst = true;
                             }
                         }
-                        if (checkDistance) {
+                        if (checkDistance && !isWithinAttackBox(player, monster, attackEffect)) {
                             boolean useBbox = shouldUseBoundingBox(monster);
                             double distance = calculateDistanceSq(player, monster, useBbox);
 //                          AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
@@ -972,6 +972,39 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             ret.position.setLocation(p.readShort(), p.readShort());
         }
         return ret;
+    }
+
+    /**
+     * 优先用技能自身的范围框判断本次攻击是否合法命中怪物。
+     * 命中技能框时，跳过后续基于中心点距离的 DISTANCE_HACK 检测。
+     */
+    private static boolean isWithinAttackBox(Character player, Monster monster, StatEffect attackEffect) {
+        if (attackEffect == null || !attackEffect.hasBoundingBox()) {
+            return false;
+        }
+
+        Rectangle attackBounds = attackEffect.calculateBoundingBox(player.getPosition(), player.isFacingLeft());
+        Rectangle monsterBounds = getMonsterBounds(monster);
+        return attackBounds.intersects(monsterBounds) || attackBounds.contains(monster.getPosition());
+    }
+
+    /**
+     * 获取怪物在地图中的实际矩形范围。
+     * 有 bbox 时使用怪物 bbox；否则退化为怪物中心点的 1x1 矩形。
+     */
+    private static Rectangle getMonsterBounds(Monster monster) {
+        MonsterStats stats = monster.getStats();
+        if (stats == null || !stats.hasBbox()) {
+            Point mobPos = monster.getPosition();
+            return new Rectangle(mobPos.x, mobPos.y, 1, 1);
+        }
+
+        int[] bbox = getWorldBbox(monster, stats);
+        int minX = Math.min(bbox[0], bbox[1]);
+        int maxX = Math.max(bbox[0], bbox[1]);
+        int minY = Math.min(bbox[2], bbox[3]);
+        int maxY = Math.max(bbox[2], bbox[3]);
+        return new Rectangle(minX, minY, Math.max(1, maxX - minX), Math.max(1, maxY - minY));
     }
 
     /**
