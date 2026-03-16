@@ -253,7 +253,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 chainLightningCheckedFirst = true;
                             }
                         }
-                        if (checkDistance && !isWithinAttackBox(player, monster, attackEffect)) {
+                        if (checkDistance && !isWithinAttackBox(player, monster, attackEffect, isFacingLeftByStance(attack.stance))) {
                             boolean useBbox = shouldUseBoundingBox(monster);
                             double distance = calculateDistanceSq(player, monster, useBbox);
 //                          AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
@@ -978,14 +978,21 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * 优先用技能自身的范围框判断本次攻击是否合法命中怪物。
      * 命中技能框时，跳过后续基于中心点距离的 DISTANCE_HACK 检测。
      */
-    private static boolean isWithinAttackBox(Character player, Monster monster, StatEffect attackEffect) {
+    private static boolean isWithinAttackBox(Character player, Monster monster, StatEffect attackEffect, boolean facingLeft) {
         if (attackEffect == null || !attackEffect.hasBoundingBox()) {
             return false;
         }
 
-        Rectangle attackBounds = attackEffect.calculateBoundingBox(player.getPosition(), player.isFacingLeft());
+        Rectangle attackBounds = attackEffect.calculateBoundingBox(player.getPosition(), facingLeft);
         Rectangle monsterBounds = getMonsterBounds(monster);
         return attackBounds.intersects(monsterBounds) || attackBounds.contains(monster.getPosition());
+    }
+
+    /**
+     * 根据攻击包中的 stance 还原本次攻击时角色的朝向。
+     */
+    private static boolean isFacingLeftByStance(int stance) {
+        return Math.abs(stance) % 2 == 1;
     }
 
     /**
