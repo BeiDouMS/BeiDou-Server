@@ -241,6 +241,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         distanceToDetect += 250000;
                     } else if (attack.skill == Shadower.BOOMERANG_STEP || attack.skill == ILArchMage.CHAIN_LIGHTNING) {
                         distanceToDetect += 60000;
+                    } else if (attack.skill == Buccaneer.DRAGON_STRIKE) {
+                        // 龙之怒的客户端攻击范围较长，且近战包没有额外携带权威攻击原点，
+                        // 需要给距离检测留出一档同步误差余量，避免擦边命中被误判。
+                        distanceToDetect += 100000;
                     }
 
                     if (!skipDistanceHack) {
@@ -253,7 +257,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 chainLightningCheckedFirst = true;
                             }
                         }
-                        if (checkDistance && !isWithinAttackBox(player, monster, attackEffect, isFacingLeftByStance(attack.stance))) {
+                        if (checkDistance && !isWithinAttackBox(player, monster, attackEffect, attack)) {
                             boolean useBbox = shouldUseBoundingBox(monster);
                             double distance = calculateDistanceSq(player, monster, useBbox);
 //                          AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
@@ -978,14 +982,43 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * 优先用技能自身的范围框判断本次攻击是否合法命中怪物。
      * 命中技能框时，跳过后续基于中心点距离的 DISTANCE_HACK 检测。
      */
-    private static boolean isWithinAttackBox(Character player, Monster monster, StatEffect attackEffect, boolean facingLeft) {
+    private static boolean isWithinAttackBox(Character player, Monster monster, StatEffect attackEffect, AttackInfo attack) {
+        Rectangle monsterBounds = getMonsterBounds(monster);
+        Point monsterPos = monster.getPosition();
+        boolean directionFacingLeft = isFacingLeftByDirection(attack.direction);
+        if (isWithinAttackBox(player, monsterBounds, monsterPos, attackEffect, directionFacingLeft)) {
+            return true;
+        }
+
+        boolean stanceFacingLeft = isFacingLeftByStance(attack.stance);
+        if (stanceFacingLeft != directionFacingLeft && isWithinAttackBox(player, monsterBounds, monsterPos, attackEffect, stanceFacingLeft)) {
+            return true;
+        }
+
+        boolean currentFacingLeft = player.isFacingLeft();
+        return currentFacingLeft != directionFacingLeft
+                && currentFacingLeft != stanceFacingLeft
+                && isWithinAttackBox(player, monsterBounds, monsterPos, attackEffect, currentFacingLeft);
+    }
+
+    /**
+     * 使用指定朝向计算技能框，并判断是否命中怪物范围框。
+     */
+    private static boolean isWithinAttackBox(Character player, Rectangle monsterBounds, Point monsterPos, StatEffect attackEffect, boolean facingLeft) {
         if (attackEffect == null || !attackEffect.hasBoundingBox()) {
             return false;
         }
 
         Rectangle attackBounds = attackEffect.calculateBoundingBox(player.getPosition(), facingLeft);
-        Rectangle monsterBounds = getMonsterBounds(monster);
-        return attackBounds.intersects(monsterBounds) || attackBounds.contains(monster.getPosition());
+        return attackBounds.intersects(monsterBounds) || attackBounds.contains(monsterPos);
+    }
+
+    /**
+     * 根据攻击包中的 direction 还原本次攻击时角色的朝向。
+     * V83 攻击包中 direction 与 stance 分离，direction 更接近本次攻击的实时左右方向。
+     */
+    private static boolean isFacingLeftByDirection(int direction) {
+        return direction == 0;
     }
 
     /**
