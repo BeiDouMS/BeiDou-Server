@@ -91,6 +91,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
 import java.util.Map.Entry;
@@ -9822,19 +9823,103 @@ public class Character extends AbstractCharacterObject {
 
     /////////////////////////////////////////////////////////////////////////////////
     //module: 角色在线时间
+    private static final String DAILY_ONLINE_TIME_EXTEND_NAME = "每日在线时间";
+    private static final int ONLINE_TIME_TICK_SECONDS = 5;
+    private static final int MAX_DAILY_ONLINE_TIME_SECONDS = 24 * 60 * 60;
+
     private int m_iCurrentOnlineTime = -1;//-1用于服务器重启时角色初始变量时间
+    private LocalDate m_dCurrentOnlineDate;
 
-    public int getCurrentOnlineTime() {
-        return this.m_iCurrentOnlineTime;
+    public synchronized int getCurrentOnlineTime() {
+        return Math.max(this.m_iCurrentOnlineTime, 0);
     }
 
-    public void setCurrentOnlineTime(final int iTime) {
-        this.m_iCurrentOnlineTime = iTime;
+    public synchronized void setCurrentOnlineTime(final int iTime) {
+        applyOnlineTimeState(LocalDate.now(), iTime);
     }
 
-    public void updateOnlineTime() {
-        String strNewOnlineTime = String.valueOf(m_iCurrentOnlineTime);
-        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", strNewOnlineTime, true);
+    /**
+     * 登录后同步初始化今日在线时长，避免首次定时任务执行前仍保留 -1 或上一天的值。
+     */
+    public synchronized void initOnlineTimeForToday() {
+        LocalDate today = LocalDate.now();
+        applyOnlineTimeState(today, loadOnlineTimeForDate(today));
+    }
+
+    /**
+     * 定时任务统一从这里推进在线时长，跨天时只做归零，不再把昨天的值继续累加到今天。
+     */
+    public synchronized void tickOnlineTime() {
+        LocalDate today = LocalDate.now();
+        if (!isOnlineTimeInitialized()) {
+            applyOnlineTimeState(today, loadOnlineTimeForDate(today));
+            return;
+        }
+        if (!today.equals(m_dCurrentOnlineDate)) {
+            applyOnlineTimeState(today, 0);
+            return;
+        }
+        applyOnlineTimeState(today, m_iCurrentOnlineTime + ONLINE_TIME_TICK_SECONDS);
+    }
+
+    /**
+     * 退出时只允许写入“今天且合法”的在线时长，避免把 -1 或跨天残留值写回每日扩展表。
+     */
+    public synchronized void updateOnlineTime() {
+        LocalDate today = LocalDate.now();
+        int safeOnlineTime = resolvePersistedOnlineTime(today);
+        applyOnlineTimeState(today, safeOnlineTime);
+        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(DAILY_ONLINE_TIME_EXTEND_NAME, String.valueOf(safeOnlineTime), true);
+    }
+
+    private boolean isOnlineTimeInitialized() {
+        return m_dCurrentOnlineDate != null && m_iCurrentOnlineTime >= 0;
+    }
+
+    private int resolvePersistedOnlineTime(LocalDate targetDate) {
+        if (targetDate.equals(m_dCurrentOnlineDate)) {
+            return normalizeOnlineTime(m_iCurrentOnlineTime);
+        }
+        // 当前内存值如果不属于今天，优先回读今天的库值，避免旧角色把昨天的数据覆盖到今天。
+        return loadOnlineTimeForDate(targetDate);
+    }
+
+    private int loadOnlineTimeForDate(LocalDate targetDate) {
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getAccountId()), ExtendType.ACCOUNT_EXTEND_DAILY.getType(), DAILY_ONLINE_TIME_EXTEND_NAME);
+        if (!isOnlineTimeRecordForDate(extendValueDO, targetDate)) {
+            return 0;
+        }
+        return parseOnlineTime(extendValueDO.getExtendValue());
+    }
+
+    private boolean isOnlineTimeRecordForDate(ExtendValueDO extendValueDO, LocalDate targetDate) {
+        if (extendValueDO == null || extendValueDO.getCreateTime() == null) {
+            return false;
+        }
+        return extendValueDO.getCreateTime().toLocalDate().isEqual(targetDate);
+    }
+
+    private int parseOnlineTime(String onlineTimeValue) {
+        if (onlineTimeValue == null || onlineTimeValue.isEmpty()) {
+            return 0;
+        }
+        try {
+            return normalizeOnlineTime(Integer.parseInt(onlineTimeValue));
+        } catch (NumberFormatException ignore) {
+            return 0;
+        }
+    }
+
+    private int normalizeOnlineTime(int onlineTime) {
+        if (onlineTime < 0 || onlineTime > MAX_DAILY_ONLINE_TIME_SECONDS) {
+            return 0;
+        }
+        return onlineTime;
+    }
+
+    private void applyOnlineTimeState(LocalDate targetDate, int onlineTime) {
+        m_dCurrentOnlineDate = targetDate;
+        m_iCurrentOnlineTime = normalizeOnlineTime(onlineTime);
     }
 
     /**

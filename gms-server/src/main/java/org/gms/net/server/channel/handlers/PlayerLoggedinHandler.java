@@ -224,6 +224,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 c.setCharacterSlots((byte) player.getClient().getCharacterSlots());
                 player.newClient(c);
             }
+            // 登录阶段先同步初始化今日在线时长，避免首次定时任务前出现 -1 或沿用上一天的值。
+            player.initOnlineTimeForToday();
 
             // 增加参数判断，避免给客户端发未知包导致异常
             if (GameConfig.getServerBoolean("use_server_auto_pot")) {
