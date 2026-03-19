@@ -379,6 +379,54 @@ public class InventoryService {
         return petignoresMapper.selectListByQuery(QueryWrapper.create().where(PETIGNORES_D_O.PETID.eq(petId)));
     }
 
+        /**
+     * 添加宠物忽略物品列表
+     *
+     * @param petId 宠物 ID
+     * @param itemIds 物品 ID 集合，将添加到宠物的忽略列表中
+     */
+    public void addPetIgnoreItems(Integer petId, Collection<Integer> itemIds) {
+        if (petId == null || itemIds == null || itemIds.isEmpty()) {
+            return;
+        }
+        for (Integer itemId : itemIds) {
+            petignoresMapper.insertSelective(PetignoresDO.builder()
+                    .petid(petId)
+                    .itemid(itemId)
+                    .build());
+        }
+    }
+
+        /**
+         * 移除宠物忽略物品列表中的物品
+         *
+         * @param petId 宠物 ID
+         * @param itemIds 物品 ID 集合，将从宠物的忽略列表中移除
+         */
+        public void removePetIgnoreItems(Integer petId, Collection<Integer> itemIds) {
+            if (petId == null || itemIds == null || itemIds.isEmpty()) {
+                return;
+            }
+            petignoresMapper.deleteByQuery(QueryWrapper.create()
+                    .where(PETIGNORES_D_O.PETID.eq(petId))
+                    .and(PETIGNORES_D_O.ITEMID.in(itemIds)));
+        }
+
+        /**
+         * 删除宠物相关数据
+         * 包括宠物的忽略物品列表和宠物本身的信息
+         *
+         * @param petId 宠物 ID
+         */
+        public void deletePetData(Integer petId) {
+            if (petId == null) {
+                return;
+            }
+            petignoresMapper.deleteByQuery(QueryWrapper.create().where(PETIGNORES_D_O.PETID.eq(petId)));
+            petsMapper.deleteById(Long.valueOf(petId));
+        }
+
+
     private void modifyInventoryCheck(InventorySearchRtnDTO data) {
         RequireUtil.requireNotNull(data.getItemId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "itemId"));
         RequireUtil.requireNotNull(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
