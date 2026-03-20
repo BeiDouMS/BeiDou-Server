@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @author Matze
@@ -48,20 +50,8 @@ public abstract class AbstractScriptManager {
     }
 
     protected ScriptEngine getInvocableScriptEngine(String path) {
-        // 优先取语言文件夹，没有则取scripts
-        String scriptName = "scripts";
-        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-        String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
-
-        Path scriptPath = Path.of(scriptName, path);
-        Path scriptLangPath = Path.of(scriptLangName, path);
-
-        Path actualPath;
-        if (Files.exists(scriptLangPath)) {
-            actualPath = scriptLangPath;
-        } else if (Files.exists(scriptPath)){
-            actualPath = scriptPath;
-        } else {
+        Path actualPath = getActualScriptPath(path);
+        if (actualPath == null) {
             return null;
         }
 
@@ -71,6 +61,11 @@ public abstract class AbstractScriptManager {
         }
 
         enableScriptHostAccess(graalScriptEngine);
+
+        Function<String, Boolean> loadScriptFunc = (scriptPath) -> loadScript(engine, scriptPath);
+        Supplier<Boolean> loadI18nFunc = () -> loadI18n(engine, path);
+        engine.put("loadScript", loadScriptFunc);
+        engine.put("loadI18n", loadI18nFunc);
 
         try (BufferedReader br = Files.newBufferedReader(actualPath, StandardCharsets.UTF_8)) {
             engine.eval(br);
@@ -103,5 +98,43 @@ public abstract class AbstractScriptManager {
 
     protected void resetContext(String path, Client c) {
         c.removeScriptEngine("scripts/" + path);
+    }
+
+    private static Path getActualScriptPath(String path) {
+        // 优先取语言文件夹，没有则取scripts
+        String scriptName = "scripts";
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
+
+        Path scriptPath = Path.of(scriptName, path);
+        Path scriptLangPath = Path.of(scriptLangName, path);
+
+        if (Files.exists(scriptLangPath)) {
+            return scriptLangPath;
+        } else if (Files.exists(scriptPath)){
+            return scriptPath;
+        } else {
+            return null;
+        }
+    }
+
+    private static boolean loadScript(ScriptEngine engine, String path) {
+        Path actualPath = getActualScriptPath(path);
+        if (actualPath == null) {
+            return false;
+        }
+        try (BufferedReader br = Files.newBufferedReader(actualPath, StandardCharsets.UTF_8)) {
+            engine.eval(br);
+            return true;
+        } catch (final ScriptException | IOException t) {
+            log.warn(I18nUtil.getLogMessage("AbstractScriptManager.getInvocableScriptEngine.warn1"), path, t);
+            return false;
+        }
+    }
+
+    private static boolean loadI18n(ScriptEngine engine, String mainScriptPath) {
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        String l10nPath = mainScriptPath.replaceFirst("\\.js$", "." + serviceProperty.getLanguage() + ".js");
+        return loadScript(engine, "lib/i18n.js") && loadScript(engine, l10nPath);
     }
 }
