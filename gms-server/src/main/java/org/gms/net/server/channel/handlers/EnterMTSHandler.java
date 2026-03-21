@@ -103,6 +103,9 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
         chr.forfeitExpirableQuests();
         chr.cancelQuestExpirationTask();
 
+        // 进入 MTS 与进入商城同理。
+        // 后续回频道会重新初始化在线时长，必须先同步当前进度。
+        chr.syncOnlineTimeBeforeSessionTransition();
         chr.saveCharToDB();
 
         c.getChannelServer().removePlayer(chr);

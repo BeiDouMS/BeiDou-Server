@@ -43,6 +43,8 @@ public class SaveAllCommand extends Command {
         Character player = c.getPlayer();
         for (World world : Server.getInstance().getWorlds()) {
             for (Character chr : world.getPlayerStorage().getAllCharacters()) {
+                // 手动全量存档时同步在线时长，避免只保存角色数据却遗漏每日在线时长。
+                chr.syncOnlineTimeToDailyRecord();
                 chr.saveCharToDB();
             }
         }

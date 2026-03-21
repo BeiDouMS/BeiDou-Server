@@ -1535,6 +1535,9 @@ public class Client extends ChannelInboundHandlerAdapter {
         player.clearBanishPlayerData();
         player.getClient().getChannelServer().removePlayer(player);
 
+        // 切换频道后会重新登录频道服。
+        // 这里必须先同步在线时长，避免新会话用旧库值覆盖当前进度。
+        player.syncOnlineTimeBeforeSessionTransition();
         player.saveCharToDB();
 
         /*

@@ -9866,10 +9866,21 @@ public class Character extends AbstractCharacterObject {
      * 退出时只允许写入“今天且合法”的在线时长，避免把 -1 或跨天残留值写回每日扩展表。
      */
     public synchronized void updateOnlineTime() {
-        LocalDate today = LocalDate.now();
-        int safeOnlineTime = resolvePersistedOnlineTime(today);
-        applyOnlineTimeState(today, safeOnlineTime);
-        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(DAILY_ONLINE_TIME_EXTEND_NAME, String.valueOf(safeOnlineTime), true);
+        syncOnlineTimeToDailyRecord();
+    }
+
+    /**
+     * 将当前在线时长同步到每日扩展值。
+     */
+    public synchronized void syncOnlineTimeToDailyRecord() {
+        persistOnlineTimeForDate(LocalDate.now());
+    }
+
+    /**
+     * 会话迁移前先同步在线时长。
+     */
+    public synchronized void syncOnlineTimeBeforeSessionTransition() {
+        syncOnlineTimeToDailyRecord();
     }
 
     private boolean isOnlineTimeInitialized() {
@@ -9915,6 +9926,15 @@ public class Character extends AbstractCharacterObject {
             return 0;
         }
         return onlineTime;
+    }
+
+    /**
+     * 将指定日期的在线时长同时同步到角色内存与每日扩展值。
+     */
+    private void persistOnlineTimeForDate(LocalDate targetDate) {
+        int safeOnlineTime = resolvePersistedOnlineTime(targetDate);
+        applyOnlineTimeState(targetDate, safeOnlineTime);
+        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(DAILY_ONLINE_TIME_EXTEND_NAME, String.valueOf(safeOnlineTime), true);
     }
 
     private void applyOnlineTimeState(LocalDate targetDate, int onlineTime) {
