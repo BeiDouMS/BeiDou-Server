@@ -191,11 +191,19 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                 case 19: // Springs on maps
                 case 20: // Aran Combat Step
                 case 22: {
-                    //Relative movement - server only cares about stance
-                    p.skip(4); //xpos = lea.readShort(); ypos = lea.readShort();
+                    Point beforePos = snapshotPosition(target);
+                    short deltaX = p.readShort();
+                    short deltaY = p.readShort();
+                    Point afterPos = target instanceof Character
+                            ? estimateRelativeMovePosition(beforePos, deltaX, deltaY)
+                            : null;
                     byte newstate = p.readByte();
+                    if (afterPos != null) {
+                        target.setPosition(afterPos);
+                    }
                     target.setStance(newstate);
                     p.readShort(); //duration
+                    recordRegularMove(target, beforePos, afterPos);
                     break;
                 }
                 case 3:
@@ -309,6 +317,18 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
         short xpos = p.readShort();
         short ypos = p.readShort();
         return new Point(xpos, ypos + yOffset);
+    }
+
+    /**
+     * Relative movement 包里给的是相对位移量。
+     * 服务端不需要做精确物理模拟，但要把当前位置推进到接近客户端的落点，
+     * 否则攻击包会长期拿旧坐标参与距离校验。
+     */
+    private static Point estimateRelativeMovePosition(Point beforePos, short deltaX, short deltaY) {
+        if (beforePos == null) {
+            return null;
+        }
+        return new Point(beforePos.x + deltaX, beforePos.y + deltaY);
     }
 
     private static void applyPositionAndStance(AnimatedMapObject target, Point position, byte newstate) {

@@ -164,7 +164,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 return;
             }
 
-            final boolean skipDistanceHack = isFullScreenDistanceExempt(attack.skill);
+            final boolean skipDistanceHack = shouldSkipDistanceHackCheck(attack.skill, attackEffect);
             final boolean isChainLightning = attack.skill == ILArchMage.CHAIN_LIGHTNING;
             boolean chainLightningCheckedFirst = false;
             Point teleportBeforePosForDistanceCheck = player.getTeleportBeforePositionForDistanceCheck();
@@ -1121,6 +1121,27 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 || skillId == ILArchMage.BLIZZARD
                 || skillId == FPArchMage.METEOR_SHOWER
                 || skillId == BlazeWizard.METEOR_SHOWER;
+    }
+
+    /**
+     * 按客户端 WZ 语义决定是否跳过通用 DISTANCE_HACK 判定。
+     * 仅对明确不是“空间攻击框”语义的技能做豁免，避免误伤正常近战技能。
+     */
+    private static boolean shouldSkipDistanceHackCheck(int skillId, StatEffect attackEffect) {
+        return isFullScreenDistanceExempt(skillId) || isNonSpatialAttackSkill(skillId, attackEffect);
+    }
+
+    /**
+     * Energy Charge 在 Skill.wz 中没有 level/lt、level/rb，属于蓄能/状态触发语义，
+     * 不应按普通近战攻击框进入距离外挂判定。
+     */
+    private static boolean isNonSpatialAttackSkill(int skillId, StatEffect attackEffect) {
+        if (attackEffect != null && attackEffect.hasBoundingBox()) {
+            return false;
+        }
+
+        return skillId == Marauder.ENERGY_CHARGE
+                || skillId == ThunderBreaker.ENERGY_CHARGE;
     }
 
     /**
