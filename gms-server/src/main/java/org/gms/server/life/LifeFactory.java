@@ -232,6 +232,125 @@ public class LifeFactory {
         return bbox;
     }
 
+    /**
+     * 读取指定怪物的 WZ 根节点。
+     */
+    private static Data getMonsterData(int mid) {
+        return data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
+    }
+
+    /**
+     * 解析当前怪物真正应当用于可视判定的数据节点。
+     *
+     * <p>部分怪物只保留自身属性，动作帧、lt/rb、origin 等视觉信息全部挂在 link 怪身上。
+     * 如果这里不沿着 link 查找，后续 bbox 会退化为“没有碰撞数据”，DISTANCE_HACK 就会误判。</p>
+     */
+    private static Data resolveMonsterVisualData(int mid, Data monsterData) {
+        if (monsterData == null) {
+            return null;
+        }
+
+        Set<Integer> visitedMobs = new HashSet<>();
+        Data currentMonsterData = monsterData;
+        int currentMid = mid;
+        while (currentMonsterData != null && visitedMobs.add(currentMid)) {
+            if (hasVisualBoundingBoxSource(currentMonsterData)) {
+                return currentMonsterData;
+            }
+
+            Data currentInfoData = currentMonsterData.getChildByPath("info");
+            int linkMid = currentInfoData == null ? 0 : DataTool.getIntConvert("link", currentInfoData, 0);
+            if (linkMid == 0) {
+                break;
+            }
+
+            currentMonsterData = getMonsterData(linkMid);
+            currentMid = linkMid;
+        }
+        return monsterData;
+    }
+
+    /**
+     * 判断一个怪物节点是否已经具备可用于距离判定的视觉来源。
+     *
+     * <p>只要存在主可视帧，或者任意动作帧能解析出 bbox，即视为可用。</p>
+     */
+    private static boolean hasVisualBoundingBoxSource(Data monsterData) {
+        if (monsterData == null) {
+            return false;
+        }
+        if (resolvePrimaryVisualFrame(monsterData) != null) {
+            return true;
+        }
+        return buildMonsterBoundingBox(0, "", monsterData).isValid();
+    }
+
+    /**
+     * 获取怪物的主可视帧。
+     *
+     * <p>保持与原逻辑一致，优先使用 fly/0，其次 stand/0。</p>
+     */
+    private static Data resolvePrimaryVisualFrame(Data monsterData) {
+        if (monsterData == null) {
+            return null;
+        }
+
+        Data flyFrame = resolveVisualFrame(monsterData.getChildByPath("fly/0"));
+        if (flyFrame != null) {
+            return flyFrame;
+        }
+        return resolveVisualFrame(monsterData.getChildByPath("stand/0"));
+    }
+
+    /**
+     * 将帧节点解析到最终的 Canvas 节点。
+     */
+    private static Data resolveVisualFrame(Data frameData) {
+        Data resolvedFrame = resolveUol(frameData);
+        if (resolvedFrame == null || resolvedFrame.getType() != DataType.CANVAS) {
+            return null;
+        }
+        return resolvedFrame;
+    }
+
+    /**
+     * 从最终视觉来源中回填怪物图片尺寸、移动类型和碰撞框。
+     */
+    private static void applyMonsterVisualStats(int mid, MonsterStats stats, Data visualMonsterData) {
+        if (stats == null || visualMonsterData == null) {
+            return;
+        }
+
+        Data flyFrame = resolveVisualFrame(visualMonsterData.getChildByPath("fly/0"));
+        Data standFrame = resolveVisualFrame(visualMonsterData.getChildByPath("stand/0"));
+        Data primaryFrame = flyFrame != null ? flyFrame : standFrame;
+
+        if (flyFrame != null) {
+            stats.setMovetype(1);
+            stats.setImgwidth(DataTool.getAttributeValueInt(flyFrame, "width", -1));
+            stats.setImgheight(DataTool.getAttributeValueInt(flyFrame, "height", -1));
+        } else if (standFrame != null) {
+            stats.setMovetype(0);
+            stats.setImgwidth(DataTool.getAttributeValueInt(standFrame, "width", -1));
+            stats.setImgheight(DataTool.getAttributeValueInt(standFrame, "height", -1));
+        }
+
+        BoundingBox bbox = buildMonsterBoundingBox(mid, stats.getName(), visualMonsterData);
+        if (bbox.isValid()) {
+            stats.setBbox(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
+            return;
+        }
+
+        if (primaryFrame == null) {
+            return;
+        }
+
+        Point origin = DataTool.getPoint("origin", primaryFrame, null);
+        if (origin != null && stats.getImgwidth() > 0 && stats.getImgheight() > 0) {
+            stats.setBbox(-origin.x, -origin.y, stats.getImgwidth() - origin.x, stats.getImgheight() - origin.y);
+        }
+    }
+
     private static void setMonsterAttackInfo(int mid, List<MobAttackInfoHolder> attackInfos) {
         if (!attackInfos.isEmpty()) {
             MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
@@ -244,7 +363,7 @@ public class LifeFactory {
     }
 
     private static Pair<MonsterStats, List<MobAttackInfoHolder>> getMonsterStats(int mid) {
-        Data monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
+        Data monsterData = getMonsterData(mid);
         if (monsterData == null) {
             return null;
         }
@@ -381,15 +500,22 @@ public class LifeFactory {
             stats.setBanishInfo(new BanishInfo(DataTool.getString("banMsg", banishData), DataTool.getInt("banMap/0/field", banishData, -1), DataTool.getString("banMap/0/portal", banishData, "sp")));
         }
 
+        Data visualMonsterData = resolveMonsterVisualData(mid, monsterData);
         int noFlip = DataTool.getInt("noFlip", monsterInfoData, 0);
         if (noFlip > 0) {
-            Point origin = DataTool.getPoint("stand/0/origin", monsterData, null);
+            Data fixedStanceFrame = resolveVisualFrame(visualMonsterData.getChildByPath("stand/0"));
+            if (fixedStanceFrame == null) {
+                fixedStanceFrame = resolvePrimaryVisualFrame(visualMonsterData);
+            }
+            Point origin = fixedStanceFrame == null ? null : DataTool.getPoint("origin", fixedStanceFrame, null);
             if (origin != null) {
                 stats.setFixedStance(origin.getX() < 1 ? 5 : 4);    // fixed left/right
             }
         }
+        // 统一从最终视觉来源回填尺寸与碰撞框，避免 link 怪重复走本地旧逻辑。
+        applyMonsterVisualStats(mid, stats, visualMonsterData);
+        /* 已废弃：以下旧的本地 visual 解析路径仅作留档，当前统一走上面的 link 可视数据解析。
         Data fly = monsterData.getChildByPath("fly/0");
-        Data stand = monsterData.getChildByPath("stand/0");
         if (fly != null) {
             stats.setMovetype(1);   //设定怪物类型为：fly
             fly = fly.getType() == DataType.UOL ? fly.getChildByPath((String) fly.getData()) : fly;  //呼叫转移...
@@ -419,6 +545,7 @@ public class LifeFactory {
                 stats.setBbox(-origin.x, -origin.y, stats.getImgwidth() - origin.x, stats.getImgheight() - origin.y);
             }
         }
+        */
         return new Pair<>(stats, attackInfos);
     }
 

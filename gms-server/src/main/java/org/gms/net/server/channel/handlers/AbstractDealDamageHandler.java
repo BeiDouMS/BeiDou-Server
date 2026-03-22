@@ -103,6 +103,26 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 封装一次距离校验最终采用的坐标样本。
+     *
+     * <p>攻击包到达时，服务端可能同时持有当前位置、瞬移前坐标、位移前坐标。
+     * 主流程只需要关心最终选中了哪个点，以及它是否来自位移补偿上下文。</p>
+     */
+    private static final class DistanceCheckSample {
+        private final Point checkPos;
+        private final double distanceSq;
+        private final boolean usedTeleportContext;
+        private final boolean usedMovementContext;
+
+        private DistanceCheckSample(Point checkPos, double distanceSq, boolean usedTeleportContext, boolean usedMovementContext) {
+            this.checkPos = checkPos;
+            this.distanceSq = distanceSq;
+            this.usedTeleportContext = usedTeleportContext;
+            this.usedMovementContext = usedMovementContext;
+        }
+    }
+
     protected void applyAttack(AttackInfo attack, final Character player, int attackCount) {
         final MapleMap map = player.getMap();
         if (map.isOwnershipRestricted(player)) {
@@ -264,43 +284,24 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                         if (checkDistance && !isWithinAttackBox(player, monster, attackEffect, attack, teleportBeforePosForDistanceCheck, movementBeforePosForDistanceCheck)) {
                             boolean useBbox = shouldUseBoundingBox(monster);
-                            Point currentPlayerPos = player.getPosition();
-                            Point checkPos = currentPlayerPos;
-                            double distance = calculateDistanceSq(currentPlayerPos, monster, useBbox);
-                            boolean usedTeleportContext = false;
-                            boolean usedMovementContext = false;
-                            if (teleportBeforePosForDistanceCheck != null && !teleportBeforePosForDistanceCheck.equals(currentPlayerPos)) {
-                                double teleportDistance = calculateDistanceSq(teleportBeforePosForDistanceCheck, monster, useBbox);
-                                if (teleportDistance < distance) {
-                                    distance = teleportDistance;
-                                    checkPos = teleportBeforePosForDistanceCheck;
-                                    usedTeleportContext = true;
-                                    usedMovementContext = false;
-                                }
+                            if (!hasReliableDistanceGeometry(attackEffect, useBbox)) {
+                                continue;
                             }
-                            if (movementBeforePosForDistanceCheck != null && !movementBeforePosForDistanceCheck.equals(currentPlayerPos)) {
-                                double movementDistance = calculateDistanceSq(movementBeforePosForDistanceCheck, monster, useBbox);
-                                if (movementDistance < distance) {
-                                    distance = movementDistance;
-                                    checkPos = movementBeforePosForDistanceCheck;
-                                    usedTeleportContext = false;
-                                    usedMovementContext = true;
-                                }
-                            }
-//                          AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
-                            if (distance > distanceToDetect && distance > distanceHackWorstDistance) {
+                            DistanceCheckSample distanceSample = chooseBestDistanceCheckSample(
+                                    player.getPosition(),
+                                    monster,
+                                    useBbox,
+                                    teleportBeforePosForDistanceCheck,
+                                    movementBeforePosForDistanceCheck
+                            );
+                            if (distanceSample.distanceSq > distanceToDetect && distanceSample.distanceSq > distanceHackWorstDistance) {
                                 distanceHackWorstMonster = monster;
-                                distanceHackWorstDistance = distance;
+                                distanceHackWorstDistance = distanceSample.distanceSq;
                                 distanceHackWorstThreshold = distanceToDetect;
                                 distanceHackWorstUseBbox = useBbox;
-                                distanceHackWorstCheckPos = new Point(checkPos);
-                                distanceHackWorstUsedTeleportContext = usedTeleportContext;
-                                distanceHackWorstUsedMovementContext = usedMovementContext;
-                            }
-                            if (false && distance > distanceToDetect) {
-                                String bboxInfo = buildBboxInfo(player, monster, useBbox, checkPos, teleportBeforePosForDistanceCheck, movementBeforePosForDistanceCheck, usedTeleportContext, usedMovementContext);
-                                AutobanFactory.DISTANCE_HACK.addPoint(player.getAutoBanManager(), "玩家：" + player.getName() + "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId() + " " + bboxInfo);
-                                log.warn("玩家：{}距离Sq到怪物: {} SID: {} MID: {} {}", player.getName(), distance, attack.skill, monster.getId(), bboxInfo);
+                                distanceHackWorstCheckPos = new Point(distanceSample.checkPos);
+                                distanceHackWorstUsedTeleportContext = distanceSample.usedTeleportContext;
+                                distanceHackWorstUsedMovementContext = distanceSample.usedMovementContext;
                             }
                         }
                     }
@@ -1145,7 +1146,50 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     }
 
     /**
-     * 是否使用碰撞框距离检测（Boss 或大体型）
+     * 判断当前攻击是否具备可靠的几何判定基础。
+     *
+     * <p>技能攻击框和怪物 bbox 至少要有一个可信来源，
+     * 否则距离判定会退化成粗糙的中心点比较，容易产生误判。</p>
+     */
+    private static boolean hasReliableDistanceGeometry(StatEffect attackEffect, boolean useBbox) {
+        return hasSkillAttackBox(attackEffect) || useBbox;
+    }
+
+    private static boolean hasSkillAttackBox(StatEffect attackEffect) {
+        return attackEffect != null && attackEffect.hasBoundingBox();
+    }
+
+    /**
+     * 从当前位置、瞬移前坐标、位移前坐标中选择最接近怪物的样本。
+     *
+     * <p>统一在这里做位移补偿，避免攻击主流程散落多套距离算法。</p>
+     */
+    private static DistanceCheckSample chooseBestDistanceCheckSample(Point currentPlayerPos, Monster monster, boolean useBbox, Point teleportBeforePos, Point movementBeforePos) {
+        DistanceCheckSample bestSample = new DistanceCheckSample(
+                currentPlayerPos,
+                calculateDistanceSq(currentPlayerPos, monster, useBbox),
+                false,
+                false
+        );
+        bestSample = chooseCloserDistanceSample(bestSample, teleportBeforePos, monster, useBbox, currentPlayerPos, true, false);
+        return chooseCloserDistanceSample(bestSample, movementBeforePos, monster, useBbox, currentPlayerPos, false, true);
+    }
+
+    private static DistanceCheckSample chooseCloserDistanceSample(DistanceCheckSample currentBest, Point candidatePos, Monster monster, boolean useBbox, Point currentPlayerPos, boolean usedTeleportContext, boolean usedMovementContext) {
+        if (candidatePos == null || candidatePos.equals(currentPlayerPos)) {
+            return currentBest;
+        }
+
+        double candidateDistanceSq = calculateDistanceSq(candidatePos, monster, useBbox);
+        if (candidateDistanceSq >= currentBest.distanceSq) {
+            return currentBest;
+        }
+
+        return new DistanceCheckSample(candidatePos, candidateDistanceSq, usedTeleportContext, usedMovementContext);
+    }
+
+    /**
+     * 怪物已具备有效 bbox 时，才使用矩形最短距离参与检测。
      */
     private static boolean shouldUseBoundingBox(Monster monster) {
         MonsterStats stats = monster.getStats();
@@ -1153,8 +1197,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     }
 
     /**
-     * 计算玩家到怪物的距离平方
-     * useBbox=true 时按碰撞框最短距离计算
+     * 计算玩家到怪物的距离平方。
+     * useBbox=true 时按碰撞框最短距离计算。
      */
     private static double calculateDistanceSq(Point playerPos, Monster monster, boolean useBbox) {
         if (!useBbox) {
