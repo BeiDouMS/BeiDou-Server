@@ -1,6 +1,14 @@
 var l10n;
 l10n ??= {};
 
+/**
+ * 根据当前服务端语言获取翻译文本。
+ * 须配合 `*.en-US.js` 以及 `*.zh-CN.js` 脚本使用。
+ *
+ * @param {string} key
+ * @param {Record<string, string>} [params]
+ * @return {string}
+ */
 function i18n(key, params) {
     try {
         let text = params === undefined ? l10n[key] : l10n[key](params);
