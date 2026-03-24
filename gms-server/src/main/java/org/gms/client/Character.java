@@ -483,6 +483,22 @@ public class Character extends AbstractCharacterObject {
     private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
     private static final InventoryService inventoryService = ServerManager.getApplicationContext().getBean(InventoryService.class);
+    // 假人服务（可选，启用 fake-player.enabled 时才生效）
+    private static volatile FakePlayerService fakePlayerService;
+    private static FakePlayerService getFakePlayerService() {
+        if (fakePlayerService == null) {
+            synchronized (Character.class) {
+                if (fakePlayerService == null) {
+                    try {
+                        fakePlayerService = ServerManager.getApplicationContext().getBean(FakePlayerService.class);
+                    } catch (Exception ignored) {
+                        // 假人系统未启用，忽略
+                    }
+                }
+            }
+        }
+        return fakePlayerService;
+    }
 
     /**
      * 最后攻击时间
@@ -1715,6 +1731,12 @@ public class Character extends AbstractCharacterObject {
             setPosition(pos);
             map.addPlayer(this);
             visitMap(map);
+
+            // 假人系统：玩家进入地图时展示假人
+            FakePlayerService fps = getFakePlayerService();
+            if (fps != null) {
+                fps.onPlayerEnterMap(client, map);
+            }
 
             prtLock.lock();
             try {
