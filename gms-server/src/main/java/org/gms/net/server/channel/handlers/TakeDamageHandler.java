@@ -151,6 +151,36 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             }
 
             direction = p.readByte();
+
+            if (p.available() >= 2) {
+                int reflect = p.readByte();
+                int guardingData = p.readByte();
+                if (reflect > 0 || guardingData > 1) {
+                    byte isPowerGuard = p.readByte();
+                    int reflectMobOid = p.readInt();
+                    byte hitAction = p.readByte();
+                    short mobX = p.readShort();
+                    short mobY = p.readShort();
+                    short charX = p.readShort();
+                    short charY = p.readShort();
+                    if (guardingData > 1 && attacker != null && !attacker.isBoss()) {
+                        Skill skillObj = null;
+                        if (chr.getSkillLevel(SkillFactory.getSkill(1220006)) > 0) {
+                            skillObj = SkillFactory.getSkill(1220006);
+                        } else if (chr.getSkillLevel(SkillFactory.getSkill(1120005)) > 0) {
+                            skillObj = SkillFactory.getSkill(1120005);
+                        }
+                        if (skillObj != null) {
+                            StatEffect skillEffect = skillObj.getEffect(chr.getSkillLevel(skillObj));
+                            if (skillEffect != null) {
+                                attacker.applyStatus(chr, new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.STUN, 1), skillObj, null, false), false, skillEffect.getDuration(), false);
+                            } else {
+                                attacker.applyStatus(chr, new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.STUN, 1), skillObj, null, false), false, 2000, false);
+                            }
+                        }
+                    }
+                }
+            }
         }
         if (damagefrom != -1 && damagefrom != -2 && attacker != null) {
             MobAttackInfo attackInfo = MobAttackInfoFactory.getMobAttackInfo(attacker, damagefrom);
@@ -189,18 +219,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         }
 
         if (damage == -1) {
-            if (chr.getSkillLevel(SkillFactory.getSkill(1220006)) > 0) {
-                fake = 1220006;
-            } else if (chr.getSkillLevel(SkillFactory.getSkill(1120005)) > 0) {
-                fake = 1120005;
-            } else {
-                fake = 4020002 + (chr.getJob().getId() / 10 - 40) * 100000;
-            }
-            
-            if ((fake == 1220006 || fake == 1120005) && attacker != null && !attacker.isBoss()) {
-                Skill skill = SkillFactory.getSkill(fake);
-                attacker.applyStatus(chr, new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.STUN, 1), skill, null, false), false, 2000, false);
-            }
+            fake = 4020002 + (chr.getJob().getId() / 10 - 40) * 100000;
         }
 
         if (damage > 0) {
