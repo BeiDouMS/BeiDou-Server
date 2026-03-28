@@ -189,12 +189,16 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         }
 
         if (damage == -1) {
-            fake = 4020002 + (chr.getJob().getId() / 10 - 40) * 100000;
-            if (fake == 1220002 || chr.getSkillLevel(SkillFactory.getSkill(1220006)) > 0) {
+            if (chr.getSkillLevel(SkillFactory.getSkill(1220006)) > 0) {
                 fake = 1220006;
+            } else if (chr.getSkillLevel(SkillFactory.getSkill(1120005)) > 0) {
+                fake = 1120005;
+            } else {
+                fake = 4020002 + (chr.getJob().getId() / 10 - 40) * 100000;
             }
-            if (fake == 1220006 && attacker != null && !attacker.isBoss()) {
-                Skill skill = SkillFactory.getSkill(1220006);
+            
+            if ((fake == 1220006 || fake == 1120005) && attacker != null && !attacker.isBoss()) {
+                Skill skill = SkillFactory.getSkill(fake);
                 attacker.applyStatus(chr, new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.STUN, 1), skill, null, false), false, 2000, false);
             }
         }
