@@ -9,7 +9,7 @@ public class IpAddresses {
     private static final List<Pattern> LOCAL_ADDRESS_PATTERNS = loadLocalAddressPatterns();
 
     private static List<Pattern> loadLocalAddressPatterns() {
-        return Stream.of("10\\.", "192\\.168\\.", "172\\.(1[6-9]|2[0-9]|3[0-1])\\.")
+        return Stream.of("^10\\.", "^192\\.168\\.", "^172\\.(1[6-9]|2[0-9]|3[0-1])\\.")
                 .map(Pattern::compile)
                 .collect(Collectors.toList());
     }
