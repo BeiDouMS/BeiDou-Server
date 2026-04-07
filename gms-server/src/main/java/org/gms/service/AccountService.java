@@ -199,7 +199,7 @@ public class AccountService {
                     .get(chr.getWorld())
                     .getPlayerStorage()
                     .getCharacterById(chr.getId());
-            if (player == null) return; // 角色离线
+            if (player == null) continue; // 角色离线
             player.setBanned(true);
             Client c = player.getClient(); // 角色在线，获取客户端
             c.banMacs(); // 封禁Mac
