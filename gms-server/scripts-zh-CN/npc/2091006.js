@@ -27,6 +27,8 @@ function action(mode, type, selection) {
             cm.getPlayer().saveLocation("MIRROR");
             cm.warp(925020000, 4);
             cm.dispose();
+        } else {
+            cm.dispose();
         }
     }
 }
