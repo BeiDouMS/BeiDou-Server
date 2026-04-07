@@ -48,6 +48,7 @@ import org.gms.server.life.MobSkillFactory;
 import org.gms.server.life.MobSkillId;
 import org.gms.server.life.MobSkillType;
 import org.gms.server.life.Monster;
+import org.gms.server.life.MonsterStats;
 import org.gms.server.life.MonsterDropEntry;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.maps.MapItem;
@@ -99,6 +100,26 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
             }
             return mySkill.getEffect(skillLevel);
+        }
+    }
+
+    /**
+     * 封装一次距离校验最终采用的坐标样本。
+     *
+     * <p>攻击包到达时，服务端可能同时持有当前位置、瞬移前坐标、位移前坐标。
+     * 主流程只需要关心最终选中了哪个点，以及它是否来自位移补偿上下文。</p>
+     */
+    private static final class DistanceCheckSample {
+        private final Point checkPos;
+        private final double distanceSq;
+        private final boolean usedTeleportContext;
+        private final boolean usedMovementContext;
+
+        private DistanceCheckSample(Point checkPos, double distanceSq, boolean usedTeleportContext, boolean usedMovementContext) {
+            this.checkPos = checkPos;
+            this.distanceSq = distanceSq;
+            this.usedTeleportContext = usedTeleportContext;
+            this.usedMovementContext = usedMovementContext;
         }
     }
 
@@ -163,12 +184,25 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 return;
             }
 
+            final boolean skipDistanceHack = shouldSkipDistanceHackCheck(attack.skill, attackEffect);
+            final boolean isChainLightning = attack.skill == ILArchMage.CHAIN_LIGHTNING;
+            boolean chainLightningCheckedFirst = false;
+            Point teleportBeforePosForDistanceCheck = player.getTeleportBeforePositionForDistanceCheck();
+            Point movementBeforePosForDistanceCheck = player.getMovementBeforePositionForDistanceCheck();
+
             //WTF IS THIS F3,1
             /*if (attackCount != attack.numDamage && attack.skill != ChiefBandit.MESO_EXPLOSION && attack.skill != NightWalker.VAMPIRE && attack.skill != WindArcher.WIND_SHOT && attack.skill != Aran.COMBO_SMASH && attack.skill != Aran.COMBO_FENRIR && attack.skill != Aran.COMBO_TEMPEST && attack.skill != NightLord.NINJA_AMBUSH && attack.skill != Shadower.NINJA_AMBUSH) {
                 return;
             }*/
 
             int totDamage = 0;
+            Monster distanceHackWorstMonster = null;
+            double distanceHackWorstDistance = Double.NEGATIVE_INFINITY;
+            double distanceHackWorstThreshold = 0.0;
+            boolean distanceHackWorstUseBbox = false;
+            Point distanceHackWorstCheckPos = null;
+            boolean distanceHackWorstUsedTeleportContext = false;
+            boolean distanceHackWorstUsedMovementContext = false;
 
             if (attack.skill == ChiefBandit.MESO_EXPLOSION) {
                 int delay = 0;
@@ -208,7 +242,6 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             for (Integer oned : attack.allDamage.keySet()) {
                 final Monster monster = map.getMonsterByOid(oned);
                 if (monster != null) {
-                    double distance = player.getPosition().distanceSq(monster.getPosition());
                     double distanceToDetect = 200000.0;
 
                     if (attack.ranged) {
@@ -233,13 +266,44 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         distanceToDetect += 250000;
                     } else if (attack.skill == Shadower.BOOMERANG_STEP || attack.skill == ILArchMage.CHAIN_LIGHTNING) {
                         distanceToDetect += 60000;
+                    } else if (attack.skill == Buccaneer.DRAGON_STRIKE) {
+                        // 龙之怒的客户端攻击范围较长，且近战包没有额外携带权威攻击原点，
+                        // 需要给距离检测留出一档同步误差余量，避免擦边命中被误判。
+                        distanceToDetect += 100000;
                     }
 
-                    if (distance > distanceToDetect) {
-//                        AutobanFactory.DISTANCE_HACK.alert(player, "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
-                        AutobanFactory.DISTANCE_HACK.addPoint(player.getAutoBanManager(), "玩家：" + player.getName() + "距离Sq到怪物: " + distance + " SID: " + attack.skill + " MID: " + monster.getId());
-                        log.warn("玩家：{}距离Sq到怪物: {} SID: {} MID: {}", player.getName(), distance, attack.skill, monster.getId());
-
+                    if (!skipDistanceHack) {
+                        boolean checkDistance = true;
+                        if (isChainLightning) {
+                            // 链式技能后续目标来源于跳跃，不以玩家距离判断
+                            if (chainLightningCheckedFirst) {
+                                checkDistance = false;
+                            } else {
+                                chainLightningCheckedFirst = true;
+                            }
+                        }
+                        if (checkDistance && !isWithinAttackBox(player, monster, attackEffect, attack, teleportBeforePosForDistanceCheck, movementBeforePosForDistanceCheck)) {
+                            boolean useBbox = shouldUseBoundingBox(monster);
+                            if (!hasReliableDistanceGeometry(attackEffect, useBbox)) {
+                                continue;
+                            }
+                            DistanceCheckSample distanceSample = chooseBestDistanceCheckSample(
+                                    player.getPosition(),
+                                    monster,
+                                    useBbox,
+                                    teleportBeforePosForDistanceCheck,
+                                    movementBeforePosForDistanceCheck
+                            );
+                            if (distanceSample.distanceSq > distanceToDetect && distanceSample.distanceSq > distanceHackWorstDistance) {
+                                distanceHackWorstMonster = monster;
+                                distanceHackWorstDistance = distanceSample.distanceSq;
+                                distanceHackWorstThreshold = distanceToDetect;
+                                distanceHackWorstUseBbox = useBbox;
+                                distanceHackWorstCheckPos = new Point(distanceSample.checkPos);
+                                distanceHackWorstUsedTeleportContext = distanceSample.usedTeleportContext;
+                                distanceHackWorstUsedMovementContext = distanceSample.usedMovementContext;
+                            }
+                        }
                     }
 
                     int totDamageToOneMonster = 0;
@@ -530,6 +594,42 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     }
                 }
+            }
+            if (teleportBeforePosForDistanceCheck != null) {
+                player.consumeTeleportDistanceCheckContext();
+            }
+            if (movementBeforePosForDistanceCheck != null) {
+                player.consumeMovementDistanceCheckContext();
+            }
+            if (distanceHackWorstMonster != null) {
+                String bboxInfo = buildBboxInfo(
+                        player,
+                        distanceHackWorstMonster,
+                        distanceHackWorstUseBbox,
+                        distanceHackWorstCheckPos,
+                        teleportBeforePosForDistanceCheck,
+                        movementBeforePosForDistanceCheck,
+                        distanceHackWorstUsedTeleportContext,
+                        distanceHackWorstUsedMovementContext
+                );
+                AutobanFactory.DISTANCE_HACK.addPoint(
+                        player.getAutoBanManager(),
+                        "Player: " + player.getName()
+                                + " maxDistanceSqToMob: " + distanceHackWorstDistance
+                                + " thresholdSq: " + distanceHackWorstThreshold
+                                + " SID: " + attack.skill
+                                + " MID: " + distanceHackWorstMonster.getId()
+                                + " " + bboxInfo
+                );
+                log.warn(
+                        "Player: {} maxDistanceSqToMob: {} thresholdSq: {} SID: {} MID: {} {}",
+                        player.getName(),
+                        distanceHackWorstDistance,
+                        distanceHackWorstThreshold,
+                        attack.skill,
+                        distanceHackWorstMonster.getId(),
+                        bboxInfo
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -922,6 +1022,292 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             ret.position.setLocation(p.readShort(), p.readShort());
         }
         return ret;
+    }
+
+    /**
+     * 优先用技能自身的范围框判断本次攻击是否合法命中怪物。
+     * 命中技能框时，跳过后续基于中心点距离的 DISTANCE_HACK 检测。
+     */
+    private static boolean isWithinAttackBox(Character player, Monster monster, StatEffect attackEffect, AttackInfo attack, Point alternatePlayerPos, Point secondaryAlternatePlayerPos) {
+        Rectangle monsterBounds = getMonsterBounds(monster);
+        Point monsterPos = monster.getPosition();
+        boolean directionFacingLeft = isFacingLeftByDirection(attack.direction);
+        Point currentPlayerPos = player.getPosition();
+        if (intersectsAnyAttackBox(monsterBounds, monsterPos, attackEffect, directionFacingLeft, currentPlayerPos, alternatePlayerPos, secondaryAlternatePlayerPos)) {
+            return true;
+        }
+
+        boolean stanceFacingLeft = isFacingLeftByStance(attack.stance);
+        if (stanceFacingLeft != directionFacingLeft
+                && intersectsAnyAttackBox(monsterBounds, monsterPos, attackEffect, stanceFacingLeft, currentPlayerPos, alternatePlayerPos, secondaryAlternatePlayerPos)) {
+            return true;
+        }
+
+        boolean currentFacingLeft = player.isFacingLeft();
+        if (currentFacingLeft != directionFacingLeft
+                && currentFacingLeft != stanceFacingLeft
+                && intersectsAnyAttackBox(monsterBounds, monsterPos, attackEffect, currentFacingLeft, currentPlayerPos, alternatePlayerPos, secondaryAlternatePlayerPos)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 使用指定朝向计算技能框，并判断是否命中怪物范围框。
+     */
+    private static boolean isWithinAttackBox(Point playerPos, Rectangle monsterBounds, Point monsterPos, StatEffect attackEffect, boolean facingLeft) {
+        if (attackEffect == null || !attackEffect.hasBoundingBox()) {
+            return false;
+        }
+
+        Rectangle attackBounds = attackEffect.calculateBoundingBox(playerPos, facingLeft);
+        return attackBounds.intersects(monsterBounds) || attackBounds.contains(monsterPos);
+    }
+
+    private static boolean intersectsAnyAttackBox(Rectangle monsterBounds, Point monsterPos, StatEffect attackEffect, boolean facingLeft, Point... playerPositions) {
+        Point primaryPos = playerPositions.length > 0 ? playerPositions[0] : null;
+        for (Point playerPos : playerPositions) {
+            if (playerPos == null) {
+                continue;
+            }
+            if (primaryPos != null && playerPos != primaryPos && playerPos.equals(primaryPos)) {
+                continue;
+            }
+            if (isWithinAttackBox(playerPos, monsterBounds, monsterPos, attackEffect, facingLeft)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 根据攻击包中的 direction 还原本次攻击时角色的朝向。
+     * V83 攻击包中 direction 与 stance 分离，direction 更接近本次攻击的实时左右方向。
+     */
+    private static boolean isFacingLeftByDirection(int direction) {
+        return direction == 0;
+    }
+
+    /**
+     * 根据攻击包中的 stance 还原本次攻击时角色的朝向。
+     */
+    private static boolean isFacingLeftByStance(int stance) {
+        return Math.abs(stance) % 2 == 1;
+    }
+
+    /**
+     * 获取怪物在地图中的实际矩形范围。
+     * 有 bbox 时使用怪物 bbox；否则退化为怪物中心点的 1x1 矩形。
+     */
+    private static Rectangle getMonsterBounds(Monster monster) {
+        MonsterStats stats = monster.getStats();
+        if (stats == null || !stats.hasBbox()) {
+            Point mobPos = monster.getPosition();
+            return new Rectangle(mobPos.x, mobPos.y, 1, 1);
+        }
+
+        int[] bbox = getWorldBbox(monster, stats);
+        int minX = Math.min(bbox[0], bbox[1]);
+        int maxX = Math.max(bbox[0], bbox[1]);
+        int minY = Math.min(bbox[2], bbox[3]);
+        int maxY = Math.max(bbox[2], bbox[3]);
+        return new Rectangle(minX, minY, Math.max(1, maxX - minX), Math.max(1, maxY - minY));
+    }
+
+    /**
+     * 全屏/大范围技能跳过距离检测
+     */
+    private static boolean isFullScreenDistanceExempt(int skillId) {
+        return skillId == Bishop.GENESIS
+                || skillId == ILArchMage.BLIZZARD
+                || skillId == FPArchMage.METEOR_SHOWER
+                || skillId == BlazeWizard.METEOR_SHOWER;
+    }
+
+    /**
+     * 按客户端 WZ 语义决定是否跳过通用 DISTANCE_HACK 判定。
+     * 仅对明确不是“空间攻击框”语义的技能做豁免，避免误伤正常近战技能。
+     */
+    private static boolean shouldSkipDistanceHackCheck(int skillId, StatEffect attackEffect) {
+        return isFullScreenDistanceExempt(skillId) || isNonSpatialAttackSkill(skillId, attackEffect);
+    }
+
+    /**
+     * Energy Charge 在 Skill.wz 中没有 level/lt、level/rb，属于蓄能/状态触发语义，
+     * 不应按普通近战攻击框进入距离外挂判定。
+     */
+    private static boolean isNonSpatialAttackSkill(int skillId, StatEffect attackEffect) {
+        if (attackEffect != null && attackEffect.hasBoundingBox()) {
+            return false;
+        }
+
+        return skillId == Marauder.ENERGY_CHARGE
+                || skillId == ThunderBreaker.ENERGY_CHARGE;
+    }
+
+    /**
+     * 判断当前攻击是否具备可靠的几何判定基础。
+     *
+     * <p>技能攻击框和怪物 bbox 至少要有一个可信来源，
+     * 否则距离判定会退化成粗糙的中心点比较，容易产生误判。</p>
+     */
+    private static boolean hasReliableDistanceGeometry(StatEffect attackEffect, boolean useBbox) {
+        return hasSkillAttackBox(attackEffect) || useBbox;
+    }
+
+    private static boolean hasSkillAttackBox(StatEffect attackEffect) {
+        return attackEffect != null && attackEffect.hasBoundingBox();
+    }
+
+    /**
+     * 从当前位置、瞬移前坐标、位移前坐标中选择最接近怪物的样本。
+     *
+     * <p>统一在这里做位移补偿，避免攻击主流程散落多套距离算法。</p>
+     */
+    private static DistanceCheckSample chooseBestDistanceCheckSample(Point currentPlayerPos, Monster monster, boolean useBbox, Point teleportBeforePos, Point movementBeforePos) {
+        DistanceCheckSample bestSample = new DistanceCheckSample(
+                currentPlayerPos,
+                calculateDistanceSq(currentPlayerPos, monster, useBbox),
+                false,
+                false
+        );
+        bestSample = chooseCloserDistanceSample(bestSample, teleportBeforePos, monster, useBbox, currentPlayerPos, true, false);
+        return chooseCloserDistanceSample(bestSample, movementBeforePos, monster, useBbox, currentPlayerPos, false, true);
+    }
+
+    private static DistanceCheckSample chooseCloserDistanceSample(DistanceCheckSample currentBest, Point candidatePos, Monster monster, boolean useBbox, Point currentPlayerPos, boolean usedTeleportContext, boolean usedMovementContext) {
+        if (candidatePos == null || candidatePos.equals(currentPlayerPos)) {
+            return currentBest;
+        }
+
+        double candidateDistanceSq = calculateDistanceSq(candidatePos, monster, useBbox);
+        if (candidateDistanceSq >= currentBest.distanceSq) {
+            return currentBest;
+        }
+
+        return new DistanceCheckSample(candidatePos, candidateDistanceSq, usedTeleportContext, usedMovementContext);
+    }
+
+    /**
+     * 怪物已具备有效 bbox 时，才使用矩形最短距离参与检测。
+     */
+    private static boolean shouldUseBoundingBox(Monster monster) {
+        MonsterStats stats = monster.getStats();
+        return stats != null && stats.hasBbox();
+    }
+
+    /**
+     * 计算玩家到怪物的距离平方。
+     * useBbox=true 时按碰撞框最短距离计算。
+     */
+    private static double calculateDistanceSq(Point playerPos, Monster monster, boolean useBbox) {
+        if (!useBbox) {
+            return playerPos.distanceSq(monster.getPosition());
+        }
+
+        MonsterStats stats = monster.getStats();
+        if (stats == null || !stats.hasBbox()) {
+            return playerPos.distanceSq(monster.getPosition());
+        }
+        int[] bbox = getWorldBbox(monster, stats);
+        int minX = bbox[0];
+        int maxX = bbox[1];
+        int minY = bbox[2];
+        int maxY = bbox[3];
+
+        // 计算点到矩形的最短距离
+        int dx = 0;
+        if (playerPos.x < minX) {
+            dx = minX - playerPos.x;
+        } else if (playerPos.x > maxX) {
+            dx = playerPos.x - maxX;
+        }
+
+        int dy = 0;
+        if (playerPos.y < minY) {
+            dy = minY - playerPos.y;
+        } else if (playerPos.y > maxY) {
+            dy = playerPos.y - maxY;
+        }
+
+        return (double) dx * dx + (double) dy * dy;
+    }
+
+    /**
+     * 生成异常日志的碰撞框信息（便于快速定位问题）
+     */
+    private static String buildBboxInfo(Character player, Monster monster, boolean useBbox, Point checkPos, Point teleportBeforePos, Point movementBeforePos, boolean usedTeleportContext, boolean usedMovementContext) {
+        MonsterStats stats = monster.getStats();
+        Point playerPos = player.getPosition();
+        Point mobPos = monster.getPosition();
+        boolean facingLeft = monster.isFacingLeft();
+        Point effectiveCheckPos = checkPos != null ? checkPos : playerPos;
+        if (stats == null || !stats.hasBbox()) {
+            return "BBOX{use=" + useBbox
+                    + ", valid=false, playerPos=" + playerPos
+                    + ", checkPos=" + effectiveCheckPos
+                    + ", teleportBeforePos=" + teleportBeforePos
+                    + ", movementBeforePos=" + movementBeforePos
+                    + ", usedTeleportContext=" + usedTeleportContext
+                    + ", usedMovementContext=" + usedMovementContext
+                    + ", mobPos=" + mobPos
+                    + ", facingLeft=" + facingLeft
+                    + "}";
+        }
+
+        int[] bbox = getWorldBbox(monster, stats);
+        int minX = bbox[0];
+        int maxX = bbox[1];
+        int minY = bbox[2];
+        int maxY = bbox[3];
+        int width = Math.max(0, maxX - minX);
+        int height = Math.max(0, maxY - minY);
+        boolean noFlip = stats.getFixedStance() != 0;
+
+        return "BBOX{use=" + useBbox
+                + ", rel=(" + stats.getBboxMinX() + "," + stats.getBboxMinY() + ")-(" + stats.getBboxMaxX() + "," + stats.getBboxMaxY() + ")"
+                + ", world=(" + minX + "," + minY + ")-(" + maxX + "," + maxY + ")"
+                + ", size=" + width + "x" + height
+                + ", playerPos=" + playerPos
+                + ", checkPos=" + effectiveCheckPos
+                + ", teleportBeforePos=" + teleportBeforePos
+                + ", movementBeforePos=" + movementBeforePos
+                + ", usedTeleportContext=" + usedTeleportContext
+                + ", usedMovementContext=" + usedMovementContext
+                + ", mobPos=" + mobPos
+                + ", facingLeft=" + facingLeft
+                + ", noFlip=" + noFlip
+                + "}";
+    }
+
+    /**
+     * 获取怪物碰撞框的世界坐标（考虑 noFlip）
+     * @param monster 怪物
+     * @param stats 怪物属性
+     * @return [minX, maxX, minY, maxY]
+     */
+    private static int[] getWorldBbox(Monster monster, MonsterStats stats) {
+        Point mobPos = monster.getPosition();
+        int minX = stats.getBboxMinX();
+        int maxX = stats.getBboxMaxX();
+        int minY = stats.getBboxMinY();
+        int maxY = stats.getBboxMaxY();
+
+        // noFlip 怪物不允许镜像，避免把碰撞框翻到反方向
+        boolean noFlip = stats.getFixedStance() != 0;
+        if (!noFlip && !monster.isFacingLeft()) {
+            int mirroredMinX = -maxX;
+            int mirroredMaxX = -minX;
+            minX = mirroredMinX;
+            maxX = mirroredMaxX;
+        }
+
+        return new int[]{
+                mobPos.x + minX,
+                mobPos.x + maxX,
+                mobPos.y + minY,
+                mobPos.y + maxY
+        };
     }
 
     /**

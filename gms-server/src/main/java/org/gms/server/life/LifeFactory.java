@@ -87,6 +87,270 @@ public class LifeFactory {
         }
     }
 
+    private static final class BoundingBox {
+        private int minX = Integer.MAX_VALUE;
+        private int minY = Integer.MAX_VALUE;
+        private int maxX = Integer.MIN_VALUE;
+        private int maxY = Integer.MIN_VALUE;
+        private boolean valid = false;
+
+        /**
+         * 合并单帧的碰撞框到当前包围盒
+         *
+         * @param lt 单帧左上角
+         * @param rb 单帧右下角
+         */
+        public void update(Point lt, Point rb) {
+            if (lt == null || rb == null) {
+                return;
+            }
+            minX = Math.min(minX, lt.x);
+            minY = Math.min(minY, lt.y);
+            maxX = Math.max(maxX, rb.x);
+            maxY = Math.max(maxY, rb.y);
+            valid = true;
+        }
+
+        public boolean isValid() {
+            return valid;
+        }
+
+        public int getMinX() {
+            return minX;
+        }
+
+        public int getMinY() {
+            return minY;
+        }
+
+        public int getMaxX() {
+            return maxX;
+        }
+
+        public int getMaxY() {
+            return maxY;
+        }
+    }
+
+    /**
+     * 解析 UOL 引用，返回最终的数据节点
+     *
+     * @param data 原始数据节点
+     * @return 解析后的节点（可能与入参相同）
+     */
+    private static Data resolveUol(Data data) {
+        if (data == null) {
+            return null;
+        }
+        if (data.getType() == DataType.UOL) {
+            Object path = data.getData();
+            if (path instanceof String) {
+                Data resolved = data.getChildByPath((String) path);
+                if (resolved != null) {
+                    return resolved;
+                }
+            }
+        }
+        return data;
+    }
+
+    /**
+     * 判断动作名是否参与碰撞框计算
+     *
+     * @param name 动作名
+     * @return 是否参与
+     */
+    private static boolean isBboxAction(String name) {
+        return name.startsWith("stand") || name.startsWith("move") || name.startsWith("fly")
+                || name.startsWith("jump") || name.startsWith("attack") || name.startsWith("hit");
+    }
+
+    /**
+     * 计算怪物多动作帧的最大包围碰撞框
+     *
+     * @param mid       怪物 ID
+     * @param mobName   怪物名称
+     * @param monsterData 怪物数据根节点
+     * @return 最大包围碰撞框
+     */
+    private static BoundingBox buildMonsterBoundingBox(int mid, String mobName, Data monsterData) {
+        BoundingBox bbox = new BoundingBox();
+        int actionCount = 0;
+        int frameCount = 0;
+        int frameWithLtRb = 0;
+        int frameFallback = 0;
+        int frameSkipped = 0;
+        for (Data action : monsterData.getChildren()) {
+            String actionName = action.getName();
+            if (actionName.equals("info") || actionName.startsWith("die") || !isBboxAction(actionName)) {
+                continue;
+            }
+            // 处理 UOL 指向的动作节点
+            Data actionData = resolveUol(action);
+            if (actionData == null) {
+                continue;
+            }
+            actionCount++;
+            for (Data frame : actionData.getChildren()) {
+                // 处理 UOL 指向的帧节点
+                Data frameData = resolveUol(frame);
+                if (frameData == null || frameData.getType() != DataType.CANVAS) {
+                    frameSkipped++;
+                    continue;
+                }
+                frameCount++;
+                Point lt = DataTool.getPoint("lt", frameData, null);
+                Point rb = DataTool.getPoint("rb", frameData, null);
+                boolean usedFallback = false;
+                Point origin = null;
+                int width = -1;
+                int height = -1;
+                if (lt == null || rb == null) {
+                    // lt/rb 缺失时，使用 origin + 宽高推算
+                    origin = DataTool.getPoint("origin", frameData, null);
+                    width = DataTool.getAttributeValueInt(frameData, "width", -1);
+                    height = DataTool.getAttributeValueInt(frameData, "height", -1);
+                    if (origin != null && width > 0 && height > 0) {
+                        lt = new Point(-origin.x, -origin.y);
+                        rb = new Point(width - origin.x, height - origin.y);
+                        usedFallback = true;
+                    }
+                }
+                if (lt != null && rb != null) {
+                    if (usedFallback) {
+                        frameFallback++;
+                    } else {
+                        frameWithLtRb++;
+                    }
+                } else {
+                    frameSkipped++;
+                }
+                // 合并到整体包围框
+                bbox.update(lt, rb);
+            }
+        }
+        return bbox;
+    }
+
+    /**
+     * 读取指定怪物的 WZ 根节点。
+     */
+    private static Data getMonsterData(int mid) {
+        return data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
+    }
+
+    /**
+     * 解析当前怪物真正应当用于可视判定的数据节点。
+     *
+     * <p>部分怪物只保留自身属性，动作帧、lt/rb、origin 等视觉信息全部挂在 link 怪身上。
+     * 如果这里不沿着 link 查找，后续 bbox 会退化为“没有碰撞数据”，DISTANCE_HACK 就会误判。</p>
+     */
+    private static Data resolveMonsterVisualData(int mid, Data monsterData) {
+        if (monsterData == null) {
+            return null;
+        }
+
+        Set<Integer> visitedMobs = new HashSet<>();
+        Data currentMonsterData = monsterData;
+        int currentMid = mid;
+        while (currentMonsterData != null && visitedMobs.add(currentMid)) {
+            if (hasVisualBoundingBoxSource(currentMonsterData)) {
+                return currentMonsterData;
+            }
+
+            Data currentInfoData = currentMonsterData.getChildByPath("info");
+            int linkMid = currentInfoData == null ? 0 : DataTool.getIntConvert("link", currentInfoData, 0);
+            if (linkMid == 0) {
+                break;
+            }
+
+            currentMonsterData = getMonsterData(linkMid);
+            currentMid = linkMid;
+        }
+        return monsterData;
+    }
+
+    /**
+     * 判断一个怪物节点是否已经具备可用于距离判定的视觉来源。
+     *
+     * <p>只要存在主可视帧，或者任意动作帧能解析出 bbox，即视为可用。</p>
+     */
+    private static boolean hasVisualBoundingBoxSource(Data monsterData) {
+        if (monsterData == null) {
+            return false;
+        }
+        if (resolvePrimaryVisualFrame(monsterData) != null) {
+            return true;
+        }
+        return buildMonsterBoundingBox(0, "", monsterData).isValid();
+    }
+
+    /**
+     * 获取怪物的主可视帧。
+     *
+     * <p>保持与原逻辑一致，优先使用 fly/0，其次 stand/0。</p>
+     */
+    private static Data resolvePrimaryVisualFrame(Data monsterData) {
+        if (monsterData == null) {
+            return null;
+        }
+
+        Data flyFrame = resolveVisualFrame(monsterData.getChildByPath("fly/0"));
+        if (flyFrame != null) {
+            return flyFrame;
+        }
+        return resolveVisualFrame(monsterData.getChildByPath("stand/0"));
+    }
+
+    /**
+     * 将帧节点解析到最终的 Canvas 节点。
+     */
+    private static Data resolveVisualFrame(Data frameData) {
+        Data resolvedFrame = resolveUol(frameData);
+        if (resolvedFrame == null || resolvedFrame.getType() != DataType.CANVAS) {
+            return null;
+        }
+        return resolvedFrame;
+    }
+
+    /**
+     * 从最终视觉来源中回填怪物图片尺寸、移动类型和碰撞框。
+     */
+    private static void applyMonsterVisualStats(int mid, MonsterStats stats, Data visualMonsterData) {
+        if (stats == null || visualMonsterData == null) {
+            return;
+        }
+
+        Data flyFrame = resolveVisualFrame(visualMonsterData.getChildByPath("fly/0"));
+        Data standFrame = resolveVisualFrame(visualMonsterData.getChildByPath("stand/0"));
+        Data primaryFrame = flyFrame != null ? flyFrame : standFrame;
+
+        if (flyFrame != null) {
+            stats.setMovetype(1);
+            stats.setImgwidth(DataTool.getAttributeValueInt(flyFrame, "width", -1));
+            stats.setImgheight(DataTool.getAttributeValueInt(flyFrame, "height", -1));
+        } else if (standFrame != null) {
+            stats.setMovetype(0);
+            stats.setImgwidth(DataTool.getAttributeValueInt(standFrame, "width", -1));
+            stats.setImgheight(DataTool.getAttributeValueInt(standFrame, "height", -1));
+        }
+
+        BoundingBox bbox = buildMonsterBoundingBox(mid, stats.getName(), visualMonsterData);
+        if (bbox.isValid()) {
+            stats.setBbox(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
+            return;
+        }
+
+        if (primaryFrame == null) {
+            return;
+        }
+
+        Point origin = DataTool.getPoint("origin", primaryFrame, null);
+        if (origin != null && stats.getImgwidth() > 0 && stats.getImgheight() > 0) {
+            stats.setBbox(-origin.x, -origin.y, stats.getImgwidth() - origin.x, stats.getImgheight() - origin.y);
+        }
+    }
+
     private static void setMonsterAttackInfo(int mid, List<MobAttackInfoHolder> attackInfos) {
         if (!attackInfos.isEmpty()) {
             MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
@@ -99,7 +363,7 @@ public class LifeFactory {
     }
 
     private static Pair<MonsterStats, List<MobAttackInfoHolder>> getMonsterStats(int mid) {
-        Data monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
+        Data monsterData = getMonsterData(mid);
         if (monsterData == null) {
             return null;
         }
@@ -236,15 +500,22 @@ public class LifeFactory {
             stats.setBanishInfo(new BanishInfo(DataTool.getString("banMsg", banishData), DataTool.getInt("banMap/0/field", banishData, -1), DataTool.getString("banMap/0/portal", banishData, "sp")));
         }
 
+        Data visualMonsterData = resolveMonsterVisualData(mid, monsterData);
         int noFlip = DataTool.getInt("noFlip", monsterInfoData, 0);
         if (noFlip > 0) {
-            Point origin = DataTool.getPoint("stand/0/origin", monsterData, null);
+            Data fixedStanceFrame = resolveVisualFrame(visualMonsterData.getChildByPath("stand/0"));
+            if (fixedStanceFrame == null) {
+                fixedStanceFrame = resolvePrimaryVisualFrame(visualMonsterData);
+            }
+            Point origin = fixedStanceFrame == null ? null : DataTool.getPoint("origin", fixedStanceFrame, null);
             if (origin != null) {
                 stats.setFixedStance(origin.getX() < 1 ? 5 : 4);    // fixed left/right
             }
         }
+        // 统一从最终视觉来源回填尺寸与碰撞框，避免 link 怪重复走本地旧逻辑。
+        applyMonsterVisualStats(mid, stats, visualMonsterData);
+        /* 已废弃：以下旧的本地 visual 解析路径仅作留档，当前统一走上面的 link 可视数据解析。
         Data fly = monsterData.getChildByPath("fly/0");
-        Data stand = monsterData.getChildByPath("stand/0");
         if (fly != null) {
             stats.setMovetype(1);   //设定怪物类型为：fly
             fly = fly.getType() == DataType.UOL ? fly.getChildByPath((String) fly.getData()) : fly;  //呼叫转移...
@@ -261,6 +532,20 @@ public class LifeFactory {
             }
 
         }
+        // 计算怪物碰撞框（多动作帧合并），用于后续距离判定和大体型识别
+        BoundingBox bbox = buildMonsterBoundingBox(mid, stats.getName(), monsterData);
+        if (bbox.isValid()) {
+            stats.setBbox(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
+        } else {
+            Point origin = DataTool.getPoint("stand/0/origin", monsterData, null);
+            if (origin == null) {
+                origin = DataTool.getPoint("fly/0/origin", monsterData, null);
+            }
+            if (origin != null && stats.getImgwidth() > 0 && stats.getImgheight() > 0) {
+                stats.setBbox(-origin.x, -origin.y, stats.getImgwidth() - origin.x, stats.getImgheight() - origin.y);
+            }
+        }
+        */
         return new Pair<>(stats, attackInfos);
     }
 
