@@ -201,12 +201,23 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                     int maplePoints = 0;
                     int nxPrepaid = 0;
                     int mesos = 0;
+                    CashShop cs = c.getPlayer().getCashShop();
+                    int incomingCashItems = 0;
+                    for (Pair<Integer, Pair<Integer, Integer>> pair : codeRes.getRight()) {
+                        if (pair.getLeft() >= 5 && ItemInformationProvider.getInstance().isCash(pair.getRight().getLeft())) {
+                            incomingCashItems++;
+                        }
+                    }
+                    if (!cs.canAddToInventory(incomingCashItems)) {
+                        c.sendPacket(PacketCreator.serverNotice(1,
+                                "现金仓库已满，最多只能保留 " + cs.getInventoryLimit() + " 个道具。"));
+                        c.enableCSActions();
+                        return;
+                    }
 
                     for (Pair<Integer, Pair<Integer, Integer>> pair : codeRes.getRight()) {
                         type = pair.getLeft();
                         int quantity = pair.getRight().getRight();
-
-                        CashShop cs = c.getPlayer().getCashShop();
                         switch (type) {
                             case 0:
                                 c.getPlayer().gainMeso(quantity, false); //mesos
