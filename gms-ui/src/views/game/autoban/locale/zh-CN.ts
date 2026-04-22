@@ -1,0 +1,17 @@
+export default {
+  'menu.game.autoban': '自动封禁管理',
+  'autoban.column.type': '类型',
+  'autoban.column.disabled': '禁用',
+  'autoban.column.defaultPoints': '默认触发次数',
+  'autoban.column.defaultExpireTime': '默认检测周期(秒)',
+  'autoban.column.points': '自定义触发次数',
+  'autoban.column.expireTime': '自定义检测周期(秒)',
+  'autoban.column.description': '描述',
+  'autoban.column.operate': '操作',
+  'autoban.points.custom': '自定义触发次数',
+  'autoban.expireTime.custom': '自定义检测周期',
+  'autoban.points.reset': '重置为默认',
+  'autoban.expireTime.reset': '重置为默认',
+  'autoban.save.success': '保存成功',
+  'autoban.neverExpire': '永不过期',
+};

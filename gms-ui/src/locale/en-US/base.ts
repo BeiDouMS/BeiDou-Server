@@ -16,4 +16,5 @@ export default {
   'button.export': 'Export',
   'button.upload': 'Upload',
   'button.download': 'Download',
+  'button.save': 'Save',
 };

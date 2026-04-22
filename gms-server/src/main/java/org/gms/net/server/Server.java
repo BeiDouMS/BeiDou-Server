@@ -158,6 +158,7 @@ public class Server {
     private static final NoteService noteService = ServerManager.getApplicationContext().getBean(NoteService.class);
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
     private static final ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+    private static final AutobanConfigService autobanConfigService = ServerManager.getApplicationContext().getBean(AutobanConfigService.class);
 
     private Server() {
         ReadWriteLock worldLock = new ReentrantReadWriteLock(true);
@@ -708,6 +709,9 @@ public class Server {
 
         // 加载玩家排名
         PlayerNPC.loadRunningRankData(worldCount);
+
+        // 加载自动封禁配置
+        autobanConfigService.loadConfigs();
 
         // 主动清理每日零点需要清理的数据
         new BossLogTask().run();

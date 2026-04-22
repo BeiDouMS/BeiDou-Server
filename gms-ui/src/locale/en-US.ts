@@ -9,6 +9,7 @@ import informationSearch from '@/views/dashboard/informationSearch/locale/en-US'
 import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import inventory from '@/views/game/inventory/locale/en-US';
+import autoban from '@/views/game/autoban/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -25,6 +26,7 @@ export default {
   'menu.game.gachapon': 'Gachapon',
   'menu.game.command': 'Command',
   'menu.game.file': 'File',
+  'menu.game.autoban': 'Autoban',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -55,4 +57,5 @@ export default {
   ...informationSearch,
   ...inventory,
   ...config,
+  ...autoban,
 };

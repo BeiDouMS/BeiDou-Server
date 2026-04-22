@@ -9,6 +9,7 @@ import informationSearch from '@/views/dashboard/informationSearch/locale/zh-CN'
 import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
 import inventory from '@/views/game/inventory/locale/zh-CN';
+import autoban from '@/views/game/autoban/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -26,6 +27,7 @@ export default {
   'menu.game.gachapon': '百宝箱',
   'menu.game.command': 'GM指令',
   'menu.game.file': '文件管理',
+  'menu.game.autoban': '自动封禁',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -58,4 +60,5 @@ export default {
   ...informationSearch,
   ...inventory,
   ...config,
+  ...autoban,
 };

@@ -1,0 +1,17 @@
+export default {
+  'menu.game.autoban': 'Autoban Management',
+  'autoban.column.type': 'Type',
+  'autoban.column.disabled': 'Disabled',
+  'autoban.column.defaultPoints': 'Default Trigger Count',
+  'autoban.column.defaultExpireTime': 'Default Detection Period(s)',
+  'autoban.column.points': 'Custom Trigger Count',
+  'autoban.column.expireTime': 'Custom Detection Period(s)',
+  'autoban.column.description': 'Description',
+  'autoban.column.operate': 'Operate',
+  'autoban.points.custom': 'Custom Trigger Count',
+  'autoban.expireTime.custom': 'Custom Detection Period',
+  'autoban.points.reset': 'Reset to Default',
+  'autoban.expireTime.reset': 'Reset to Default',
+  'autoban.save.success': 'Save Success',
+  'autoban.neverExpire': 'Never Expire',
+};

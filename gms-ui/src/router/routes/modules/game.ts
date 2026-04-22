@@ -102,6 +102,16 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'autoban',
+      name: 'autoban',
+      component: () => import('@/views/game/autoban/index.vue'),
+      meta: {
+        locale: 'menu.game.autoban',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

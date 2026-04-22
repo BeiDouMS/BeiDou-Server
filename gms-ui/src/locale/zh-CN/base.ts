@@ -16,4 +16,5 @@ export default {
   'button.export': '导出',
   'button.upload': '上传',
   'button.download': '下载',
+  'button.save': '保存',
 };

@@ -41,12 +41,20 @@ public class AutobanManager {
                 return;
             }
 
+            // 检查该类型是否被禁用
+            if (fac.isDisabled()) {
+                return;
+            }
+
+            // 获取生效的过期时间
+            long effectiveExpire = fac.getEffectiveExpiretime();
+
             if (lastTime.containsKey(fac)) {
-                if (lastTime.get(fac) < (Server.getInstance().getCurrentTime() - fac.getExpire())) {
+                if (lastTime.get(fac) < (Server.getInstance().getCurrentTime() - effectiveExpire)) {
                     points.put(fac, points.get(fac) / 2); //So the points are not completely gone.
                 }
             }
-            if (fac.getExpire() != -1) {
+            if (effectiveExpire != -1) {
                 lastTime.put(fac, Server.getInstance().getCurrentTime());
             }
 
@@ -56,7 +64,9 @@ public class AutobanManager {
                 points.put(fac, 1);
             }
 
-            if (points.get(fac) >= fac.getMaximum()) {
+            // 获取生效的积分阈值
+            int effectivePoints = fac.getEffectivePoints();
+            if (points.get(fac) >= effectivePoints) {
                 chr.autoBan(reason);
             }
         }
