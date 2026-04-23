@@ -1,8 +1,8 @@
 /*
-	This file is part of the OdinMS Maple Story Server
+    This file is part of the OdinMS Maple Story Server
     Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+               Matthias Butz <matze@odinms.de>
+               Jan Christian Meyer <vimes@odinms.de>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -21,10 +21,10 @@
 */
 
 /* Gordon
-	El Nath: El Nath Market (211000100)
+    El Nath: El Nath Market (211000100)
 
-	Refining NPC:
-	* Shoes, level 60-80 all classes
+    Refining NPC:
+    * Shoes, level 60-80 all classes
 */
 
 var status = 0;
@@ -36,20 +36,18 @@ var matQty;
 var cost;
 
 function start() {
-    cm.getPlayer().setCS(true);
     status = -1;
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == 1) {
+    if (mode == 1)
         status++;
-    } else {
+    else
         cm.dispose();
-    }
     if (status == 0 && mode == 1) {
-        var selStr = "Hello there. El Nath winters are incredibly cold, you're going to need a warm pair of shoes to survive.#b"
-        var options = ["Create Warrior shoes", "Create Bowman shoes", "Create Magician shoes", "Create Thief shoes"];
+        var selStr = "嗨，我是高登 有什么我可以帮助你的？？#b"
+        var options = new Array("做一双战士鞋子", "做一双弓箭手鞋子", "做一双法师鞋子", "做一双盗贼鞋子");
         for (var i = 0; i < options.length; i++) {
             selStr += "\r\n#L" + i + "# " + options[i] + "#l";
         }
@@ -60,25 +58,25 @@ function action(mode, type, selection) {
         var selStr;
         var shoes;
         if (selectedType == 0) { //warrior shoes
-            selStr = "Warrior shoes? Okay, then which set?#b";
-            var shoes = ["Sapphire Camel Boots#k - Warrior Lv. 60#b", "Orihalcon Camel Boots#k - Warrior Lv. 60#b", "Blood Camel Boots#k - Warrior Lv. 60#b",
-                "Blue Carzen Boots#k - Warrior Lv. 70#b", "Purple Carzen Boots#k - Warrior Lv. 70#b", "Dark Carzen Boots#k - Warrior Lv. 70#b",
-                "Red Rivers Boots#k - Warrior Lv. 80#b", "Blue Rivers Boots#k - Warrior Lv. 80#b", "Dark Rivers Boots#k - Warrior Lv. 80#b"];
+            selStr = "战士鞋子？好的，那要哪一套呢？#b";
+            var shoes = ["#t1072147:##k - 剑士 等级. 60#b", "#t1072148:##k - 剑士 等级. 60#b", "#t1072149:##k - 剑士 等级. 60#b",
+                "#t1072154:##k - 战士 等级. 70#b", "#t1072155:##k - 战士 等级. 70#b", "#t1072156:##k - 战士 等级. 70#b",
+                "#t1072210:##k - 战士 等级. 80#b", "#t1072211:##k - 战士 等级. 80#b", "#t1072212:##k - 战士 等级. 80#b"];
         } else if (selectedType == 1) { //bowman shoes
-            selStr = "Bowman shoes? Okay, then which set?#b";
-            var shoes = ["Red Gore Boots#k - Bowman Lv. 60#b", "Blue Gore Boots#k - Bowman Lv. 60#b", "Green Gore Boots#k - Bowman Lv. 60#b",
-                "Blue Elf Boots#k - Bowman Lv. 70#b", "Beige Elf Boots#k - Bowman Lv. 70#b", "Green Elf Boots#k - Bowman Lv. 70#b", "Dark Elf Boots#k - Bowman Lv. 70#b",
-                "Blue Wing Boots#k - Bowman Lv. 80#b", "Red Wing Boots#k - Bowman Lv. 80#b", "Green Wing Boots#k - Bowman Lv. 80#b", "Dark Wing Boots#k - Bowman Lv. 80#b"];
+            selStr = "弓箭手鞋子？好的，那要哪一套呢？#b";
+            var shoes = ["#t1072144:##k - 弓箭手 等级. 60#b", "#t1072145:##k - 弓箭手 等级. 60#b", "#t1072146:##k - 弓箭手 等级. 60#b",
+                "#t1072164:##k - 弓箭手 等级. 70#b", "#t1072165:##k - 弓箭手 等级. 70#b", "#t1072166:##k - 弓箭手 等级. 70#b", "#t1072167:##k - 弓箭手 等级. 70#b",
+                "#t1072182:##k - 弓箭手 等级. 80#b", "#t1072183:##k - 弓箭手 等级. 80#b", "#t1072184:##k - 弓箭手 等级. 80#b", "#t1072185:##k - 弓箭手 等级. 80#b"];
         } else if (selectedType == 2) { //mage shoes
-            selStr = "Magician shoes? Okay, then which set?#b";
-            var shoes = ["Pink Goldrunners#k - Magician Lv. 60#b", "Green Goldrunners#k - Magician Lv. 60#b", "Orange Goldrunners#k - Magician Lv. 60#b", "Blue Goldrunners#k - Magician Lv. 60#b",
-                "Blue Lapiz Sandals#k - Magician Lv. 70#b", "Red Lapiz Sandals#k - Magician Lv. 70#b", "Brown Lapiz Sandals#k - Magician Lv. 70#b", "Gold Lapiz Sandals#k - Magician Lv. 70#b",
-                "Green Enigma Shoes#k - Magician Lv. 80#b", "Purple Enigma Shoes#k - Magician Lv. 80#b", "Dark Enigma Shoes#k - Magician Lv. 80#b"];
+            selStr = "法师鞋子？好的，那要哪一套呢？#b";
+            var shoes = ["#t1072136:##k - 法师 等级. 60#b", "#t1072137:##k - 法师 等级. 60#b", "#t1072138:##k - 法师 等级. 60#b", "#t1072139:##k - 法师 等级. 60#b",
+                "#t1072157:##k - 法师 等级. 70#b", "#t1072158:##k - 法师 等级. 70#b", "#t1072159:##k - 法师 等级. 70#b", "#t1072160:##k - 法师 等级. 70#b",
+                "#t1072177:##k - 法师 等级. 80#b", "#t1072178:##k - 法师 等级. 80#b", "#t1072179:##k - 法师 等级. 80#b"];
         } else if (selectedType == 3) { //thief shoes
-            selStr = "Thief shoes? Okay, then which set?#b";
-            var shoes = ["Blood Moss Boots#k - Thief Lv. 60#b", "Gold Moss Boots#k - Thief Lv. 60#b", "Dark Moss Boots#k - Thief Lv. 60#b",
-                "Purple Mystique Shoes#k - Thief Lv. 70#b", "Blue Mystique Shoes#k - Thief Lv. 70#b", "Red Mystique Shoes#k - Thief Lv. 70#b",
-                "Green Pirate Boots#k - Thief Lv. 80#b", "Red Pirate Boots#k - Thief Lv. 80#b", "Dark Pirate Boots#k - Thief Lv. 80#b"];
+            selStr = "飞侠鞋子？好的，那要哪一套呢？#b";
+            var shoes = ["#t1072150:##k - 盗贼 等级. 60#b", "#t1072151:##k - 盗贼 等级. 60#b", "#t1072152:##k - 盗贼 等级. 60#b",
+                "#t1072161:##k - 盗贼 等级. 70#b", "#t1072162:##k - 盗贼 等级. 70#b", "#t1072163:##k - 盗贼 等级. 70#b",
+                "#t1072172:##k - 盗贼 等级. 80#b", "#t1072173:##k - 盗贼 等级. 80#b", "#t1072174:##k - 盗贼 等级. 80#b"];
         }
         for (var i = 0; i < shoes.length; i++) {
             selStr += "\r\n#L" + i + "# " + shoes[i] + "#l";
@@ -138,7 +136,9 @@ function action(mode, type, selection) {
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
         }
-        var prompt = "You want me to make a #t" + item + "#? In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
+
+        var prompt = "你想要做一双 #r#t" + item + ":##k ？ 我为了要做出最棒的品质，我需要以下物品，我建议你确保装备栏空间足够。\r\n#b";
+
         if (mats instanceof Array) {
             for (var i = 0; i < mats.length; i++) {
                 prompt += "\r\n#i" + mats[i] + "# " + matQty[i] + " #t" + mats[i] + "#";
@@ -146,8 +146,9 @@ function action(mode, type, selection) {
         } else {
             prompt += "\r\n#i" + mats + "# " + matQty + " #t" + mats + "#";
         }
+
         if (cost > 0) {
-            prompt += "\r\n#i4031138# " + cost + " meso";
+            prompt += "\r\n#i4031138# " + cost + " 金钱";
         }
         cm.sendYesNo(prompt);
     } else if (status == 3 && mode == 1) {
