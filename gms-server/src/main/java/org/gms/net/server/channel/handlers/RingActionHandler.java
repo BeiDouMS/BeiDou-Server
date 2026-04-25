@@ -440,16 +440,26 @@ public final class RingActionHandler extends AbstractPacketHandler {
                                     Item weddingTicket = new Item(newItemId, (short) 0, (short) 1);
                                     weddingTicket.setExpiration(expiration);
 
-                                    DueyProcessor.dueyCreatePackage(weddingTicket, 0, groom, guest);
+                                    if (c.getPlayer().haveItem(ItemId.QUICK_DELIVERY_TICKET)) {
+                                        InventoryManipulator.removeById(c, InventoryType.CASH, ItemId.QUICK_DELIVERY_TICKET, (short) 1, false, false);
+                                        DueyProcessor.dueyCreatePackage(weddingTicket, 0, groom, guest , true);
+                                    } else {
+                                        c.getPlayer().dropMessage(1, "对方目前无法直接接收邀请函，发送快递邀请函需要 [特快专递使用券]。");
+                                        c.sendPacket(PacketCreator.enableActions());
+                                        return;
+                                    }
                                 }
                             } else {
                                 c.getPlayer().dropMessage(5, "Wedding is already under way. You cannot invite any more guests for the event.");
+                                return;
                             }
                         } else {
                             c.getPlayer().dropMessage(5, "'" + name + "' is already invited for your marriage.");
+                            return;
                         }
                     } else {
                         c.getPlayer().dropMessage(5, "Invitation was not sent to '" + name + "'. Either the time for your marriage reservation already came or it was not found.");
+                        return;
                     }
 
                 } catch (Exception ex) {
