@@ -2812,6 +2812,10 @@ public class Character extends AbstractCharacterObject {
                                 }
 
                                 if (ItemConstants.isExpirablePet(item.getItemId())) {
+                                    if (item.getPetId() > -1) {
+                                        // 宠物道具真正过期销毁时，同时清理 pets/petignores，避免数据库残留孤儿数据。
+                                        Pet.deleteFromDb(this, item.getPetId());
+                                    }
                                     sendPacket(PacketCreator.itemExpired(item.getItemId()));
                                     toberemove.add(item);
                                 } else {
@@ -4423,6 +4427,82 @@ public class Character extends AbstractCharacterObject {
         chrLock.lock();
         try {
             excluded.get(petId).add(x);
+        } finally {
+            chrLock.unlock();
+        }
+    }
+
+    /**
+     * 统一从数据库加载单只宠物的过滤配置，确保召唤时内存状态与数据库保持一致。
+     */
+    public void loadPetExcludedItems(int petId) {
+        List<Integer> excludedItemIds = inventoryService.getPetIgnoreByPetId(petId).stream()
+                .map(PetignoresDO::getItemid)
+                .filter(Objects::nonNull)
+                .toList();
+        replacePetExcludedItemsInMemory(petId, excludedItemIds);
+    }
+
+    /**
+     * 客户端提交过滤设置时，直接按差异增量更新数据库，避免角色保存时再做危险的全量删写。
+     */
+    public void updatePetExcludedItems(int petId, Set<Integer> newExcludedItems) {
+        Set<Integer> currentExcludedItems = getExcludedForPet(petId);
+        Set<Integer> normalizedExcludedItems = new LinkedHashSet<>(newExcludedItems);
+
+        Set<Integer> toAdd = new LinkedHashSet<>(normalizedExcludedItems);
+        toAdd.removeAll(currentExcludedItems);
+
+        Set<Integer> toRemove = new LinkedHashSet<>(currentExcludedItems);
+        toRemove.removeAll(normalizedExcludedItems);
+
+        inventoryService.addPetIgnoreItems(petId, toAdd);
+        inventoryService.removePetIgnoreItems(petId, toRemove);
+        replacePetExcludedItemsInMemory(petId, normalizedExcludedItems);
+    }
+
+    /**
+     * 宠物被永久删除时同步清理数据库和角色内存中的过滤配置，避免残留脏数据。
+     */
+    public void deletePetExcludedData(int petId) {
+        inventoryService.deletePetData(petId);
+        removeExcluded(petId);
+    }
+
+    public Set<Integer> getExcludedForPet(int petId) {
+        chrLock.lock();
+        try {
+            Set<Integer> petExcludedItems = excluded.get(petId);
+            if (petExcludedItems == null) {
+                return Collections.emptySet();
+            }
+            return Collections.unmodifiableSet(new LinkedHashSet<>(petExcludedItems));
+        } finally {
+            chrLock.unlock();
+        }
+    }
+
+    private void replacePetExcludedItemsInMemory(int petId, Collection<Integer> itemIds) {
+        chrLock.lock();
+        try {
+            excluded.remove(petId);
+            if (itemIds != null && !itemIds.isEmpty()) {
+                LinkedHashSet<Integer> normalizedItems = itemIds.stream()
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
+                if (!normalizedItems.isEmpty()) {
+                    excluded.put(petId, normalizedItems);
+                }
+            }
+        } finally {
+            chrLock.unlock();
+        }
+    }
+
+    private void removeExcluded(int petId) {
+        chrLock.lock();
+        try {
+            excluded.remove(petId);
         } finally {
             chrLock.unlock();
         }
@@ -6308,8 +6388,8 @@ public class Character extends AbstractCharacterObject {
                     Pet pet = item.getPet();
                     if (pet != null && pet.isSummoned()) {
                         chr.addPet(pet);
-                        chr.resetExcluded(item.getPetId());
-                        inventoryService.getPetIgnoreByPetId(item.getPetId()).forEach(petignoresDO -> chr.addExcluded(petignoresDO.getPetid(), petignoresDO.getItemid()));
+                        // 登录时对已召唤宠物统一走同一套过滤配置加载逻辑，避免后续入口行为不一致。
+                        chr.loadPetExcludedItems(item.getPetId());
                     }
                     continue;
                 }
@@ -7528,22 +7608,6 @@ public class Character extends AbstractCharacterObject {
 
                 for (Pet pet : petList) {
                     pet.saveToDb();
-                }
-
-                for (Entry<Integer, Set<Integer>> es : getExcluded().entrySet()) {    // this set is already protected
-                    try (PreparedStatement psIgnore = con.prepareStatement("DELETE FROM petignores WHERE petid=?")) {
-                        psIgnore.setInt(1, es.getKey());
-                        psIgnore.executeUpdate();
-                    }
-
-                    try (PreparedStatement psIgnore = con.prepareStatement("INSERT INTO petignores (petid, itemid) VALUES (?, ?)")) {
-                        psIgnore.setInt(1, es.getKey());
-                        for (Integer x : es.getValue()) {
-                            psIgnore.setInt(2, x);
-                            psIgnore.addBatch();
-                        }
-                        psIgnore.executeBatch();
-                    }
                 }
 
                 // Key config

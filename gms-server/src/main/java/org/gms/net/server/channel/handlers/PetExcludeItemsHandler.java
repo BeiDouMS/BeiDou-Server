@@ -28,6 +28,9 @@ import org.gms.client.inventory.Pet;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  * @author BubblesDev
  * @author Ronan
@@ -50,17 +53,21 @@ public final class PetExcludeItemsHandler extends AbstractPacketHandler {
             return;
         }
 
-        chr.resetExcluded(petId);
+        Set<Integer> newExcludedItems = new LinkedHashSet<>();
         byte amount = p.readByte();
         for (int i = 0; i < amount; i++) {
             int itemId = p.readInt();
             if (itemId >= 0) {
-                chr.addExcluded(petId, itemId);
+                newExcludedItems.add(itemId);
             } else {
                 AutobanFactory.PACKET_EDIT.alert(chr, "negative item id value in PetExcludeItemsHandler (" + itemId + ")");
                 return;
             }
         }
+
+        // 客户端会提交完整过滤列表，这里先确保旧配置已加载，再按差异增量更新数据库和内存。
+        chr.loadPetExcludedItems(petId);
+        chr.updatePetExcludedItems(petId, newExcludedItems);
         chr.commitExcludedItems();
     }
 }
