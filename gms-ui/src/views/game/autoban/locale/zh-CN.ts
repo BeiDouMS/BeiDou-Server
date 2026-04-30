@@ -1,5 +1,4 @@
 export default {
-  'menu.game.autoban': '自动封禁管理',
   'autoban.column.type': '类型',
   'autoban.column.disabled': '禁用',
   'autoban.column.defaultPoints': '默认触发次数',

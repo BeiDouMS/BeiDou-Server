@@ -1,5 +1,4 @@
 export default {
-  'menu.game.autoban': 'Autoban Management',
   'autoban.column.type': 'Type',
   'autoban.column.disabled': 'Disabled',
   'autoban.column.defaultPoints': 'Default Trigger Count',
