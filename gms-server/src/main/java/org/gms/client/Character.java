@@ -99,6 +99,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
@@ -508,9 +509,25 @@ public class Character extends AbstractCharacterObject {
      * 最后攻击时间
      * 用来校验攻击速度是否过快
      */
-    @Setter
-    @Getter
-    private long lastAttackTime = 0;
+    private final ConcurrentHashMap<Integer, Long> lastAttackTimes = new ConcurrentHashMap<>();
+
+    /**
+     * 原子更新指定技能的最后攻击时间，并返回与上次记录的时间间隔（毫秒）。
+     * 若是首次记录或出现时钟回退，返回 Long.MAX_VALUE 表示本次不参与间隔判定。
+     */
+    public long updateLastAttackTimeAndGetInterval(int skillId, long currentTimeMillis) {
+        AtomicLong intervalMillis = new AtomicLong(Long.MAX_VALUE);
+        lastAttackTimes.compute(skillId, (ignored, previousTime) -> {
+            long previous = previousTime == null ? 0L : previousTime;
+            if (previous > 0L && currentTimeMillis > previous) {
+                intervalMillis.set(currentTimeMillis - previous);
+            }
+            // 保证每个技能的时间记录单调不回退，避免并发写入覆盖新值。
+            return Math.max(previous, currentTimeMillis);
+        });
+        return intervalMillis.get();
+    }
+
 
     private Character() {
         super.setListener(new CharacterListener(this));
