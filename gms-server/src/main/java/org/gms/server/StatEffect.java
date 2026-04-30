@@ -882,24 +882,19 @@ public class StatEffect {
      */
     public void applyPassive(Character applyto, MapObject obj, int attack) {
         if (makeChanceResult()) {
-            switch (sourceid) { // MP eater
-                case FPWizard.MP_EATER:
-                case ILWizard.MP_EATER:
-                case Cleric.MP_EATER:
-                    if (obj == null || obj.getType() != MapObjectType.MONSTER) {
-                        return;
+            if (sourceid == FPWizard.MP_EATER || sourceid == ILWizard.MP_EATER || sourceid == Cleric.MP_EATER) { // MP eater
+                if (obj == null || obj.getType() != MapObjectType.MONSTER) return;
+
+                Monster mob = (Monster) obj; // x is absorb percentage
+                if (!mob.isBoss()) {
+                    int absorbMp = Math.min((int) (mob.getMaxMp() * (getX() / 100.0)), mob.getMp());
+                    if (absorbMp > 0) {
+                        mob.setMp(mob.getMp() - absorbMp);
+                        applyto.addMP(absorbMp);
+                        applyto.sendPacket(PacketCreator.showOwnBuffEffect(sourceid, 1));
+                        applyto.getMap().broadcastMessage(applyto, PacketCreator.showBuffEffect(applyto.getId(), sourceid, 1), false);
                     }
-                    Monster mob = (Monster) obj; // x is absorb percentage
-                    if (!mob.isBoss()) {
-                        int absorbMp = Math.min((int) (mob.getMaxMp() * (getX() / 100.0)), mob.getMp());
-                        if (absorbMp > 0) {
-                            mob.setMp(mob.getMp() - absorbMp);
-                            applyto.addMP(absorbMp);
-                            applyto.sendPacket(PacketCreator.showOwnBuffEffect(sourceid, 1));
-                            applyto.getMap().broadcastMessage(applyto, PacketCreator.showBuffEffect(applyto.getId(), sourceid, 1), false);
-                        }
-                    }
-                    break;
+                }
             }
         }
     }

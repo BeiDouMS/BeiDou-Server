@@ -49,17 +49,17 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            var greeting = "Hello, I'm #p9209000#, the Skill & Mastery Book announcer! ";
+            var greeting = "你好，我是#p9209000#，是技能书和能手册的解说员！";
 
             if (cm.getPlayer().isCygnus()) {
-                cm.sendOk(greeting + "There are no skill or mastery books available for Cygnus Knights.");
+                cm.sendOk(greeting + "骑士团没有可用的技能书或能手册。");
                 cm.dispose();
                 return;
             }
 
             var jobrank = cm.getJob().getId() % 10;
             if (jobrank < 2) {
-                cm.sendOk(greeting + "Keep training yourself until you reach the #r4th job#k of your class. New opportunities for improvement will arrive when you reach that feat!");
+                cm.sendOk(greeting + "继续锻炼自己，直到你达到当前职业#r四转#k。当你达到这一成就时，新的提升机会将会到来！");
                 cm.dispose();
                 return;
             }
@@ -68,13 +68,13 @@ function action(mode, type, selection) {
             masterybook = cm.getAvailableMasteryBooks();
 
             if (skillbook.length == 0 && masterybook.length == 0) {
-                cm.sendOk(greeting + "There are no books available to further improve your job skills for now. Either you #bmaxed out everything#k or #byou didn't reach the minimum requisites to use some skill books#k yet.");
+                cm.sendOk(greeting + "目前没有可用的技能书来进一步提升你的技能。要么你已经#b将所有技能都学满了#k，要么#b你还没有达到使用某些技能书籍的最低要求#k。");
                 cm.dispose();
             } else if (skillbook.length > 0 && masterybook.length > 0) {
-                var sendStr = greeting + "New opportunities for skill improvement have been located for you to improve your skills! Pick a type to take a look onto.\r\n\r\n#b";
+                var sendStr = greeting + "我们为你找到了提升技能的新机会，快来提升你的技能吧！选择一个类型来查看。\r\n\r\n#b";
 
-                sendStr += "#L1# Skill Book#l\r\n";
-                sendStr += "#L2# Mastery Book#l\r\n";
+                sendStr += "#L1# 技能书#l\r\n";
+                sendStr += "#L2# 能手册#l\r\n";
 
                 cm.sendSimple(sendStr);
             } else if (skillbook.length > 0) {
