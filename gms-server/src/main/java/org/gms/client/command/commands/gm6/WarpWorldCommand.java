@@ -53,6 +53,9 @@ public class WarpWorldCommand extends Command {
                 String[] socket = server.getInetSocket(c, worldb, c.getChannel());
                 c.getWorldServer().removePlayer(player);
                 player.getMap().removePlayer(player);//LOL FORGOT THIS ><
+                // 跨世界会重新加载角色对象。
+                // 先同步在线时长，避免回流时使用旧库值。
+                player.syncOnlineTimeBeforeSessionTransition();
                 player.setSessionTransitionState();
                 player.setWorld(worldb);
                 player.saveCharToDB();//To set the new world :O (true because else 2 player instances are created, one in both worlds)

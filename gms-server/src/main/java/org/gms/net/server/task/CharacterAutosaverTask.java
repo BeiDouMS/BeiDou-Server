@@ -47,6 +47,8 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
         PlayerStorage ps = wserv.getPlayerStorage();
         for (Character chr : ps.getAllCharacters()) {
             if (chr != null && chr.isLoggedIn()) {
+                // 自动存档时一并同步在线时长，降低异常停服后每日在线时长大幅回退的概率。
+                chr.syncOnlineTimeToDailyRecord();
                 chr.saveCharToDB(false);
             }
         }

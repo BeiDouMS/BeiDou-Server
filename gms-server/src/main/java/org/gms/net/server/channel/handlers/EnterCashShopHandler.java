@@ -94,6 +94,9 @@ public class EnterCashShopHandler extends AbstractPacketHandler {
             c.getChannelServer().removePlayer(mc);
             mc.getMap().removePlayer(mc);
             mc.getCashShop().open(true);
+            // 进入商城不会走完整断线流程。
+            // 返回频道后会重新初始化在线时长，先落库可以避免被旧值覆盖。
+            mc.syncOnlineTimeBeforeSessionTransition();
             mc.saveCharToDB();
         } catch (Exception e) {
             e.printStackTrace();
