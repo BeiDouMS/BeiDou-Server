@@ -106,6 +106,7 @@ public class ItemInformationProvider {
     protected Map<Integer, Boolean> accountItemRestrictionCache = new HashMap<>();
     protected Map<Integer, Boolean> dropRestrictionCache = new HashMap<>();
     protected Map<Integer, Boolean> pickupRestrictionCache = new HashMap<>();
+    protected Map<Integer, Boolean> itemExistenceCache = new HashMap<>();
     protected Map<Integer, Integer> getMesoCache = new HashMap<>();
     protected Map<Integer, Integer> monsterBookID = new HashMap<>();
     protected Map<Integer, Boolean> untradeableCache = new HashMap<>();
@@ -317,6 +318,20 @@ public class ItemInformationProvider {
             }
         }
         return ret;
+    }
+
+    /**
+     * 检查物品ID是否存在于WZ资源中，结果会缓存，避免重复遍历资源目录。
+     */
+    public boolean itemExists(int itemId) {
+        Boolean cached = itemExistenceCache.get(itemId);
+        if (cached != null) {
+            return cached;
+        }
+
+        boolean exists = getItemData(itemId) != null;
+        itemExistenceCache.put(itemId, exists);
+        return exists;
     }
 
     public List<Integer> getItemIdsInRange(int minId, int maxId, boolean ignoreCashItem) {

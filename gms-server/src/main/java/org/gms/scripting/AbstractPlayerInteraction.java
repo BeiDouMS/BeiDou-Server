@@ -597,6 +597,10 @@ public class AbstractPlayerInteraction {
         int petId = -1;
 
         if (quantity >= 0) {
+            if (quantity == 0) {
+                log.warn("拦截gainItem：数量不能为0，角色ID={}，itemId={}", getPlayer().getId(), id);
+                return null;
+            }
             if (ItemConstants.isPet(id)) {
                 petId = Pet.createPet(id);
 
@@ -622,6 +626,10 @@ public class AbstractPlayerInteraction {
             }
 
             ItemInformationProvider ii = ItemInformationProvider.getInstance();
+            if (!ii.itemExists(id)) {
+                log.warn("拦截gainItem：物品ID不存在，itemId={}，角色ID={}", id, getPlayer().getId());
+                return null;
+            }
 
             if (ItemConstants.getInventoryType(id).equals(InventoryType.EQUIP)) {
                 item = ii.getEquipById(id);
@@ -643,6 +651,10 @@ public class AbstractPlayerInteraction {
             } else {
                 item = new Item(id, (short) 0, quantity, petId);
             }
+            if (item == null) {
+                log.warn("拦截gainItem：物品对象为空，角色ID={}，itemId={}", getPlayer().getId(), id);
+                return null;
+            }
 
             if (expires >= 0) {
                 item.setExpiration(System.currentTimeMillis() + expires);
@@ -654,12 +666,18 @@ public class AbstractPlayerInteraction {
             }
             if (ItemConstants.getInventoryType(id) == InventoryType.EQUIP) {
                 if (randomStats) {
-                    InventoryManipulator.addFromDrop(c, ii.randomizeStats((Equip) item), false, petId);
+                    if (!InventoryManipulator.addFromDrop(c, ii.randomizeStats((Equip) item), false, petId)) {
+                        return null;
+                    }
                 } else {
-                    InventoryManipulator.addFromDrop(c, item, false, petId);
+                    if (!InventoryManipulator.addFromDrop(c, item, false, petId)) {
+                        return null;
+                    }
                 }
             } else {
-                InventoryManipulator.addFromDrop(c, item, false, petId);
+                if (!InventoryManipulator.addFromDrop(c, item, false, petId)) {
+                    return null;
+                }
             }
         } else {
             InventoryManipulator.removeById(c, ItemConstants.getInventoryType(id), id, -quantity, true, false);
@@ -669,6 +687,49 @@ public class AbstractPlayerInteraction {
         }
 
         return item;
+    }
+
+    public boolean exchangeItems(int requiredItemId, int requiredQuantity, int rewardItemId, int rewardQuantity) {
+        if (requiredQuantity <= 0 || rewardQuantity <= 0) {
+            log.warn("拦截exchangeItems：参数数量非法，角色ID={}，requiredItemId={}，requiredQuantity={}，rewardItemId={}，rewardQuantity={}",
+                    getPlayer().getId(), requiredItemId, requiredQuantity, rewardItemId, rewardQuantity);
+            return false;
+        }
+        if (!haveItem(requiredItemId, requiredQuantity)) {
+            return false;
+        }
+        if (!canHold(rewardItemId, rewardQuantity, requiredItemId, requiredQuantity)) {
+            return false;
+        }
+
+        int beforeRequired = getPlayer().getItemQuantity(requiredItemId, false);
+        try {
+            gainItem(requiredItemId, (short) -requiredQuantity, false, false);
+        } catch (Exception e) {
+            int removed = beforeRequired - getPlayer().getItemQuantity(requiredItemId, false);
+            if (removed > 0) {
+                gainItem(requiredItemId, (short) removed, false, false);
+            }
+            log.warn("exchangeItems扣除材料失败，角色ID={}，requiredItemId={}，requiredQuantity={}",
+                    getPlayer().getId(), requiredItemId, requiredQuantity, e);
+            return false;
+        }
+
+        Item reward = gainItem(rewardItemId, (short) rewardQuantity, false, false);
+        if (reward == null) {
+            try {
+                Item rollback = gainItem(requiredItemId, (short) requiredQuantity, false, false);
+                if (rollback == null) {
+                    log.error("exchangeItems回滚材料失败，角色ID={}，requiredItemId={}，requiredQuantity={}，rewardItemId={}，rewardQuantity={}",
+                            getPlayer().getId(), requiredItemId, requiredQuantity, rewardItemId, rewardQuantity);
+                }
+            } catch (Exception e) {
+                log.error("exchangeItems回滚材料异常，角色ID={}，requiredItemId={}，requiredQuantity={}，rewardItemId={}，rewardQuantity={}",
+                        getPlayer().getId(), requiredItemId, requiredQuantity, rewardItemId, rewardQuantity, e);
+            }
+            return false;
+        }
+        return true;
     }
 
     public void gainFame(int delta) {

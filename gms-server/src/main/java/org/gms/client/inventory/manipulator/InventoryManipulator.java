@@ -85,8 +85,16 @@ public class InventoryManipulator {
 
     private static boolean addByIdInternal(Client c, Character chr, InventoryType type, Inventory inv, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        if (!ii.itemExists(itemId)) {
+            log.warn("拦截发放物品：物品ID不存在，itemId={}，角色ID={}", itemId, chr.getId());
+            return false;
+        }
         if (!type.equals(InventoryType.EQUIP)) {
             short slotMax = ii.getSlotMax(c, itemId);
+            if (slotMax <= 0) {
+                log.warn("拦截发放物品：slotMax非法，itemId={}，slotMax={}，角色ID={}", itemId, slotMax, chr.getId());
+                return false;
+            }
             List<Item> existing = inv.listById(itemId);
             if (!ItemConstants.isRechargeable(itemId) && petid == -1) {
                 if (existing.size() > 0) { // first update all existing slots to slotMax
@@ -150,6 +158,10 @@ public class InventoryManipulator {
             }
         } else if (quantity == 1) {
             Item nEquip = ii.getEquipById(itemId);
+            if (nEquip == null) {
+                log.warn("拦截发放装备：物品ID不存在，itemId={}，角色ID={}", itemId, chr.getId());
+                return false;
+            }
             nEquip.setFlag(flag);
             nEquip.setExpiration(expiration);
             if (owner != null) {
@@ -200,10 +212,20 @@ public class InventoryManipulator {
             c.sendPacket(PacketCreator.showItemUnavailable());
             return false;
         }
+        if (!ii.itemExists(itemid)) {
+            log.warn("拦截掉落入包：物品ID不存在，itemId={}，角色ID={}", itemid, chr.getId());
+            c.sendPacket(PacketCreator.showItemUnavailable());
+            return false;
+        }
         short quantity = item.getQuantity();
 
         if (!type.equals(InventoryType.EQUIP)) {
             short slotMax = ii.getSlotMax(c, itemid);
+            if (slotMax <= 0) {
+                log.warn("拦截掉落入包：slotMax非法，itemId={}，slotMax={}，角色ID={}", itemid, slotMax, chr.getId());
+                c.sendPacket(PacketCreator.showItemUnavailable());
+                return false;
+            }
             List<Item> existing = inv.listById(itemid);
             if (!ItemConstants.isRechargeable(itemid) && petId == -1) {
                 if (existing.size() > 0) { // first update all existing slots to slotMax
@@ -226,6 +248,10 @@ public class InventoryManipulator {
                 }
                 while (quantity > 0) {
                     short newQ = (short) Math.min(quantity, slotMax);
+                    if (newQ <= 0) {
+                        log.warn("中止掉落入包：数量非法，itemId={}，quantity={}，slotMax={}，角色ID={}", itemid, quantity, slotMax, chr.getId());
+                        return false;
+                    }
                     quantity -= newQ;
                     Item nItem = new Item(itemid, (short) 0, newQ, petId);
                     nItem.setExpiration(item.getExpiration());
@@ -297,6 +323,10 @@ public class InventoryManipulator {
         InventoryType type = ItemConstants.getInventoryType(itemid);
         Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
+        if (!ii.itemExists(itemid)) {
+            log.warn("背包空间校验失败：物品ID不存在，itemId={}，角色ID={}", itemid, chr.getId());
+            return false;
+        }
 
         if (ii.isPickupRestricted(itemid)) {
             if (haveItemWithId(inv, itemid)) {
@@ -308,6 +338,9 @@ public class InventoryManipulator {
 
         if (!type.equals(InventoryType.EQUIP)) {
             short slotMax = ii.getSlotMax(c, itemid);
+            if (slotMax <= 0) {
+                return false;
+            }
             List<Item> existing = inv.listById(itemid);
 
             final int numSlotsNeeded;
@@ -352,6 +385,9 @@ public class InventoryManipulator {
         InventoryType type = !useProofInv ? ItemConstants.getInventoryType(itemid) : InventoryType.CANHOLD;
         Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
+        if (!ii.itemExists(itemid)) {
+            return 0;
+        }
 
         if (ii.isPickupRestricted(itemid)) {
             if (haveItemWithId(inv, itemid)) {
@@ -363,6 +399,9 @@ public class InventoryManipulator {
 
         if (!type.equals(InventoryType.EQUIP)) {
             short slotMax = ii.getSlotMax(c, itemid);
+            if (slotMax <= 0) {
+                return 0;
+            }
             final int numSlotsNeeded;
 
             if (ItemConstants.isRechargeable(itemid)) {

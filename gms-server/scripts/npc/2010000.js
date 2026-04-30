@@ -106,7 +106,7 @@ eQuestPrizes[14] = [[2000006, 30],	// Mana Elixir
     [2040805, 1]];   // 10% Glove Attack
 eQuestPrizes[15] = [[2000006, 30],   // Mana Elixir
     [4020006, 7],	// Topaz Ore
-    [4020008.2],	// Black Crystal Ore
+    [4020008, 2],	// Black Crystal Ore
     [4020007, 2],	// Diamond Ore
     [2041020, 1]];	// 10% Cape Dex
 eQuestPrizes[16] = [[2000001, 30],	// Orange Potions
@@ -159,7 +159,7 @@ eQuestPrizes[23] = [[2000006, 25],	// Mana Elixir
     [2041023, 1]];	// 10% Cape LUK
 eQuestPrizes[24] = [[2000006, 35],	// Mana Elixir
     [4020006, 9],	// Topaz Ore
-    [4010008, 4],	// Black Crystal Ore
+    [4020008, 4],	// Black Crystal Ore
     [4020007, 4],	// Diamond Ore
     [2041008, 1]];   // 10% Cape HP
 var requiredItem = 0;
@@ -199,12 +199,14 @@ function action(mode, type, selection) {
         prizeQuantity = reward[itemSet][1];
         if (!cm.haveItem(requiredItem, 100)) {
             cm.sendOk("Hmmm... are you sure you have #b100 #t" + requiredItem + "##k? If so, then please check and see if your item inventory is full or not.");
-        } else if (!cm.canHold(prizeItem)) {
+        } else if (prizeItem <= 0 || prizeQuantity <= 0) {
+            cm.sendOk("Something's wrong with my trade list right now. Please try again later.");
+        } else if (!cm.canHold(prizeItem, prizeQuantity, requiredItem, 100)) {
             cm.sendOk("Your use and etc. inventory seems to be full. You need the free spaces to trade with me! Make room, and then find me.");
+        } else if (!cm.exchangeItems(requiredItem, 100, prizeItem, prizeQuantity)) {
+            cm.sendOk("I can't complete this trade right now. Please try again in a moment.");
         } else {
-            cm.gainItem(requiredItem, -100);
             cm.gainExp(500 * cm.getPlayer().getExpRate());
-            cm.gainItem(prizeItem, prizeQuantity);
             cm.sendOk("For your #b100 #t" + requiredItem + "##k, here's my #b" + prizeQuantity + " #t" + prizeItem + "##k. What do you think? Do you like the items I gave you in return? I plan on being here for a while, so if you gather up more items, I'm always open for a trade ...");
         }
         cm.dispose();
