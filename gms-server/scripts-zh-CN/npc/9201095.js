@@ -57,8 +57,8 @@ function action(mode, type, selection) {
     }
 
     if (status == 0 && mode == 1) {
-        var selStr = "Hey, partner! If you have the right goods, I can turn it into something very nice...#b"
-        var options = ["Weapon Forging", "Weapon Upgrading"];
+        var selStr = "嘿，伙计！如果你带来了合适的材料，我可以把它打造成相当不错的武器……#b"
+        var options = ["武器锻造", "武器升级"];
         for (var i = 0; i < options.length; i++) {
             selStr += "\r\n#L" + i + "# " + options[i] + "#l";
         }
@@ -66,7 +66,7 @@ function action(mode, type, selection) {
     } else if (status == 1 && mode == 1) {
         selectedType = selection;
         if (selectedType == 0) { //weapon forge
-            var selStr = "So, what kind of weapon would you like me to forge?#b";
+            var selStr = "那么，你想让我为你锻造哪种武器呢？#b";
             var weapon = ["#t2070018#", "#t1382060#", "#t1442068#", "#t1452060#"];
             for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
@@ -74,7 +74,7 @@ function action(mode, type, selection) {
 
             cm.sendSimple(selStr);
         } else if (selectedType == 1) { //weapon upgrade
-            var selStr = "An upgraded weapon? Of course, but note that upgrades won't carry over to the new item... #b";
+            var selStr = "想升级武器吗？当然可以，不过要注意，升级后的新武器不会继承原来的强化效果……#b";
             var weapon = ["#t1472074#", "#t1472073#", "#t1472075#", "#t1332079#", "#t1332078#", "#t1332080#", "#t1462054#", "#t1462053#", "#t1462055#", "#t1402050#", "#t1402049#", "#t1402051#"];
             for (var i = 0; i < weapon.length; i++) {
                 selStr += "\r\n#L" + i + "# " + weapon[i] + "#l";
@@ -107,14 +107,15 @@ function action(mode, type, selection) {
             cost = costSet[selectedItem];
         }
 
-        var prompt = "You want me to make ";
+        var prompt = "你想让我制作 ";
+
         if (qty == 1) {
-            prompt += "a #t" + item + "#?";
+            prompt += "一个 #t" + item + "# 吗？";
         } else {
-            prompt += qty + " #t" + item + "#?";
+            prompt += qty + " 个 #t" + item + "# 吗？";
         }
 
-        prompt += " In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
+        prompt += " 那么，我需要你提供特定的材料才能完成制作。另外请确保你的物品栏有足够的空间！#b";
 
         if (mats instanceof Array) {
             for (var i = 0; i < mats.length; i++) {
@@ -125,7 +126,7 @@ function action(mode, type, selection) {
         }
 
         if (cost > 0) {
-            prompt += "\r\n#i4031138# " + cost * qty + " meso";
+            prompt += "\r\n#i4031138# " + cost * qty + " 金币";
         }
 
         cm.sendYesNo(prompt);
@@ -136,11 +137,11 @@ function action(mode, type, selection) {
         recvQty = qty;
 
         if (!cm.canHold(recvItem, recvQty)) {
-            cm.sendOk("首先检查你的物品栏是否有空位。");
+            cm.sendOk("请先确认你的物品栏是否有足够的空位。");
             cm.dispose();
             return;
         } else if (cm.getMeso() < cost * qty) {
-            cm.sendOk("恐怕你没有足够的钱来付我，伙计。请先检查一下，好吗？");
+            cm.sendOk("恐怕你的金币不够支付费用，伙计。请先检查一下。");
             cm.dispose();
             return;
         } else {
@@ -156,7 +157,7 @@ function action(mode, type, selection) {
         }
 
         if (!complete) {
-            cm.sendOk("“嘿，我需要这些物品来正确制作，你知道吗？”");
+            cm.sendOk("嘿，我需要这些材料才能正确制作武器，你明白的吧？");
         } else {
             if (mats instanceof Array) {
                 for (var i = 0; i < mats.length; i++) {
@@ -170,7 +171,7 @@ function action(mode, type, selection) {
             }
 
             cm.gainItem(recvItem, recvQty);
-            cm.sendOk("都搞定了。如果你还需要什么……嗯，我不会走开的。");
+            cm.sendOk("完成了。如果你还需要什么……嗯，我一直都在这里。");
         }
         cm.dispose();
     }
