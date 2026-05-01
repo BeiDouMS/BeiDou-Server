@@ -653,14 +653,14 @@ public class AssignAPProcessor {
                     int level = player.getLevel();
                     Job job = player.getJob();
                     boolean canWash = true;
-                    if (job.isA(Job.SPEARMAN) && mp < 4 * level + 156) {
-                        canWash = false;
-                    } else if ((job.isA(Job.FIGHTER) || job.isA(Job.ARAN1)) && mp < 4 * level + 56) {
-                        canWash = false;
-                    } else if (job.isA(Job.THIEF) && job.getId() % 100 > 0 && mp < level * 14 - 4) {
-                        canWash = false;
-                    } else if (mp < level * 14 + 148) {
-                        canWash = false;
+					if (job.isA(Job.SPEARMAN)) {
+                        canWash = mp >= 4 * level + 156;
+                    } else if (job.isA(Job.FIGHTER) || job.isA(Job.ARAN1)) {
+                        canWash = mp >= 4 * level + 56;
+                    } else if (job.isA(Job.THIEF) && job.getId() % 100 > 0) {
+                        canWash = mp >= level * 14 - 4;
+                    } else {
+                        canWash = mp >= level * 14 + 148;
                     }
                     if (!canWash) {
                         player.message("你的MP总量不足，无法进行重置。");
