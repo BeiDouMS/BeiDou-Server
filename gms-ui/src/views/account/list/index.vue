@@ -4,10 +4,10 @@
     <a-card class="general-card" :title="$t('menu.account.list')">
       <a-form :model="filterForm" class="a-from-keyword">
         <a-form-item :label="$t('account.list.filter.id')">
-          <a-input-number v-model="filterForm.id" />
+          <a-input-number v-model="filterForm.id" @keydown.enter="loadData"/>
         </a-form-item>
         <a-form-item :label="$t('account.list.filter.name')">
-          <a-input v-model="filterForm.name" />
+          <a-input v-model="filterForm.name"  @keydown.enter="loadData"/>
         </a-form-item>
         <a-form-item :label="$t('account.list.filter.lastLoginStart')">
           <a-date-picker
