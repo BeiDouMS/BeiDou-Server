@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /* Jack - Refining NPC
-	@author ronancpl (Ronan)
+    @author ronancpl (Ronan)
  */
 
 var status = 0;
@@ -30,7 +30,7 @@ var matQty;
 var cost;
 var qty;
 var equip;
-var last_use; //last item is a use item
+var last_use; //上次选择的物品是消耗品
 
 function start() {
     cm.getPlayer().setCS(true);
@@ -48,10 +48,10 @@ function action(mode, type, selection) {
     }
 
     if (status == 0) {
-        var selStr = "Hey, are you aware about the expeditions running right now at the Crimsonwood Keep? So, there is a great opportunity for one to improve themselves, one can rack up experience and loot pretty fast there.";
+        var selStr = "嘿，你知道现在绯红峡谷正在进行的远征活动吗？这是一个提升自己的好机会，在那里可以快速积累经验和战利品。";
         cm.sendNext(selStr);
     } else if (status == 1) {
-        var selStr = "Said so, methinks making use of some strong utility potions can potentially create some differential on the front, and by this I mean to start crafting #b#t2022284##k's to help on the efforts. So, getting right down to business, I'm currently pursuing #rplenty#k of those items: #r#t4032010##k, #r#t4032011##k, #r#t4032012##k, and some funds to support the cause. Would you want to get some of these boosters?";
+        var selStr = "既然如此，我认为使用一些强力的辅助药水可以在前线产生一些优势。我的意思是开始制作 #b#t2022284##k 来协助远征。目前我正在收集 #r大量#k 这些物品：#r#t4032010##k、#r#t4032011##k、#r#t4032012##k，以及一些资金来支持行动。你想获取一些这些增益物品吗？";
         cm.sendYesNo(selStr);
     } else if (status == 2) {
         //selectedItem = selection;
@@ -66,31 +66,31 @@ function action(mode, type, selection) {
         matQty = matQtySet[selectedItem];
         cost = costSet[selectedItem];
 
-        var prompt = "Ok, I'll be crafting some #t" + item + "#. In that case, how many of those do you want me to make?";
+        var prompt = "好的，我将制作一些 #t" + item + "#。你希望我制作多少个？";
         cm.sendGetNumber(prompt, 1, 1, 100)
     } else if (status == 3) {
         qty = (selection > 0) ? selection : (selection < 0 ? -selection : 1);
         last_use = false;
 
-        var prompt = "So, you want me to make ";
+        var prompt = "所以，你想让我制作 ";
         if (qty == 1) {
-            prompt += "a #t" + item + "#?";
+            prompt += "一个 #t" + item + "#？";
         } else {
-            prompt += qty + " #t" + item + "#?";
+            prompt += qty + " 个 #t" + item + "#？";
         }
 
-        prompt += " In that case, I'm going to need specific items from you in order to make it. And make sure you have room in your inventory!#b";
+        prompt += " 为此，我需要你提供一些特定的材料。同时确保你的背包有足够的空间！#b";
 
         if (mats instanceof Array) {
             for (var i = 0; i < mats.length; i++) {
-                prompt += "\r\n#i" + mats[i] + "# " + matQty[i] * qty + " #t" + mats[i] + "#";
+                prompt += "\r\n#i" + mats[i] + "# " + matQty[i] * qty + " 个 #t" + mats[i] + "#";
             }
         } else {
-            prompt += "\r\n#i" + mats + "# " + matQty * qty + " #t" + mats + "#";
+            prompt += "\r\n#i" + mats + "# " + matQty * qty + " 个 #t" + mats + "#";
         }
 
         if (cost > 0) {
-            prompt += "\r\n#i4031138# " + cost * qty + " meso";
+            prompt += "\r\n#i4031138# " + cost * qty + " 金币";
         }
         cm.sendYesNo(prompt);
     } else if (status == 4) {
@@ -114,7 +114,7 @@ function action(mode, type, selection) {
             }
 
             if (!complete) {
-                cm.sendOk("您的库存中资源不足。请再次检查。");
+                cm.sendOk("你的库存中材料不足，请检查后再试。");
             } else {
                 if (mats instanceof Array) {
                     for (var i = 0; i < mats.length; i++) {
@@ -125,7 +125,7 @@ function action(mode, type, selection) {
                 }
                 cm.gainMeso(-cost * qty);
                 cm.gainItem(item, qty);
-                cm.sendOk("就是这样！谢谢你的合作。");
+                cm.sendOk("好了！谢谢你的合作。");
             }
         }
         cm.dispose();
