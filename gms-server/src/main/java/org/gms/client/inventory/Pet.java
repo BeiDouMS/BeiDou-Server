@@ -97,14 +97,11 @@ public class Pet extends Item {
     }
 
     public static void deleteFromDb(Character owner, int petid) {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("DELETE FROM pets WHERE `petid` = ?")) {
-            // thanks Vcoc for detecting petignores remaining after deletion
-            ps.setInt(1, petid);
-
-            owner.resetExcluded(petid);
+        try {
+            // 宠物基础数据删除后，petignores 会通过外键级联清理，这里同步移除角色内存中的缓存。
+            owner.deletePetExcludedData(petid);
             CashIdGenerator.freeCashId(petid);
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
