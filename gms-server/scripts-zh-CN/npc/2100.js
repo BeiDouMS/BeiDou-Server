@@ -64,7 +64,7 @@ function action(mode, type, selection) {
             cm.dispose();
         }
     } else if (status == 0) {
-        cm.sendPrev("一旦你训练得足够努力，你就有资格获得一份工作。你可以成为赫内西斯的弓箭手，艾琳尼亚的魔法师，佩里恩的战士，以及科尔宁城的盗贼……");
+        cm.sendPrev("一旦你训练得足够努力，你就有资格获得一份工作。你可以成为射手村的弓箭手，魔法密林的魔法师，勇士部落的战士，以及废弃都市的飞侠……");
     } else {
         cm.dispose();
     }
