@@ -43,6 +43,7 @@ import org.gms.constants.id.MobId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.ServerConstants;
 import org.gms.constants.skills.*;
+import org.gms.constants.string.ExtendKey;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.*;
 import org.gms.exception.NotEnabledException;
@@ -9840,6 +9841,7 @@ public class Character extends AbstractCharacterObject {
     /////////////////////////////////////////////////////////////////////////////////
     //module: 角色在线时间
     private int m_iCurrentOnlineTime = -1;//-1用于服务器重启时角色初始变量时间
+    private AtomicBoolean timeUpdating = new AtomicBoolean(false);
 
     public int getCurrentOnlineTime() {
         return this.m_iCurrentOnlineTime;
@@ -9850,8 +9852,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void updateOnlineTime() {
+        if (m_iCurrentOnlineTime == -1) {
+            return;
+        }
         String strNewOnlineTime = String.valueOf(m_iCurrentOnlineTime);
-        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", strNewOnlineTime, true);
+        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(ExtendKey.ONLINE_TIME.getKey(), strNewOnlineTime, true);
     }
 
     /**
