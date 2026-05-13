@@ -86,6 +86,8 @@ public class SpawnPetProcessor {
                     pet.setSummoned(true);
                     pet.saveToDb();
                     chr.addPet(pet);
+                    // 登录时未召唤的宠物不会预加载过滤配置，这里补载后再同步给客户端。
+                    chr.loadPetExcludedItems(pet.getUniqueId());
                     chr.getMap().broadcastMessage(c.getPlayer(), PacketCreator.showPet(c.getPlayer(), pet, false, false), true);
                     c.sendPacket(PacketCreator.petStatUpdate(c.getPlayer()));
                     c.sendPacket(PacketCreator.enableActions());

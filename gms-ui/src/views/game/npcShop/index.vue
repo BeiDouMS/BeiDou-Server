@@ -4,11 +4,11 @@
     <a-card class="general-card" :title="$t('menu.game.npcShop')">
       <a-row>
         <a-col>
-          <a-input-number v-model="shopFilter.shopId" placeholder="商店 ID" />
-          <a-input-number v-model="shopFilter.npcId" placeholder="NPC ID" />
-          <a-input v-model="shopFilter.npcName" placeholder="NPC 名称" />
-          <a-input-number v-model="shopFilter.itemId" placeholder="物品 ID" />
-          <a-input v-model="shopFilter.itemName" placeholder="物品" />
+          <a-input-number v-model="shopFilter.shopId" placeholder="商店 ID" @keydown.enter="loadClick"/>
+          <a-input-number v-model="shopFilter.npcId" placeholder="NPC ID" @keydown.enter="loadClick" />
+          <a-input v-model="shopFilter.npcName" placeholder="NPC 名称" @keydown.enter="loadClick" />
+          <a-input-number v-model="shopFilter.itemId" placeholder="物品 ID" @keydown.enter="loadClick" />
+          <a-input v-model="shopFilter.itemName" placeholder="物品" @keydown.enter="loadClick" />
           <a-space>
             <a-button type="primary" status="success" @click="loadClick">
               搜索

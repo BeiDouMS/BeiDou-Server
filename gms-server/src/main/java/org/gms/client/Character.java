@@ -43,6 +43,7 @@ import org.gms.constants.id.MobId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.ServerConstants;
 import org.gms.constants.skills.*;
+import org.gms.constants.string.ExtendKey;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.*;
 import org.gms.exception.NotEnabledException;
@@ -99,6 +100,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
@@ -508,9 +510,25 @@ public class Character extends AbstractCharacterObject {
      * 最后攻击时间
      * 用来校验攻击速度是否过快
      */
-    @Setter
-    @Getter
-    private long lastAttackTime = 0;
+    private final ConcurrentHashMap<Integer, Long> lastAttackTimes = new ConcurrentHashMap<>();
+
+    /**
+     * 原子更新指定技能的最后攻击时间，并返回与上次记录的时间间隔（毫秒）。
+     * 若是首次记录或出现时钟回退，返回 Long.MAX_VALUE 表示本次不参与间隔判定。
+     */
+    public long updateLastAttackTimeAndGetInterval(int skillId, long currentTimeMillis) {
+        AtomicLong intervalMillis = new AtomicLong(Long.MAX_VALUE);
+        lastAttackTimes.compute(skillId, (ignored, previousTime) -> {
+            long previous = previousTime == null ? 0L : previousTime;
+            if (previous > 0L && currentTimeMillis > previous) {
+                intervalMillis.set(currentTimeMillis - previous);
+            }
+            // 保证每个技能的时间记录单调不回退，避免并发写入覆盖新值。
+            return Math.max(previous, currentTimeMillis);
+        });
+        return intervalMillis.get();
+    }
+
 
     private Character() {
         super.setListener(new CharacterListener(this));
@@ -2812,6 +2830,10 @@ public class Character extends AbstractCharacterObject {
                                 }
 
                                 if (ItemConstants.isExpirablePet(item.getItemId())) {
+                                    if (item.getPetId() > -1) {
+                                        // 宠物道具真正过期销毁时，同时清理 pets/petignores，避免数据库残留孤儿数据。
+                                        Pet.deleteFromDb(this, item.getPetId());
+                                    }
                                     sendPacket(PacketCreator.itemExpired(item.getItemId()));
                                     toberemove.add(item);
                                 } else {
@@ -4423,6 +4445,82 @@ public class Character extends AbstractCharacterObject {
         chrLock.lock();
         try {
             excluded.get(petId).add(x);
+        } finally {
+            chrLock.unlock();
+        }
+    }
+
+    /**
+     * 统一从数据库加载单只宠物的过滤配置，确保召唤时内存状态与数据库保持一致。
+     */
+    public void loadPetExcludedItems(int petId) {
+        List<Integer> excludedItemIds = inventoryService.getPetIgnoreByPetId(petId).stream()
+                .map(PetignoresDO::getItemid)
+                .filter(Objects::nonNull)
+                .toList();
+        replacePetExcludedItemsInMemory(petId, excludedItemIds);
+    }
+
+    /**
+     * 客户端提交过滤设置时，直接按差异增量更新数据库，避免角色保存时再做危险的全量删写。
+     */
+    public void updatePetExcludedItems(int petId, Set<Integer> newExcludedItems) {
+        Set<Integer> currentExcludedItems = getExcludedForPet(petId);
+        Set<Integer> normalizedExcludedItems = new LinkedHashSet<>(newExcludedItems);
+
+        Set<Integer> toAdd = new LinkedHashSet<>(normalizedExcludedItems);
+        toAdd.removeAll(currentExcludedItems);
+
+        Set<Integer> toRemove = new LinkedHashSet<>(currentExcludedItems);
+        toRemove.removeAll(normalizedExcludedItems);
+
+        inventoryService.addPetIgnoreItems(petId, toAdd);
+        inventoryService.removePetIgnoreItems(petId, toRemove);
+        replacePetExcludedItemsInMemory(petId, normalizedExcludedItems);
+    }
+
+    /**
+     * 宠物被永久删除时同步清理数据库和角色内存中的过滤配置，避免残留脏数据。
+     */
+    public void deletePetExcludedData(int petId) {
+        inventoryService.deletePetData(petId);
+        removeExcluded(petId);
+    }
+
+    public Set<Integer> getExcludedForPet(int petId) {
+        chrLock.lock();
+        try {
+            Set<Integer> petExcludedItems = excluded.get(petId);
+            if (petExcludedItems == null) {
+                return Collections.emptySet();
+            }
+            return Collections.unmodifiableSet(new LinkedHashSet<>(petExcludedItems));
+        } finally {
+            chrLock.unlock();
+        }
+    }
+
+    private void replacePetExcludedItemsInMemory(int petId, Collection<Integer> itemIds) {
+        chrLock.lock();
+        try {
+            excluded.remove(petId);
+            if (itemIds != null && !itemIds.isEmpty()) {
+                LinkedHashSet<Integer> normalizedItems = itemIds.stream()
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
+                if (!normalizedItems.isEmpty()) {
+                    excluded.put(petId, normalizedItems);
+                }
+            }
+        } finally {
+            chrLock.unlock();
+        }
+    }
+
+    private void removeExcluded(int petId) {
+        chrLock.lock();
+        try {
+            excluded.remove(petId);
         } finally {
             chrLock.unlock();
         }
@@ -6308,8 +6406,8 @@ public class Character extends AbstractCharacterObject {
                     Pet pet = item.getPet();
                     if (pet != null && pet.isSummoned()) {
                         chr.addPet(pet);
-                        chr.resetExcluded(item.getPetId());
-                        inventoryService.getPetIgnoreByPetId(item.getPetId()).forEach(petignoresDO -> chr.addExcluded(petignoresDO.getPetid(), petignoresDO.getItemid()));
+                        // 登录时对已召唤宠物统一走同一套过滤配置加载逻辑，避免后续入口行为不一致。
+                        chr.loadPetExcludedItems(item.getPetId());
                     }
                     continue;
                 }
@@ -7528,22 +7626,6 @@ public class Character extends AbstractCharacterObject {
 
                 for (Pet pet : petList) {
                     pet.saveToDb();
-                }
-
-                for (Entry<Integer, Set<Integer>> es : getExcluded().entrySet()) {    // this set is already protected
-                    try (PreparedStatement psIgnore = con.prepareStatement("DELETE FROM petignores WHERE petid=?")) {
-                        psIgnore.setInt(1, es.getKey());
-                        psIgnore.executeUpdate();
-                    }
-
-                    try (PreparedStatement psIgnore = con.prepareStatement("INSERT INTO petignores (petid, itemid) VALUES (?, ?)")) {
-                        psIgnore.setInt(1, es.getKey());
-                        for (Integer x : es.getValue()) {
-                            psIgnore.setInt(2, x);
-                            psIgnore.addBatch();
-                        }
-                        psIgnore.executeBatch();
-                    }
                 }
 
                 // Key config
@@ -9823,6 +9905,7 @@ public class Character extends AbstractCharacterObject {
     /////////////////////////////////////////////////////////////////////////////////
     //module: 角色在线时间
     private int m_iCurrentOnlineTime = -1;//-1用于服务器重启时角色初始变量时间
+    private AtomicBoolean timeUpdating = new AtomicBoolean(false);
 
     public int getCurrentOnlineTime() {
         return this.m_iCurrentOnlineTime;
@@ -9833,8 +9916,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void updateOnlineTime() {
+        if (m_iCurrentOnlineTime == -1) {
+            return;
+        }
         String strNewOnlineTime = String.valueOf(m_iCurrentOnlineTime);
-        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", strNewOnlineTime, true);
+        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(ExtendKey.ONLINE_TIME.getKey(), strNewOnlineTime, true);
     }
 
     /**

@@ -8,21 +8,25 @@
             v-model="condition.continent"
             placeholder="大区ID"
             allow-clear
+            @keydown.enter="loadData"
           />
           <a-input-number
             v-model="condition.itemId"
             placeholder="物品ID"
             allow-clear
+            @keydown.enter="loadData"
           />
           <a-input
             v-model="condition.itemName"
             placeholder="物品名称"
             allow-clear
+            @keydown.enter="loadData"
           />
           <a-input-number
             v-model="condition.questId"
             placeholder="任务ID"
             allow-clear
+            @keydown.enter="loadData"
           />
           <a-space>
             <a-button type="primary" @click="loadData">查询</a-button>

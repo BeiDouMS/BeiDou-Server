@@ -6,17 +6,17 @@
         <a-row :gutter="16">
           <a-col :span="6">
             <a-form-item :label="$t('account.player.id')">
-              <a-input-number v-model="filterForm.id" />
+              <a-input-number v-model="filterForm.id" @keydown.enter="loadData"/>
             </a-form-item>
           </a-col>
           <a-col :span="6">
             <a-form-item :label="$t('account.player.name')">
-              <a-input v-model="filterForm.name" />
+              <a-input v-model="filterForm.name" @keydown.enter="loadData"/>
             </a-form-item>
           </a-col>
           <a-col :span="6">
             <a-form-item :label="$t('account.player.mapId')">
-              <a-input-number v-model="filterForm.map" />
+              <a-input-number v-model="filterForm.map" @keydown.enter="loadData"/>
             </a-form-item>
           </a-col>
         </a-row>
