@@ -45,7 +45,7 @@ function action(mode, type, selection) {
     } else {
         status++;
         if (status == 1) {
-            cm.sendNextPrev("Are you going to give up and leave this place?")
+            cm.sendNextPrev("你打算放弃并离开这个地方吗？")
         } else if (status == 2) {
             cm.sendYesNo("下次进来的时候，你将不得不从头开始...");
         } else if (status == 3) {

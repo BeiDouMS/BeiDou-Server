@@ -1,6 +1,6 @@
 var status = 0;
 var ticketSelection = -1;
-var text = "Here's the ticket reader.";
+var text = "这是检票口。";
 var hasTicket = false;
 var NLC = false;
 var em;
@@ -32,7 +32,7 @@ function action(mode, type, selection) {
 
         } else if (selection == 1) {
             if (cm.haveItem(4031036) || cm.haveItem(4031037) || cm.haveItem(4031038)) {
-                text += " You will be brought in immediately. Which ticket you would like to use?#b";
+                text += "您将立即被带进去。您想使用哪张票？#b";
                 for (var i = 0; i < 3; i++) {
                     if (cm.haveItem(4031036 + i)) {
                         text += "\r\n#b#L" + (i + 1) + "##t" + (4031036 + i) + "#";
