@@ -168,7 +168,6 @@
   } from '@/api/dashboard';
   import { Message } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
-  import { useRouter } from 'vue-router';
   import {
     reloadEventsByGMCommand,
     reloadMapsByGMCommand,
@@ -182,7 +181,6 @@
   const stopConfigVisible = ref(false);
   const shutdownConfirmVisible = ref(false); // 新增用于确认关机的模态框可见性控制
   const restartConfirmVisible = ref(false); // 新增用于确认重启的模态框可见性控制
-  const router = useRouter();
   const stopConfigData = reactive({
     minutes: 0,
     shutdownMsg: '',

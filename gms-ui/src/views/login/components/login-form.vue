@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, reactive, nextTick} from 'vue';
+  import { ref, reactive, nextTick } from 'vue';
   import { useRouter } from 'vue-router';
   import { Message } from '@arco-design/web-vue';
   import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
