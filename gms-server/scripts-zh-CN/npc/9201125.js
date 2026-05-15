@@ -56,7 +56,7 @@ function action(mode, type, selection) {
         if (status == 0) {
             if (cm.getJob().getId() == 0) {
                 if (cm.getLevel() >= 8 && cm.canGetFirstJob(jobType)) {
-                    cm.sendYesNo("你好 #h#，我可以把你送到#b#m" + map + "##k进行#b" + job + "#k转职。你要过去吗？");
+                    cm.sendYesNo("你好 #h1#，我可以把你送到#b#m" + map + "##k进行#b" + job + "#k转职。你要过去吗？");
                 } else {
                     cm.sendOk("如果你想成为#b" + job + "#k，你需要到达#b8级，" + cm.getFirstJobStatRequirement(jobType) + "#k。");
                     cm.dispose();

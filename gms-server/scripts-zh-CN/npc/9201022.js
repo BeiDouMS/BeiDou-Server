@@ -29,9 +29,9 @@ status = -1;
 
 function start() {
     if (cm.getPlayer().getMapId() == 100000000) {
-        cm.sendYesNo("我可以带你去阿莫利亚村。你准备好了吗？");
+        cm.sendYesNo("我可以带你去婚礼公园。你准备好了吗？");
     } else {
-        cm.sendYesNo("我可以带你回到明斯特。你准备好了吗？");
+        cm.sendYesNo("我可以带你回到射手村。你准备好了吗？");
     }
 }
 

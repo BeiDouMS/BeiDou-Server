@@ -68,6 +68,10 @@ function clearStage(stage, eim, curMap) {
 }
 
 function rectangleStages(eim, property, areaCombos, areaRects) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if(GameConfig.getServerBoolean("use_enable_solo_expeditions") && eim.getPlayerCount() == 1){
+        return true;
+    }
     var c = eim.getProperty(property);
     if (c == null) {
         c = Math.floor(Math.random() * areaCombos.length);
@@ -198,7 +202,7 @@ function action(mode, type, selection) {
                 }
 
                 cm.dispose();
-            } else if (curMap == 103000802) {
+            } else if (curMap == 103000802) {   // stage 3
                 var stgProperty = "stg3Property";
                 var stgCombos = stage3Combos;
                 var stgAreas = stage3Rects;
@@ -224,7 +228,7 @@ function action(mode, type, selection) {
                 }
 
                 cm.dispose();
-            } else if (curMap == 103000803) {
+            } else if (curMap == 103000803) {   // stage 4
                 var stgProperty = "stg4Property";
                 var stgCombos = stage4Combos;
                 var stgAreas = stage4Rects;
@@ -250,7 +254,7 @@ function action(mode, type, selection) {
                 }
 
                 cm.dispose();
-            } else if (curMap == 103000804) {
+            } else if (curMap == 103000804) {   // stage 5
                 if (eim.isEventLeader(cm.getPlayer())) {
                     if (cm.haveItem(4001008, 10)) {
                         cm.sendNext("这是通往最后的奖励阶段的传送门。这个阶段让你更容易地击败普通怪物。你将有一定的时间来尽可能多地狩猎，但你可以随时通过NPC中途离开这个阶段。再次恭喜你通过了所有的阶段。让你的队伍跟我对话，他们可以通过到达奖励阶段来领取奖品。保重……");
