@@ -54,7 +54,7 @@ function action(mode, type, selection) {
                 return;
             }
 
-            cm.sendOk("我只想和你们的领导谈话！");
+            cm.sendOk("我只想和你们的队长谈话！");
             cm.dispose();
             return;
         }
@@ -68,7 +68,7 @@ function action(mode, type, selection) {
                     eim.giveEventPlayersExp(3500);
                     clearStage(0, eim);
 
-                    cm.sendNext("请救救米内尔娃，她被波波皮希困在封印中，他是我们塔楼的恐怖存在！他把米内尔娃雕像的所有部分都弄丢了，我们必须把它们全部找回来！哦，请原谅我，我是塔楼的管家伊克。我是米内尔娃的皇家仆人。");
+                    cm.sendNext("请救救雅典娜，她被远古精灵困在封印中，远古精灵是我们塔楼的恐怖存在！他把雅典娜雕像的所有部分都弄丢了，我们必须把它们全部找回来！哦，请原谅我，我是塔楼的管家易克。我是雅典娜的皇家仆人。");
                 } else {
                     cm.warp(920010000, 2);
                 }
@@ -79,12 +79,12 @@ function action(mode, type, selection) {
                     if (eim.getIntProperty("statusStg7") == -1) {
                         eim.warpEventTeam(920010800);
                     } else if (eim.getIntProperty("statusStg8") == -1) {
-                        cm.sendOk("哦！你带来了#t4001055#！请把它放在雕像的底座上，让米涅瓦重生！");
+                        cm.sendOk("哦！你带来了#t4001055#！请把它放在雕像的底座上，让雅典娜重生！");
                     } else {
-                        cm.sendOk("谢谢你救了米内尔瓦！请和她交谈…");
+                        cm.sendOk("谢谢你救了雅典娜！请和她交谈…");
                     }
                 } else {
-                    cm.sendOk("请拯救米内尔娃！收集她雕像的六块碎片，然后与我交谈以取回最后一块碎片！");
+                    cm.sendOk("请拯救雅典娜！收集她雕像的六块碎片，然后与我交谈以取回最后一块碎片！");
                 }
                 break;
             case 920010200: //walkway
@@ -120,7 +120,7 @@ function action(mode, type, selection) {
                 break;
             case 920010400: //lobby
                 if (eim.getIntProperty("statusStg3") == -1) {
-                    cm.sendOk("请找到本周的LP，并将其放在音乐播放器上。\r\n#v4001056# 星期日\r\n#v4001057# 星期一\r\n#v4001058# 星期二\r\n#v4001059# 星期三\r\n#v4001060# 星期四\r\n#v4001061# 星期五\r\n#v4001062# 星期六");
+                    cm.sendOk("请找到本周的唱片，并将其放在音乐播放器上。\r\n#v4001056# 星期日\r\n#v4001057# 星期一\r\n#v4001058# 星期二\r\n#v4001059# 星期三\r\n#v4001060# 星期四\r\n#v4001061# 星期五\r\n#v4001062# 星期六");
                 } else if (eim.getIntProperty("statusStg3") == 0) {
                     cm.getMap().getReactorByName("stone3").forceHitReactor(1);
                     cm.sendOk("哦，这音乐... 它和环境非常搭配。做得好，一个箱子出现在场地上。从中取出雕像的一部分！");
@@ -154,7 +154,14 @@ function action(mode, type, selection) {
                         total += z;
                     }
                     if (total != 3) {
-                        cm.sendOk("这些平台上需要有确切的3名玩家。");
+                        const GameConfig = Java.type('org.gms.config.GameConfig');
+                        if(GameConfig.getServerBoolean("use_enable_solo_expeditions") && eim.getPlayerCount() == 1){
+                            cm.getMap().getReactorByName("stone4").forceHitReactor(1);
+                            eim.giveEventPlayersExp(3500);
+                            clearStage(4, eim);
+                        }else{
+                            cm.sendOk("这些平台上需要有在场的3名玩家。");
+                        }
                     } else {
                         var num_correct = 0;
                         for (var i = 0; i < 3; i++) {
@@ -177,7 +184,7 @@ function action(mode, type, selection) {
                         }
                     }
                 } else {
-                    cm.sendOk("干得好！请去找其他碎片，拯救米内尔瓦！");
+                    cm.sendOk("干得好！请去找其他碎片，拯救雅典娜！");
                 }
                 cm.dispose();
                 break;
@@ -276,13 +283,13 @@ function action(mode, type, selection) {
                 }
                 break;
             case 920010800:
-                cm.sendNext("请找到一种方法来打败波波精灵！一旦你通过种植种子找到了黑暗尼芬死亡，你就找到了波波精灵！打败它，拿到生命之根来拯救米内尔瓦！！");
+                cm.sendNext("请找到一种方法来打败远古精灵！一旦你通过种植种子找到了黑暗食人花并打死它，远古精灵就会出现！打败它，拿到生命草来拯救雅典娜！！");
                 break;
             case 920010900:
                 if (eim.getProperty("statusStg8") == "1") {
                     cm.sendNext("这是塔的监狱。你可能会在这里找到一些好东西，只要确保尽快解决前面的谜题。");
                 } else {
-                    cm.sendNext("在那里你找不到任何雕像碎片。爬上梯子返回中心塔，然后到其他地方去搜索。一旦你救了米涅瓦，你可以回到这里拿下面的好东西。");
+                    cm.sendNext("在那里你找不到任何雕像碎片。爬上梯子返回中心塔，然后到其他地方去搜索。一旦你救了雅典娜，你可以回到这里拿下面的好东西。");
                 }
                 break;
             case 920011000:

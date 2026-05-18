@@ -63,7 +63,7 @@ function action(mode, type, selection) {
                 var state = eim.getIntProperty("statusStg" + stage);
 
                 if (state == -1) {           // preamble
-                    cm.sendOk("嗨。欢迎来到#bBOSS阶段#k。在那个平台上杀死老鼠，揭示出阿利莎尔，并打败他！");
+                    cm.sendOk("嗨。欢迎来到#b玩具塔副本BOSS阶段#k。在那个平台上杀死老鼠，揭示出阿利莎尔，并打败他！");
                     eim.setProperty("statusStg" + stage, 0);
                 } else {                      // check stage completion
                     if (cm.haveItem(4001023, 1)) {

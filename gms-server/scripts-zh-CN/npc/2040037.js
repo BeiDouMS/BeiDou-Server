@@ -69,7 +69,7 @@ function action(mode, type, selection) {
                 var state = eim.getIntProperty("statusStg" + stage);
 
                 if (state == -1) {           // preamble
-                    cm.sendOk("嗨。欢迎来到 #bstage#k。收集地图上散落的 15 个 #t4001022#，然后和我交谈。");
+                    cm.sendOk("嗨。欢迎来到 #b玩具塔副本阶段"+ stage +"#k。收集地图上散落的 15 个 #t4001022#，然后和我交谈。");
                     eim.setProperty("statusStg" + stage, 0);
                 } else {       // check stage completion
                     if (cm.haveItem(4001022, 15)) {
@@ -83,7 +83,7 @@ function action(mode, type, selection) {
                     }
                 }
             } else {
-                cm.sendNext("请告诉你的#b队伍领袖#k来找我谈话。");
+                cm.sendNext("请告诉你的#b队长#k来找我谈话。");
             }
         }
 

@@ -29,8 +29,8 @@ var questionNum;
 
 function start() {
     status = -1;
-    questions = ["Which of these items does the Flaming Raccoon NOT drop?", "Which NPC is responsible for transporting travellers from Kerning City to Zipangu, and back?", "Which of the items sold at the Mushroom Shrine increases your attack power?", "Which of these items do the Extras NOT drop?", "Which of these items DO NOT exist??", "What's the name of the vegetable store owner in Showa Town?", "Which of these items DO exist?", "What is the name of the strongest boss in the Mushroom Shrine?", "Which one of these items has a mis-matched class or level description?", "Which of these noodles are NOT being sold by Robo at the Mushroom Shrine?", "Which of these NPCs do NOT stand in front of Showa Movie Theater?"]
-    answers = [["Raccoon Firewood", "Solid Horn", "Red Brick"], ["Peli", "Spinel", "Poli"], ["Takoyaki", "Yakisoba", "Tempura"], ["Extra A's Badge", "Extra B's Corset", "Extra C's Necklace"], ["Frozen Tuna", "Fan", "Fly Swatter"], ["Sami", "Kami", "Umi"], ["Cloud Fox's Tooth", "Ghost's Bouquet", "Dark Cloud Fox's Tail"], ["Black Crow", "Blue Mushmom", "Himegami"], ["Bamboo Spear - Warrior-only Weapon", "Pico-Pico Hammer - One-handed Sword", "Mystic Cane - Level 51 equip"], ["Kinoko Ramen (Pig Skull)", "Kinoko Ramen (Salt)", "Mushroom Miso Ramen"], ["Skye", "Furano", "Shinta"]];
+    questions = ["火焰浣熊不会掉落以下哪些物品？", "哪个NPC负责将旅客从废弃都市运送到古代神社，然后再运回？", "古代神社出售的哪些物品可以提高你的攻击力？", "以下哪些装备不会被删除？", "以下哪些物品不存在？", "昭和村的蔬菜店老板叫什么名字？", "这些物品中有哪些是存在的？", "古代神社最强的boss叫什么？", "这些物品中，哪一个的类别或级别描述不匹配？", "这些面条中，哪一条不是古代神社里NPC卖的？", "这些NPC中，哪一个不站在昭和电影院前？"]
+    answers = [["浣熊柴火", "实心号角", "红砖"], ["佩利", "导游妮妮", "波利"], ["章鱼串", "日本炒面", "天妇罗"], ["徽章", "衣服", "项链"], ["冷冻金枪鱼", "风扇", "苍蝇拍"], ["萨米", "卡米", "由美"], ["云狐牙齿", "幽灵花束", "云狐尾巴"], ["天狗", "蓝蘑菇王", "姬神"], ["木精灵枪-战士专用武器", "橡皮榔头-单手剑", "枫树杖-51级装备"], ["日式拉面(豚骨)", "日式拉面(海鲜)", "味噌拉面"], ["绘里香", "黑泽", "阿利博士"]];
     correctAnswer = [1, 1, 0, 1, 2, 2, 2, 0, 0, 2, 2];
     action(1, 0, 0);
 }
@@ -65,10 +65,10 @@ function action(mode, type, selection) {
             }
         } else if (status == 7 && mode == 1) { //2-6 are the questions
             if (selection != correctAnswer.pop()) {
-                cm.sendNext("Hmmm...all humans make mistakes anyway! If you want to take another crack at it, then bring me 300 Fried Chicken.")
+                cm.sendNext("嗯……反正所有人都会犯错！如果你想再试一次，那就给我拿300只炸鸡来。")
                 cm.dispose();
             } else {
-                cm.sendNext("Dang, you answered all the questions right. I may not like humans in general, but I HATE breaking a promise, so, as promised, here's the Orange Marble.")
+                cm.sendNext("哎呀，你所有的问题都答对了。总的来说，我可能不喜欢人类，但我讨厌食言，所以，正如我所承诺的，这是橙色大理石。")
             }
         } else if (status == 8 && mode == 1) { //gain marble
             cm.gainItem(4031064, 1);
@@ -78,7 +78,7 @@ function action(mode, type, selection) {
             var cont = true;
             if (status > 2) {
                 if (selection != correctAnswer.pop()) {
-                    cm.sendNext("Hmmm...all humans make mistakes anyway! If you want to take another crack at it, then bring me 300 Fried Chicken.")
+                    cm.sendNext("嗯……反正所有人都会犯错！如果你想再试一次，那就给我拿300只炸鸡来。")
                     cm.dispose();
                     cont = false;
                 }
@@ -99,7 +99,7 @@ function action(mode, type, selection) {
                 }
                 var question = questions.pop();
                 var answer = answers.pop();
-                var prompt = "Question no." + (status - 1) + ": " + question;
+                var prompt = "问题 no." + (status - 1) + ": " + question;
                 for (var i = 0; i < answer.length; i++) {
                     prompt += "\r\n#b#L" + i + "#" + answer[i] + "#l#k";
                 }
