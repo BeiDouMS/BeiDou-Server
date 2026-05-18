@@ -55,7 +55,7 @@ function action(mode, type, selection) {
         if (status == 0) {
             if (cm.haveItem(4031013, 30)) {
                 completed = true;
-                cm.sendOk("你是一个真正的英雄！拿着这个，黑暗领主会承认你的。");
+                cm.sendOk("你是一个真正的英雄！拿着这个，达克鲁会承认你的。");
             } else {
                 completed = false;
                 cm.sendSimple("你需要收集 #b30 个 #t4031013##k。祝你好运。\r\n#b#L1#我想离开#l");
