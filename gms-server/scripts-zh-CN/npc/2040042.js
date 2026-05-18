@@ -63,6 +63,7 @@ function action(mode, type, selection) {
 
         var eim = cm.getPlayer().getEventInstance();
 
+
         if (eim.getProperty(stage.toString() + "stageclear") != null) {
             cm.sendNext("快点，去下一个阶段，传送门已经打开了！");
         } else {
@@ -70,7 +71,7 @@ function action(mode, type, selection) {
                 var state = eim.getIntProperty("statusStg" + stage);
 
                 if (state == -1) {           // preamble
-                    cm.sendOk("嗨。欢迎来到#b舞台#k。你需要远程人员在这里。他们必须杀死三只老鼠，这将触发一些东西。接下来就是你自己去发现了！给我3张通行证！");
+                    cm.sendOk("嗨。欢迎来到#b玩具塔副本阶段" + stage + "#k。你需要远程人员在这里。他们必须杀死三只老鼠，这将触发一些东西。接下来就是你自己去发现了！给我3张通行证！");
                     eim.setProperty("statusStg" + stage, 0);
                 } else if (state == 0) {       // check stage completion
                     if (cm.haveItem(4001022, 3)) {
