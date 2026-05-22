@@ -155,7 +155,7 @@ function levelSecondJobSelect0() {
 
 function levelSecondJobSelect1() {
     // 点击下一步返回levelStartSecondJob1
-    cm.sendNextLevel("StartSecondJob1", "掌握#r冰/雷系魔法#k的魔法师。\r\n\r\n#b冰/雷法师#k是一个活跃的职业，能够造成魔法元素伤害。这些技能使他们在面对对其元素弱点的敌人时具有显著优势。通过他们的技能#r冥想#k和#r减速#k，#b冰/雷法师#k可以增加他们的魔法攻击力并减少对手的移动能力。#b冰/雷法师#k拥有冰冻攻击和闪电攻击。");    //i/l mage
+    cm.sendNextLevel("StartSecondJob1", "掌握#r冰/雷系魔法#k的魔法师。\r\n\r\n#b冰/雷法师#k是一个活跃的职业，能够造成魔法元素伤害。这些技能使他们在面对对其元素弱点的敌人时具有显著优势。通过他们的技能#r冥想#k和#r减速#k，#b冰/雷法师#k可以增加他们的魔法攻击力并减少对手的移动能力。#b冰/雷法师#k拥有冰冻攻击和雷电攻击。");    //i/l mage
 }
 
 function levelSecondJobSelect2() {
@@ -165,7 +165,7 @@ function levelSecondJobSelect2() {
 
 function levelSecondJobSelect3() {
     // 选择4进入levelSecondJobSelect4，选择5进入levelSecondJobSelect5，选择6进入levelSecondJobSelect6
-    cm.sendSelectLevel("SecondJobSelect", "现在... 你做好决定了吗？请选择你想要在二转时选择的职业。#b\r\n#L4#法师（火 / 毒）\r\n#L5#法师（冰 / 闪电）\r\n#L6#牧师");
+    cm.sendSelectLevel("SecondJobSelect", "现在... 你做好决定了吗？请选择你想要在二转时选择的职业。#b\r\n#L4#法师（火 / 毒）\r\n#L5#法师（冰 / 雷）\r\n#L6#牧师");
 }
 
 function levelSecondJobSelect4() {
