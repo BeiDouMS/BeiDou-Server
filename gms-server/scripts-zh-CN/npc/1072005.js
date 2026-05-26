@@ -44,7 +44,7 @@ function action(mode, type, selection) {
         if (status == 0) {
             if (cm.haveItem(4031013, 30)) {
                 completed = true;
-                cm.sendNext("哦哦哦.. 你收集了所有30个黑暗弹珠！！这应该很困难.. 简直不可思议！好吧。你通过了测试，为此，我会奖励你 #b英雄的证明#k。拿着它回到艾琳尼亚去吧。");
+                cm.sendNext("哦哦哦.. 你收集了所有30个#b#t4031013##k！！这应该很困难.. 简直不可思议！好吧。你通过了测试，为此，我会奖励你 #b#t4031012##k。拿着它回到#b#m101000000##k去吧。");
             } else {
                 completed = false;
                 cm.sendSimple("你需要收集 #b30 #t4031013##k。祝你好运。\r\n#b#L1#我想离开#l");

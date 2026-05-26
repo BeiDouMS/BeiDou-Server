@@ -68,7 +68,7 @@ var questionTree = [
         ["为了给射手村的玛雅治病，需要给她什么？", ["苹果", "强力灵药", "奇怪的药", "菊花", "橙汁"], 2],
         ["以下与合成或冶炼工作没有关系的NPC是？", ["奈巴", "塞利尔", "塞恩", "易德", "后街吉姆"], 2],
         ["在彩虹岛看不到的NPC是？", ["巴里", "特奥", "皮奥", "赛德", "玛利亚"], 1],
-        ["在导航室的监视器里能看到谁和Kyrin在一起？", ["路卡斯", "金博士", "长老斯坦", "斯卡德", "弗利维教授"], 1],
+        ["在航海室的监视器里能看到谁和凯琳在一起？", ["路卡斯", "金博士", "长老斯坦", "斯卡德", "弗利维教授"], 1],
         ["你知道射手村的赫丽娜吗？他的眼睛是什么颜色？", ["蓝色", "绿色", "棕色", "红色", "黑色"], 1],
         ["勇士部落武术教练的帽子上有多少根羽毛？", ["7", "8", "3", "13", "16"], 3],
         ["魔法密林汉斯持有的宝珠是什么颜色?", ["白色", "橙色", "蓝色", "紫色", "绿色"], 2]
@@ -105,7 +105,7 @@ function action(mode, type, selection) {
             if (cm.getPlayer().gotPartyQuestItem("JBQ") && !cm.haveItem(4031058, 1)) {
                 if (cm.haveItem(4005004, 1)) {
                     if (!cm.canHold(4031058)) {
-                        cm.sendNext("接受此试炼前，请确保有一个空闲的ETC槽位。");
+                        cm.sendNext("接受此试炼前，请确保有一个空闲的其它槽位。");
                         cm.dispose();
                     } else {
                         cm.sendNext("好的...我将在这里测试你的智慧。回答所有问题正确，你就会通过测试，但是，如果你有一次说谎，那么你就得重新开始，好吗，我们开始吧。");
@@ -148,7 +148,7 @@ function action(mode, type, selection) {
             cm.sendSimple(questionHead + questionEntry + "\r\n\r\n#b" + questionOptions + "#k");
         } else if (status == 6) {
             if (!evaluateAnswer(selection)) {
-                cm.sendNext("你已经失败了这个问题。");
+                cm.sendNext("你已经失败了，这个问题回答错误。");
                 cm.dispose();
                 return;
             }
@@ -168,7 +168,7 @@ function evaluateAnswer(selection) {
 }
 
 function generateQuestionHeading() {
-    return "Here's the " + (status) + (status == 1 ? "st" : status == 2 ? "nd" : status == 3 ? "rd" : "th") + " question. ";
+    return "这是"+(status == 1 ? "第一" : status == 2 ? "第二" : status == 3 ? "第三" : "第四") + "个问题：\r\n";
 }
 
 function shuffleArray(array) {

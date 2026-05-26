@@ -212,7 +212,7 @@ function action(mode, type, selection) {
         } else if (status == 5) {
             cm.sendNextPrev("我也给了你一点 #bSP#k。打开左下角的 #b技能菜单#k。你可以提升新获得的二级技能。不过要注意，你不能一次性提升它们。有些技能只有在学会其他技能后才能使用。记得要牢记这一点。");
         } else if (status == 6) {
-            cm.sendNextPrev((job == 410 ? "Assassin" : "Bandit") + " need to be strong. But remember that you can't abuse that power and use it on a weakling. Please use your enormous power the right way, because... for you to use that the right way, that is much harden than just getting stronger. Please find me after you have advanced much further. I'll be waiting for you.");
+            cm.sendNextPrev((job == 410 ? "刺客" : "侠客") + "需要变强。 但请记住，你不能滥用这种力量去对付弱者。请以正确的方式运用你强大的力量，因为……对你而言，以正确的方式运用这种力量，远比仅仅变得更强要困难得多。当你取得更大的进步后，请来找我。我会等你。");
         }
     } else if (actionx["3thJobI"]) {
         if (status == 0) {
