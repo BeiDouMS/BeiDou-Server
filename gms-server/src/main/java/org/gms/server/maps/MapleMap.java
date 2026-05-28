@@ -4391,7 +4391,7 @@ public class MapleMap {
     }
 
     public GuardianSpawnPoint getRandomGuardianSpawn(int team) {
-        boolean alltaken = false;
+        boolean alltaken = true;
         for (GuardianSpawnPoint a : this.guardianSpawns) {
             if (!a.isTaken()) {
                 alltaken = false;
@@ -4401,7 +4401,7 @@ public class MapleMap {
         if (alltaken) {
             return null;
         }
-        if (this.guardianSpawns.size() > 0) {
+        if (!this.guardianSpawns.isEmpty()) {
             while (true) {
                 for (GuardianSpawnPoint gsp : this.guardianSpawns) {
                     if (!gsp.isTaken() && Math.random() < 0.3 && (gsp.getTeam() == -1 || gsp.getTeam() == team)) {
