@@ -1186,6 +1186,11 @@ public class Server {
     }
 
     public void updateCharacterEntry(Character chr) {
+        // 已经不在线，不再更新角色视图
+        if (!chr.isLoggedIn() || chr.getAccountId() == 0) {
+            return;
+        }
+
         Character chrView = chr.generateCharacterEntry();
 
         lgnWLock.lock();

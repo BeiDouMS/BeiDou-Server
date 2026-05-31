@@ -7468,16 +7468,23 @@ public class Character extends AbstractCharacterObject {
         if (GameConfig.getServerBoolean("use_autosave")) {
             Runnable r = () -> saveCharToDB(true);
 
-            CharacterSaveService service = (CharacterSaveService) getWorldServer().getServiceAccess(WorldServices.SAVE_CHARACTER);
+            CharacterSaveService service = getCharacterSaveService();
             service.registerSaveCharacter(this.getId(), r);
         } else {
             saveCharToDB(true);
         }
     }
 
+    private CharacterSaveService getCharacterSaveService() {
+        return (CharacterSaveService) getWorldServer().getServiceAccess(WorldServices.SAVE_CHARACTER);
+    }
+
     //ItemFactory saveItems and monsterbook.saveCards are the most time consuming here.
     public synchronized void saveCharToDB(boolean notAutosave) {
         if (!loggedIn) {
+            // 如果已经退出登录，取消自动保存当前角色任务
+            CharacterSaveService service = getCharacterSaveService();
+            service.unregisterSaveCharacter(this.getId());
             return;
         }
 

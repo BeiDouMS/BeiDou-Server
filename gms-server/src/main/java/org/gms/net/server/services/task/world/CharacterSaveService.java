@@ -41,6 +41,10 @@ public class CharacterSaveService extends BaseService {
         chrSaveScheduler.registerSaveCharacter(characterId, runAction);
     }
 
+    public void unregisterSaveCharacter(int characterId) {
+        chrSaveScheduler.unregisterSaveCharacter(characterId);
+    }
+
     private class CharacterSaveScheduler extends BaseScheduler {
 
         public void registerSaveCharacter(Integer characterId, Runnable runAction) {
@@ -48,7 +52,7 @@ public class CharacterSaveService extends BaseService {
         }
 
         public void unregisterSaveCharacter(Integer characterId) {
-            interruptEntry(characterId);
+            interruptEntry(characterId, false);
         }
 
     }

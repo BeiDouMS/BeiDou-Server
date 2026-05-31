@@ -133,6 +133,10 @@ public abstract class BaseScheduler {
     }
 
     protected void interruptEntry(Object key) {
+        interruptEntry(key, true);
+    }
+
+    protected void interruptEntry(Object key, boolean executeBeforeStop) {
         Runnable toRun = null;
 
         lockScheduler();
@@ -145,7 +149,7 @@ public abstract class BaseScheduler {
             unlockScheduler();
         }
 
-        if (toRun != null) {
+        if (toRun != null && executeBeforeStop) {
             toRun.run();
         }
 
