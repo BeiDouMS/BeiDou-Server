@@ -155,11 +155,24 @@ public class Trade {
     private void cancel(byte result) {
         boolean show = GameConfig.getServerBoolean("use_debug");
 
-        for (Item item : items) {
-            InventoryManipulator.addFromDrop(chr.getClient(), item, show);
-        }
-        if (meso > 0) {
-            chr.gainMeso(meso, show, true, show);
+        // 只有双方都 locked 时才说明 completeTrade 已完成握手、物品即将/已被转移，此时不能退还
+        // 但如果 completeTrade 检查失败，会先 unlock 再 cancelTrade，正常客户端不会走 else 分支
+        boolean bothLocked = isLocked() && partner != null && partner.isLocked();
+        if (!bothLocked) {
+            for (Item item : items) {
+                InventoryManipulator.addFromDrop(chr.getClient(), item, show);
+            }
+            if (meso > 0) {
+                chr.gainMeso(meso, show, true, show);
+            }
+        } else {
+            Trade p = partner;
+            log.error(I18nUtil.getLogMessage("Trade.warn.cancel.bothLocked"),
+                chr.getId(), chr.getName(), items.size(), meso,
+                p != null ? p.getChr().getId() : 0,
+                p != null ? p.getChr().getName() : "null",
+                p != null ? p.items.size() : 0,
+                p != null ? p.meso : 0);
         }
         meso = 0;
         if (items != null) {
@@ -197,6 +210,7 @@ public class Trade {
                 partner.getChr().sendPacket(PacketCreator.getTradeMesoSet((byte) 1, this.meso));
             }
         } else {
+            // 为什么不处理？
         }
     }
 
@@ -295,6 +309,20 @@ public class Trade {
             return this.getPartner().checkTradeCompleteHandshake(false);
         }
     }
+    /**
+     * checkCompleteHandshake 成功后双方 locked=true，如果后续检查失败必须先用此方法解锁再取消，
+     * 否则 cancel() 看到 bothLocked=true 会跳过退还导致物品永久丢失。
+     */
+    private static void unlockAndCancel(Character chr, TradeResult result) {
+        Trade local = chr.getTrade();
+        Trade partner = local.getPartner();
+        local.locked.set(false);
+        if (partner != null) {
+            partner.locked.set(false);
+        }
+        cancelTrade(chr, result);
+    }
+
     //完成交易处理
     public static void completeTrade(Character chr) {
         Trade local = chr.getTrade();
@@ -304,12 +332,12 @@ public class Trade {
             partner.fetchExchangedItems();
 
             if (!local.fitsMeso()) {
-                cancelTrade(local.getChr(), TradeResult.UNSUCCESSFUL);
+                unlockAndCancel(local.getChr(), TradeResult.UNSUCCESSFUL);
                 chr.message(I18nUtil.getMessage("Trade.message.Mesos.Player"));
                 partner.getChr().message(I18nUtil.getMessage("Trade.message.Mesos.Partner"));
                 return;
             } else if (!partner.fitsMeso()) {
-                cancelTrade(partner.getChr(), TradeResult.UNSUCCESSFUL);
+                unlockAndCancel(partner.getChr(), TradeResult.UNSUCCESSFUL);
                 chr.message(I18nUtil.getMessage("Trade.message.Mesos.Player"));
                 partner.getChr().message(I18nUtil.getMessage("Trade.message.Mesos.Partner"));
                 return;
@@ -318,24 +346,24 @@ public class Trade {
             if (!local.fitsInInventory()) {//判断背包空间是否足够
                 if (local.fitsUniquesInInventory()) {   //判断当前角色交易物品是否为唯一物品
                     //非唯一物品
-                    cancelTrade(local.getChr(), TradeResult.UNSUCCESSFUL);
+                    unlockAndCancel(local.getChr(), TradeResult.UNSUCCESSFUL);
                     chr.message(I18nUtil.getMessage("Trade.message.fitsInInventory.Player"));
                     partner.getChr().message(I18nUtil.getMessage("Trade.message.fitsInInventory.Partner"));
                 } else {
                     //唯一物品
-                    cancelTrade(local.getChr(), TradeResult.UNSUCCESSFUL_UNIQUE_ITEM_LIMIT);
+                    unlockAndCancel(local.getChr(), TradeResult.UNSUCCESSFUL_UNIQUE_ITEM_LIMIT);
                     partner.getChr().message(I18nUtil.getMessage("Trade.message.fitsUniquesInInventory"));
                 }
                 return;
             } else if (!partner.fitsInInventory()) {//判断背包空间是否足够
                 if (partner.fitsUniquesInInventory()) { //判断交易角色交易物品是否为唯一物品
                     //非唯一物品
-                    cancelTrade(partner.getChr(), TradeResult.UNSUCCESSFUL);
+                    unlockAndCancel(partner.getChr(), TradeResult.UNSUCCESSFUL);
                     chr.message(I18nUtil.getMessage("Trade.message.fitsInInventory.Player"));
                     partner.getChr().message(I18nUtil.getMessage("Trade.message.fitsInInventory.Partner"));
                 } else {
                     //唯一物品
-                    cancelTrade(partner.getChr(), TradeResult.UNSUCCESSFUL_UNIQUE_ITEM_LIMIT);
+                    unlockAndCancel(partner.getChr(), TradeResult.UNSUCCESSFUL_UNIQUE_ITEM_LIMIT);
                     chr.message(I18nUtil.getMessage("Trade.message.fitsUniquesInInventory"));
                 }
                 return;
@@ -347,7 +375,7 @@ public class Trade {
             if(mesomax == 0) mesomax = 1000000;
             if (level != -1 && local.getChr().getLevel() <= level) {
                 if (mesomax != -1 && local.getChr().getMesosTraded() + local.exchangeMeso > mesomax) {
-                    cancelTrade(local.getChr(), TradeResult.NO_RESPONSE);
+                    unlockAndCancel(local.getChr(), TradeResult.NO_RESPONSE);
                     local.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax",level,mesomax)));
                     partner.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax1",level,mesomax)));
                     return;
@@ -356,7 +384,7 @@ public class Trade {
                 }
             } else if (level != -1 && partner.getChr().getLevel() <= level) {
                 if (mesomax != -1 && partner.getChr().getMesosTraded() + partner.exchangeMeso > mesomax) {
-                    cancelTrade(partner.getChr(), TradeResult.NO_RESPONSE);
+                    unlockAndCancel(partner.getChr(), TradeResult.NO_RESPONSE);
                     partner.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax",level,mesomax)));
                     local.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax1",level,mesomax)));
                     return;
