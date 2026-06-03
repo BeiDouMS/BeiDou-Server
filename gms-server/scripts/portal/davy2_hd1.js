@@ -1,12 +1,12 @@
-var windowTime = 10 * 1000;
-
 function enter(pi) {
     var eim = pi.getEventInstance();
-    var level = eim.getIntProperty("level");
-    if (eim.getProperty("stage2b") == "0") {
-        pi.getMap(925100202).spawnAllMonstersFromMapSpawnList(level, true);
-        eim.setProperty("stage2b", "1");
+    if (eim == null) {
+        return false;
     }
+    var map = pi.getMap(925100202);
+    map.killAllMonsters();
+    map.restoreMapSpawnPoints();
+    map.instanceMapForceRespawn();
 
     pi.playPortalSound();
     pi.warp(925100202, 0);
