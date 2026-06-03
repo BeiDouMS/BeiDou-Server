@@ -24,13 +24,14 @@
     Jayd
 -- Version Info -----------------------------------------------------------------------------------
     1.0 - First Version by Jayd
----------------------------------------------------------------------------------------------------    
+---------------------------------------------------------------------------------------------------
  */
 
 var status;
-var smap = 681000000;
-var hv = 209000000;
-var tst, b2h;
+// 西蒙负责在快乐村和沙龙神殿之间传送玩家。
+var SHALOM_TEMPLE = 681000000;
+var HAPPYVILLE = 209000000;
+var toShalomTemple, backToHappyville;
 
 function start() {
     status = -1;
@@ -42,7 +43,7 @@ function action(mode, type, selection) {
         cm.dispose();
     } else {
         if (status == 0 && mode == 0) {
-            cm.sendNext("如果你改变主意了，告诉我！");
+            cm.sendNext("如果你改变主意了，随时再来找我。");
             cm.dispose();
         }
 
@@ -53,19 +54,19 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            if (cm.getMapId() == hv) {
-                tst = 1; //to shalom temple
-                cm.sendYesNo("“沙龙神殿与快乐村的其他地方都不一样，你想前往 #b沙龙神殿#k 吗？”"); //not GMS lol
-            } else if (cm.getMapId() == smap) {
-                b2h = 1; //back to happyville
-                cm.sendYesNo("你想回到快乐村吗？");
+            if (cm.getMapId() == HAPPYVILLE) {
+                toShalomTemple = 1;
+                cm.sendYesNo("沙龙神殿和快乐村的其他地方不太一样，你想前往 #b沙龙神殿#k 吗？");
+            } else if (cm.getMapId() == SHALOM_TEMPLE) {
+                backToHappyville = 1;
+                cm.sendYesNo("你想返回 #b快乐村#k 吗？");
             }
         } else if (status == 1) {
-            if (tst == 1) {
-                cm.warp(smap, 0);
+            if (toShalomTemple == 1) {
+                cm.warp(SHALOM_TEMPLE, 0);
                 cm.dispose();
-            } else if (b2h == 1) {
-                cm.warp(hv, 0);
+            } else if (backToHappyville == 1) {
+                cm.warp(HAPPYVILLE, 0);
                 cm.dispose();
             }
         }
