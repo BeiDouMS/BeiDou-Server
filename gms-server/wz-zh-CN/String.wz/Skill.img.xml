@@ -5306,7 +5306,7 @@
         <string name="h7" value="最大MP增加。每次升级时+14，使用AP提高时+7"/>
         <string name="h8" value="最大MP增加。每次升级时+16，使用AP提高时+8"/>
         <string name="h9" value="最大MP增加。每次升级时+18，使用AP提高时+9"/>
-        <string name="desc" value="[最高等级 : 10]\n等级上升时及使用AP加MP时，\n提高MaxMP的增加量。\n必要技能: #c增加恢复MP等级5以上#"/>
+        <string name="desc" value="[最高等级 : 10]\n升级或使用AP增加MP时，额外提高最大MP增加量。\n必要技能：#c魔力恢复 Lv.5#"/>
     </imgdir>
     <imgdir name="20000012">
         <string name="name" value="精灵的祝福"/>
@@ -5486,7 +5486,7 @@
         <string name="h7" value="持续267秒，消费MP6，用MP代替损伤的33%"/>
         <string name="h8" value="持续288秒，消费MP6，用MP代替损伤的36%"/>
         <string name="h9" value="持续309秒，消费MP6，用MP代替损伤的39%"/>
-        <string name="desc" value="[最高等级 : 20]\n一定时间内，损血量以MP代替。\n但MP达到0消耗HP"/>
+        <string name="desc" value="[最高等级 : 20]\n一定时间内，受到伤害时按比例由MP承担；\nMP不足时，剩余伤害由HP承担。"/>
     </imgdir>
     <imgdir name="2001003">
         <string name="name" value="魔法铠甲"/>
@@ -5510,7 +5510,7 @@
         <string name="h7" value="持续158秒，消费MP8，物理防御力+14"/>
         <string name="h8" value="持续172秒，消费MP8，物理防御力+16"/>
         <string name="h9" value="持续186秒，消费MP8，物理防御力+18"/>
-        <string name="desc" value="[最高等级 : 20]\n一定时间内增加物理防御力。\n必需技能: #c魔法盾等级3以上#"/>
+        <string name="desc" value="[最高等级 : 20]\n一定时间内提高物理防御力。\n必要技能：#c魔法盾 Lv.3#"/>
     </imgdir>
     <imgdir name="2001004">
         <string name="name" value="魔法弹"/>
@@ -5534,7 +5534,7 @@
         <string name="h7" value="消费MP7，基本攻击力28，熟练度30%"/>
         <string name="h8" value="消费MP8，基本攻击力31，熟练度30%"/>
         <string name="h9" value="消费MP8，基本攻击力32，熟练度35%"/>
-        <string name="desc" value="[最高等级 : 20]\n消耗MP,攻击一个怪物"/>
+        <string name="desc" value="[最高等级 : 20]\n消耗MP，对1个敌人造成魔法伤害。"/>
     </imgdir>
     <imgdir name="2001005">
         <string name="name" value="魔法双击"/>
@@ -5558,7 +5558,7 @@
         <string name="h7" value="消费MP11，基本攻击力18，熟练度30%"/>
         <string name="h8" value="消费MP12，基本攻击力20，熟练度30%"/>
         <string name="h9" value="消费MP12，基本攻击力21，熟练度35%"/>
-        <string name="desc" value="[最高等级 : 20]\n消耗MP,对同一个怪物连续攻击两次"/>
+        <string name="desc" value="[最高等级 : 20]\n消耗MP，对1个敌人连续造成2次魔法伤害。\n必要技能：#c魔法弹 Lv.1#"/>
     </imgdir>
     <imgdir name="210">
         <string name="bookName" value="火毒魔法技能"/>
@@ -6979,7 +6979,7 @@
         <string name="h7" value="按攻击时的17%的比率吸收，最高不超过MP的27%"/>
         <string name="h8" value="按攻击时的18%的比率吸收，最高不超过MP的28%"/>
         <string name="h9" value="按攻击时的19%的比率吸收，最高不超过MP的29%"/>
-        <string name="desc" value="[最高等级 : 20]\n使用魔法攻击时，吸收怪物的MP。\n怪物的MP为0时无效"/>
+        <string name="desc" value="[最高等级 : 20]\n魔法攻击命中时，有概率吸收非Boss怪物的MP；\n怪物MP为0时无效。"/>
     </imgdir>
     <imgdir name="2201001">
         <string name="name" value="精神力"/>
@@ -7003,7 +7003,7 @@
 		<string name="h7" value="消耗MP10，魔法力7，持续70秒"/>
 		<string name="h8" value="消耗MP10，魔法力8，持续80秒"/>
 		<string name="h9" value="消耗MP10，魔法力9，持续90秒"/>
-		<string name="desc" value="[最高等级 : 20]\n通过精神交流一定时间内提高周围所有队员的魔力。提高值和持续时间随等级提升增加。\n必需技能: #c魔力吸收等级3以上#"/>
+		<string name="desc" value="[最高等级 : 20]\n一定时间内提高周围队员的魔法攻击力，效果和持续时间随等级提高。\n必要技能：#c魔力吸收 Lv.3#"/>
 	</imgdir>
     <imgdir name="2201002">
         <string name="name" value="快速移动"/>
@@ -7027,7 +7027,7 @@
 		<string name="h7" value="消耗MP42，移动距离130"/>
 		<string name="h8" value="消耗MP39，移动距离130"/>
 		<string name="h9" value="消耗MP36，移动距离130"/>
-        <string name="desc" value="[最高等级 : 20]\n用方向键可以瞬间移动一定的距离"/>
+        <string name="desc" value="[最高等级 : 20]\n使用方向键瞬间移动一定距离，移动距离随等级提高。"/>
     </imgdir>
     <imgdir name="2201003">
         <string name="name" value="缓速术"/>
@@ -7051,75 +7051,75 @@
 		<string name="h7" value="消耗MP8，怪物移动速度-14，持续14秒"/>
 		<string name="h8" value="消耗MP8，怪物移动速度-16，持续16秒"/>
 		<string name="h9" value="消耗MP8，怪物移动速度-18，持续18秒"/>
-		<string name="desc" value="[最高等级 : 20]\n降低怪物的移动速度，无法重复使用。效果和持续时间随等级提升增加。\n必需技能: #c快速移动等级５以上# "/>
+		<string name="desc" value="[最高等级 : 20]\n降低周围最多6个敌人的移动速度，不能对同一目标叠加。\n必要技能：#c快速移动 Lv.5#"/>
 	</imgdir>
     <imgdir name="2201004">
         <string name="name" value="冰冻术"/>
-       <string name="h1" value="消耗MP12，魔法力13，熟练度5%"/>
-		<string name="h10" value="消耗MP12，魔法力40，熟练度20%"/>
-		<string name="h11" value="消耗MP12，魔法力43，熟练度20%"/>
-		<string name="h12" value="消耗MP12，魔法力46，熟练度20%"/>
-		<string name="h13" value="消耗MP12，魔法力49，熟练度25%"/>
-		<string name="h14" value="消耗MP12，魔法力52，熟练度25%"/>
-		<string name="h15" value="消耗MP12，魔法力55，熟练度25%"/>
-		<string name="h16" value="消耗MP24，魔法力58，熟练度30%"/>
-		<string name="h17" value="消耗MP24，魔法力61，熟练度30%"/>
-		<string name="h18" value="消耗MP24，魔法力64，熟练度30%"/>
-		<string name="h19" value="消耗MP24，魔法力67，熟练度35%"/>
-		<string name="h2" value="消耗MP12，魔法力16，熟练度5%"/>
-		<string name="h20" value="消耗MP24，魔法力70，熟练度35%"/>
-		<string name="h21" value="消耗MP24，魔法力73，熟练度35%"/>
-		<string name="h22" value="消耗MP24，魔法力76，熟练度40%"/>
-		<string name="h23" value="消耗MP24，魔法力79，熟练度40%"/>
-		<string name="h24" value="消耗MP24，魔法力82，熟练度40%"/>
-		<string name="h25" value="消耗MP24，魔法力85，熟练度45%"/>
-		<string name="h26" value="消耗MP24，魔法力88，熟练度45%"/>
-		<string name="h27" value="消耗MP24，魔法力91，熟练度45%"/>
-		<string name="h28" value="消耗MP24，魔法力94，熟练度50%"/>
-		<string name="h29" value="消耗MP24，魔法力97，熟练度50%"/>
-		<string name="h3" value="消耗MP12，魔法力19，熟练度5%"/>
-		<string name="h30" value="消耗MP24，魔法力100，熟练度50%"/>
-		<string name="h4" value="消耗MP12，魔法力22，熟练度10%"/>
-		<string name="h5" value="消耗MP12，魔法力25，熟练度10%"/>
-		<string name="h6" value="消耗MP12，魔法力28，熟练度10%"/>
-		<string name="h7" value="消耗MP12，魔法力31，熟练度15%"/>
-		<string name="h8" value="消耗MP12，魔法力34，熟练度15%"/>
-		<string name="h9" value="消耗MP12，魔法力37，熟练度15%"/>
-        <string name="desc" value="[最高等级 : 30]\n使用冰冻魔法，使怪物冻结并受到伤害.\n被打中的敌人暂时停止行动.\n火属性的敌人受到伤害更大"/>
+       <string name="h1" value="消耗MP12，魔法力13，熟练度15%"/>
+		<string name="h10" value="消耗MP12，魔法力40，熟练度30%"/>
+		<string name="h11" value="消耗MP12，魔法力43，熟练度30%"/>
+		<string name="h12" value="消耗MP12，魔法力46，熟练度30%"/>
+		<string name="h13" value="消耗MP12，魔法力49，熟练度35%"/>
+		<string name="h14" value="消耗MP12，魔法力52，熟练度35%"/>
+		<string name="h15" value="消耗MP12，魔法力55，熟练度35%"/>
+		<string name="h16" value="消耗MP24，魔法力58，熟练度40%"/>
+		<string name="h17" value="消耗MP24，魔法力61，熟练度40%"/>
+		<string name="h18" value="消耗MP24，魔法力64，熟练度40%"/>
+		<string name="h19" value="消耗MP24，魔法力67，熟练度45%"/>
+		<string name="h2" value="消耗MP12，魔法力16，熟练度15%"/>
+		<string name="h20" value="消耗MP24，魔法力70，熟练度45%"/>
+		<string name="h21" value="消耗MP24，魔法力73，熟练度45%"/>
+		<string name="h22" value="消耗MP24，魔法力76，熟练度50%"/>
+		<string name="h23" value="消耗MP24，魔法力79，熟练度50%"/>
+		<string name="h24" value="消耗MP24，魔法力82，熟练度50%"/>
+		<string name="h25" value="消耗MP24，魔法力85，熟练度55%"/>
+		<string name="h26" value="消耗MP24，魔法力88，熟练度55%"/>
+		<string name="h27" value="消耗MP24，魔法力91，熟练度55%"/>
+		<string name="h28" value="消耗MP24，魔法力94，熟练度60%"/>
+		<string name="h29" value="消耗MP24，魔法力97，熟练度60%"/>
+		<string name="h3" value="消耗MP12，魔法力19，熟练度15%"/>
+		<string name="h30" value="消耗MP24，魔法力100，熟练度60%"/>
+		<string name="h4" value="消耗MP12，魔法力22，熟练度20%"/>
+		<string name="h5" value="消耗MP12，魔法力25，熟练度20%"/>
+		<string name="h6" value="消耗MP12，魔法力28，熟练度20%"/>
+		<string name="h7" value="消耗MP12，魔法力31，熟练度25%"/>
+		<string name="h8" value="消耗MP12，魔法力34，熟练度25%"/>
+		<string name="h9" value="消耗MP12，魔法力37，熟练度25%"/>
+        <string name="desc" value="[最高等级 : 30]\n使用冰属性魔法攻击1个敌人并使其冻结；\n对火属性敌人造成更高伤害。"/>
     </imgdir>
     <imgdir name="2201005">
         <string name="name" value="雷电术"/>
-        <string name="h1" value="消耗MP20，魔法力2，熟练度5%"/>
-		<string name="h10" value="消耗MP20，魔法力20，熟练度20%"/>
-		<string name="h11" value="消耗MP20，魔法力22，熟练度20%"/>
-		<string name="h12" value="消耗MP20，魔法力24，熟练度20%"/>
-		<string name="h13" value="消耗MP20，魔法力26，熟练度25%"/>
-		<string name="h14" value="消耗MP20，魔法力28，熟练度25%"/>
-		<string name="h15" value="消耗MP20，魔法力30，熟练度25%"/>
-		<string name="h16" value="消耗MP40，魔法力32，熟练度30%"/>
-		<string name="h17" value="消耗MP40，魔法力34，熟练度30%"/>
-		<string name="h18" value="消耗MP40，魔法力36，熟练度30%"/>
-		<string name="h19" value="消耗MP40，魔法力38，熟练度35%"/>
-		<string name="h2" value="消耗MP20，魔法力4，熟练度5%"/>
-		<string name="h20" value="消耗MP40，魔法力40，熟练度35%"/>
-		<string name="h21" value="消耗MP40，魔法力42，熟练度35%"/>
-		<string name="h22" value="消耗MP40，魔法力44，熟练度40%"/>
-		<string name="h23" value="消耗MP40，魔法力46，熟练度40%"/>
-		<string name="h24" value="消耗MP40，魔法力48，熟练度40%"/>
-		<string name="h25" value="消耗MP40，魔法力50，熟练度45%"/>
-		<string name="h26" value="消耗MP40，魔法力52，熟练度45%"/>
-		<string name="h27" value="消耗MP40，魔法力54，熟练度45%"/>
-		<string name="h28" value="消耗MP40，魔法力56，熟练度50%"/>
-		<string name="h29" value="消耗MP40，魔法力58，熟练度50%"/>
-		<string name="h3" value="消耗MP20，魔法力6，熟练度5%"/>
-		<string name="h30" value="消耗MP40，魔法力60，熟练度50%"/>
-		<string name="h4" value="消耗MP20，魔法力8，熟练度10%"/>
-		<string name="h5" value="消耗MP20，魔法力10，熟练度10%"/>
-		<string name="h6" value="消耗MP20，魔法力12，熟练度10%"/>
-		<string name="h7" value="消耗MP20，魔法力14，熟练度15%"/>
-		<string name="h8" value="消耗MP20，魔法力16，熟练度15%"/>
-		<string name="h9" value="消耗MP20，魔法力18，熟练度15%"/>
-        <string name="desc" value="[最高等级 : 30]\n在周围制造强力磁场，并向怪物发起雷电\n攻击，攻击一定范围内的所有敌人"/>
+        <string name="h1" value="消耗MP20，魔法力2，熟练度15%"/>
+		<string name="h10" value="消耗MP20，魔法力20，熟练度30%"/>
+		<string name="h11" value="消耗MP20，魔法力22，熟练度30%"/>
+		<string name="h12" value="消耗MP20，魔法力24，熟练度30%"/>
+		<string name="h13" value="消耗MP20，魔法力26，熟练度35%"/>
+		<string name="h14" value="消耗MP20，魔法力28，熟练度35%"/>
+		<string name="h15" value="消耗MP20，魔法力30，熟练度35%"/>
+		<string name="h16" value="消耗MP40，魔法力32，熟练度40%"/>
+		<string name="h17" value="消耗MP40，魔法力34，熟练度40%"/>
+		<string name="h18" value="消耗MP40，魔法力36，熟练度40%"/>
+		<string name="h19" value="消耗MP40，魔法力38，熟练度45%"/>
+		<string name="h2" value="消耗MP20，魔法力4，熟练度15%"/>
+		<string name="h20" value="消耗MP40，魔法力40，熟练度45%"/>
+		<string name="h21" value="消耗MP40，魔法力42，熟练度45%"/>
+		<string name="h22" value="消耗MP40，魔法力44，熟练度50%"/>
+		<string name="h23" value="消耗MP40，魔法力46，熟练度50%"/>
+		<string name="h24" value="消耗MP40，魔法力48，熟练度50%"/>
+		<string name="h25" value="消耗MP40，魔法力50，熟练度55%"/>
+		<string name="h26" value="消耗MP40，魔法力52，熟练度55%"/>
+		<string name="h27" value="消耗MP40，魔法力54，熟练度55%"/>
+		<string name="h28" value="消耗MP40，魔法力56，熟练度60%"/>
+		<string name="h29" value="消耗MP40，魔法力58，熟练度60%"/>
+		<string name="h3" value="消耗MP20，魔法力6，熟练度15%"/>
+		<string name="h30" value="消耗MP40，魔法力60，熟练度60%"/>
+		<string name="h4" value="消耗MP20，魔法力8，熟练度20%"/>
+		<string name="h5" value="消耗MP20，魔法力10，熟练度20%"/>
+		<string name="h6" value="消耗MP20，魔法力12，熟练度20%"/>
+		<string name="h7" value="消耗MP20，魔法力14，熟练度25%"/>
+		<string name="h8" value="消耗MP20，魔法力16，熟练度25%"/>
+		<string name="h9" value="消耗MP20，魔法力18，熟练度25%"/>
+        <string name="desc" value="[最高等级 : 30]\n在周围引发雷电攻击，最多攻击6个敌人。"/>
     </imgdir>
     <imgdir name="221">
         <string name="bookName" value="巫师（冰雷）技能"/>
@@ -7180,7 +7180,7 @@
 		<string name="h7" value="消耗MP增加135%，魔法攻击造成伤害116%"/>
 		<string name="h8" value="消耗MP增加140%，魔法攻击造成伤害117%"/>
 		<string name="h9" value="消耗MP增加145%，魔法攻击造成伤害118%"/>
-        <string name="desc" value="[最高等级:30]\n消耗更多的MP,提高自己的魔法攻击力"/>
+        <string name="desc" value="[最高等级:30]\n增加魔法技能的MP消耗，同时提高魔法伤害。"/>
     </imgdir>
     <imgdir name="2211002">
         <string name="name" value="冰咆哮"/>
@@ -7214,7 +7214,7 @@
 		<string name="h7" value="消费MP27，基本攻击力44，熟练度25%,攻击范围130%"/>
 		<string name="h8" value="消费MP28，基本攻击力46，熟练度25%,攻击范围130%"/>
 		<string name="h9" value="消费MP29，基本攻击力48，熟练度25%,攻击范围130%"/>
-        <string name="desc" value="[最高等级:30]\n使用冰块攻击。命中时有非冰属性的怪物\n冻结，最多伤害8个怪物"/>
+        <string name="desc" value="[最高等级:30]\n召唤冰块攻击范围内最多6个敌人，非冰属性目标命中后会被冻结。"/>
     </imgdir>
     <imgdir name="2211003">
         <string name="name" value="落雷枪"/>
@@ -7248,7 +7248,7 @@
 		<string name="h7" value="消费MP13，魔法力111，熟练度25%"/>
 		<string name="h8" value="消费MP13，魔法力115，熟练度25%"/>
 		<string name="h9" value="消费MP14，魔法力118，熟练度25%"/>
-        <string name="desc" value="[最高等级:30]\n集合雷气制造枪攻击一个怪物.\n怪物遭受雷属性攻击"/>
+        <string name="desc" value="[最高等级:30]\n凝聚雷电之枪攻击1个敌人，造成雷属性魔法伤害。"/>
     </imgdir>
     <imgdir name="2211004">
         <string name="name" value="封印术"/>
@@ -7272,65 +7272,65 @@
 		<string name="h7" value="消耗MP18，持续时间13秒，56%概率封印成功"/>
 		<string name="h8" value="消耗MP18，持续时间14秒，59%概率封印成功"/>
 		<string name="h9" value="消耗MP18，持续时间14秒，62%概率封印成功"/>
-        <string name="desc" value="[最高等级:20]\n对周围多个的怪物进行封印。成为封印状\n态的怪物不能使用技能，对BOSS无效\n必需技能: #c魔力激化等级3以上#"/>
+        <string name="desc" value="[最高等级:20]\n对周围最多6个敌人施加封印。\n封印状态下怪物无法使用技能，对Boss无效。\n必要技能：#c魔力激化 Lv.3#"/>
     </imgdir>
     <imgdir name="2211005">
         <string name="name" value="魔法狂暴"/>
-        <string name="h1" value="消费HP58 MP53，持续10秒 魔法攻击速度提升两个等级"/>
-        <string name="h10" value="消费HP40 MP35，持续100秒 魔法攻击速度提升两个等级"/>
-        <string name="h11" value="消费HP39 MP34，持续110秒 魔法攻击速度提升两个等级"/>
-        <string name="h12" value="消费HP38 MP33，持续120秒 魔法攻击速度提升两个等级"/>
-        <string name="h13" value="消费HP37 MP32，持续130秒 魔法攻击速度提升两个等级"/>
-        <string name="h14" value="消费HP36 MP31，持续140秒 魔法攻击速度提升两个等级"/>
-        <string name="h15" value="消费HP35 MP30，持续150秒 魔法攻击速度提升两个等级"/>
-        <string name="h16" value="消费HP34 MP29，持续160秒 魔法攻击速度提升两个等级"/>
-        <string name="h17" value="消费HP33 MP28，持续170秒 魔法攻击速度提升两个等级"/>
-        <string name="h18" value="消费HP32 MP37，持续180秒 魔法攻击速度提升两个等级"/>
-        <string name="h19" value="消费HP31 MP26，持续190秒 魔法攻击速度提升两个等级"/>
-        <string name="h2" value="消费HP56 MP51，持续20秒 魔法攻击速度提升两个等级"/>
-        <string name="h20" value="消费HP30 MP25，持续200秒 魔法攻击速度提升两个等级"/>
-        <string name="h3" value="消费HP54 MP49，持续30秒 魔法攻击速度提升两个等级"/>
-        <string name="h4" value="消费HP52 MP47，持续40秒 魔法攻击速度提升两个等级"/>
-        <string name="h5" value="消费HP50 MP45，持续50秒 魔法攻击速度提升两个等级"/>
-        <string name="h6" value="消费HP48 MP43，持续60秒 魔法攻击速度提升两个等级"/>
-        <string name="h7" value="消费HP46 MP41，持续70秒 魔法攻击速度提升两个等级"/>
-        <string name="h8" value="消费HP44 MP39，持续80秒 魔法攻击速度提升两个等级"/>
-        <string name="h9" value="消费HP42 MP37，持续90秒 魔法攻击速度提升两个等级"/>
-        <string name="desc" value="[最高等级:20]\n消耗更多的HP和MP,提高魔法攻击速度。\n必需技能: #c魔力激化等级3以上#"/>
+        <string name="h1" value="消耗HP58、MP53，持续10秒，魔法攻击速度提高1个等级"/>
+        <string name="h10" value="消耗HP40、MP35，持续100秒，魔法攻击速度提高1个等级"/>
+        <string name="h11" value="消耗HP39、MP34，持续110秒，魔法攻击速度提高2个等级"/>
+        <string name="h12" value="消耗HP38、MP33，持续120秒，魔法攻击速度提高2个等级"/>
+        <string name="h13" value="消耗HP37、MP32，持续130秒，魔法攻击速度提高2个等级"/>
+        <string name="h14" value="消耗HP36、MP31，持续140秒，魔法攻击速度提高2个等级"/>
+        <string name="h15" value="消耗HP35、MP30，持续150秒，魔法攻击速度提高2个等级"/>
+        <string name="h16" value="消耗HP34、MP29，持续160秒，魔法攻击速度提高2个等级"/>
+        <string name="h17" value="消耗HP33、MP28，持续170秒，魔法攻击速度提高2个等级"/>
+        <string name="h18" value="消耗HP32、MP27，持续180秒，魔法攻击速度提高2个等级"/>
+        <string name="h19" value="消耗HP31、MP26，持续190秒，魔法攻击速度提高2个等级"/>
+        <string name="h2" value="消耗HP56、MP51，持续20秒，魔法攻击速度提高1个等级"/>
+        <string name="h20" value="消耗HP30、MP25，持续200秒，魔法攻击速度提高2个等级"/>
+        <string name="h3" value="消耗HP54、MP49，持续30秒，魔法攻击速度提高1个等级"/>
+        <string name="h4" value="消耗HP52、MP47，持续40秒，魔法攻击速度提高1个等级"/>
+        <string name="h5" value="消耗HP50、MP45，持续50秒，魔法攻击速度提高1个等级"/>
+        <string name="h6" value="消耗HP48、MP43，持续60秒，魔法攻击速度提高1个等级"/>
+        <string name="h7" value="消耗HP46、MP41，持续70秒，魔法攻击速度提高1个等级"/>
+        <string name="h8" value="消耗HP44、MP39，持续80秒，魔法攻击速度提高1个等级"/>
+        <string name="h9" value="消耗HP42、MP37，持续90秒，魔法攻击速度提高1个等级"/>
+        <string name="desc" value="[最高等级:20]\n消耗HP和MP，提高魔法攻击速度；等级越高，持续时间越长且速度提升更高。\n必要技能：#c魔力激化 Lv.3#"/>
     </imgdir>
     <imgdir name="2211006">
         <string name="name" value="冰雷合击"/>
-        <string name="h1" value="消费MP14，魔法力130，熟练度15%，持续1秒结冰"/>
-		<string name="h10" value="消费MP14，魔法力154，熟练度30%，持续1秒结冰"/>
-		<string name="h11" value="消费MP18，魔法力156，熟练度30%，持续1秒结冰"/>
-		<string name="h12" value="消费MP18，魔法力158，熟练度30%，持续1秒结冰"/>
-		<string name="h13" value="消费MP18，魔法力160，熟练度35%，持续1秒结冰"/>
-		<string name="h14" value="消费MP18，魔法力162，熟练度35%，持续1秒结冰"/>
-		<string name="h15" value="消费MP18，魔法力164，熟练度35%，持续1秒结冰"/>
-		<string name="h16" value="消费MP18，魔法力166，熟练度40%，持续2秒结冰"/>
-		<string name="h17" value="消费MP18，魔法力168，熟练度40%，持续2秒结冰"/>
-		<string name="h18" value="消费MP18，魔法力170，熟练度40%，持续2秒结冰"/>
-		<string name="h19" value="消费MP18，魔法力172，熟练度45%，持续2秒结冰"/>
-		<string name="h2" value="消费MP14，魔法力134，熟练度15%，持续1秒结冰"/>
-		<string name="h20" value="消费MP18，魔法力174，熟练度45%，持续2秒结冰"/>
-		<string name="h21" value="消费MP22，魔法力176，熟练度45%，持续2秒结冰"/>
-		<string name="h22" value="消费MP22，魔法力178，熟练度50%，持续2秒结冰"/>
-		<string name="h23" value="消费MP22，魔法力180，熟练度50%，持续2秒结冰"/>
-		<string name="h24" value="消费MP22，魔法力182，熟练度50%，持续2秒结冰"/>
-		<string name="h25" value="消费MP22，魔法力184，熟练度55%，持续2秒结冰"/>
-		<string name="h26" value="消费MP22，魔法力186，熟练度55%，持续2秒结冰"/>
-		<string name="h27" value="消费MP22，魔法力187，熟练度55%，持续2秒结冰"/>
-		<string name="h28" value="消费MP22，魔法力188，熟练度60%，持续2秒结冰"/>
-		<string name="h29" value="消费MP22，魔法力189，熟练度60%，持续2秒结冰"/>
-		<string name="h3" value="消费MP14，魔法力137，熟练度15%，持续1秒结冰"/>
-		<string name="h30" value="消费MP22，魔法力190，熟练度60%，持续2秒结冰"/>
-		<string name="h4" value="消费MP14，魔法力140，熟练度20%，持续1秒结冰"/>
-		<string name="h5" value="消费MP14，魔法力143，熟练度20%，持续1秒结冰"/>
-		<string name="h6" value="消费MP14，魔法力146，熟练度20%，持续1秒结冰"/>
-		<string name="h7" value="消费MP14，魔法力148，熟练度25%，持续1秒结冰"/>
-		<string name="h8" value="消费MP14，魔法力150，熟练度25%，持续1秒结冰"/>
-		<string name="h9" value="消费MP14，魔法力152，熟练度25%，持续1秒结冰"/>
-        <string name="desc" value="[最高等级:30]\n混合冰和雷属性的魔法攻击一个怪物。\n一定的几率怪物被冻结"/>
+        <string name="h1" value="消耗MP14，魔法力80，熟练度15%，命中后冻结1秒"/>
+		<string name="h10" value="消耗MP14，魔法力104，熟练度30%，命中后冻结1秒"/>
+		<string name="h11" value="消耗MP18，魔法力106，熟练度30%，命中后冻结1秒"/>
+		<string name="h12" value="消耗MP18，魔法力108，熟练度30%，命中后冻结1秒"/>
+		<string name="h13" value="消耗MP18，魔法力110，熟练度35%，命中后冻结1秒"/>
+		<string name="h14" value="消耗MP18，魔法力112，熟练度35%，命中后冻结1秒"/>
+		<string name="h15" value="消耗MP18，魔法力114，熟练度35%，命中后冻结1秒"/>
+		<string name="h16" value="消耗MP18，魔法力116，熟练度40%，命中后冻结2秒"/>
+		<string name="h17" value="消耗MP18，魔法力118，熟练度40%，命中后冻结2秒"/>
+		<string name="h18" value="消耗MP18，魔法力120，熟练度40%，命中后冻结2秒"/>
+		<string name="h19" value="消耗MP18，魔法力122，熟练度45%，命中后冻结2秒"/>
+		<string name="h2" value="消耗MP14，魔法力84，熟练度15%，命中后冻结1秒"/>
+		<string name="h20" value="消耗MP18，魔法力124，熟练度45%，命中后冻结2秒"/>
+		<string name="h21" value="消耗MP22，魔法力126，熟练度45%，命中后冻结2秒"/>
+		<string name="h22" value="消耗MP22，魔法力128，熟练度50%，命中后冻结2秒"/>
+		<string name="h23" value="消耗MP22，魔法力130，熟练度50%，命中后冻结2秒"/>
+		<string name="h24" value="消耗MP22，魔法力132，熟练度50%，命中后冻结2秒"/>
+		<string name="h25" value="消耗MP22，魔法力134，熟练度55%，命中后冻结2秒"/>
+		<string name="h26" value="消耗MP22，魔法力136，熟练度55%，命中后冻结2秒"/>
+		<string name="h27" value="消耗MP22，魔法力137，熟练度55%，命中后冻结2秒"/>
+		<string name="h28" value="消耗MP22，魔法力138，熟练度60%，命中后冻结2秒"/>
+		<string name="h29" value="消耗MP22，魔法力139，熟练度60%，命中后冻结2秒"/>
+		<string name="h3" value="消耗MP14，魔法力87，熟练度15%，命中后冻结1秒"/>
+		<string name="h30" value="消耗MP22，魔法力140，熟练度60%，命中后冻结2秒"/>
+		<string name="h4" value="消耗MP14，魔法力90，熟练度20%，命中后冻结1秒"/>
+		<string name="h5" value="消耗MP14，魔法力93，熟练度20%，命中后冻结1秒"/>
+		<string name="h6" value="消耗MP14，魔法力96，熟练度20%，命中后冻结1秒"/>
+		<string name="h7" value="消耗MP14，魔法力98，熟练度25%，命中后冻结1秒"/>
+		<string name="h8" value="消耗MP14，魔法力100，熟练度25%，命中后冻结1秒"/>
+		<string name="h9" value="消耗MP14，魔法力102，熟练度25%，命中后冻结1秒"/>
+        <string name="desc" value="[最高等级:30]\n使用冰、雷属性组合魔法攻击1个敌人，命中后使目标冻结。"/>
     </imgdir>
     <imgdir name="222">
         <string name="bookName" value="最高级冷气,雷电魔法"/>
@@ -7367,7 +7367,7 @@
         <string name="h7" value="消耗MP 20，210秒内所有的属性点提高 4%"/>
         <string name="h8" value="消耗MP 20，240秒内所有的属性点提高 4%"/>
         <string name="h9" value="消耗MP 20，270秒内所有的属性点提高 5%"/>
-        <string name="desc" value="一定时间内把组队成员的所有属性点提高\n一定的百分比"/>
+        <string name="desc" value="一定时间内按百分比提高组队成员的所有属性。"/>
     </imgdir>
     <imgdir name="2221001">
         <string name="name" value="创世之破"/>
@@ -7401,7 +7401,7 @@
         <string name="h7" value="消耗MP 25，最大攻击力 220，熟练度 45"/>
         <string name="h8" value="消耗MP 25，最大攻击力 230，熟练度 45"/>
         <string name="h9" value="消耗MP 25，最大攻击力 240，熟练度 45"/>
-        <string name="desc" value="一定时间内搜集周围离子的力量,\n引起一次性大爆炸"/>
+        <string name="desc" value="蓄力聚集周围能量后释放爆炸，最多攻击6个敌人。"/>
     </imgdir>
     <imgdir name="2221002">
 		<string name="name" value="魔法反击"/>
@@ -7435,41 +7435,41 @@
 		<string name="h7" value="消耗MP 32，70秒间 37%的几率将魔法伤害的85%反还给敌人"/>
 		<string name="h8" value="消耗MP 33，80秒间 38%的几率将魔法伤害的90%反还给敌人"/>
 		<string name="h9" value="消耗MP 34，90秒间 39%的几率将魔法伤害的95%反还给敌人"/>
-		<string name="desc" value="改变魔法的流向来攻击敌人.\n一次最多返还敌人的20%体力"/>
+		<string name="desc" value="受到魔法伤害时，有概率将部分伤害反射给敌人；\n反射伤害最高不超过怪物最大HP的20%，Boss无效。"/>
 	</imgdir>
     <imgdir name="2221003">
         <string name="name" value="冰凤球"/>
-       <string name="h1" value="消耗MP15,魔法力42,熟练度5%,持续时间10秒"/>
-		<string name="h10" value="消耗MP18,魔法力60,熟练度20%,持续时间10秒"/>
-		<string name="h11" value="消耗MP18,魔法力62,熟练度20%,持续时间10秒"/>
-		<string name="h12" value="消耗MP18,魔法力64,熟练度20%,持续时间10秒"/>
-		<string name="h13" value="消耗MP21,魔法力66,熟练度25%,持续时间10秒"/>
-		<string name="h14" value="消耗MP21,魔法力68,熟练度25%,持续时间10秒"/>
-		<string name="h15" value="消耗MP21,魔法力70,熟练度25%,持续时间10秒"/>
-		<string name="h16" value="消耗MP21,魔法力72,熟练度30%,持续时间15秒"/>
-		<string name="h17" value="消耗MP21,魔法力74,熟练度30%,持续时间15秒"/>
-		<string name="h18" value="消耗MP21,魔法力76,熟练度30%,持续时间15秒"/>
-		<string name="h19" value="消耗MP31,魔法力78,熟练度35%,持续时间15秒"/>
-		<string name="h2" value="消耗MP15,魔法力44,熟练度5%,持续时间10秒"/>
-		<string name="h20" value="消耗MP31,魔法力80,熟练度35%,持续时间15秒"/>
-		<string name="h21" value="消耗MP31,魔法力82,熟练度35%,持续时间15秒"/>
-		<string name="h22" value="消耗MP31,魔法力84,熟练度40%,持续时间15秒"/>
-		<string name="h23" value="消耗MP31,魔法力86,熟练度40%,持续时间15秒"/>
-		<string name="h24" value="消耗MP31,魔法力88,熟练度40%,持续时间15秒"/>
-		<string name="h25" value="消耗MP34,魔法力90,熟练度45%,持续时间15秒"/>
-		<string name="h26" value="消耗MP34,魔法力92,熟练度45%,持续时间15秒"/>
-		<string name="h27" value="消耗MP34,魔法力94,熟练度45%,持续时间15秒"/>
-		<string name="h28" value="消耗MP34,魔法力96,熟练度50%,持续时间15秒"/>
-		<string name="h29" value="消耗MP34,魔法力98,熟练度50%,持续时间15秒"/>
-		<string name="h3" value="消耗MP15,魔法力46,熟练度5%,持续时间10秒"/>
-		<string name="h30" value="消耗MP34,魔法力100,熟练度50%,持续时间15秒"/>
-		<string name="h4" value="消耗MP15,魔法力48,熟练度10%,持续时间10秒"/>
-		<string name="h5" value="消耗MP15,魔法力50,熟练度10%,持续时间10秒"/>
-		<string name="h6" value="消耗MP15,魔法力52,熟练度10%,持续时间10秒"/>
-		<string name="h7" value="消耗MP18,魔法力54,熟练度15%,持续时间10秒"/>
-		<string name="h8" value="消耗MP18,魔法力56,熟练度15%,持续时间10秒"/>
-		<string name="h9" value="消耗MP18,魔法力58,熟练度15%,持续时间10秒"/>
-        <string name="desc" value="冻结多数怪物,给予持续伤害.\n被冰凤球抓住的人火系抗性降低"/>
+       <string name="h1" value="消耗MP15，魔法力42，熟练度15%，持续10秒，最多攻击2个敌人"/>
+		<string name="h10" value="消耗MP18，魔法力60，熟练度30%，持续10秒，最多攻击3个敌人"/>
+		<string name="h11" value="消耗MP18，魔法力62，熟练度30%，持续10秒，最多攻击3个敌人"/>
+		<string name="h12" value="消耗MP18，魔法力64，熟练度30%，持续10秒，最多攻击3个敌人"/>
+		<string name="h13" value="消耗MP21，魔法力66，熟练度35%，持续10秒，最多攻击4个敌人"/>
+		<string name="h14" value="消耗MP21，魔法力68，熟练度35%，持续10秒，最多攻击4个敌人"/>
+		<string name="h15" value="消耗MP21，魔法力70，熟练度35%，持续10秒，最多攻击4个敌人"/>
+		<string name="h16" value="消耗MP21，魔法力72，熟练度40%，持续15秒，最多攻击4个敌人"/>
+		<string name="h17" value="消耗MP21，魔法力74，熟练度40%，持续15秒，最多攻击4个敌人"/>
+		<string name="h18" value="消耗MP21，魔法力76，熟练度40%，持续15秒，最多攻击4个敌人"/>
+		<string name="h19" value="消耗MP31，魔法力78，熟练度45%，持续15秒，最多攻击5个敌人"/>
+		<string name="h2" value="消耗MP15，魔法力44，熟练度15%，持续10秒，最多攻击2个敌人"/>
+		<string name="h20" value="消耗MP31，魔法力80，熟练度45%，持续15秒，最多攻击5个敌人"/>
+		<string name="h21" value="消耗MP31，魔法力82，熟练度45%，持续15秒，最多攻击5个敌人"/>
+		<string name="h22" value="消耗MP31，魔法力84，熟练度50%，持续15秒，最多攻击5个敌人"/>
+		<string name="h23" value="消耗MP31，魔法力86，熟练度50%，持续15秒，最多攻击5个敌人"/>
+		<string name="h24" value="消耗MP31，魔法力88，熟练度50%，持续15秒，最多攻击5个敌人"/>
+		<string name="h25" value="消耗MP34，魔法力90，熟练度55%，持续15秒，最多攻击6个敌人"/>
+		<string name="h26" value="消耗MP34，魔法力92，熟练度55%，持续15秒，最多攻击6个敌人"/>
+		<string name="h27" value="消耗MP34，魔法力94，熟练度55%，持续15秒，最多攻击6个敌人"/>
+		<string name="h28" value="消耗MP34，魔法力96，熟练度60%，持续15秒，最多攻击6个敌人"/>
+		<string name="h29" value="消耗MP34，魔法力98，熟练度60%，持续15秒，最多攻击6个敌人"/>
+		<string name="h3" value="消耗MP15，魔法力46，熟练度15%，持续10秒，最多攻击2个敌人"/>
+		<string name="h30" value="消耗MP34，魔法力100，熟练度60%，持续15秒，最多攻击6个敌人"/>
+		<string name="h4" value="消耗MP15，魔法力48，熟练度20%，持续10秒，最多攻击2个敌人"/>
+		<string name="h5" value="消耗MP15，魔法力50，熟练度20%，持续10秒，最多攻击2个敌人"/>
+		<string name="h6" value="消耗MP15，魔法力52，熟练度20%，持续10秒，最多攻击2个敌人"/>
+		<string name="h7" value="消耗MP18，魔法力54，熟练度25%，持续10秒，最多攻击3个敌人"/>
+		<string name="h8" value="消耗MP18，魔法力56，熟练度25%，持续10秒，最多攻击3个敌人"/>
+		<string name="h9" value="消耗MP18，魔法力58，熟练度25%，持续10秒，最多攻击3个敌人"/>
+        <string name="desc" value="攻击多个敌人并造成持续伤害，命中后使目标对火属性攻击更脆弱。"/>
     </imgdir>
     <imgdir name="2221004">
         <string name="name" value="终极无限"/>
@@ -7503,7 +7503,7 @@
         <string name="h7" value="17秒 内不消耗MP"/>
         <string name="h8" value="18秒 内不消耗MP"/>
         <string name="h9" value="19秒 内不消耗MP"/>
-        <string name="desc" value="一定时间内搜集周围的魔力,不消耗魔法值 \n#c冷却时间 : 3分#"/>
+        <string name="desc" value="一定时间内使用技能不消耗MP。 \n#c冷却时间：3分钟#"/>
     </imgdir>
     <imgdir name="2221005">
         <string name="name" value="火魔兽"/>
@@ -7537,7 +7537,7 @@
 		<string name="h7" value="消耗MP 31，魔法力 201，持续时间 45秒"/>
 		<string name="h8" value="消耗MP 34，魔法力 204，持续时间 50秒"/>
 		<string name="h9" value="消耗MP 37，魔法力 207，持续时间 55秒"/>
-        <string name="desc" value="一定时间内召唤火属性的火魔兽. \n最多攻击6只敌人.\n必要技能 : #c冰凤球等级5以上#"/>
+        <string name="desc" value="一定时间内召唤火属性火魔兽协助攻击，最多攻击3个敌人。\n必要技能：#c冰凤球 Lv.5#"/>
     </imgdir>
     <imgdir name="2221006">
         <string name="name" value="链环闪电"/>
@@ -7571,11 +7571,11 @@
 		<string name="h7" value="消耗MP 16，魔法力 121，熟练度 25%，目标3名"/>
 		<string name="h8" value="消耗MP 16，魔法力 124，熟练度 25%，目标3名"/>
 		<string name="h9" value="消耗MP 16，魔法力 127，熟练度 25%，目标3名"/>
-        <string name="desc" value="使用高压电,给敌人2次电属性攻击.被电击的\n敌人周围要是有其他敌人,同样会受伤害"/>
+        <string name="desc" value="使用高压雷电攻击1个敌人，并连锁攻击附近敌人；\n可攻击的目标数量随等级提高。"/>
     </imgdir>
     <imgdir name="2221007">
         <string name="name" value="落霜冰破"/>
-        string name="h1" value="消耗MP 2100，魔法力 330，时间1秒"/>
+        <string name="h1" value="消耗MP 2100，魔法力 330，时间1秒"/>
 		<string name="h10" value="消耗MP 3000，魔法力 420，时间1秒"/>
 		<string name="h11" value="消耗MP 3100，魔法力 430，时间2秒"/>
 		<string name="h12" value="消耗MP 3200，魔法力 440，时间2秒"/>
@@ -7605,16 +7605,16 @@
 		<string name="h7" value="消耗MP 2700，魔法力 390，时间1秒"/>
 		<string name="h8" value="消耗MP 2800，魔法力 400，时间1秒"/>
 		<string name="h9" value="消耗MP 2900，魔法力 410，时间1秒"/>
-        <string name="desc" value="从天空掉冰枪,\n给15只以下的怪物强烈的冰属性伤害.\n#c冷却时间: 10秒#"/>
+        <string name="desc" value="召唤冰枪攻击最多15个敌人，造成强力冰属性伤害。\n#c冷却时间：10秒#"/>
     </imgdir>
     <imgdir name="2221008">
         <string name="name" value="勇士的意志"/>
-        <string name="h1" value="消耗MP 30，解除诱惑异常状态，冷却时间10分钟"/>
-        <string name="h2" value="消耗MP 30，解除诱惑异常状态，冷却时间9分钟"/>
-        <string name="h3" value="消耗MP 30，解除诱惑异常状态，冷却时间8分钟"/>
-        <string name="h4" value="消耗MP 30，解除诱惑异常状态，冷却时间7分钟"/>
-        <string name="h5" value="消耗MP 30，解除诱惑异常状态，冷却时间6分钟"/>
-        <string name="desc" value="从异常状态中恢复.\n 随着等级的上升,冷却时间逐渐缩短"/>
+        <string name="h1" value="消耗MP 30，解除诱惑、僵尸、混乱等异常状态，冷却时间"/>
+        <string name="h2" value="消耗MP 30，解除诱惑、僵尸、混乱等异常状态，冷却时间"/>
+        <string name="h3" value="消耗MP 30，解除诱惑、僵尸、混乱等异常状态，冷却时间"/>
+        <string name="h4" value="消耗MP 30，解除诱惑、僵尸、混乱等异常状态，冷却时间"/>
+        <string name="h5" value="消耗MP 30，解除诱惑、僵尸、混乱等异常状态，冷却时间"/>
+        <string name="desc" value="解除诱惑、僵尸、混乱等异常状态；\n等级越高，冷却时间越短。"/>
     </imgdir>
     <imgdir name="230">
         <string name="bookName" value="神圣魔法技能"/>
