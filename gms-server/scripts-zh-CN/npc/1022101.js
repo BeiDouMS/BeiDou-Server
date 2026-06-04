@@ -45,7 +45,7 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendYesNo("圣诞老人告诉我来到这里，只是他没有告诉我什么时候……我希望我来的时间对了！哦！顺便说一下，我是鲁尼，我可以带你去#b快乐村#k。你准备好了吗？");
+            cm.sendYesNo("圣诞老人让我来到这里，只是没有告诉我具体是什么时候……希望我来得正是时候！哦！顺便说一下，我是露妮，我可以带你去#b幸福村#k。你准备好了吗？");
         } else {
             cm.getPlayer().saveLocation("HAPPYVILLE");
             cm.warp(209000000, 0);
