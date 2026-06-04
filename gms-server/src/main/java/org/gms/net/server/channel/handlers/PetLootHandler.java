@@ -41,7 +41,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
 
-        int petIndex = chr.getPetIndex(p.readInt());
+        byte petIndex = chr.getPetIndex(p.readInt());
         Pet pet = chr.getPet(petIndex);
         if (pet == null || !pet.isSummoned()) {
             c.sendPacket(PacketCreator.enableActions());
@@ -54,12 +54,12 @@ public final class PetLootHandler extends AbstractPacketHandler {
         try {
             MapItem mapitem = (MapItem) ob;
             if (mapitem.getMeso() > 0) {
-                if (!chr.isEquippedMesoMagnet()) {
+                if (!chr.isEquippedMesoMagnet(petIndex)) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
-                if (chr.isEquippedPetItemIgnore()) {
+                if (chr.isEquippedPetItemIgnore(petIndex)) {
                     final Set<Integer> petIgnore = chr.getExcludedItems();
                     if (!petIgnore.isEmpty() && petIgnore.contains(Integer.MAX_VALUE)) {
                         c.sendPacket(PacketCreator.enableActions());
@@ -67,12 +67,12 @@ public final class PetLootHandler extends AbstractPacketHandler {
                     }
                 }
             } else {
-                if (!chr.isEquippedItemPouch()) {
+                if (!chr.isEquippedItemPouch(petIndex)) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
-                if (chr.isEquippedPetItemIgnore()) {
+                if (chr.isEquippedPetItemIgnore(petIndex)) {
                     final Set<Integer> petIgnore = chr.getExcludedItems();
                     if (!petIgnore.isEmpty() && petIgnore.contains(mapitem.getItem().getItemId())) {
                         c.sendPacket(PacketCreator.enableActions());

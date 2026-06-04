@@ -258,12 +258,6 @@ public class Character extends AbstractCharacterObject {
     private boolean equipchanged = true, berserk, hasMerchant, hasSandboxItem = false, whiteChat = false;
     @Setter
     private boolean canRecvPartySearchInvite = true;
-    @Getter
-    private boolean equippedMesoMagnet = false;
-    @Getter
-    private boolean equippedItemPouch = false;
-    @Getter
-    private boolean equippedPetItemIgnore = false;
     private boolean usedSafetyCharm = false;
     @Getter
     @Setter
@@ -5265,6 +5259,59 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    private static boolean isValidPetIndex(byte petIndex) {
+        return petIndex >= 0 && petIndex < 3;
+    }
+
+    public int getPetEquipItemId(byte petIndex) {
+        if (!isValidPetIndex(petIndex)) {
+            return 0;
+        }
+
+        Item petEqp = getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PetEquipSlots.get(petIndex).equip());
+        return petEqp == null ? 0 : petEqp.getItemId();
+    }
+
+    public boolean hasPetNameTag(byte petIndex) {
+        if (!isValidPetIndex(petIndex)) {
+            return false;
+        }
+
+        return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PetEquipSlots.get(petIndex).nameTag()) != null;
+    }
+
+    public boolean hasPetChatballoon(byte petIndex) {
+        if (!isValidPetIndex(petIndex)) {
+            return false;
+        }
+
+        return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PetEquipSlots.get(petIndex).chatBalloon()) != null;
+    }
+
+    public boolean isEquippedMesoMagnet(byte petIndex) {
+        if (!isValidPetIndex(petIndex)) {
+            return false;
+        }
+
+        return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PetEquipSlots.get(petIndex).mesoMagnet()) != null;
+    }
+
+    public boolean isEquippedItemPouch(byte petIndex) {
+        if (!isValidPetIndex(petIndex)) {
+            return false;
+        }
+
+        return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PetEquipSlots.get(petIndex).itemPouch()) != null;
+    }
+
+    public boolean isEquippedPetItemIgnore(byte petIndex) {
+        if (!isValidPetIndex(petIndex)) {
+            return false;
+        }
+
+        return getInventory(InventoryType.EQUIPPED).getItem(ItemConstants.PetEquipSlots.get(petIndex).itemIgnore()) != null;
+    }
+
     public final byte getQuestStatus(final int quest) {
         synchronized (quests) {
             QuestStatus mqs = quests.get((short) quest);
@@ -9305,12 +9352,6 @@ public class Character extends AbstractCharacterObject {
 
         if (itemid == ItemId.PENDANT_OF_THE_SPIRIT) {
             this.equipPendantOfSpirit();
-        } else if (itemid == ItemId.MESO_MAGNET) {
-            equippedMesoMagnet = true;
-        } else if (itemid == ItemId.ITEM_POUCH) {
-            equippedItemPouch = true;
-        } else if (itemid == ItemId.ITEM_IGNORE) {
-            equippedPetItemIgnore = true;
         }
     }
 
@@ -9319,12 +9360,6 @@ public class Character extends AbstractCharacterObject {
 
         if (itemid == ItemId.PENDANT_OF_THE_SPIRIT) {
             this.unequipPendantOfSpirit();
-        } else if (itemid == ItemId.MESO_MAGNET) {
-            equippedMesoMagnet = false;
-        } else if (itemid == ItemId.ITEM_POUCH) {
-            equippedItemPouch = false;
-        } else if (itemid == ItemId.ITEM_IGNORE) {
-            equippedPetItemIgnore = false;
         }
     }
 

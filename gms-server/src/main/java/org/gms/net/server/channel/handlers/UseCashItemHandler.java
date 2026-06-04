@@ -420,7 +420,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 player.forceUpdateItem(item);
             }
 
-            player.getMap().broadcastMessage(player, PacketCreator.changePetName(player, newName, 1), true);
+            player.getMap().broadcastMessage(player, PacketCreator.changePetName(player, newName, (byte)0), true);
             c.enableActions();
             remove(c, position, itemId);
         } else if (itemType == 520) {//钱袋子
