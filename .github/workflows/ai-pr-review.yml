@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: MiniMax Code Review
-        uses: MiniMax-AI/code-review-action@main
+        uses: tarmojussila/minimax-code-review@main
         with:
           MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
           MINIMAX_MODEL: 'MiniMax-M3'
