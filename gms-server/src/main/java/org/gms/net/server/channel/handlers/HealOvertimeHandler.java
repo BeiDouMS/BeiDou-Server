@@ -23,8 +23,11 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.Skill;
+import org.gms.client.SkillFactory;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.autoban.AutobanManager;
+import org.gms.constants.skills.Magician;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
@@ -61,15 +64,28 @@ public final class HealOvertimeHandler extends AbstractPacketHandler {
             chr.getMap().broadcastMessage(chr, PacketCreator.showHpHealed(chr.getId(), healHP), false);
             abm.spam(0, timestamp);
         }
-        short healMP = p.readShort();
+        int healMP = p.readShort();
         if (healMP != 0 && healMP < 1000) {
             abm.setTimestamp(9, timestamp, 28);
             if ((abm.getLastSpam(1) + 1500) > timestamp) {
                 AutobanFactory.FAST_MP_HEALING.addPoint(abm, "Fast mp healing");
                 return;     // thanks resinate for noticing mp being gained even after detection
             }
+            healMP = applyImprovedMpRecovery(chr, healMP);
             chr.addMP(healMP);
             abm.spam(1, timestamp);
         }
+    }
+
+    private static int applyImprovedMpRecovery(Character chr, int healMP) {
+        Skill improvedRecovery = SkillFactory.getSkill(Magician.IMPROVED_MP_RECOVERY);
+        int skillLevel = chr.getSkillLevel(improvedRecovery);
+        if (skillLevel <= 0) {
+            return healMP;
+        }
+
+        // Keep this as a server-side floor so clients that already include the bonus are not doubled.
+        int expectedRecovery = skillLevel * (chr.getLevel() / 10) + 3;
+        return Math.max(healMP, expectedRecovery);
     }
 }
