@@ -25,8 +25,11 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -324,5 +327,45 @@ public final class ItemConstants {
 
     public static boolean notValidHairColor(int hairColor) {
         return hairColor > 7 || hairColor < 0;
+    }
+
+    // is_correct_bodypart
+    public final static short Pet0Equip = -114;
+    public final static short Pet1Equip = -130;
+    public final static short Pet2Equip = -138;
+
+    public final static short Pet0NameTag = -121;
+    public final static short Pet1NameTag = -131;
+    public final static short Pet2NameTag = -139;
+
+    public final static short Pet0ChatBalloon = -129;
+    public final static short Pet1ChatBalloon = -132;
+    public final static short Pet2ChatBalloon = -140;
+
+    // itemId = 1812000
+    public final static short Pet0MesoMagnet = -123;
+    public final static short Pet1MesoMagnet = -134;
+    public final static short Pet2MesoMagnet = -142;
+
+    // itemId = 1812001
+    public final static short Pet0ItemPouch = -122;
+    public final static short Pet1ItemPouch = -133;
+    public final static short Pet2ItemPouch = -141;
+
+    // itemId = 1812007
+    public final static short Pet0ItemIgnore = -146;
+    public final static short Pet1ItemIgnore = -147;
+    public final static short Pet2ItemIgnore = -148;
+
+    public static final List<PetEquipSlot> PET_EQUIP_SLOTS = Collections.unmodifiableList(Arrays.asList(
+        new PetEquipSlot(Pet0Equip, Pet0NameTag, Pet0ChatBalloon, Pet0MesoMagnet, Pet0ItemPouch, Pet0ItemIgnore),
+        new PetEquipSlot(Pet1Equip, Pet1NameTag, Pet1ChatBalloon, Pet1MesoMagnet, Pet1ItemPouch, Pet1ItemIgnore),
+        new PetEquipSlot(Pet2Equip, Pet2NameTag, Pet2ChatBalloon, Pet2MesoMagnet, Pet2ItemPouch, Pet2ItemIgnore)
+    ));
+
+    public static final List<Short> PETS_NAME_TAG = Collections.unmodifiableList(Arrays.asList(Pet0NameTag, Pet1NameTag, Pet2NameTag));
+
+    public static boolean isValidPetIndex(byte petIndex) {
+        return petIndex >= 0 && petIndex < 3;
     }
 }
