@@ -469,6 +469,12 @@ public class Monster extends AbstractLoadedLife {
             dispatchMonsterDamaged(from, trueDamage);
         }
 
+        // ========== 通知事件实例记录伤害 ==========
+        EventInstanceManager eim = getMap().getEventInstance();
+        if (eim != null && !fake) {
+            eim.addDamage(from, trueDamage);
+        }
+
         if (!takenDamage.containsKey(from.getId())) {
             takenDamage.put(from.getId(), new AtomicLong(trueDamage));
         } else {

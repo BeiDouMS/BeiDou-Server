@@ -53,6 +53,7 @@ import javax.script.ScriptException;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -72,6 +73,7 @@ public class EventInstanceManager {
     private int leaderId = -1; // 事件队伍领袖ID
     private final List<Monster> mobs = new LinkedList<>();// 事件中生成的怪物列表
     private final Map<Character, Integer> killCount = new HashMap<>();// 玩家击杀计数
+    private final Map<Character, Long> playerDamage = new ConcurrentHashMap<>();// 玩家伤害量
     private EventManager em; // 所属事件管理器
     private EventScriptScheduler ess; // 事件脚本调度器
     private MapManager mapManager; // 地图管理器
@@ -1431,5 +1433,34 @@ public class EventInstanceManager {
         }
 
         return true;
+    }
+    // 添加记录伤害的方法
+    public void addDamage(Character chr, int damage) {
+        if (chr == null || damage <= 0) return;
+        playerDamage.merge(chr, (long) damage, Long::sum);
+    }
+
+    // 添加清空方法（可选）
+    public void clearDamage() {
+        playerDamage.clear();
+    }
+
+    // 添加通报伤害排名的方法
+    public void broadcastDamageRanking() {
+        if (playerDamage.isEmpty()) return;
+
+        // 按伤害值降序排序
+        List<Map.Entry<Character, Long>> sorted = new ArrayList<>(playerDamage.entrySet());
+        sorted.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+        long totalDamage = sorted.stream().mapToLong(Map.Entry::getValue).sum();
+
+        dropMessage(6, "========== 伤害统计 ==========");
+        dropMessage(6, "总伤害: " + totalDamage);
+        for (int i = 0; i < Math.min(5, sorted.size()); i++) {
+            Map.Entry<Character, Long> entry = sorted.get(i);
+            dropMessage(6, (i+1) + "名: " + entry.getKey().getName() + " - " + entry.getValue() + " 伤害");
+        }
+        dropMessage(6, "==============================");
     }
 }
