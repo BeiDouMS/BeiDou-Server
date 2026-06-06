@@ -11,12 +11,16 @@ jobs:
   review:
     if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
+    env:
+      SPONSOR_NAME: ${{ vars.AI_SPONSOR_NAME || '赞助方' }}
     steps:
       - name: AI Code Review
         uses: SleepNap/one-ai-pr-review@v1
         with:
-          api_key: ${{ secrets.MINIMAX_API_KEY }}
-          provider: minimax
+          api_key: ${{ secrets.DEEPSEEK_API_KEY }}
+          provider: deepseek
+          model: deepseek-v4-flash
+          api_base: https://opencode.ai/zen/go/v1/chat/completions
           reviewer_name: AI Code Review
           system_prompt: |
             你是一个资深的 Java 游戏服务端代码审查专家。这是一个冒险岛（MapleStory v83）风格的服务端项目。
@@ -36,3 +40,5 @@ jobs:
             代码质量/安全性/可维护性 (1-5)
 
             用中文回答，简洁专业。如果代码没问题就诚实说，不要强行找问题。
+
+            审查报告末尾附上：> 🙏 感谢 ${{ env.SPONSOR_NAME }} 提供的 API Key 赞助支持。
