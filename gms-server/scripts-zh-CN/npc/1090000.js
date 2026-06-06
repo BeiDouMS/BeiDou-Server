@@ -68,9 +68,9 @@ function start() {
     } else if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {
         spawnPnpc = true;
 
-        var sendStr = "You have walked a long way to reach the power, wisdom and courage you hold today, haven't you? What do you say about having right now #ra NPC on the Hall of Fame holding the current image of your character#k? Do you like it?";
+        var sendStr = "你一路走来，才拥有今天的力量、智慧与勇气，不是吗？你觉得现在就在名人堂里放置一个#r保留你当前角色形象的玩家 NPC#k怎么样？喜欢吗？";
         if (spawnPnpcFee > 0) {
-            sendStr += " I can do it for you, for the fee of #b " + cm.numberWithCommas(spawnPnpcFee) + " mesos.#k";
+            sendStr += " 我可以帮你完成，不过需要收取 #b" + cm.numberWithCommas(spawnPnpcFee) + " 金币。#k";
         }
 
         cm.sendYesNo(sendStr);
@@ -251,7 +251,7 @@ function action(mode, type, selection) {
                     job = 520;
                 }
 
-                cm.sendYesNo("所以你想要选择成为" + (job == 510 ? "#b格斗家#k" : "#b神射手#k") + "进行第二次转职吗？你知道在这里做出选择后，第二次转职就无法选择其他职业了，对吧？");
+                cm.sendYesNo("所以你想要选择成为" + (job == 510 ? "#b格斗家#k" : "#b枪手#k") + "进行第二次转职吗？你知道在这里做出选择后，第二次转职就无法选择其他职业了，对吧？");
             }
         } else if (status == 3) {
             if (cm.haveItem(4031012)) {
@@ -272,7 +272,7 @@ function action(mode, type, selection) {
         } else if (status == 5) {
             cm.sendNextPrev("我也给了你一点 #bSP#k。打开左下角的 #b技能菜单#k。你可以提升新获得的二级技能。不过要注意，你不能一次性提升它们。有些技能只有在学会其他技能后才能使用。记得要牢记这一点。");
         } else if (status == 6) {
-            cm.sendNextPrev((job == 510 ? "Brawlers" : "Gunslingers") + " need to be strong. But remember that you can't abuse that power and use it on a weakling. Please use your enormous power the right way, because... for you to use that the right way, that is much harden than just getting stronger. Please find me after you have advanced much further. I'll be waiting for you.");
+            cm.sendNextPrev((job == 510 ? "格斗家" : "枪手") + "都必须足够强大。不过要记住，你不能滥用这份力量去欺负弱者。请把你强大的力量用在正确的地方，因为……正确运用这份力量，比单纯变强更困难。等你继续成长之后再来找我吧。我会在这里等你。");
         }
     } else if (actionx["3thJobI"]) {
         if (status == 0) {
