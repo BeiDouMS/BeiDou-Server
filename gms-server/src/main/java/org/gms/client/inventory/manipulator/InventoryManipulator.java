@@ -662,11 +662,11 @@ public class InventoryManipulator {
             chr.cancelBuffStats(BuffStat.BOOSTER);
         }
 
-        byte petIndex = (byte)ItemConstants.PetsNameTag.indexOf(dst);
+        int petIndex = ItemConstants.PETS_NAME_TAG.indexOf(dst);
         if (petIndex != -1) {
             Pet pet = chr.getPet(petIndex);
             if (pet != null) {
-                chr.getMap().broadcastMessage(chr, PacketCreator.changePetName(chr, pet.getName(), petIndex), false);
+                chr.getMap().broadcastMessage(chr, PacketCreator.changePetName(chr, pet.getName(), (byte)petIndex), false);
             }
         }
 
@@ -714,11 +714,11 @@ public class InventoryManipulator {
             eqpdInv.addItemFromDB(target);
         }
 
-        byte petIndex = (byte)ItemConstants.PetsNameTag.indexOf(src);
+        int petIndex = ItemConstants.PETS_NAME_TAG.indexOf(src);
         if (petIndex != -1) {
             Pet pet = chr.getPet(petIndex);
             if (pet != null) {
-                chr.getMap().broadcastMessage(chr, PacketCreator.changePetName(chr, pet.getName(), petIndex), false);
+                chr.getMap().broadcastMessage(chr, PacketCreator.changePetName(chr, pet.getName(), (byte)petIndex), false);
             }
         }
         

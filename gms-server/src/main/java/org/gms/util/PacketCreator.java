@@ -2729,6 +2729,7 @@ public class PacketCreator {
         p.writeString(allianceName);  // does not seem to work
         p.writeByte(0); // pMedalInfo, thanks to Arnah (Vertisy)
 
+        // CUIUserInfo::SetMultiPetInfo
         Pet[] pets = chr.getPets();
         for (byte i = 0; i < 3; i++) {
             if (pets[i] != null) {

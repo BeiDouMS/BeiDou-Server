@@ -50,7 +50,7 @@ public final class PetChatHandler extends AbstractPacketHandler {
             c.disconnect(true, false);
             return;
         }
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.petChat(c.getPlayer().getId(), pet, act, text, c.getPlayer().hasPetChatballoon(pet)), false);
+        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.petChat(c.getPlayer().getId(), pet, act, text, c.getPlayer().hasPetChatballoon(pet)), true);
         ChatLogger.log(c, "Pet", text);
     }
 }

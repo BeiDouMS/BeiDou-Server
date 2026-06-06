@@ -25,10 +25,11 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -356,11 +357,15 @@ public final class ItemConstants {
     public final static short Pet1ItemIgnore = -147;
     public final static short Pet2ItemIgnore = -148;
 
-    public static ArrayList<PetEquipSlot> PetEquipSlots = new ArrayList<>(Arrays.asList(
+    public static final List<PetEquipSlot> PET_EQUIP_SLOTS = Collections.unmodifiableList(Arrays.asList(
         new PetEquipSlot(Pet0Equip, Pet0NameTag, Pet0ChatBalloon, Pet0MesoMagnet, Pet0ItemPouch, Pet0ItemIgnore),
         new PetEquipSlot(Pet1Equip, Pet1NameTag, Pet1ChatBalloon, Pet1MesoMagnet, Pet1ItemPouch, Pet1ItemIgnore),
         new PetEquipSlot(Pet2Equip, Pet2NameTag, Pet2ChatBalloon, Pet2MesoMagnet, Pet2ItemPouch, Pet2ItemIgnore)
     ));
 
-    public static ArrayList<Short> PetsNameTag = new ArrayList<>(Arrays.asList(Pet0NameTag, Pet1NameTag, Pet2NameTag));
+    public static final List<Short> PETS_NAME_TAG = Collections.unmodifiableList(Arrays.asList(Pet0NameTag, Pet1NameTag, Pet2NameTag));
+
+    public static boolean isValidPetIndex(byte petIndex) {
+        return petIndex >= 0 && petIndex < 3;
+    }
 }
