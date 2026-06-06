@@ -1,26 +1,24 @@
-name: MiniMax Code Review
+name: AI PR Review
 
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
-  contents: read
   pull-requests: write
-  issues: write
 
 jobs:
-  minimax-review:
+  review:
     if: github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
     steps:
-      - name: MiniMax Code Review
-        uses: tarmojussila/minimax-code-review@main
+      - name: AI Code Review
+        uses: SleepNap/one-ai-pr-review@v1
         with:
-          MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
-          MINIMAX_MODEL: 'MiniMax-M3'
-          MINIMAX_REVIEWER_NAME: 'MiniMax Code Review'
-          MINIMAX_SYSTEM_PROMPT: |
+          api_key: ${{ secrets.MINIMAX_API_KEY }}
+          provider: minimax
+          reviewer_name: AI Code Review
+          system_prompt: |
             你是一个资深的 Java 游戏服务端代码审查专家。这是一个冒险岛（MapleStory v83）风格的服务端项目。
 
             请按以下格式审查 PR 并给出结构化总结：
