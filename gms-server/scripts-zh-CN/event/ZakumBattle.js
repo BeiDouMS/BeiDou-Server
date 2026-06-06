@@ -223,6 +223,7 @@ function monsterKilled(mob, eim) {
     if (isZakum(mob)) {
         eim.setIntProperty("defeatedBoss", 1);
         eim.showClearEffect(mob.getMap().getId());
+        eim.broadcastDamageRanking();
         eim.clearPQ();
 
         mob.getMap().broadcastZakumVictory();

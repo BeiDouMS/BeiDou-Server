@@ -200,6 +200,7 @@ function monsterKilled(mob, eim) {
     if (isHorntail(mob)) {
         eim.setIntProperty("defeatedBoss", 1);
         eim.showClearEffect(mob.getMap().getId());
+        eim.broadcastDamageRanking();
         eim.clearPQ();
 
         eim.dispatchRaiseQuestMobCount(8810018, 240060200);
