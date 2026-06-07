@@ -117,6 +117,9 @@ public class DataTool {
     }
 
     public static int getInt(String path, Data data, int def) {
+        if (data==null) {
+            return def;
+        }
         return getInt(data.getChildByPath(path), def);
     }
 
