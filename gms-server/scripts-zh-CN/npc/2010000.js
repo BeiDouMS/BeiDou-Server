@@ -106,7 +106,7 @@ eQuestPrizes[14] = [[2000006, 30],	// Mana Elixir
     [2040805, 1]];   // 10% Glove Attack
 eQuestPrizes[15] = [[2000006, 30],   // Mana Elixir
     [4020006, 7],	// Topaz Ore
-    [4020008.2],	// Black Crystal Ore
+    [4020008, 2],	// Black Crystal Ore
     [4020007, 2],	// Diamond Ore
     [2041020, 1]];	// 10% Cape Dex
 eQuestPrizes[16] = [[2000001, 30],	// Orange Potions
@@ -159,7 +159,7 @@ eQuestPrizes[23] = [[2000006, 25],	// Mana Elixir
     [2041023, 1]];	// 10% Cape LUK
 eQuestPrizes[24] = [[2000006, 35],	// Mana Elixir
     [4020006, 9],	// Topaz Ore
-    [4010008, 4],	// Black Crystal Ore
+    [4020008, 4],	// Black Crystal Ore
     [4020007, 4],	// Diamond Ore
     [2041008, 1]];   // 10% Cape HP
 var requiredItem = 0;
@@ -199,7 +199,9 @@ function action(mode, type, selection) {
         prizeQuantity = reward[itemSet][1];
         if (!cm.haveItem(requiredItem, 100)) {
             cm.sendOk("嗯... 你确定你有 #b100 #t" + requiredItem + "##k 吗？如果是的话，请检查一下你的物品栏是否已满。");
-        } else if (!cm.canHold(prizeItem)) {
+        } else if (prizeItem <= 0 || prizeQuantity <= 0) {
+            cm.sendOk("奇怪……我这边的交易清单好像出了点问题。你先稍等一下，晚点再来找我交易吧。");
+        } else if (!cm.canHold(prizeItem, prizeQuantity, requiredItem, 100)) {
             cm.sendOk("你的使用等等物品栏似乎已经满了。你需要腾出空间才能和我交易！清理一下，然后找到我。");
         } else {
             cm.gainItem(requiredItem, -100);

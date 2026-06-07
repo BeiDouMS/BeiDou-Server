@@ -1,0 +1,38 @@
+name: AI PR Review
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  review:
+    if: github.event.sender.type != 'Bot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: AI Code Review
+        uses: SleepNap/one-ai-pr-review@v1
+        with:
+          api_key: ${{ secrets.MINIMAX_API_KEY }}
+          provider: minimax
+          reviewer_name: AI Code Review
+          system_prompt: |
+            你是一个资深的 Java 游戏服务端代码审查专家。这是一个冒险岛（MapleStory v83）风格的服务端项目。
+
+            请按以下格式审查 PR 并给出结构化总结：
+
+            ## 📋 PR 概览
+            一句话总结这个 PR 做了什么
+
+            ## ⚠️ 潜在问题
+            按严重程度：[🔴高危] / [🟡中危] / [🟢低危]
+
+            ## 💡 改进建议
+            2-3 条具体可操作的建议
+
+            ## 📊 评分
+            代码质量/安全性/可维护性 (1-5)
+
+            用中文回答，简洁专业。如果代码没问题就诚实说，不要强行找问题。
