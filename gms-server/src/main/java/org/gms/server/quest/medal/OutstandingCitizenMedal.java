@@ -9,6 +9,7 @@ public final class OutstandingCitizenMedal {
     public static final int QUEST_ID = 29508;
     public static final int ELIGIBILITY_QUEST_ID = 29580;
     public static final int MEDAL_ID = 1142081;
+    public static final int QUEST_NPC_ID = 9000040;
 
     private OutstandingCitizenMedal() {
     }
@@ -22,10 +23,17 @@ public final class OutstandingCitizenMedal {
     }
 
     public static void refreshEligibility(Character player) {
+        if (player == null) {
+            return;
+        }
+
         Quest mainQuest = Quest.getInstance(QUEST_ID);
         Quest eligibilityQuest = Quest.getInstance(ELIGIBILITY_QUEST_ID);
-        QuestStatus.Status mainStatus = player.getQuest(mainQuest).getStatus();
-        QuestStatus.Status eligibilityStatus = player.getQuest(eligibilityQuest).getStatus();
+        QuestStatus mainQuestStatus = player.getQuest(mainQuest);
+        QuestStatus eligibilityQuestStatus = player.getQuest(eligibilityQuest);
+
+        QuestStatus.Status mainStatus = getStatusOrNotStarted(mainQuestStatus);
+        QuestStatus.Status eligibilityStatus = getStatusOrNotStarted(eligibilityQuestStatus);
 
         if (mainStatus != QuestStatus.Status.STARTED || !isEligible(player)) {
             if (eligibilityStatus != QuestStatus.Status.NOT_STARTED) {
@@ -35,14 +43,23 @@ public final class OutstandingCitizenMedal {
         }
 
         if (eligibilityStatus != QuestStatus.Status.STARTED) {
-            eligibilityQuest.forceStart(player, 9000040);
+            eligibilityQuest.forceStart(player, QUEST_NPC_ID);
         }
     }
 
     public static void clearEligibility(Character player) {
+        if (player == null) {
+            return;
+        }
+
         Quest eligibilityQuest = Quest.getInstance(ELIGIBILITY_QUEST_ID);
-        if (player.getQuest(eligibilityQuest).getStatus() != QuestStatus.Status.NOT_STARTED) {
+        QuestStatus eligibilityQuestStatus = player.getQuest(eligibilityQuest);
+        if (getStatusOrNotStarted(eligibilityQuestStatus) != QuestStatus.Status.NOT_STARTED) {
             eligibilityQuest.reset(player);
         }
+    }
+
+    private static QuestStatus.Status getStatusOrNotStarted(QuestStatus questStatus) {
+        return questStatus != null ? questStatus.getStatus() : QuestStatus.Status.NOT_STARTED;
     }
 }

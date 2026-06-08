@@ -1,4 +1,5 @@
 var OutstandingCitizenMedal = Java.type('org.gms.server.quest.medal.OutstandingCitizenMedal');
+var questId = OutstandingCitizenMedal.QUEST_ID;
 var medalId = OutstandingCitizenMedal.MEDAL_ID;
 
 function getMissingRequirements() {
@@ -13,38 +14,51 @@ function getMissingRequirements() {
         missing.push("join a guild");
     }
     if (familyEntry == null || familyEntry.getJuniorCount() < 1) {
-        missing.push("register at least 1 Junior");
+        missing.push("have at least 1 junior");
     }
 
     return missing;
 }
 
 function start(mode, type, selection) {
+    if (qm.getQuestStatus(questId) == 2) {
+        qm.sendOk("You have already received the Outstanding Citizen medal.");
+        qm.dispose();
+        return;
+    }
+
     qm.forceStartQuest();
     OutstandingCitizenMedal.refreshEligibility(qm.getPlayer());
 
     var missing = getMissingRequirements();
     if (missing.length > 0) {
-        qm.sendOk("Join a marriage, a guild, and register at least 1 Junior. Come back once you meet all three requirements.");
+        qm.sendOk("Please get married, join a guild, and have at least 1 junior. Come back when all conditions are met.");
     } else {
-        qm.sendOk("You have met all the requirements. Talk to me again to receive the medal.");
+        qm.sendOk("You meet all requirements. Talk to me again to receive the medal.");
     }
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (qm.getQuestStatus(questId) == 2) {
+        OutstandingCitizenMedal.clearEligibility(qm.getPlayer());
+        qm.sendOk("You have already received the Outstanding Citizen medal.");
+        qm.dispose();
+        return;
+    }
+
     OutstandingCitizenMedal.refreshEligibility(qm.getPlayer());
 
     var missing = getMissingRequirements();
     if (missing.length > 0) {
-        qm.sendOk("You have not met all the requirements yet. Please " + missing.join(", ") + ".");
+        qm.sendOk("You have not met all requirements yet. Please: " + missing.join(", ") + ".");
         qm.dispose();
         return;
     }
 
     if (!qm.haveItem(medalId)) {
         if (!qm.canHold(medalId)) {
-            qm.sendOk("Please make room in your Equip inventory before receiving the medal.");
+            qm.sendOk("Please make 1 free slot in your Equip inventory before receiving the medal.");
             qm.dispose();
             return;
         }
@@ -52,7 +66,7 @@ function end(mode, type, selection) {
     }
 
     var medalname = qm.getMedalName();
-    qm.message("<" + medalname + "> has been awarded.");
+    qm.message("<" + medalname + "> reward received.");
     qm.earnTitle(medalname);
     qm.forceCompleteQuest();
     OutstandingCitizenMedal.clearEligibility(qm.getPlayer());
