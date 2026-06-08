@@ -5,7 +5,7 @@
 */
 
 var status = -1;
-var requiredKills = 1000000;
+var requiredKills = 100000;
 
 function getProgress() {
     return Math.min(qm.getQuestProgressInt(29400), requiredKills);
@@ -23,7 +23,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("在30天内狩猎高于自己等级的#r1,000,000只#k怪物！完成任务即可获得#e#b勤奋冒险家勋章#k#n称号。其中实力最为出众的勇士将获得#e#b传说中的猎人(特级)#k#n……");
+            qm.sendNext("在30天内狩猎高于自己等级的#r100,000只#k怪物！完成任务即可获得#e#b勤奋冒险家勋章#k#n称号。其中实力最为出众的勇士将获得#e#b传说中的猎人(特级)#k#n……");
         } else if (status == 1) {
             qm.sendYesNo("请注意：必须为高于自身等级的怪物（120级以上的角色必须狩猎120级以上的怪物）。你要接受这个挑战吗？");
         } else if (status == 2) {

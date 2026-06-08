@@ -5,7 +5,7 @@
 */
 
 var status = -1;
-var requiredKills = 1000000;
+var requiredKills = 100000;
 
 function getProgress() {
     return Math.min(qm.getQuestProgressInt(29400), requiredKills);
@@ -23,7 +23,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Hunt #r1,000,000#k monsters that are higher level than you within 30 days! Anyone who completes this task will receive the title, #e#bVeteran Hunter#k#n. The person with the highest score will receive the #e#bLegendary Hunter (Special Title)#k#n.");
+            qm.sendNext("Hunt #r100,000#k monsters that are higher level than you within 30 days! Anyone who completes this task will receive the title, #e#bVeteran Hunter#k#n. The person with the highest score will receive the #e#bLegendary Hunter (Special Title)#k#n.");
         } else if (status == 1) {
             qm.sendYesNo("Note that monsters must be higher level than your character. Characters level 120 or above must hunt monsters level 120 or higher. Do you want to accept this challenge?");
         } else if (status == 2) {

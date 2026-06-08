@@ -110,7 +110,8 @@ import static java.util.concurrent.TimeUnit.*;
 
 public class Character extends AbstractCharacterObject {
     public static final int VETERAN_HUNTER_QUEST = 29400;
-    public static final int VETERAN_HUNTER_REQUIRED_KILLS = 1_000_000;
+    public static final int VETERAN_HUNTER_REQUIRED_KILLS = 100_000;
+    private static final int VETERAN_HUNTER_LEVEL_FLOOR = 120;
     private static final Logger log = LoggerFactory.getLogger(Character.class);
 
     @Getter
@@ -6699,7 +6700,6 @@ public class Character extends AbstractCharacterObject {
     public void raiseQuestMobCount(int id) {
         // Kept for scripted quest progress that has no concrete monster instance.
         // Real monster kills should call the overload with mobLevel for level-based medals.
-        raiseVeteranHunterMobCount(-1);
         raiseQuestMobCountInternal(id);
     }
 
@@ -6753,7 +6753,8 @@ public class Character extends AbstractCharacterObject {
             try {
                 progress = Integer.parseInt(qs.getProgress(0));
             } catch (NumberFormatException e) {
-                progress = 0;
+                log.warn("Invalid Veteran Hunter progress for chrId {}, progress: {}", this.id, qs.getProgress(0), e);
+                return;
             }
 
             if (progress >= VETERAN_HUNTER_REQUIRED_KILLS) {
@@ -6766,7 +6767,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private boolean countsForVeteranHunter(int mobLevel) {
-        return level >= 120 ? mobLevel >= 120 : mobLevel > level;
+        return level >= VETERAN_HUNTER_LEVEL_FLOOR ? mobLevel >= VETERAN_HUNTER_LEVEL_FLOOR : mobLevel > level;
     }
 
     public Mount mount(int id, int skillid) {
