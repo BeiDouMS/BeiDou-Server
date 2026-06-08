@@ -26,6 +26,7 @@ import org.gms.client.autoban.AutobanFactory;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
+import org.gms.util.PacketCreator;
 
 /**
  * @author Matze
@@ -41,7 +42,8 @@ public final class ChangeChannelHandler extends AbstractPacketHandler {
             AutobanFactory.GENERAL.alert(c.getPlayer(), "CCing to same channel.");
             c.disconnect(false, false);
             return;
-        } else if (c.getPlayer().getCashShop().isOpened() || c.getPlayer().getMiniGame() != null || c.getPlayer().getPlayerShop() != null) {
+        } else if (c.getPlayer().getCashShop().isOpened() || c.getPlayer().getMiniGame() != null || c.getPlayer().getPlayerShop() != null || c.getPlayer().getTrade() != null) {
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
 
