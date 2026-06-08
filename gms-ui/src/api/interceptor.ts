@@ -92,6 +92,7 @@ axios.interceptors.response.use(
     return res;
   },
   (error) => {
+    const status = error.response?.status;
     let errorMessage;
     if (error.message === 'Network Error') {
       errorMessage = '无法连接到服务器';
@@ -102,7 +103,7 @@ axios.interceptors.response.use(
       content: errorMessage,
       duration: 5 * 1000,
     });
-    if (error.response.status === 401) {
+    if (status === 401) {
       const userStore = useUserStore();
 
       userStore.logoutCallBack();
