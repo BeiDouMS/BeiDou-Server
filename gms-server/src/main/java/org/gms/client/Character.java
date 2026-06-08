@@ -6739,24 +6739,26 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void raiseVeteranHunterMobCount(int mobLevel) {
-        QuestStatus qs = getQuest(Quest.getInstance(VETERAN_HUNTER_QUEST));
-        if (qs.getStatus() != QuestStatus.Status.STARTED || mobLevel <= 0 || !countsForVeteranHunter(mobLevel)) {
-            return;
-        }
+        synchronized (quests) {
+            QuestStatus qs = getQuest(Quest.getInstance(VETERAN_HUNTER_QUEST));
+            if (qs.getStatus() != QuestStatus.Status.STARTED || mobLevel <= 0 || !countsForVeteranHunter(mobLevel)) {
+                return;
+            }
 
-        int progress;
-        try {
-            progress = Integer.parseInt(qs.getProgress(0));
-        } catch (NumberFormatException e) {
-            progress = 0;
-        }
+            int progress;
+            try {
+                progress = Integer.parseInt(qs.getProgress(0));
+            } catch (NumberFormatException e) {
+                progress = 0;
+            }
 
-        if (progress >= VETERAN_HUNTER_REQUIRED_KILLS) {
-            return;
-        }
+            if (progress >= VETERAN_HUNTER_REQUIRED_KILLS) {
+                return;
+            }
 
-        qs.setProgress(0, Integer.toString(progress + 1));
-        announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
+            qs.setProgress(0, Integer.toString(progress + 1));
+            announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
+        }
     }
 
     private boolean countsForVeteranHunter(int mobLevel) {
