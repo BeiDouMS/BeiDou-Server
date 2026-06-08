@@ -1,4 +1,5 @@
 var medalId = 1142081;
+var Quest = Java.type('org.gms.server.quest.Quest');
 
 function getMissingRequirements() {
     var missing = [];
@@ -18,25 +19,20 @@ function getMissingRequirements() {
     return missing;
 }
 
-function start(mode, type, selection) {
-    qm.forceStartQuest();
-    qm.sendOk("请完成结婚、加入公会，并拥有至少 1 名后辈。满足全部条件后再来找我领取勋章。");
-    qm.dispose();
-}
-
-function end(mode, type, selection) {
+function tryAwardMedal() {
     var missing = getMissingRequirements();
     if (missing.length > 0) {
         qm.sendOk("你还没有满足全部条件，请先：" + missing.join("、") + "。");
+        Quest.getInstance(29508).reset(qm.getPlayer());
         qm.dispose();
-        return;
+        return false;
     }
 
     if (!qm.haveItem(medalId)) {
         if (!qm.canHold(medalId)) {
             qm.sendOk("请在装备栏中空出 1 个位置后再来领取勋章。");
             qm.dispose();
-            return;
+            return false;
         }
         qm.gainItem(medalId, 1);
     }
@@ -46,4 +42,13 @@ function end(mode, type, selection) {
     qm.earnTitle(medalname);
     qm.forceCompleteQuest();
     qm.dispose();
+    return true;
+}
+
+function start(mode, type, selection) {
+    tryAwardMedal();
+}
+
+function end(mode, type, selection) {
+    tryAwardMedal();
 }

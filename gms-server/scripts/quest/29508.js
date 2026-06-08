@@ -1,4 +1,5 @@
 var medalId = 1142081;
+var Quest = Java.type('org.gms.server.quest.Quest');
 
 function getMissingRequirements() {
     var missing = [];
@@ -18,25 +19,20 @@ function getMissingRequirements() {
     return missing;
 }
 
-function start(mode, type, selection) {
-    qm.forceStartQuest();
-    qm.sendOk("Join a marriage, a guild, and register at least 1 Junior. Come back once you meet all three requirements.");
-    qm.dispose();
-}
-
-function end(mode, type, selection) {
+function tryAwardMedal() {
     var missing = getMissingRequirements();
     if (missing.length > 0) {
         qm.sendOk("You have not met all the requirements yet. Please " + missing.join(", ") + ".");
+        Quest.getInstance(29508).reset(qm.getPlayer());
         qm.dispose();
-        return;
+        return false;
     }
 
     if (!qm.haveItem(medalId)) {
         if (!qm.canHold(medalId)) {
             qm.sendOk("Please make room in your Equip inventory before receiving the medal.");
             qm.dispose();
-            return;
+            return false;
         }
         qm.gainItem(medalId, 1);
     }
@@ -46,4 +42,13 @@ function end(mode, type, selection) {
     qm.earnTitle(medalname);
     qm.forceCompleteQuest();
     qm.dispose();
+    return true;
+}
+
+function start(mode, type, selection) {
+    tryAwardMedal();
+}
+
+function end(mode, type, selection) {
+    tryAwardMedal();
 }
