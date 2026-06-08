@@ -764,7 +764,7 @@ public class Monster extends AbstractLoadedLife {
 
             attacker.gainExp(_personalExp, _partyExp, true, false, white);
             attacker.increaseEquipExp(_personalExp);
-            attacker.raiseQuestMobCount(getId());
+            attacker.raiseQuestMobCount(getId(), getStats().getLevel());
         }
     }
 
@@ -898,7 +898,7 @@ public class Monster extends AbstractLoadedLife {
                     Character chr = mapChars.get(chrid);
 
                     if (chr != null && chr.isLoggedInWorld()) {
-                        chr.raiseQuestMobCount(mobid);
+                        chr.raiseQuestMobCount(mobid, getStats().getLevel());
                     }
                 }
             }

@@ -305,6 +305,16 @@ public class Quest {
             return false;
         }
 
+        if (id == Character.VETERAN_HUNTER_QUEST) {
+            try {
+                if (Integer.parseInt(mqs.getProgress(0)) < Character.VETERAN_HUNTER_REQUIRED_KILLS) {
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+
         for (AbstractQuestRequirement r : completeReqs.values()) {
             if (!r.check(chr, npcid)) {
                 return false;
@@ -396,7 +406,7 @@ public class Quest {
             chr.questTimeLimit(this, timeLimit);
         }
         if (timeLimit2 > 0) {
-            newStatus.setExpirationTime(System.currentTimeMillis() + timeLimit2);
+            newStatus.setExpirationTime(System.currentTimeMillis() + SECONDS.toMillis(timeLimit2));
             chr.questTimeLimit2(this, newStatus.getExpirationTime());
         }
 

@@ -109,6 +109,8 @@ import java.util.stream.Collectors;
 import static java.util.concurrent.TimeUnit.*;
 
 public class Character extends AbstractCharacterObject {
+    public static final int VETERAN_HUNTER_QUEST = 29400;
+    public static final int VETERAN_HUNTER_REQUIRED_KILLS = 1_000_000;
     private static final Logger log = LoggerFactory.getLogger(Character.class);
 
     @Getter
@@ -6694,14 +6696,24 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void raiseQuestMobCount(int id) {
+        raiseVeteranHunterMobCount(-1);
+        raiseQuestMobCountInternal(id);
+    }
+
+    public void raiseQuestMobCount(int id, int mobLevel) {
+        raiseVeteranHunterMobCount(mobLevel);
+        raiseQuestMobCountInternal(id);
+    }
+
+    private void raiseQuestMobCountInternal(int id) {
         // It seems nexon uses monsters that don't exist in the WZ (except string) to merge multiple mobs together for these 3 monsters.
         // We also want to run mobKilled for both since there are some quest that don't use the updated ID...
         if (id == MobId.GREEN_MUSHROOM || id == MobId.DEJECTED_GREEN_MUSHROOM) {
-            raiseQuestMobCount(MobId.GREEN_MUSHROOM_QUEST);
+            raiseQuestMobCountInternal(MobId.GREEN_MUSHROOM_QUEST);
         } else if (id == MobId.ZOMBIE_MUSHROOM || id == MobId.ANNOYED_ZOMBIE_MUSHROOM) {
-            raiseQuestMobCount(MobId.ZOMBIE_MUSHROOM_QUEST);
+            raiseQuestMobCountInternal(MobId.ZOMBIE_MUSHROOM_QUEST);
         } else if (id == MobId.GHOST_STUMP || id == MobId.SMIRKING_GHOST_STUMP) {
-            raiseQuestMobCount(MobId.GHOST_STUMP_QUEST);
+            raiseQuestMobCountInternal(MobId.GHOST_STUMP_QUEST);
         }
 
         int lastQuestProcessed = 0;
@@ -6724,6 +6736,31 @@ public class Character extends AbstractCharacterObject {
         } catch (Exception e) {
             log.warn("Character.mobKilled. chrId {}, last quest processed: {}", this.id, lastQuestProcessed, e);
         }
+    }
+
+    private void raiseVeteranHunterMobCount(int mobLevel) {
+        QuestStatus qs = getQuest(Quest.getInstance(VETERAN_HUNTER_QUEST));
+        if (qs.getStatus() != QuestStatus.Status.STARTED || mobLevel <= 0 || !countsForVeteranHunter(mobLevel)) {
+            return;
+        }
+
+        int progress;
+        try {
+            progress = Integer.parseInt(qs.getProgress(0));
+        } catch (NumberFormatException e) {
+            progress = 0;
+        }
+
+        if (progress >= VETERAN_HUNTER_REQUIRED_KILLS) {
+            return;
+        }
+
+        qs.setProgress(0, Integer.toString(progress + 1));
+        announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
+    }
+
+    private boolean countsForVeteranHunter(int mobLevel) {
+        return level >= 120 ? mobLevel >= 120 : mobLevel > level;
     }
 
     public Mount mount(int id, int skillid) {
