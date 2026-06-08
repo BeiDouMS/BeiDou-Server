@@ -6695,7 +6695,10 @@ public class Character extends AbstractCharacterObject {
         sendPacket(PacketCreator.sendYellowTip(m));
     }
 
+    @Deprecated
     public void raiseQuestMobCount(int id) {
+        // Kept for scripted quest progress that has no concrete monster instance.
+        // Real monster kills should call the overload with mobLevel for level-based medals.
         raiseVeteranHunterMobCount(-1);
         raiseQuestMobCountInternal(id);
     }
@@ -6706,6 +6709,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void raiseQuestMobCountInternal(int id) {
+        // Do not update Veteran Hunter here: merged quest mob ids must not double-count one kill.
         // It seems nexon uses monsters that don't exist in the WZ (except string) to merge multiple mobs together for these 3 monsters.
         // We also want to run mobKilled for both since there are some quest that don't use the updated ID...
         if (id == MobId.GREEN_MUSHROOM || id == MobId.DEJECTED_GREEN_MUSHROOM) {
