@@ -105,7 +105,7 @@ public class Inventory implements Iterable<Item> {
     public Collection<Item> list() {
         lock.lock();
         try {
-            return Collections.unmodifiableCollection(inventory.values());
+            return new ArrayList<>(inventory.values());
         } finally {
             lock.unlock();
         }
