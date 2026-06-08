@@ -406,7 +406,8 @@ public class Quest {
             chr.questTimeLimit(this, timeLimit);
         }
         if (timeLimit2 > 0) {
-            newStatus.setExpirationTime(System.currentTimeMillis() + timeLimit2);
+            long timeLimitMillis = id == Character.VETERAN_HUNTER_QUEST ? SECONDS.toMillis(timeLimit2) : timeLimit2;
+            newStatus.setExpirationTime(System.currentTimeMillis() + timeLimitMillis);
             chr.questTimeLimit2(this, newStatus.getExpirationTime());
         }
 
