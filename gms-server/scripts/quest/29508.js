@@ -43,7 +43,7 @@ function end(mode, type, selection) {
 
     var medalname = qm.getMedalName();
     qm.message("<" + medalname + "> has been awarded.");
-    qm.earnTitle("<" + medalname + "> has been awarded.");
+    qm.earnTitle(medalname);
     qm.forceCompleteQuest();
     qm.dispose();
 }
