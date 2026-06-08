@@ -24,6 +24,7 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
@@ -105,25 +106,47 @@ public final class MTSHandler extends AbstractPacketHandler {
                 if (itemtype == 1) {
                     quantity = 1;
                 }
-                if (quantity < 0 || price < 110 || c.getPlayer().getItemQuantity(itemid, false) < quantity) {
+                if (quantity < 0 || price < 110) {
                     return;
                 }
                 InventoryType invType = ItemConstants.getInventoryType(itemid);
-                Item i = c.getPlayer().getInventory(invType).getItem(slot).copy();
-                if (i != null && c.getPlayer().getMeso() >= 5000) {
-                    try (Connection con = DatabaseConnection.getConnection();
-                            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM mts_items WHERE seller = ?");) {
-                        ps.setInt(1, c.getPlayer().getId());
-                        ResultSet rs = ps.executeQuery();
-                        if (rs.next()) {
-                            if (rs.getInt(1) > 10) { // They have more than 10 items up for sale already!
-                                c.getPlayer().dropMessage(1, "You already have 10 items up for auction!");
-                                c.sendPacket(getMTS(1, 0, 0));
-                                c.sendPacket(PacketCreator.transferInventory(getTransfer(c.getPlayer().getId())));
-                                c.sendPacket(PacketCreator.notYetSoldInv(getNotYetSold(c.getPlayer().getId())));
-                                return;
-                            }
-                        }
+                // 先查挂单数，不过10才继续（避免扣完物品后再回滚）
+                int currentListings;
+                try (Connection con = DatabaseConnection.getConnection();
+                        PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM mts_items WHERE seller = ?")) {
+                    ps.setInt(1, c.getPlayer().getId());
+                    ResultSet rs = ps.executeQuery();
+                    currentListings = (rs.next()) ? rs.getInt(1) : 0;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                if (currentListings > 10) {
+                    c.getPlayer().dropMessage(1, "You already have 10 items up for auction!");
+                    c.sendPacket(getMTS(1, 0, 0));
+                    c.sendPacket(PacketCreator.transferInventory(getTransfer(c.getPlayer().getId())));
+                    c.sendPacket(PacketCreator.notYetSoldInv(getNotYetSold(c.getPlayer().getId())));
+                    return;
+                }
+
+                Inventory inv = c.getPlayer().getInventory(invType);
+                inv.lockInventory();
+                Item i;
+                try {
+                    Item checkItem = inv.getItem(slot);
+                    if (checkItem == null || checkItem.getItemId() != itemid || c.getPlayer().getItemQuantity(itemid, false) < quantity) {
+                        return;
+                    }
+                    if (c.getPlayer().getMeso() < 5000) {
+                        return;
+                    }
+                    i = checkItem.copy();
+                    InventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
+                } finally {
+                    inv.unlockInventory();
+                }
+                if (i != null) {
+                    try (Connection con = DatabaseConnection.getConnection()) {
 
                         LocalDate now = LocalDate.now();
                         LocalDate sellEnd = now.plusDays(7);
@@ -186,10 +209,11 @@ public final class MTSHandler extends AbstractPacketHandler {
                                 pse.executeUpdate();
                             }
                         }
-                        InventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
 
                     } catch (SQLException e) {
                         e.printStackTrace();
+                        InventoryManipulator.addFromDrop(c, i, false);
+                        return;
                     }
                     c.getPlayer().gainMeso(-5000, false);
                     c.sendPacket(PacketCreator.MTSConfirmSell());

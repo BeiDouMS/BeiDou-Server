@@ -623,15 +623,28 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 PlayerShop shop = chr.getPlayerShop();
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
-                    if (shop.isOpen() || !shop.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots    //感谢Vcoc指出了一个具有无限商店插槽的漏洞
-                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message11")));
-                        return;
-                    }
+                    Inventory inv = chr.getInventory(ivType);
+                    inv.lockInventory();
+                    try {
+                        Item checkItem = inv.getItem(slot);
+                        if (checkItem == null || checkItem.getItemId() != ivItem.getItemId() || checkItem.getQuantity() < (bundles * perBundle)) {
+                            c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message7")));
+                            c.sendPacket(PacketCreator.enableActions());
+                            return;
+                        }
 
-                    if (ItemConstants.isRechargeable(ivItem.getItemId())) {
-                        InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
-                    } else {
-                        InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
+                        if (shop.isOpen() || !shop.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots    //感谢Vcoc指出了一个具有无限商店插槽的漏洞
+                            c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message11")));
+                            return;
+                        }
+
+                        if (ItemConstants.isRechargeable(ivItem.getItemId())) {
+                            InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
+                        } else {
+                            InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
+                        }
+                    } finally {
+                        inv.unlockInventory();
                     }
 
                     c.sendPacket(PacketCreator.getPlayerShopItemUpdate(shop));
@@ -641,15 +654,28 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    if (merchant.isOpen() || !merchant.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots    //感谢Vcoc指出了一个具有无限商店插槽的漏洞
-                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message11")));
-                        return;
-                    }
+                    Inventory inv = chr.getInventory(ivType);
+                    inv.lockInventory();
+                    try {
+                        Item checkItem = inv.getItem(slot);
+                        if (checkItem == null || checkItem.getItemId() != ivItem.getItemId() || checkItem.getQuantity() < (bundles * perBundle)) {
+                            c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message7")));
+                            c.sendPacket(PacketCreator.enableActions());
+                            return;
+                        }
 
-                    if (ItemConstants.isRechargeable(ivItem.getItemId())) {
-                        InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
-                    } else {
-                        InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
+                        if (merchant.isOpen() || !merchant.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots    //感谢Vcoc指出了一个具有无限商店插槽的漏洞
+                            c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message11")));
+                            return;
+                        }
+
+                        if (ItemConstants.isRechargeable(ivItem.getItemId())) {
+                            InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
+                        } else {
+                            InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
+                        }
+                    } finally {
+                        inv.unlockInventory();
                     }
 
                     c.sendPacket(PacketCreator.updateHiredMerchant(merchant, chr));
