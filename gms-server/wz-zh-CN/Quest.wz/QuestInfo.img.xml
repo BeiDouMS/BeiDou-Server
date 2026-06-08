@@ -17927,30 +17927,33 @@
     <string name="2" value="玛亚说莱昂内尔的朋友们来找它，并和它一起离开了。至少莱昂内尔不是孤单一人。玛亚虽然很难过，但让莱昂内尔回到朋友身边，或许才是最好的选择。"/>
     <int name="area" value="30"/>
   </imgdir>
-      <imgdir name="8041">
-    <string name="name" value="怪物传闻坊"/>
-    <string name="parent" value="怪物传闻坊"/>
-    <string name="0" value="听说冰封雪域的斯卡德被某只怪物袭击了。我得去找他了解情况。"/>
-    <string name="1" value="原来珀斯上尉也被那只臭名昭著的怪物袭击过。我得去问问他。"/>
-    <string name="2" value="为了打听那只怪物的情报，我得先帮珀斯上尉一个忙。真是的……"/>
-    <int name="area" value="30"/>
-  </imgdir>
-      <imgdir name="8042">
-    <string name="name" value="珀斯上尉的情报"/>
-    <string name="parent" value="怪物传闻坊"/>
-    <string name="0" value="为了打听那只怪物的情报，我得先帮珀斯上尉一个忙。真是的……"/>
-    <string name="1" value="为了进一步了解那只怪物，我需要交给珀斯上尉#b50个#t04000129##k。\n#t04000129#  #b#c04000129##k/50"/>
-    <string name="2" value="难怪……据珀斯上尉所说，地球防御本部似乎也在行动，准备对付那只怪物。他建议我去偷听马斯特将军，也许能知道更多内情。这可不容易……"/>
-    <int name="area" value="30"/>
-  </imgdir>
-      <imgdir name="8043">
-    <string name="name" value="白狼人"/>
-    <string name="parent" value="怪物传闻坊"/>
-    <string name="0" value="难怪……据珀斯上尉所说，地球防御本部似乎正在准备对付那只怪物。他说偷听马斯特将军的谈话，也许能知道更多内情。这可不容易……"/>
-    <string name="1" value="不可能……这些#b#o8140000##k可能正在策划什么阴谋。我不能让它们伤害无辜的人。虽然这可能不是玛亚想听到的，但我必须消灭这些#b#o8140000##k。\n#t04000054# #b#c04000054##k/50"/>
-    <string name="2" value="我没有找到戴着项链的#b#o8140000##k。我相信莱昂内尔一定还活在某个地方。虽然听起来有些奇怪，但我愿意相信这一点。"/>
-    <int name="area" value="30"/>
-  </imgdir>
+    <imgdir name="8041">
+        <string name="name" value="怪物传闻坊"/>
+        <string name="parent" value="怪物传闻坊"/>
+        <int name="order" value="1"/>
+        <string name="0" value="听说冰封雪域的斯卡德被某只怪物袭击了。我得去找他了解情况。"/>
+        <string name="1" value="原来珀斯上尉也被那只臭名昭著的怪物袭击过。我得去问问他。"/>
+        <string name="2" value="为了打听那只怪物的情报，我得先帮珀斯上尉一个忙。真是的……"/>
+        <int name="area" value="33"/>
+    </imgdir>
+    <imgdir name="8042">
+        <string name="name" value="珀斯上尉的情报"/>
+        <string name="parent" value="怪物传闻坊"/>
+        <int name="order" value="2"/>
+        <string name="0" value="为了打听那只怪物的情报，我得先帮珀斯上尉一个忙。真是的……"/>
+        <string name="1" value="为了进一步了解那只怪物，我需要交给珀斯上尉#b50个#t04000129##k。\n#t04000129#  #b#c04000129##k/50"/>
+        <string name="2" value="难怪……据珀斯上尉所说，地球防御本部似乎也在行动，准备对付那只怪物。他建议我去偷听马斯特将军，也许能知道更多内情。这可不容易……"/>
+        <int name="area" value="48"/>
+    </imgdir>
+    <imgdir name="8043">
+        <string name="name" value="白狼人"/>
+        <string name="parent" value="怪物传闻坊"/>
+        <int name="order" value="3"/>
+        <string name="0" value="难怪……据珀斯上尉所说，地球防御本部似乎正在准备对付那只怪物。他说偷听马斯特将军的谈话，也许能知道更多内情。这可不容易……"/>
+        <string name="1" value="不可能……这些#b#o8140000##k可能正在策划什么阴谋。我不能让它们伤害无辜的人。虽然这可能不是玛亚想听到的，但我必须消灭这些#b#o8140000##k。\n#t04000054# #b#c04000054##k/50"/>
+        <string name="2" value="我没有找到戴着项链的#b#o8140000##k。我相信莱昂内尔一定还活在某个地方。虽然听起来有些奇怪，但我愿意相信这一点。"/>
+        <int name="area" value="10"/>
+    </imgdir>
     <imgdir name="8047">
         <string name="name" value="勇助与美食"/>
         <string name="0" value="来自昭和村的勇助显然要做一个“奇妙的美食”。真是有趣……"/>
