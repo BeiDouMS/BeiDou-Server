@@ -64,25 +64,25 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
 
     }
     //解决宠吸物品过滤器问题 by pkoukk
-    private final boolean shouldPickupItem(Character player, MapItem mapitem) {
+    private final boolean shouldPickupItem(Character player, MapItem mapitem, byte petIndex) {
         if (mapitem == null || mapitem.isPickedUp()) {
             return false;
         }
         if (mapitem.getMeso() > 0) {
-            if (!player.isEquippedMesoMagnet()) {
+            if (!player.isEquippedMesoMagnet(petIndex)) {
                 return false;
             }
 
-            if (player.isEquippedPetItemIgnore()) {
+            if (player.isEquippedPetItemIgnore(petIndex)) {
                 final Set<Integer> petIgnore = player.getExcludedItems();
                 return petIgnore.isEmpty() || !petIgnore.contains(Integer.MAX_VALUE);
             }
         } else {
-            if (!player.isEquippedItemPouch()) {
+            if (!player.isEquippedItemPouch(petIndex)) {
                 return false;
             }
 
-            if (player.isEquippedPetItemIgnore()) {
+            if (player.isEquippedPetItemIgnore(petIndex)) {
                 final Set<Integer> petIgnore = player.getExcludedItems();
                 return petIgnore.isEmpty() || !petIgnore.contains(mapitem.getItem().getItemId());
             }
@@ -100,7 +100,7 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
             if (mapItem.isPlayerDrop()||!player.needQuestItem(mapItem.getQuest(), mapItem.getItemId())) {
                 continue;
             }
-            if (shouldPickupItem(player, mapItem) && (mapItem.getOwnerId() == player.getId()
+            if (shouldPickupItem(player, mapItem, slot) && (mapItem.getOwnerId() == player.getId()
                     || mapItem.getOwnerId() == player.getPartyId())) {
             player.pickupItem(item, (int) slot);  // 执行拾取操作
                 }
