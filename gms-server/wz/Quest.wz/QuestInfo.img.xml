@@ -10576,10 +10576,12 @@ Able to proceed to &apos;For the peace of Victoria Island...&apos; as next quest
     <int name="viewMedalItem" value="1142013"/>
   </imgdir>
   <imgdir name="29400">
-    <string name="name" value="Title Challenge - Veteran Hunter"/>
-    <string name="0" value="#b#eTitle Challenge - Veteran Hunter#n\n#kHunt #r1,000,000#k monsters that are higher level than you within 30 days!  The Monk of Honor, Dalair, is looking for a clever hunter who has stamina.  Anyone who completes this task will receive the title, #e#bVeteran Hunter#k#n.  I heard that the person with the highest score will receive another title called #e#bLegendary Hunter(Special Title)#n#k..."/>
-    <string name="1" value="#b#eTitle Challenge - Veteran Hunter#b#n\n\n#k - Time Left : #Qdaylimit#Days #Qhourlimit#Hours #Qminlimit#Minutes #Qseclimit#Seconds\n - Hunted Monsters: #r#jmon##k / #jmg# #k\n                             #jgaugeHunt# #jperHunt# %\n\n* Only monsters that are higher level than you count \n   (Characters that are level 120 or higher must hunt monsters that are level 120 or higher\n   in order for it to count)\n\n#b#eTitle Challenge - Legendary Hunter#n(Special Title)#k\n\n - Hunted Monster Count #1\n"/>
-    <string name="2" value="#b#eTitle Challenge - Veteran Hunter#b#n\n\n#k - Time Left : #Qdaylimit#Days #Qhourlimit#Hours #Qminlimit#Minutes #Qseclimit#Seconds\n - Hunted Monsters: #r#jmon##k / #jmg# #k\n                             #jgaugeHunt# #jperHunt# %\n\n* Only monsters that are higher leveled than you count \n   (Characters that are level 120 or higher must hunt monsters that are level 120 or higher\n   in order for it to count)\n\n#b#eTitle Challenge - Legendary Hunter#n(Special Title)#k\n\n - Hunted Monster Count #1\n\nI tried out for the Veteran Hunter title, which you get by hunting as many monsters your level or higher that you can within a specific time limit.  Dalair said that if I want to become the &apos;#bLegendary Hunter#k&apos;, don&apos;t forget the hunting record resets every 1st day of each month.  Oh, he also said if I lose the Veteran Hunter medal, I have to redo the challenge so I should make sure to take good care of it."/>
+    <string name="name" value="挑战勋章 - 勤奋冒险家勋章"/>
+    <string name="0" value="#b#e挑战勋章 - 勤奋冒险家勋章#n\n#k在30天内狩猎等级符合条件的#r100000只#k怪物！达利尔正在寻找最聪明伶俐、韧劲十足的勇士。完成挑战后，将被授予#e#b勤奋冒险家勋章#k#n。"/>
+    <string name="1" value="#b#e挑战勋章 - 勤奋冒险家勋章#b#n\n\n#k - 剩余时间：#Qdaylimit#天 #Qhourlimit#小时 #Qminlimit#分 #Qseclimit#秒\n - 已杀怪物数：#r#a294001##k\n\n※ 120级以下角色：必须狩猎等级高于自身等级的怪物。\n※ 120级及以上角色：必须狩猎120级及以上的怪物。\n" />
+    <string name="2" value="#b#e挑战勋章 - 勤奋冒险家勋章#b#n\n\n#k - 已完成：#r100000#k / 100000\n\n你已经完成挑战，获得了#b勤奋冒险家勋章#k。勋章遗失时，需要重新接受挑战并再次完成100000只怪物狩猎目标后才能重新领取。" />
+    <string name="demandSummary" value="已杀怪物数：#a294001#\r\n30天内击杀100000只符合等级条件的怪物。" />
+    <string name="rewardSummary" value="#Wbasic# #v1142004:##t1142004:# 1"/>
     <int name="timeLimit2" value="2592000"/>
     <int name="area" value="51"/>
     <int name="medalCategory" value="2"/>
