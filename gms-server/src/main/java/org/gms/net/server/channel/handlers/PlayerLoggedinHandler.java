@@ -338,6 +338,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
             }
             //展示服务信息
+            org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(player);
             noteService.show(player);
             //异常地图掉线信息提示
             c.getSysRescue().showMapChangeMessage(player);
