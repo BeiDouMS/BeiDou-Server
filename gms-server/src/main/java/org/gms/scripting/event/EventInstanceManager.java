@@ -79,7 +79,7 @@ public class EventInstanceManager {
     private String name; // 事件实例名称
 
     //伤害统计排名
-    private boolean recordDamage = false;   // 伤害统计记录开关，由脚本调用 startDamageRecording() 开启
+    private volatile boolean recordDamage = false;   // 伤害统计记录开关，由脚本调用 startDamageRecording() 开启
     private static final long MAX_DAMAGE_THRESHOLD = Long.MAX_VALUE - 1_000_000_000L;
     private final Map<Integer, Long> playerDamage = new ConcurrentHashMap<>();// 玩家伤害量
     private final Map<Integer, String> playerNames = new ConcurrentHashMap<>(); //玩家角色名
@@ -1471,7 +1471,7 @@ public class EventInstanceManager {
     }
 
     // 添加通报伤害排名的方法
-    public void broadcastDamageRanking() {
+    public synchronized void broadcastDamageRanking() {
         if (!GameConfig.getServerBoolean("damage_ranking")) {
             log.debug("伤害统计功能已被服务器禁用。");
             return;
@@ -1506,10 +1506,9 @@ public class EventInstanceManager {
         }
         dropMessage(6, "==============================");
     }
-    public void clearDamage() {
+    public synchronized void clearDamage() {
         recordDamage = false;
         playerDamage.clear();
         playerNames.clear();
     }
-
 }
