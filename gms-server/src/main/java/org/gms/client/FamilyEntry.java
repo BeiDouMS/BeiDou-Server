@@ -21,7 +21,6 @@ package org.gms.client;
 
 import org.gms.net.packet.Packet;
 import org.gms.net.server.Server;
-import org.gms.server.quest.medal.OutstandingCitizenMedal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.DatabaseConnection;
@@ -431,16 +430,15 @@ public class FamilyEntry {
     }
 
     public synchronized boolean addJunior(FamilyEntry newJunior) {
-        if (newJunior == null || isJunior(newJunior)) {
-            return false;
-        }
-
         for (int i = 0; i < juniors.length; i++) {
             if (juniors[i] == null) { // successfully add new junior to family
                 juniors[i] = newJunior;
                 addJuniorCount(1);
                 getFamily().addEntry(newJunior);
-                refreshOutstandingCitizenEligibility();
+                Character chr = getChr();
+                if (chr != null) {
+                    org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(chr);
+                }
                 return true;
             }
         }
@@ -460,18 +458,14 @@ public class FamilyEntry {
             if (juniors[i] == junior) {
                 juniors[i] = null;
                 addJuniorCount(-1);
-                refreshOutstandingCitizenEligibility();
+                Character chr = getChr();
+                if (chr != null) {
+                    org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(chr);
+                }
                 return true;
             }
         }
         return false;
-    }
-
-    private void refreshOutstandingCitizenEligibility() {
-        Character chr = getChr();
-        if (chr != null) {
-            OutstandingCitizenMedal.refreshEligibility(chr);
-        }
     }
 
     public int getTotalSeniors() {
