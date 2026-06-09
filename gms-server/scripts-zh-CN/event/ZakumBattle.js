@@ -133,7 +133,10 @@ function playerEntry(eim, player) {
     player.changeMap(map, map.getPortal(0));
 
     //开启伤害记录
-    eim.startDamageRecording();
+    if(GameConfig.getServerBoolean("damage_ranking")) {
+        eim.startDamageRecording();
+        player.dropMessage(6, "当前副本已开启伤害统计。");
+    }
 }
 
 function scheduledTimeout(eim) {

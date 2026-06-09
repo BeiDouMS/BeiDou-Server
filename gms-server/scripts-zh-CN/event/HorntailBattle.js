@@ -130,7 +130,11 @@ function playerEntry(eim, player) {
     eim.dropMessage(5, "[远征队] " + player.getName() + " 已进入地图。");
     var map = eim.getMapInstance(entryMap);
     player.changeMap(map, map.getPortal(0));
-    eim.startDamageRecording();  // 开启伤害统计
+    //开启伤害记录
+    if(GameConfig.getServerBoolean("damage_ranking")) {
+        eim.startDamageRecording();
+        player.dropMessage(6, "当前副本已开启伤害统计。");
+    }
 }
 
 function scheduledTimeout(eim) {

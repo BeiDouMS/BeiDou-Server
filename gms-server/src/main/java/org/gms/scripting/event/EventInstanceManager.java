@@ -81,7 +81,8 @@ public class EventInstanceManager {
     //伤害统计排名
     private boolean recordDamage = false;   // 伤害统计记录开关，由脚本调用 startDamageRecording() 开启
     private static final long MAX_DAMAGE_THRESHOLD = Long.MAX_VALUE - 1_000_000_000L;
-    private final Map<Character, Long> playerDamage = new ConcurrentHashMap<>();// 玩家伤害量
+    private final Map<Integer, Long> playerDamage = new ConcurrentHashMap<>();// 玩家伤害量
+    private final Map<Integer, String> playerNames = new ConcurrentHashMap<>(); //玩家角色名
 
     // 事件属性存储
     private final Properties props = new Properties();
@@ -1447,31 +1448,26 @@ public class EventInstanceManager {
      * 需要在副本初始化时调用（如 setup 或 playerEntry）
      */
     public void startDamageRecording() {
+        if (recordDamage) return;
         if (GameConfig.getServerBoolean("damage_ranking")) {
             recordDamage = true;
-            dropMessage(6, "当前副本已开启伤害统计。");
         } else {
             log.debug("全局伤害统计未启用，无法记录伤害");
         }
     }
 
     public void addDamage(Character chr, int damage) {
-        if (!recordDamage) return;
-        if (chr == null || damage <= 0) return;
+        if (!recordDamage || chr == null || damage <= 0) return;
 
-        long newValue = playerDamage.merge(chr, (long) damage, Long::sum);
+        long newValue = playerDamage.merge(chr.getId(), (long) damage, Long::sum);
+        playerNames.putIfAbsent(chr.getId(), chr.getName()); //保存角色名
         // 防止溢出
         if (newValue < 0) {
             log.warn("玩家 {} 伤害累计溢出，重置为最大值", chr.getName());
-            playerDamage.put(chr, Long.MAX_VALUE);
+            playerDamage.put(chr.getId(), Long.MAX_VALUE);
         } else if (newValue > MAX_DAMAGE_THRESHOLD) {
             log.warn("玩家 {} 伤害累计接近最大值", chr.getName());
         }
-    }
-
-    // 添加清空方法
-    public void clearDamage() {
-        playerDamage.clear();
     }
 
     // 添加通报伤害排名的方法
@@ -1490,17 +1486,30 @@ public class EventInstanceManager {
         }
 
         // 按伤害值降序排序
-        List<Map.Entry<Character, Long>> sorted = new ArrayList<>(playerDamage.entrySet());
+        List<Map.Entry<Integer, Long>> sorted = new ArrayList<>(playerDamage.entrySet());
         sorted.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
 
         long totalDamage = sorted.stream().mapToLong(Map.Entry::getValue).sum();
 
         dropMessage(6, "========== 伤害统计 ==========");
         dropMessage(6, "总伤害: " + totalDamage);
-        for (int i = 0; i < Math.min(5, sorted.size()); i++) {
-            Map.Entry<Character, Long> entry = sorted.get(i);
-            dropMessage(6, (i+1) + "名: " + entry.getKey().getName() + " - " + entry.getValue() + " 伤害");
+        int rank = 1;
+        for (Map.Entry<Integer, Long> entry : sorted) {
+            if (rank > 5) break;
+            int cid = entry.getKey();
+            String name = playerNames.get(cid);
+            if (name == null) {
+                name = "未知玩家";   // fallback，理论上不会发生
+            }
+            dropMessage(6, rank + "名: " + name + " - " + entry.getValue() + " 伤害");
+            rank++;
         }
         dropMessage(6, "==============================");
     }
+    public void clearDamage() {
+        recordDamage = false;
+        playerDamage.clear();
+        playerNames.clear();
+    }
+
 }

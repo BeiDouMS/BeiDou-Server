@@ -1,4 +1,4 @@
--- 是否开启范围宠吸功能
+-- 是否开启副本伤害排名功能
 INSERT INTO `game_config`(`config_type`, `config_sub_type`, `config_clazz`, `config_code`, `config_value`, `config_desc`, `update_time`)
 SELECT 'server', 'Game Mechanics', 'java.lang.Boolean', 'damage_ranking', 'false', 'damage_ranking', '2026-06-09 00:00:00'
 WHERE NOT EXISTS (
