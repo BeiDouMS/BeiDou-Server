@@ -73,11 +73,15 @@ public class EventInstanceManager {
     private int leaderId = -1; // 事件队伍领袖ID
     private final List<Monster> mobs = new LinkedList<>();// 事件中生成的怪物列表
     private final Map<Character, Integer> killCount = new HashMap<>();// 玩家击杀计数
-    private final Map<Character, Long> playerDamage = new ConcurrentHashMap<>();// 玩家伤害量
     private EventManager em; // 所属事件管理器
     private EventScriptScheduler ess; // 事件脚本调度器
     private MapManager mapManager; // 地图管理器
     private String name; // 事件实例名称
+
+    //伤害统计排名
+    private boolean recordDamage = false;   // 伤害统计记录开关，由脚本调用 startDamageRecording() 开启
+    private static final long MAX_DAMAGE_THRESHOLD = Long.MAX_VALUE - 1_000_000_000L;
+    private final Map<Character, Long> playerDamage = new ConcurrentHashMap<>();// 玩家伤害量
 
     // 事件属性存储
     private final Properties props = new Properties();
@@ -673,6 +677,9 @@ public class EventInstanceManager {
         mapIds.clear();
         props.clear();
         objectProps.clear();
+
+        // 清理伤害统计数据
+        clearDamage();
 
         disposeExpedition();
 
@@ -1434,20 +1441,53 @@ public class EventInstanceManager {
 
         return true;
     }
-    // 添加记录伤害的方法
-    public void addDamage(Character chr, int damage) {
-        if (chr == null || damage <= 0) return;
-        playerDamage.merge(chr, (long) damage, Long::sum);
+
+    /**
+     * 开始记录伤害（仅在全局开关开启时生效）
+     * 需要在副本初始化时调用（如 setup 或 playerEntry）
+     */
+    public void startDamageRecording() {
+        if (GameConfig.getServerBoolean("damage_ranking")) {
+            recordDamage = true;
+            dropMessage(6, "当前副本已开启伤害统计。");
+        } else {
+            log.debug("全局伤害统计未启用，无法记录伤害");
+        }
     }
 
-    // 添加清空方法（可选）
+    public void addDamage(Character chr, int damage) {
+        if (!recordDamage) return;
+        if (chr == null || damage <= 0) return;
+
+        long newValue = playerDamage.merge(chr, (long) damage, Long::sum);
+        // 防止溢出
+        if (newValue < 0) {
+            log.warn("玩家 {} 伤害累计溢出，重置为最大值", chr.getName());
+            playerDamage.put(chr, Long.MAX_VALUE);
+        } else if (newValue > MAX_DAMAGE_THRESHOLD) {
+            log.warn("玩家 {} 伤害累计接近最大值", chr.getName());
+        }
+    }
+
+    // 添加清空方法
     public void clearDamage() {
         playerDamage.clear();
     }
 
     // 添加通报伤害排名的方法
     public void broadcastDamageRanking() {
-        if (playerDamage.isEmpty()) return;
+        if (!GameConfig.getServerBoolean("damage_ranking")) {
+            log.debug("伤害统计功能已被服务器禁用。");
+            return;
+        }
+        if (!recordDamage) {
+            log.debug("该副本未开启伤害统计。");
+            return;
+        }
+        if (playerDamage.isEmpty()) {
+            log.debug("尚无伤害数据。");
+            return;
+        }
 
         // 按伤害值降序排序
         List<Map.Entry<Character, Long>> sorted = new ArrayList<>(playerDamage.entrySet());

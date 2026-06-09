@@ -131,9 +131,13 @@ function playerEntry(eim, player) {
 
     // 将玩家传送到入口地图的第一个传送点
     player.changeMap(map, map.getPortal(0));
+
+    //开启伤害记录
+    eim.startDamageRecording();
 }
 
 function scheduledTimeout(eim) {
+    eim.broadcastDamageRanking();   // 时间结束时通报
     end(eim);
 }
 
