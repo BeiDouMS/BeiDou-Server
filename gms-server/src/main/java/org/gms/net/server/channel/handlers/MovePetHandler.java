@@ -57,12 +57,14 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
         }
         player.getPet(slot).updatePosition(res);
         player.getMap().broadcastMessage(player, PacketCreator.movePet(player.getId(), petId, slot, res), false);
-        if (GameConfig.getServerBoolean("pet_itemvac")) {
-            // 根据游戏config参数确定是否开启宠吸
+
+        if (GLOBAL_PET_ITEMVAC_ENABLED) {
+            // 根据游戏config参数确定是否开启宠吸,需重启服务
             itemVac(player,slot);
         }
 
     }
+    private static final boolean GLOBAL_PET_ITEMVAC_ENABLED = GameConfig.getServerBoolean("pet_itemvac");
     //解决宠吸物品过滤器问题 by pkoukk
     private final boolean shouldPickupItem(Character player, MapItem mapitem, byte petIndex) {
         if (mapitem == null || mapitem.isPickedUp()) {
@@ -103,7 +105,7 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
             if (shouldPickupItem(player, mapItem, slot) && (mapItem.getOwnerId() == player.getId()
                     || mapItem.getOwnerId() == player.getPartyId())) {
             player.pickupItem(item, (int) slot);  // 执行拾取操作
-                }
+            }
         }
     }
 }

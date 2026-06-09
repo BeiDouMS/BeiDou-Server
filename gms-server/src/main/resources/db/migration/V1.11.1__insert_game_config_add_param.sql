@@ -7,14 +7,14 @@ WHERE NOT EXISTS (
 
 -- 中文内容
 INSERT INTO `lang_resources`(`lang_type`, `lang_base`, `lang_code`, `lang_value`, `lang_extend`)
-SELECT 'zh-CN', 'game_config', 'pet_itemvac', '是否开启范围宠吸功能', NULL
+SELECT 'zh-CN', 'game_config', 'pet_itemvac', '是否开启范围宠吸功能（需重启服务）', NULL
 WHERE NOT EXISTS (
     SELECT 1 FROM `lang_resources` WHERE `lang_type` = 'zh-CN' AND `lang_code` = 'pet_itemvac'
 );
 
 -- 英文内容
 INSERT INTO `lang_resources`(`lang_type`, `lang_base`, `lang_code`, `lang_value`, `lang_extend`)
-SELECT 'en-US', 'game_config', 'use_enable_party_level_limit_lift', 'Whether to enable pets to vacuum items', NULL
+SELECT 'en-US', 'game_config', 'pet_itemvac', 'Whether to enable pets to vacuum items (restart server)', NULL
 WHERE NOT EXISTS (
     SELECT 1 FROM `lang_resources` WHERE `lang_type` = 'en-US' AND `lang_code` = 'pet_itemvac'
 );
