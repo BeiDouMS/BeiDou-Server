@@ -39,10 +39,10 @@ function pushIfItemExists(array, itemid) {
 
 function start() {
     if (cm.isQuestCompleted(8860) && !cm.haveItem(4031528)) {
-        cm.sendNext("我已经帮你做过一次头发，作为一种服务交换，伙计。如果你想再次改变发型，你需要从现金商店购买一个经验头发券！");
+        cm.sendNext("我已经帮你使用过一次克劳迪娅的优惠券了。如果你还想换发型，请使用商城发型券。");
         cm.dispose();
     } else {
-        cm.sendYesNo("准备好要做一个超棒的发型了吗？我觉得你准备好了！只要说出来，我们就可以开始了！");
+        cm.sendYesNo("准备好用克劳迪娅的优惠券免费做一次发型了吗？如果准备好了，我们现在就开始吧！");
     }
 }
 
@@ -71,10 +71,10 @@ function action(mode, type, selection) {
         if (cm.haveItem(4031528)) {
             cm.gainItem(4031528, -1);
             cm.setHair(hairnew[Math.floor(Math.random() * hairnew.length)]);
-            cm.sendNextPrev("还不错，如果我这么说的话！我知道我学习的那些书会派上用场……");
+            cm.sendNextPrev("不错吧？我就知道我学过的发型书一定会派上用场……");
             cm.dispose();
         } else {
-            cm.sendNext("嗯...你确定你有我们指定的免费优惠券吗？抱歉，没有优惠券就不能理发。");
+            cm.sendNext("嗯……你确定带着克劳迪娅的优惠券吗？抱歉，没有优惠券就不能免费做发型。");
             cm.dispose();
         }
     }

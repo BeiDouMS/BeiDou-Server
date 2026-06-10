@@ -45,7 +45,7 @@ function action(mode, type, selection) {
             if (area > 0) {
                 cm.sendYesNo("你希望离开这个地方吗？");
             } else {
-                cm.sendYesNo("你想要回到 #b快乐村#k 吗？");
+                cm.sendYesNo("你想要回到 #b幸福村#k 吗？");
             }
         } else {
             if (area > 0) {

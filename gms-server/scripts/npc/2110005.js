@@ -30,8 +30,8 @@
 ---------------------------------------------------------------------------------------------------
 */
 
-var toMagatia = "Would you like to take the #bCamel Cab#k to #bMagatia#k, the town of Alchemy? The fare is #b1500 mesos#k.";
-var toAriant = "Would you like to take the #bCamel Cab#k to #bAriant#k, the town of Burning Roads? The fare is #b1500 mesos#k.";
+var toMagatia = "你想乘坐#b骆驼中巴#k前往炼金术之城#b玛加提亚#k吗？车费是#b1500金币#k。";
+var toAriant = "你想乘坐#b骆驼中巴#k前往燃烧之路的城镇#b阿里安特#k吗？车费是#b1500金币#k。";
 
 function start() {
     cm.sendYesNo(cm.getPlayer().getMapId() == 260020000 ? toMagatia : toAriant);
@@ -40,7 +40,7 @@ function start() {
 function action(mode, type, selection) {
     if (mode == 1) {
         if (cm.getMeso() < 1500) {
-            cm.sendNext("I am sorry, but I think you are short on mesos. I am afraid I can't let you ride this if you do not have enough money to do so. Please come back when you have enough money to use this.");
+            cm.sendNext("很抱歉，你的金币不够。如果没有足够的车费，我不能让你乘坐骆驼中巴。请准备好车费后再来吧。");
             cm.dispose();
         } else {
             cm.warp(cm.getPlayer().getMapId() == 260020000 ? 261000000 : 260000000, 0);
@@ -48,7 +48,7 @@ function action(mode, type, selection) {
             cm.dispose();
         }
     } else if (mode == 0) {
-        cm.sendNext("Hmmm... too busy to do it right now? If you feel like doing it, though, come back and find me.");
+        cm.sendNext("嗯……现在还不想出发吗？如果想乘坐骆驼中巴，随时回来找我。");
     }
     cm.dispose();
 }

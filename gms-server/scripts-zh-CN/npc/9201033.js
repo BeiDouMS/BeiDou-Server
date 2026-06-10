@@ -28,7 +28,7 @@
  */
 
 var status;
-// 西蒙负责在快乐村和沙龙神殿之间传送玩家。
+// 西蒙负责在幸福村和沙龙神殿之间传送玩家。
 var SHALOM_TEMPLE = 681000000;
 var HAPPYVILLE = 209000000;
 var toShalomTemple, backToHappyville;
@@ -56,10 +56,10 @@ function action(mode, type, selection) {
         if (status == 0) {
             if (cm.getMapId() == HAPPYVILLE) {
                 toShalomTemple = 1;
-                cm.sendYesNo("沙龙神殿和快乐村的其他地方不太一样，你想前往 #b沙龙神殿#k 吗？");
+                cm.sendYesNo("沙龙神殿和幸福村的其他地方不太一样，你想前往 #b沙龙神殿#k 吗？");
             } else if (cm.getMapId() == SHALOM_TEMPLE) {
                 backToHappyville = 1;
-                cm.sendYesNo("你想返回 #b快乐村#k 吗？");
+                cm.sendYesNo("你想返回 #b幸福村#k 吗？");
             }
         } else if (status == 1) {
             if (toShalomTemple == 1) {
