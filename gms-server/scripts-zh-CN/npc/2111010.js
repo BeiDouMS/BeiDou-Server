@@ -44,7 +44,7 @@ function action(mode, type, selection) {
                 if (cm.canHold(4031708, 1)) {
                     cm.gainItem(4031708, 1);
                 } else {
-                    cm.sendOk("有一个ETC槽位可用，可以获取Alcadno的秘密文件。");
+                    cm.sendOk("请先空出一个其他栏位，才能取得卡帕莱特的秘密文件。");
                 }
             }
 
