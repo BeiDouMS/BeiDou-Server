@@ -26,7 +26,7 @@
 
 var status;
 var ticketId = 5220000;
-var mapName = ["Henesys", "Ellinia", "Perion", "Kerning City", "Sleepywood", "Mushroom Shrine", "Showa Spa (M)", "Showa Spa (F)", "Ludibrium", "New Leaf City", "El Nath", "Nautilus"];
+var mapName = ["射手村", "魔法密林", "勇士部落", "废弃都市", "林中之城", "蘑菇神社", "昭和澡堂（男）", "昭和澡堂（女）", "玩具城", "新叶城", "冰峰雪域", "诺特勒斯号"];
 var curMapName = "";
 
 function start() {
@@ -47,9 +47,9 @@ function action(mode, type, selection) {
         }
         if (status == 0 && mode == 1) {
             if (cm.haveItem(ticketId)) {
-                cm.sendYesNo("你可以使用" + curMapName + "扭蛋机。你想要使用你的扭蛋券吗？");
+                cm.sendYesNo("你可以使用" + curMapName + "快乐百宝箱。你想要使用你的快乐百宝券吗？");
             } else {
-                cm.sendSimple("欢迎来到" + curMapName + "扭蛋机。我可以为您做些什么呢？\r\n\r\n#L0#什么是扭蛋机？#l\r\n#L1#在哪里可以购买扭蛋机券？#l");
+                cm.sendSimple("欢迎来到" + curMapName + "快乐百宝箱。我可以为您做些什么呢？\r\n\r\n#L0#什么是快乐百宝箱？#l\r\n#L1#在哪里可以购买快乐百宝券？#l");
             }
         } else if (status == 1 && cm.haveItem(ticketId)) {
             if (cm.canHold(1302000) && cm.canHold(2000000) && cm.canHold(3010001) && cm.canHold(4000000)) { // One free slot in every inventory.
@@ -61,12 +61,12 @@ function action(mode, type, selection) {
             cm.dispose();
         } else if (status == 1) {
             if (selection == 0) {
-                cm.sendNext("玩转扭蛋机，赢得稀有卷轴、装备、椅子、熟练书和其他酷炫物品！你只需要一张 #b扭蛋券#k 就有机会成为随机物品的幸运获得者。");
+                cm.sendNext("玩转快乐百宝箱，赢得稀有卷轴、装备、椅子、熟练书和其他酷炫物品！你只需要一张 #b快乐百宝券#k 就有机会成为随机物品的幸运获得者。");
             } else {
-                cm.sendNext("“Gachapon Tickets可以在#r现金商店#k购买，可以使用NX或枫叶点购买。点击屏幕右下角的红色商店图标访问#r现金商店#k，您可以购买门票。”");
+                cm.sendNext("快乐百宝券可以在#r现金商店#k购买，可以使用NX或枫叶点购买。点击屏幕右下角的红色商店图标进入#r现金商店#k，就能购买快乐百宝券。");
             }
         } else if (status == 2) {
-            cm.sendNextPrev("你会在" + curMapName + "的扭蛋机中找到各种物品，但最有可能找到与" + curMapName + "相关的物品和卷轴。");
+            cm.sendNextPrev("你会在" + curMapName + "的快乐百宝箱中找到各种物品，但最有可能找到与" + curMapName + "相关的物品和卷轴。");
         } else {
             cm.dispose();
         }
