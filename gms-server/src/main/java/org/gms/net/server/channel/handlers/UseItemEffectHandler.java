@@ -22,9 +22,6 @@
 package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
-import org.gms.client.inventory.InventoryType;
-import org.gms.client.inventory.Item;
-import org.gms.constants.id.ItemId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
@@ -32,17 +29,9 @@ import org.gms.util.PacketCreator;
 public final class UseItemEffectHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        Item toUse;
         int itemId = p.readInt();
-        if (itemId == ItemId.BUMMER_EFFECT || itemId == ItemId.GOLDEN_CHICKEN_EFFECT) {
-            toUse = c.getPlayer().getInventory(InventoryType.ETC).findById(itemId);
-        } else {
-            toUse = c.getPlayer().getInventory(InventoryType.CASH).findById(itemId);
-        }
-        if (toUse == null || toUse.getQuantity() < 1) {
-            if (itemId != 0) {
-                return;
-            }
+        if (!c.getPlayer().hasItemEffectItem(itemId)) {
+            return;
         }
         c.getPlayer().setItemEffect(itemId);
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.itemEffect(c.getPlayer().getId(), itemId), false);

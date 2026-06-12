@@ -270,6 +270,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.sendPacket(PacketCreator.sendAutoMpPot(autompPot != null ? autompPot.getAction() : 0));
 
             player.getMap().addPlayer(player);
+            if (player.getItemEffect() != 0) {
+                player.sendPacket(PacketCreator.itemEffect(player.getId(), player.getItemEffect()));
+            }
             player.visitMap(player.getMap());
 
             BuddyList bl = player.getBuddylist();

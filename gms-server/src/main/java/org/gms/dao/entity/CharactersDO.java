@@ -200,6 +200,9 @@ public class CharactersDO implements Serializable {
     @Column("partySearch")
     private Boolean partySearch;
 
+    @Column("itemEffect")
+    private Integer itemEffect;
+
     private Long jailexpire;
 
 }

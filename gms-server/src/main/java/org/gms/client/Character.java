@@ -164,6 +164,19 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int itemEffect;
+
+    public boolean hasItemEffectItem(int itemId) {
+        if (itemId == 0) {
+            return true;
+        }
+
+        InventoryType inventoryType = (itemId == ItemId.BUMMER_EFFECT || itemId == ItemId.GOLDEN_CHICKEN_EFFECT)
+                ? InventoryType.ETC
+                : InventoryType.CASH;
+        Item item = getInventory(inventoryType).findById(itemId);
+        return item != null && item.getQuantity() > 0;
+    }
+
     @Setter
     @Getter
     private int guildId;
@@ -6470,6 +6483,10 @@ public class Character extends AbstractCharacterObject {
         if ((sandboxCheck & ItemConstants.SANDBOX) == ItemConstants.SANDBOX) {
             chr.setHasSandboxItem();
         }
+        Integer itemEffect = charactersDO.getItemEffect();
+        if (itemEffect != null && chr.hasItemEffectItem(itemEffect)) {
+            chr.setItemEffect(itemEffect);
+        }
         chr.setPartnerId(charactersDO.getPartnerId());
         chr.setMarriageItemId(charactersDO.getMarriageItemId());
         World world = Server.getInstance().getWorld(charactersDO.getWorld());
@@ -6627,6 +6644,7 @@ public class Character extends AbstractCharacterObject {
         cdo.setUseslots((int) chr.getSlots(1));
         cdo.setSetupslots((int) chr.getSlots(2));
         cdo.setEtcslots((int) chr.getSlots(3));
+        cdo.setItemEffect(chr.getItemEffect());
         // todo 未完成
         return cdo;
     }
@@ -7540,7 +7558,7 @@ public class Character extends AbstractCharacterObject {
             con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
             try {
-                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, itemEffect = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, level);    // thanks CanIGetaPR for noticing an unnecessary "level" limitation when persisting DB data
                     ps.setInt(2, fame);
 
@@ -7654,7 +7672,8 @@ public class Character extends AbstractCharacterObject {
                     ps.setTimestamp(53, new Timestamp(lastExpGainTime));
                     ps.setInt(54, ariantPoints);
                     ps.setBoolean(55, canRecvPartySearchInvite);
-                    ps.setInt(56, id);
+                    ps.setInt(56, itemEffect);
+                    ps.setInt(57, id);
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
