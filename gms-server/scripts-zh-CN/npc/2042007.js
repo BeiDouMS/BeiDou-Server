@@ -18,7 +18,7 @@ function action(mode, type, selection) {
         cm.dispose();
     } else {
         if (status >= 0 && mode == 0) {
-            cm.sendOk("好的，希望下次我们能聊天。");
+            cm.sendOk("好吧，希望下次还能再聊。");
             cm.dispose();
             return;
         }
@@ -30,7 +30,7 @@ function action(mode, type, selection) {
 
         if (cm.getPlayer().getMapId() == 980030010) {
             if (status == 0) {
-                cm.sendNext("希望你在怪物嘉年华上玩得开心！");
+                cm.sendNext("希望你在怪物嘉年华中玩得开心！");
             } else if (status > 0) {
                 cm.warp(980030000, 0);
                 cm.dispose();
@@ -41,20 +41,20 @@ function action(mode, type, selection) {
                     var shiu = "";
                     if (cm.getPlayer().getFestivalPoints() >= 300) {
                         shiu += "#rA#k";
-                        cm.sendOk("很遗憾，尽管你表现出色，但你要么平局要么失败了这场战斗。下次胜利就属于你了！\r\n\r\n#b你的结果：" + shiu);
+                        cm.sendOk("很遗憾，虽然你表现非常出色，但这场战斗还是平局或失败了。下次胜利一定会属于你！ \r\n\r\n#b你的结果：" + shiu);
                         rnk = 10;
                     } else if (cm.getPlayer().getFestivalPoints() >= 100) {
                         shiu += "#rB#k";
                         rnk = 20;
-                        cm.sendOk("很遗憾，即使你表现出色，你要么平局要么失败了这场战斗。只差一点点，胜利就可能属于你了！\r\n\r\n#b你的结果：" + shiu);
+                        cm.sendOk("很遗憾，虽然你展现了极限般的表现，但这场战斗还是平局或失败了。只差一点点，胜利就会属于你！ \r\n\r\n#b你的结果：" + shiu);
                     } else if (cm.getPlayer().getFestivalPoints() >= 50) {
                         shiu += "#rC#k";
                         rnk = 30;
-                        cm.sendOk("很遗憾，你要么平局要么失败了。胜利属于那些努力奋斗的人。我看到了你的努力，所以胜利离你并不遥远。继续努力吧！\r\n#b你的结果：" + shiu);
+                        cm.sendOk("很遗憾，这场战斗最终平局或失败了。胜利属于不断努力的人。我看到了你的努力，所以胜利离你并不遥远。继续加油！\r\n\r\n#b你的结果：" + shiu);
                     } else {
                         shiu += "#rD#k";
                         rnk = 40;
-                        cm.sendOk("很遗憾，你要么打成了平局，要么输掉了战斗，你的表现清楚地反映了这一点。我希望你下次能做得更好。\r\n\r\n#b你的结果：" + shiu);
+                        cm.sendOk("很遗憾，这场战斗最终平局或失败了，你的表现也确实反映了这一点。下次我期待你有更好的表现。 \r\n\r\n#b你的结果：" + shiu);
                     }
                 } else {
                     cm.warp(980030000, 0);
@@ -95,19 +95,19 @@ function action(mode, type, selection) {
                     if (cm.getPlayer().getFestivalPoints() >= 300) {
                         shi += "#rA#k";
                         rnk = 1;
-                        cm.sendOk("恭喜你的胜利！表现太棒了！对方队伍毫无还手之力！希望下次也能有同样出色的表现！\r\n\r\n#b你的成绩：" + shi);
+                        cm.sendOk("恭喜你获得胜利！！！多么精彩的表现！对方队伍完全无计可施！希望下次也能保持这样的好表现！ \r\n\r\n#b你的结果：" + shi);
                     } else if (cm.getPlayer().getFestivalPoints() >= 100) {
                         shi += "#rB#k";
                         rnk = 2;
-                        cm.sendOk("恭喜你的胜利！太棒了！你对抗对方团队做得很好！再坚持一会儿，下次你肯定能拿到A！\r\n\r\n#b你的成绩：" + shi);
+                        cm.sendOk("恭喜你获得胜利！太棒了！你在对抗对方队伍时表现得很好！只要再努力一点，下次一定能拿到A！ \r\n\r\n#b你的结果：" + shi);
                     } else if (cm.getPlayer().getFestivalPoints() >= 50) {
                         shi += "#rC#k";
                         rnk = 3;
-                        cm.sendOk("恭喜你的胜利。你做了一些事情，但这不能算是一个好的胜利。我期待你下次能做得更好。\r\n#b你的结果：" + shi);
+                        cm.sendOk("恭喜你获得胜利。你确实做了一些贡献，不过还称不上漂亮的胜利。下次我期待你有更好的表现。 \r\n\r\n#b你的结果：" + shi);
                     } else {
                         shi += "#rD#k";
                         rnk = 4;
-                        cm.sendOk("恭喜你的胜利，尽管你的表现并没有完全体现出来。在下一次怪物嘉年华中更加积极参与吧！\r\n\r\n#b你的结果：" + shi);
+                        cm.sendOk("恭喜你获得胜利，虽然你的表现还不太配得上这场胜利。下次参加怪物嘉年华时，请更积极一些！ \r\n\r\n#b你的结果：" + shi);
                     }
                 } else {
                     cm.warp(980030000, 0);
