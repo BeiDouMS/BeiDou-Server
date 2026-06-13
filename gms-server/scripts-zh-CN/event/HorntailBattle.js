@@ -130,9 +130,15 @@ function playerEntry(eim, player) {
     eim.dropMessage(5, "[远征队] " + player.getName() + " 已进入地图。");
     var map = eim.getMapInstance(entryMap);
     player.changeMap(map, map.getPortal(0));
+    //开启伤害记录
+    if(GameConfig.getServerBoolean("damage_ranking")) {
+        eim.startDamageRecording();
+        player.dropMessage(6, "当前副本已开启伤害统计。");
+    }
 }
 
 function scheduledTimeout(eim) {
+    eim.broadcastDamageRanking();   // 时间结束时通报
     end(eim);
 }
 
@@ -200,6 +206,7 @@ function monsterKilled(mob, eim) {
     if (isHorntail(mob)) {
         eim.setIntProperty("defeatedBoss", 1);
         eim.showClearEffect(mob.getMap().getId());
+        eim.broadcastDamageRanking();  // BOSS死亡时通报
         eim.clearPQ();
 
         eim.dispatchRaiseQuestMobCount(8810018, 240060200);
