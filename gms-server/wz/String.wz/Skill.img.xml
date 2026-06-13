@@ -196,7 +196,7 @@
   </imgdir>
   <imgdir name="2000001">
     <string name="name" value="Improved MaxMP Increase"/>
-    <string name="desc" value="Master Level : 10] This skill boosts up the amount of increase on MaxMP after each Level UP, or AP used on MaxMP.\nRequired Skill : #cAt least Level 5 on Improving MP Recovery#"/>
+    <string name="desc" value="[Master Level : 10]\nIncreases the MaxMP gained when leveling up or assigning AP to MP.\nRequired Skill : #cImproved MP Recovery Lv.5#"/>
     <string name="h1" value="If Level UP, +2 more; if AP applied, +1 more on top on MaxMP"/>
     <string name="h2" value="If Level UP, +4 more; if AP applied, +2 more on top on MaxMP"/>
     <string name="h3" value="If Level UP, +6 more; if AP applied, +3 more on top on MaxMP"/>
@@ -210,7 +210,7 @@
   </imgdir>
   <imgdir name="2001002">
     <string name="name" value="Magic Guard"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily replaces damage with MP instead of HP. If MP reaches 0, the HP takes a full hit."/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily converts a percentage of incoming HP damage into MP damage. If MP is insufficient, remaining damage is taken as HP."/>
     <string name="h1" value="MP -6; Replace 11% of HP damage as MP for 111 sec. "/>
     <string name="h2" value="MP -6; Replace 14% of HP damage as MP for 132 sec."/>
     <string name="h3" value="MP -6; Replace 17% of HP damage as MP for 153 sec."/>
@@ -234,7 +234,7 @@
   </imgdir>
   <imgdir name="2001003">
     <string name="name" value="Magic Armor"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily boosts the weapon def. of the armor by blowing magic into it.\nRequired Skill : #cAt least Level 3 on Magic Guard#"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily increases weapon defense.\nRequired Skill : #cMagic Guard Lv.3#"/>
     <string name="h1" value="MP -8; weapon def. +2 for 54 sec."/>
     <string name="h2" value="MP -8; weapon def. +4 for 68 sec."/>
     <string name="h3" value="MP -8; weapon def. +6 for 82 sec."/>
@@ -258,7 +258,7 @@
   </imgdir>
   <imgdir name="2001004">
     <string name="name" value="Energy Bolt"/>
-    <string name="desc" value="[Master Level : 20]\nUse MP to attack one enemy."/>
+    <string name="desc" value="[Master Level : 20]\nConsumes MP to deal magic damage to 1 enemy."/>
     <string name="h1" value="MP -6, basic attack 20, mastery 15%"/>
     <string name="h2" value="MP -6, basic attack 21, mastery 15%"/>
     <string name="h3" value="MP -6, basic attack 22, mastery 20%"/>
@@ -282,7 +282,7 @@
   </imgdir>
   <imgdir name="2001005">
     <string name="name" value="Magic Claw"/>
-    <string name="desc" value="[Master Level : 20]\nUse MP to attack an enemy twice.\nRequired Skill : #cAt least Level 1 on Energy Bolt#"/>
+    <string name="desc" value="[Master Level : 20]\nConsumes MP to strike 1 enemy twice with magic.\nRequired Skill : #cEnergy Bolt Lv.1#"/>
     <string name="h1" value="MP -10, basic attack 11, mastery 15%"/>
     <string name="h2" value="MP -10, basic attack 12, mastery 15%"/>
     <string name="h3" value="MP -10, basic attack 13, mastery 20%"/>
@@ -1417,7 +1417,7 @@
   </imgdir>
   <imgdir name="2200000">
     <string name="name" value="MP Eater"/>
-    <string name="desc" value="[Master Level : 20]\nAbsorbs the enemy&apos;s MP when attacking with Magic skills, until it reaches 0."/>
+    <string name="desc" value="[Master Level : 20]\nWhen a magic attack hits, has a chance to absorb MP from a non-boss monster. No effect if the monster has no MP."/>
     <string name="h1" value="For every attack, 11% Success rate,\r\nabsorb 21% of the enemy&apos;s MaxMP."/>
     <string name="h2" value="For every attack, 12% Success rate,\r\nabsorb 22% of the enemy&apos;s MaxMP."/>
     <string name="h3" value="For every attack, 13% Success rate,\r\nabsorb 23% of the enemy&apos;s MaxMP."/>
@@ -1441,7 +1441,7 @@
   </imgdir>
   <imgdir name="2201001">
     <string name="name" value="Meditation"/>
-    <string name="desc" value="[Master Level : 20]\nMeditate for a bit to temporarily boost up the magic attack of party members around the area.\nRequired Skill : #cAt least Level 3 on MP Eater#"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily increases the magic attack of nearby party members.\nRequired Skill : #cMP Eater Lv.3#"/>
     <string name="h1" value="MP -10; party&apos;s magic attack +1 for 10 sec."/>
     <string name="h2" value="MP -10; party&apos;s magic attack +2 for 20sec."/>
     <string name="h3" value="MP -10; party&apos;s magic attack +3 for 30 sec."/>
@@ -1465,7 +1465,7 @@
   </imgdir>
   <imgdir name="2201002">
     <string name="name" value="Teleport"/>
-    <string name="desc" value="[Master Level : 20]\nUse the arrow keys to teleport to other places in the same map on a set distance."/>
+    <string name="desc" value="[Master Level : 20]\nUse the arrow keys to teleport a set distance within the same map."/>
     <string name="h1" value="MP -60; teleport, with 130 in distance"/>
     <string name="h2" value="MP -57; teleport, with 130 in distance"/>
     <string name="h3" value="MP -54; teleport, with 130 in distance"/>
@@ -1489,7 +1489,7 @@
   </imgdir>
   <imgdir name="2201003">
     <string name="name" value="Slow"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily slows down the movement of up to 6 monsters. Cannot be used on the same monsters more than twice in a row.\nRequired Skill : #cAt least Level 5 on Teleport#"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily slows up to 6 nearby monsters. The effect cannot be stacked on the same target.\nRequired Skill : #cTeleport Lv.5#"/>
     <string name="h1" value="MP -8; enemy&apos;s moving speed -2 for 2 sec."/>
     <string name="h2" value="MP -8; enemy&apos;s moving speed -4 for 4 sec."/>
     <string name="h3" value="MP -8; enemy&apos;s moving speed -6 for 6 sec."/>
@@ -1513,7 +1513,7 @@
   </imgdir>
   <imgdir name="2201004">
     <string name="name" value="Cold Beam"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks a single monster with a sharp piece of Ice. The monster will freeze if hit.  Damages the fire-based enemies 1.5 times more, where as the ice-based enemies get only half the damage."/>
+    <string name="desc" value="[Master Level : 30]\nAttacks 1 enemy with ice magic and freezes it. Deals increased damage to fire-based enemies."/>
     <string name="h1" value="MP -12; Basic attack 13, mastery 15%"/>
     <string name="h2" value="MP -12; Basic attack 16, mastery 15%"/>
     <string name="h3" value="MP -12; Basic attack 19, mastery 15%"/>
@@ -1547,7 +1547,7 @@
   </imgdir>
   <imgdir name="2201005">
     <string name="name" value="Thunder Bolt"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks surrounding monsters with a thunder bolt.  All monsters in the range receive damage."/>
+    <string name="desc" value="[Master Level : 30]\nStrikes up to 6 nearby enemies with lightning."/>
     <string name="h1" value="MP -20; Basic attack 2, mastery 15%"/>
     <string name="h2" value="MP -20; Basic attack 4, mastery 15%"/>
     <string name="h3" value="MP -20; Basic attack 6, mastery 15%"/>
@@ -3525,7 +3525,7 @@
   </imgdir>
   <imgdir name="2210001">
     <string name="name" value="Element Amplification"/>
-    <string name="desc" value="[Master Level : 30]\n Boosts the capacity for all Magic attacks by using additional MP."/>
+    <string name="desc" value="[Master Level : 30]\nIncreases magic skill damage while increasing MP consumption."/>
     <string name="h1" value="Use 105% MP, Magic Attack 107%"/>
     <string name="h2" value="Use 110% MP, Magic Attack 109%"/>
     <string name="h3" value="Use 115% MP, Magic Attack 111%"/>
@@ -3559,7 +3559,7 @@
   </imgdir>
   <imgdir name="2211002">
     <string name="name" value="Ice Strike"/>
-    <string name="desc" value="[Master Level : 30]\nFires ice blocks at multiple enemies. If struck, all monsters other than ice-based ones will freeze. Cannot attack more than 6 at once."/>
+    <string name="desc" value="[Master Level : 30]\nDrops ice blocks on up to 6 enemies in range. Non-ice enemies freeze when hit."/>
     <string name="h1" value="Use MP 21, Attack 32, Mastery 15%, Attack Range 110%"/>
     <string name="h2" value="Use MP 22, Attack 34, Mastery 15%, Attack Range 110%"/>
     <string name="h3" value="Use MP 23, Attack 36, Mastery 15%, Attack Range 110%"/>
@@ -3593,7 +3593,7 @@
   </imgdir>
   <imgdir name="2211003">
     <string name="name" value="Thunder Spear"/>
-    <string name="desc" value="[Master Level : 30]\nGathers up the power of lightening and turns it into a spear, attacking a single enemy. Monsters will be damaged with a lightening-based attack."/>
+    <string name="desc" value="[Master Level : 30]\nForms a spear of lightning to attack 1 enemy with lightning magic."/>
     <string name="h1" value="Use MP 10, Attack 80, Mastery 15%"/>
     <string name="h2" value="Use MP 10, Attack 90, Mastery 15%"/>
     <string name="h3" value="Use MP 11, Attack 95, Mastery 15%"/>
@@ -3627,7 +3627,7 @@
   </imgdir>
   <imgdir name="2211004">
     <string name="name" value="Seal"/>
-    <string name="desc" value="[Master Level : 20]\nSeals up the enemies around you for a certain amount of time. Once sealed up, the monsters can&apos;t use attacking skills, but the skill does not work on boss monsters.\nRequired Skill : #cAt least Level 3 on Element Amplification#"/>
+    <string name="desc" value="[Master Level : 20]\nSeals up to 6 nearby enemies, preventing them from using skills. Does not work on bosses.\nRequired Skill : #cElement Amplification Lv.3#"/>
     <string name="h1" value="Use 12 MP, 38% chance of sealing up for 10 sec."/>
     <string name="h2" value="Use 12 MP, 41% chance of sealing up for 11 sec."/>
     <string name="h3" value="Use 12 MP, 44% chance of sealing up for 11 sec."/>
@@ -3651,31 +3651,31 @@
   </imgdir>
   <imgdir name="2211005">
     <string name="name" value="Spell Booster"/>
-    <string name="desc" value="[Master Level : 20]\nUses up a significant amount of HP and MP to increase the attacking speed for spells."/>
-    <string name="h1" value="Use HP 58, MP 53 to boost up the magic attacking speed to level 2 for 10 sec."/>
-    <string name="h2" value="Use HP 56, MP 51 to boost up the magic attacking speed to level 2 for 20 sec."/>
-    <string name="h3" value="Use HP 54, MP 49 to boost up the magic attacking speed to level 2 for 30 sec."/>
-    <string name="h4" value="Use HP 52, MP 47 to boost up the magic attacking speed to level 2 for 40 sec."/>
-    <string name="h5" value="Use HP 50, MP 45 to boost up the magic attacking speed to level 2 for 50 sec."/>
-    <string name="h6" value="Use HP 48, MP 43 to boost up the magic attacking speed to level 2 for 60 sec."/>
-    <string name="h7" value="Use HP 46, MP 41 to boost up the magic attacking speed to level 2 for 70 sec."/>
-    <string name="h8" value="Use HP 44, MP 39 to boost up the magic attacking speed to level 2 for 80 sec."/>
-    <string name="h9" value="Use HP 42, MP 37 to boost up the magic attacking speed to level 2 for 90 sec."/>
-    <string name="h10" value="Use HP 40, MP 35 to boost up the magic attacking speed to level 2 for 100 sec."/>
-    <string name="h11" value="Use HP 39, MP 34 to boost up the magic attacking speed to level 3 for 110 sec."/>
-    <string name="h12" value="Use HP 38, MP 33 to boost up the magic attacking speed to level 3 for 120 sec."/>
-    <string name="h13" value="Use HP 37, MP 32 to boost up the magic attacking speed to level 3 for 130 sec."/>
-    <string name="h14" value="Use HP 36, MP 31 to boost up the magic attacking speed to level 3 for 140 sec."/>
-    <string name="h15" value="Use HP 35, MP 30 to boost up the magic attacking speed to level 3 for 150 sec."/>
-    <string name="h16" value="Use HP 34, MP 29 to boost up the magic attacking speed to level 3 for 160 sec."/>
-    <string name="h17" value="Use HP 33, MP 28 to boost up the magic attacking speed to level 3 for 170 sec."/>
-    <string name="h18" value="Use HP 32, MP 27 to boost up the magic attacking speed to level 3 for 180 sec."/>
-    <string name="h19" value="Use HP 31, MP 26 to boost up the magic attacking speed to level 3 for 190 sec."/>
-    <string name="h20" value="Use HP 30, MP 25 to boost up the magic attacking speed to level 3 for 200 sec."/>
+    <string name="desc" value="[Master Level : 20]\nConsumes HP and MP to increase magic attack speed.\nRequired Skill : #cElement Amplification Lv.3#"/>
+    <string name="h1" value="Use HP 58, MP 53 to increase magic attack speed by 1 stage for 10 sec."/>
+    <string name="h2" value="Use HP 56, MP 51 to increase magic attack speed by 1 stage for 20 sec."/>
+    <string name="h3" value="Use HP 54, MP 49 to increase magic attack speed by 1 stage for 30 sec."/>
+    <string name="h4" value="Use HP 52, MP 47 to increase magic attack speed by 1 stage for 40 sec."/>
+    <string name="h5" value="Use HP 50, MP 45 to increase magic attack speed by 1 stage for 50 sec."/>
+    <string name="h6" value="Use HP 48, MP 43 to increase magic attack speed by 1 stage for 60 sec."/>
+    <string name="h7" value="Use HP 46, MP 41 to increase magic attack speed by 1 stage for 70 sec."/>
+    <string name="h8" value="Use HP 44, MP 39 to increase magic attack speed by 1 stage for 80 sec."/>
+    <string name="h9" value="Use HP 42, MP 37 to increase magic attack speed by 1 stage for 90 sec."/>
+    <string name="h10" value="Use HP 40, MP 35 to increase magic attack speed by 1 stage for 100 sec."/>
+    <string name="h11" value="Use HP 39, MP 34 to increase magic attack speed by 2 stages for 110 sec."/>
+    <string name="h12" value="Use HP 38, MP 33 to increase magic attack speed by 2 stages for 120 sec."/>
+    <string name="h13" value="Use HP 37, MP 32 to increase magic attack speed by 2 stages for 130 sec."/>
+    <string name="h14" value="Use HP 36, MP 31 to increase magic attack speed by 2 stages for 140 sec."/>
+    <string name="h15" value="Use HP 35, MP 30 to increase magic attack speed by 2 stages for 150 sec."/>
+    <string name="h16" value="Use HP 34, MP 29 to increase magic attack speed by 2 stages for 160 sec."/>
+    <string name="h17" value="Use HP 33, MP 28 to increase magic attack speed by 2 stages for 170 sec."/>
+    <string name="h18" value="Use HP 32, MP 27 to increase magic attack speed by 2 stages for 180 sec."/>
+    <string name="h19" value="Use HP 31, MP 26 to increase magic attack speed by 2 stages for 190 sec."/>
+    <string name="h20" value="Use HP 30, MP 25 to increase magic attack speed by 2 stages for 200 sec."/>
   </imgdir>
   <imgdir name="2211006">
     <string name="name" value="Element Composition"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks a single monster with Magic attack of Ice and Lightning features combined.  Very effective to the monsters vulnerable to ice and lightning, and if struck, the monster will freeze."/>
+    <string name="desc" value="[Master Level : 30]\nAttacks 1 enemy with combined ice and lightning magic, freezing the target on hit."/>
     <string name="h1" value="Use MP 14, Attack 80, Mastery 15%, freezes enemy for 1 sec."/>
     <string name="h2" value="Use MP 14, Attack 84, Mastery 15%, freezes enemy for 1 sec."/>
     <string name="h3" value="Use MP 14, Attack 87, Mastery 15%, freezes enemy for 1 sec."/>
@@ -6054,7 +6054,7 @@
   </imgdir>
   <imgdir name="2221000">
     <string name="name" value="Maple Warrior"/>
-    <string name="desc" value="Increase all players&apos; stats within a party by certain percentage "/>
+    <string name="desc" value="Temporarily increases all stats of party members by a percentage."/>
     <string name="h1" value="MP - 10 ,  For 30Secs, all stats + 1% "/>
     <string name="h2" value="MP - 10 ,  For 60Secs, all stats + 1% "/>
     <string name="h3" value="MP - 10 ,  For 90Secs, all stats + 2% "/>
@@ -6088,7 +6088,7 @@
   </imgdir>
   <imgdir name="2221001">
     <string name="name" value="Big Bang"/>
-    <string name="desc" value="Gathers up numerous particles from the surrounding area to form an energy vortex, culminating in a powerful explosion."/>
+    <string name="desc" value="Charge energy from the surroundings, then release an explosion that attacks up to 6 enemies."/>
     <string name="h1" value="MP - 25 , Max attack 160, Mastery 35%"/>
     <string name="h2" value="MP - 25 , Max attack 170, Mastery 35%"/>
     <string name="h3" value="MP - 25 , Max attack 180, Mastery 35%"/>
@@ -6122,7 +6122,7 @@
   </imgdir>
   <imgdir name="2221002">
     <string name="name" value="Mana Reflection"/>
-    <string name="desc" value="By drawing on incredible inner strength, enables one to reverse the flow of Mana back to the monster, returning the damage received from the monster. The returned damage cannot exceed 20% of maxHP of the monster."/>
+    <string name="desc" value="When hit by magic damage, has a chance to reflect a portion of the damage to the enemy. Reflected damage cannot exceed 20% of the monster&apos;s MaxHP and does not affect bosses."/>
     <string name="h1" value="MP - 26 , for duration of 10secs, with success rate 31%, returns 55% of magic damage received back to enemy.."/>
     <string name="h2" value="MP - 27 , for duration of 20secs, with success rate 32%, returns 60% of magic damage received back to enemy.."/>
     <string name="h3" value="MP - 28 , for duration of 30secs, with success rate 33%, returns 65% of magic damage received back to enemy.."/>
@@ -6156,41 +6156,41 @@
   </imgdir>
   <imgdir name="2221003">
     <string name="name" value="Ice Demon"/>
-    <string name="desc" value="Provides consistent damage to a monster using ice pieces from Ice Demon. Monsters stricken by Ice Demon become vulnerable to fire-based attacks."/>
-    <string name="h1" value="MP - 15 , Basic attack 42, Mastery 15%, for 10secs, attack up to 2 enemies."/>
-    <string name="h2" value="MP - 15 , Basic attack 44, Mastery 15%, for 10secs, attack up to 2 enemies."/>
-    <string name="h3" value="MP - 15 , Basic attack 46, Mastery 15%, for 10secs, attack up to 2 enemies."/>
-    <string name="h4" value="MP - 15 , Basic attack 48, Mastery 20%, for 10secs, attack up to 2 enemies."/>
-    <string name="h5" value="MP - 15 , Basic attack 50, Mastery 20%, for 10secs, attack up to 2 enemies."/>
-    <string name="h6" value="MP - 15 , Basic attack 52, Mastery 20%, for 10secs, attack up to 2 enemies."/>
-    <string name="h7" value="MP - 18 , Basic attack 54, Mastery 25%, for 10secs, attack up to 3 enemies."/>
-    <string name="h8" value="MP - 18 , Basic attack 56, Mastery 25%, for 10secs, attack up to 3 enemies."/>
-    <string name="h9" value="MP - 18 , Basic attack 58, Mastery 25%, for 10secs, attack up to 3 enemies."/>
-    <string name="h10" value="MP - 18 , Basic attack 60, Mastery 30%, for 10secs, attack up to 3 enemies."/>
-    <string name="h11" value="MP - 18 , Basic attack 62, Mastery 30%, for 10secs, attack up to 3 enemies."/>
-    <string name="h12" value="MP - 18 , Basic attack 64, Mastery 30%, for 10secs, attack up to 3 enemies."/>
-    <string name="h13" value="MP - 21 , Basic attack 66, Mastery 35%, for 10secs, attack up to 4 enemies."/>
-    <string name="h14" value="MP - 21 , Basic attack 68, Mastery 35%, for 10secs, attack up to 4 enemies."/>
-    <string name="h15" value="MP - 21 , Basic attack 70, Mastery 35%, for 10secs, attack up to 4 enemies."/>
-    <string name="h16" value="MP - 21 , Basic attack 72, Mastery 40%, for 10secs, attack up to 4 enemies."/>
-    <string name="h17" value="MP - 21 , Basic attack 74, Mastery 40%, for 10secs, attack up to 4 enemies."/>
-    <string name="h18" value="MP - 21 , Basic attack 76, Mastery 40%, for 10secs, attack up to 4 enemies."/>
-    <string name="h19" value="MP - 31 , Basic attack 78, Mastery 45%, for 15secs, attack up to 5 enemies."/>
-    <string name="h20" value="MP - 31 , Basic attack 80, Mastery 45%, for 15secs, attack up to 5 enemies."/>
-    <string name="h21" value="MP - 31 , Basic attack 82, Mastery 45%, for 15secs, attack up to 5 enemies."/>
-    <string name="h22" value="MP - 31 , Basic attack 84, Mastery 50%, for 15secs, attack up to 5 enemies."/>
-    <string name="h23" value="MP - 31 , Basic attack 86, Mastery 50%, for 15secs, attack up to 5 enemies."/>
-    <string name="h24" value="MP - 31 , Basic attack 88, Mastery 50%, for 15secs, attack up to 5 enemies."/>
-    <string name="h25" value="MP - 34 , Basic attack 90, Mastery 55%, for 15secs, attack up to 6 enemies."/>
-    <string name="h26" value="MP - 34 , Basic attack 92, Mastery 55%, for 15secs, attack up to 6 enemies."/>
-    <string name="h27" value="MP - 34 , Basic attack 94, Mastery 55%, for 15secs, attack up to 6 enemies."/>
-    <string name="h28" value="MP - 34 , Basic attack 96, Mastery 60%, for 15secs, attack up to 6 enemies."/>
-    <string name="h29" value="MP - 34 , Basic attack 98, Mastery 60%, for 15secs, attack up to 6 enemies."/>
-    <string name="h30" value="MP - 34 , Basic attack 100, Mastery 60%, for 15secs, attack up to 6 enemies."/>
+    <string name="desc" value="Attacks multiple enemies and deals damage over time. Enemies hit become vulnerable to fire-based attacks."/>
+    <string name="h1" value="MP - 15, Basic attack 42, Mastery 15%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h2" value="MP - 15, Basic attack 44, Mastery 15%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h3" value="MP - 15, Basic attack 46, Mastery 15%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h4" value="MP - 15, Basic attack 48, Mastery 20%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h5" value="MP - 15, Basic attack 50, Mastery 20%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h6" value="MP - 15, Basic attack 52, Mastery 20%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h7" value="MP - 18, Basic attack 54, Mastery 25%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h8" value="MP - 18, Basic attack 56, Mastery 25%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h9" value="MP - 18, Basic attack 58, Mastery 25%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h10" value="MP - 18, Basic attack 60, Mastery 30%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h11" value="MP - 18, Basic attack 62, Mastery 30%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h12" value="MP - 18, Basic attack 64, Mastery 30%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h13" value="MP - 21, Basic attack 66, Mastery 35%, for 10 sec, attacks up to 4 enemies."/>
+    <string name="h14" value="MP - 21, Basic attack 68, Mastery 35%, for 10 sec, attacks up to 4 enemies."/>
+    <string name="h15" value="MP - 21, Basic attack 70, Mastery 35%, for 10 sec, attacks up to 4 enemies."/>
+    <string name="h16" value="MP - 21, Basic attack 72, Mastery 40%, for 15 sec, attacks up to 4 enemies."/>
+    <string name="h17" value="MP - 21, Basic attack 74, Mastery 40%, for 15 sec, attacks up to 4 enemies."/>
+    <string name="h18" value="MP - 21, Basic attack 76, Mastery 40%, for 15 sec, attacks up to 4 enemies."/>
+    <string name="h19" value="MP - 31, Basic attack 78, Mastery 45%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h20" value="MP - 31, Basic attack 80, Mastery 45%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h21" value="MP - 31, Basic attack 82, Mastery 45%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h22" value="MP - 31, Basic attack 84, Mastery 50%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h23" value="MP - 31, Basic attack 86, Mastery 50%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h24" value="MP - 31, Basic attack 88, Mastery 50%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h25" value="MP - 34, Basic attack 90, Mastery 55%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h26" value="MP - 34, Basic attack 92, Mastery 55%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h27" value="MP - 34, Basic attack 94, Mastery 55%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h28" value="MP - 34, Basic attack 96, Mastery 60%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h29" value="MP - 34, Basic attack 98, Mastery 60%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h30" value="MP - 34, Basic attack 100, Mastery 60%, for 15 sec, attacks up to 6 enemies."/>
   </imgdir>
   <imgdir name="2221004">
     <string name="name" value="Infinity"/>
-    <string name="desc" value="Enables one to temporarily draw magic powers from sources surrounding the mage and use it in place of one&apos;s own MP."/>
+    <string name="desc" value="Temporarily allows skills to be used without consuming MP. #cCooldown: 3 min.#"/>
     <string name="h1" value="For 11secs, Mana is left intacted."/>
     <string name="h2" value="For 12secs, Mana is left intacted."/>
     <string name="h3" value="For 13secs, Mana is left intacted."/>
@@ -6224,7 +6224,7 @@
   </imgdir>
   <imgdir name="2221005">
     <string name="name" value="Ifrit"/>
-    <string name="desc" value="Calls upon the Ifrit familiar, who is fire-based. Attacks up to 3 monsters."/>
+    <string name="desc" value="Summons the fire-based Ifrit to attack up to 3 enemies.\nRequired Skill : #cIce Demon Lv.5#"/>
     <string name="h1" value="MP - 13 , Basic attack 183, for 15secs"/>
     <string name="h2" value="MP - 16 , Basic attack 186, for 20secs"/>
     <string name="h3" value="MP - 19 , Basic attack 189, for 25secs"/>
@@ -6258,7 +6258,7 @@
   </imgdir>
   <imgdir name="2221006">
     <string name="name" value="Chain Lightning"/>
-    <string name="desc" value="Attacks a single monster using a high-voltage lightning attack. If struck, monsters around the affected monster will receive damage as well."/>
+    <string name="desc" value="Attacks 1 enemy with high-voltage lightning, then chains to nearby enemies. The number of targets increases with skill level."/>
     <string name="h1" value="MP - 16 , Basic attack 103, Mastery 15%, Damage up to  2enemies."/>
     <string name="h2" value="MP - 16 , Basic attack 106, Mastery 15%, Damage up to  2enemies."/>
     <string name="h3" value="MP - 16 , Basic attack 109, Mastery 15%, Damage up to  2enemies."/>
@@ -6292,7 +6292,7 @@
   </imgdir>
   <imgdir name="2221007">
     <string name="name" value="Blizzard"/>
-    <string name="desc" value="Summons spears of ice from the sky, showering up to 15 monsters at one time with a nasty blizzard. Incurs tremedous ice-based damages to the attacked."/>
+    <string name="desc" value="Summons ice spears to attack up to 15 enemies with powerful ice damage. #cCooldown: 10 sec.#"/>
     <string name="h1" value="MP - 2100 , Basic attack 330"/>
     <string name="h2" value="MP - 2200 , Basic attack 340"/>
     <string name="h3" value="MP - 2300 , Basic attack 350"/>
@@ -6326,12 +6326,12 @@
   </imgdir>
   <imgdir name="2221008">
     <string name="name" value="Hero&apos;s Will"/>
-    <string name="desc" value="Enables one to shrug off abnormal conditions. The higher the skill level, the more types of abnormal conditions one can nullify."/>
-    <string name="h1" value="MP - 30 escape from abnormal condition, Terms between skills 600secs"/>
-    <string name="h2" value="MP - 30 escape from abnormal condition, Terms between skills 540secs"/>
-    <string name="h3" value="MP - 30 escape from abnormal condition, Terms between skills 480secs"/>
-    <string name="h4" value="MP - 30 escape from abnormal condition, Terms between skills 420secs"/>
-    <string name="h5" value="MP - 30 escape from abnormal condition, Terms between skills 360secs"/>
+    <string name="desc" value="Removes abnormal conditions such as Seduce, Zombify, and Confuse. Cooldown decreases as the skill level increases."/>
+    <string name="h1" value="MP - 30, removes abnormal conditions, cooldown 600 sec."/>
+    <string name="h2" value="MP - 30, removes abnormal conditions, cooldown 540 sec."/>
+    <string name="h3" value="MP - 30, removes abnormal conditions, cooldown 480 sec."/>
+    <string name="h4" value="MP - 30, removes abnormal conditions, cooldown 420 sec."/>
+    <string name="h5" value="MP - 30, removes abnormal conditions, cooldown 360 sec."/>
   </imgdir>
   <imgdir name="232">
     <string name="bookName" value="Highest class of Holy Magic"/>
