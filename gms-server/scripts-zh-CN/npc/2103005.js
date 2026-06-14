@@ -22,6 +22,7 @@
  */
 
 var status;
+var slot = 1;
 
 function start() {
     status = -1;
@@ -31,32 +32,42 @@ function start() {
 function action(mode, type, selection) {
     if (mode == -1) {
         cm.dispose();
+        return;
+    }
+    if (mode == 0 && type > 0) {
+        cm.dispose();
+        return;
+    }
+    if (mode == 1) {
+        status++;
     } else {
-        if (mode == 0 && type > 0) {
+        status--;
+    }
+
+    if (status == 0) {
+        if (!cm.isQuestStarted(3929)) {
+            cm.sendOk("这里似乎没什么特别的。");
             cm.dispose();
             return;
         }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
 
-        if (status == 0) {
-            if (cm.isQuestStarted(3929)) {
-                var progress = cm.getQuestProgress(3929);
-                var slot = 1;
-
-                var ch = progress[slot];
-                if (ch == '2') {
-                    var nextProgress = progress.substr(0, slot) + '3' + progress.substr(slot + 1);
-
-                    cm.gainItem(4031580, -1);
-                    cm.setQuestProgress(3929, nextProgress);
-                }
+        var progress = cm.getQuestProgress(3929);
+        var ch = progress[slot];
+        if (ch == '3') {
+            cm.sendOk("这里已经放过食物了。");
+        } else if (ch == '2') {
+            if (!cm.haveItem(4031580, 1)) {
+                cm.sendOk("你身上没有#b#t4031580##k。");
+            } else {
+                var nextProgress = progress.substr(0, slot) + '3' + progress.substr(slot + 1);
+                cm.gainItem(4031580, -1);
+                cm.setQuestProgress(3929, nextProgress);
+                cm.sendOk("你悄悄把#b#t4031580##k放在了居民家里。");
             }
-
-            cm.dispose();
+        } else {
+            cm.sendOk("这里似乎没什么特别的。");
         }
+
+        cm.dispose();
     }
 }
