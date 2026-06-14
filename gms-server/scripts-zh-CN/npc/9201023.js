@@ -100,14 +100,14 @@ function action(mode, type, selection) {
 
         if (status == 0) {
             if (!cm.isQuestStarted(100400)) {
-                cm.sendOk("你好 #b#h0##k，我是爱之仙子 #p9201023#。");     // thanks Periwinks (LuckyStory) for noticing Nana's introducing themselves as Nana (H)
+                cm.sendOk("你好 #b#h0##k，我是爱情仙子 #p9201023#。");     // thanks Periwinks (LuckyStory) for noticing Nana's introducing themselves as Nana (H)
                 cm.dispose();
                 return;
             }
 
             nanaLoc = getNanaLocation(cm.getPlayer());
             if (nanaLoc == -1) {
-                cm.sendOk("你好 #b#h0##k，我是爱之仙子 #p9201023#。");
+                cm.sendOk("你好 #b#h0##k，我是爱情仙子 #p9201023#。");
                 cm.dispose();
                 return;
             }

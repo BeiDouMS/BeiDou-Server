@@ -396,7 +396,7 @@ public class Quest {
             chr.questTimeLimit(this, timeLimit);
         }
         if (timeLimit2 > 0) {
-            newStatus.setExpirationTime(System.currentTimeMillis() + timeLimit2);
+            newStatus.setExpirationTime(System.currentTimeMillis() + SECONDS.toMillis(timeLimit2));
             chr.questTimeLimit2(this, newStatus.getExpirationTime());
         }
 

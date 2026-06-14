@@ -63,6 +63,7 @@ import org.gms.server.maps.AbstractAnimatedMapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Summon;
+import org.gms.server.quest.medal.VeteranHunterMedal;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -469,6 +470,12 @@ public class Monster extends AbstractLoadedLife {
             dispatchMonsterDamaged(from, trueDamage);
         }
 
+        // ========== 通知事件实例记录伤害 ==========
+        EventInstanceManager eim = getMap().getEventInstance();
+        if (eim != null && !fake) {
+            eim.addDamage(from, trueDamage);
+        }
+
         if (!takenDamage.containsKey(from.getId())) {
             takenDamage.put(from.getId(), new AtomicLong(trueDamage));
         } else {
@@ -765,6 +772,7 @@ public class Monster extends AbstractLoadedLife {
             attacker.gainExp(_personalExp, _partyExp, true, false, white);
             attacker.increaseEquipExp(_personalExp);
             attacker.raiseQuestMobCount(getId());
+            VeteranHunterMedal.onMonsterKilled(attacker, this);
         }
     }
 

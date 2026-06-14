@@ -3,6 +3,6 @@
  **/
 
 function start() {
-    cm.sendOk("欢迎来到#b快乐小镇#k，年轻的旅行者。你有什么愿望吗？");
+    cm.sendOk("欢迎来到#b幸福村#k，年轻的旅行者。愿这个冬天带给你温暖和好运。");
     cm.dispose();
 } 

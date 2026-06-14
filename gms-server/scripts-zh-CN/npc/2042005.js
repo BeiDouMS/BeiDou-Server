@@ -31,10 +31,10 @@ function action(mode, type, selection) {
         if (status == 0) {
             if (cm.getParty() == null) {
                 status = 10;
-                cm.sendOk("在参加怪物嘉年华之前，你需要创建一个队伍！");
+                cm.sendOk("你需要先创建一个队伍，才能参加怪物嘉年华！");
             } else if (!cm.isLeader()) {
                 status = 10;
-                cm.sendOk("如果你想开始战斗，让#组队队长#来找我谈谈。");
+                cm.sendOk("如果想开始战斗，请让#b队长#k来和我对话。");
             } else {
                 var leaderMapid = cm.getMapId();
                 var party = cm.getParty().getMembers();
@@ -53,16 +53,16 @@ function action(mode, type, selection) {
 
                 if (party >= 1) {
                     status = 10;
-                    cm.sendOk("你的队伍人数不够。你需要一个有 #b" + cpqMinAmt + "#k - #r" + cpqMaxAmt + "#k 名成员的队伍，并且他们应该和你在同一地图上。");
+                    cm.sendOk("你的队伍人数不足。队伍需要有#b" + cpqMinAmt + "#k - #r" + cpqMaxAmt + "#k名成员，而且所有成员都必须和你在同一张地图。");
                 } else if (lvlOk != inMap) {
                     status = 10;
-                    cm.sendOk("确保你的队伍中的每个人都处于正确的等级范围内（" + cpqMinLvl + "~" + cpqMaxLvl + "）！");
+                    cm.sendOk("请确认队伍中的所有成员等级都在正确范围内（" + cpqMinLvl + "~" + cpqMaxLvl + "）！");
                 } else if (isOutMap > 0) {
                     status = 10;
-                    cm.sendOk("有一些队员不在地图上！");
+                    cm.sendOk("队伍中有成员不在当前地图！");
                 } else {
                     if (!cm.sendCPQMapLists2()) {
-                        cm.sendOk("所有的怪物嘉年华场地目前都在使用中！请稍后再试。");
+                        cm.sendOk("所有怪物嘉年华场地目前都在使用中！请稍后再试。");
                         cm.dispose();
                     }
                 }
@@ -73,16 +73,16 @@ function action(mode, type, selection) {
                     cm.challengeParty2(selection);
                     cm.dispose();
                 } else {
-                    cm.sendOk("房间目前已满。");
+                    cm.sendOk("这个房间目前已经满员。");
                     cm.dispose();
                 }
             } else {
                 var party = cm.getParty().getMembers();
                 const GameConfig = Java.type('org.gms.config.GameConfig');
                 if ((selection === 0 || selection === 1) && party.size() < (GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : 2)) {
-                    cm.sendOk("你至少需要2名玩家才能参与战斗！");
+                    cm.sendOk("至少需要2名玩家才能参加战斗！");
                 } else if ((selection === 2) && party.size() < (GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : 3)) {
-                    cm.sendOk("你至少需要3名玩家参与战斗！");
+                    cm.sendOk("至少需要3名玩家才能参加战斗！");
                 } else {
                     cm.cpqLobby2(selection);
                 }

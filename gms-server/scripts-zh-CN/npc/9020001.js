@@ -69,7 +69,7 @@ function clearStage(stage, eim, curMap) {
 
 function rectangleStages(eim, property, areaCombos, areaRects) {
     const GameConfig = Java.type('org.gms.config.GameConfig');
-    if(GameConfig.getServerBoolean("use_enable_solo_expeditions") && eim.getPlayerCount() == 1){
+    if(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1){
         return true;
     }
     var c = eim.getProperty(property);
@@ -139,6 +139,12 @@ function action(mode, type, selection) {
                     cm.sendNext("太棒了！你通过了所有的关卡来到了这一点。这是为了你出色的表现而给予的小奖品。在接受之前，请确保你的使用和其他物品栏有空位可用。");
                 }
             } else if (curMap == 103000800) {   // stage 1
+                const GameConfig = Java.type('org.gms.config.GameConfig');
+                if (eim.getPlayerCount() == 1 && !GameConfig.getServerBoolean("use_enable_stage_skip")) {
+                    cm.sendOk("这里的机关需要多人配合才能解开，一个人恐怕难以应付。等你找到了可靠的伙伴，再一起回来挑战吧！");
+                    cm.dispose();
+                    return;
+                }
                 if (cm.isEventLeader()) {
                     var numpasses = eim.getPlayerCount() - 1;     // minus leader
 

@@ -40,7 +40,7 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendOk("我来自遥远的地方，寻找足够强大的人加入我的远征队，对抗肆虐这片土地的邪恶。你，碰巧是其中之一吗？");
+            cm.sendOk("我从遥远的地方而来，寻找足够强大的人加入我的远征队，对抗肆虐这片土地的邪恶。你是否就是其中之一？");
             cm.dispose();
         }
     }
