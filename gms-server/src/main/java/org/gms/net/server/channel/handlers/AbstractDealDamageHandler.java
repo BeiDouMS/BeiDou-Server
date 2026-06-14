@@ -1129,7 +1129,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * 仅对明确不是“空间攻击框”语义的技能做豁免，避免误伤正常近战技能。
      */
     private static boolean shouldSkipDistanceHackCheck(int skillId, StatEffect attackEffect) {
-        return isFullScreenDistanceExempt(skillId) || isNonSpatialAttackSkill(skillId, attackEffect);
+        return isFullScreenDistanceExempt(skillId)
+                || isNonSpatialAttackSkill(skillId, attackEffect)
+                || isPiercingProjectileWithoutAttackBox(skillId, attackEffect);
     }
 
     /**
@@ -1143,6 +1145,19 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
         return skillId == Marauder.ENERGY_CHARGE
                 || skillId == ThunderBreaker.ENERGY_CHARGE;
+    }
+
+    /**
+     * Avenger has no level/lt or level/rb in Skill.wz; the client sends hits from its piercing projectile path.
+     * The generic distance check can skip valid hits when both the skill attack box and monster bbox are unavailable.
+     */
+    private static boolean isPiercingProjectileWithoutAttackBox(int skillId, StatEffect attackEffect) {
+        if (attackEffect != null && attackEffect.hasBoundingBox()) {
+            return false;
+        }
+
+        return skillId == Hermit.AVENGER
+                || skillId == NightWalker.AVENGER;
     }
 
     /**
