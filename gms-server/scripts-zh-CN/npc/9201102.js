@@ -1,9 +1,8 @@
-/**
- *9201102 - Stirgeman
- *@author Ronan
- */
-
 function start() {
-    cm.sendOk("新叶城的巡逻队随时待命。没有任何生物能够突破到城市里。");
+
+    cm.sendOk("不要害怕，斯廷吉曼在这里！新叶城巡逻队随时待命，不会让怪物轻易闯进城市。");
+
     cm.dispose();
+
 }
+
