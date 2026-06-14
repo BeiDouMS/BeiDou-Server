@@ -31,17 +31,13 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode < 0) {
+    if (mode <= 0) {
         cm.dispose();
     } else {
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
+        status++;
 
         if (status == 0) {
-            cm.sendYesNo("我们有一棵漂亮的圣诞树。你想看看/装饰它吗？");
+            cm.sendYesNo("这里有一间圣诞树房间，可以自由装饰。要进去看看吗？");
         } else if (status == 1) {
             cm.warp(209000002);
             cm.dispose();

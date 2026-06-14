@@ -154,7 +154,14 @@ function action(mode, type, selection) {
                         total += z;
                     }
                     if (total != 3) {
-                        cm.sendOk("There needs to be exactly 3 players on these platforms.");
+                        const GameConfig = Java.type('org.gms.config.GameConfig');
+                        if(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1){
+                            cm.getMap().getReactorByName("stone4").forceHitReactor(1);
+                            eim.giveEventPlayersExp(3500);
+                            clearStage(4, eim);
+                        }else{
+                            cm.sendOk("There needs to be exactly 3 players on these platforms.");
+                        }
                     } else {
                         var num_correct = 0;
                         for (var i = 0; i < 3; i++) {

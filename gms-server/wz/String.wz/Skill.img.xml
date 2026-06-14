@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="Skill.img">
   <imgdir name="000">
     <string name="bookName" value="Beginner&apos;s Basics"/>
@@ -196,7 +196,7 @@
   </imgdir>
   <imgdir name="2000001">
     <string name="name" value="Improved MaxMP Increase"/>
-    <string name="desc" value="Master Level : 10] This skill boosts up the amount of increase on MaxMP after each Level UP, or AP used on MaxMP.\nRequired Skill : #cAt least Level 5 on Improving MP Recovery#"/>
+    <string name="desc" value="[Master Level : 10]\nIncreases the MaxMP gained when leveling up or assigning AP to MP.\nRequired Skill : #cImproved MP Recovery Lv.5#"/>
     <string name="h1" value="If Level UP, +2 more; if AP applied, +1 more on top on MaxMP"/>
     <string name="h2" value="If Level UP, +4 more; if AP applied, +2 more on top on MaxMP"/>
     <string name="h3" value="If Level UP, +6 more; if AP applied, +3 more on top on MaxMP"/>
@@ -210,7 +210,7 @@
   </imgdir>
   <imgdir name="2001002">
     <string name="name" value="Magic Guard"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily replaces damage with MP instead of HP. If MP reaches 0, the HP takes a full hit."/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily converts a percentage of incoming HP damage into MP damage. If MP is insufficient, remaining damage is taken as HP."/>
     <string name="h1" value="MP -6; Replace 11% of HP damage as MP for 111 sec. "/>
     <string name="h2" value="MP -6; Replace 14% of HP damage as MP for 132 sec."/>
     <string name="h3" value="MP -6; Replace 17% of HP damage as MP for 153 sec."/>
@@ -234,7 +234,7 @@
   </imgdir>
   <imgdir name="2001003">
     <string name="name" value="Magic Armor"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily boosts the weapon def. of the armor by blowing magic into it.\nRequired Skill : #cAt least Level 3 on Magic Guard#"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily increases weapon defense.\nRequired Skill : #cMagic Guard Lv.3#"/>
     <string name="h1" value="MP -8; weapon def. +2 for 54 sec."/>
     <string name="h2" value="MP -8; weapon def. +4 for 68 sec."/>
     <string name="h3" value="MP -8; weapon def. +6 for 82 sec."/>
@@ -258,7 +258,7 @@
   </imgdir>
   <imgdir name="2001004">
     <string name="name" value="Energy Bolt"/>
-    <string name="desc" value="[Master Level : 20]\nUse MP to attack one enemy."/>
+    <string name="desc" value="[Master Level : 20]\nConsumes MP to deal magic damage to 1 enemy."/>
     <string name="h1" value="MP -6, basic attack 20, mastery 15%"/>
     <string name="h2" value="MP -6, basic attack 21, mastery 15%"/>
     <string name="h3" value="MP -6, basic attack 22, mastery 20%"/>
@@ -282,7 +282,7 @@
   </imgdir>
   <imgdir name="2001005">
     <string name="name" value="Magic Claw"/>
-    <string name="desc" value="[Master Level : 20]\nUse MP to attack an enemy twice.\nRequired Skill : #cAt least Level 1 on Energy Bolt#"/>
+    <string name="desc" value="[Master Level : 20]\nConsumes MP to strike 1 enemy twice with magic.\nRequired Skill : #cEnergy Bolt Lv.1#"/>
     <string name="h1" value="MP -10, basic attack 11, mastery 15%"/>
     <string name="h2" value="MP -10, basic attack 12, mastery 15%"/>
     <string name="h3" value="MP -10, basic attack 13, mastery 20%"/>
@@ -464,7 +464,7 @@
   </imgdir>
   <imgdir name="4000001">
     <string name="name" value="Keen Eyes"/>
-    <string name="desc" value="[Master Level : 8]\nIncreases the range of attack using throwing weapons such as throwing stars &amp; knives.\nRequired Skill : #cAt least Level 3 on Nimble Body#"/>
+    <string name="desc" value="[Master Level : 8]\nIncreases the attack range of throwing weapons such as throwing stars and knives.\nRequired Skill : #cAt least Level 3 on Nimble Body#"/>
     <string name="h1" value="Range of attack for the throwing weapon: +25"/>
     <string name="h2" value="Range of attack for the throwing weapon: +50"/>
     <string name="h3" value="Range of attack for the throwing weapon: +75"/>
@@ -476,7 +476,7 @@
   </imgdir>
   <imgdir name="4001002">
     <string name="name" value="Disorder"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily decreases the weapon def. and attacking abilities of the affected, even stunting the ongoing attacks. Can&apos;t use this skill on a monster that&apos;s already in &quot;disorder.&quot;"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily decreases one enemy&apos;s weapon attack and weapon defense. Cannot be used on an enemy already affected by Disorder."/>
     <string name="h1" value="MP -5; enemy&apos;s weapon attack -1, weapon def. -1 for 7 sec."/>
     <string name="h2" value="MP -5; enemy&apos;s weapon attack -2, weapon def. -2 for 9 sec."/>
     <string name="h3" value="MP -5; enemy&apos;s weapon attack -3, weapon def. -3 for 11 sec."/>
@@ -500,75 +500,75 @@
   </imgdir>
   <imgdir name="4001003">
     <string name="name" value="Dark Sight"/>
-    <string name="desc" value="[Master Level : 20]\nUse MP to hide behind the shadows. Can&apos;t be attacked, and can&apos;t attack either.\nRequired Skill : #cAt least Level 3 on Disorder#"/>
-    <string name="h1" value="MP -24; disappear for 10 sec., speed -30"/>
-    <string name="h2" value="MP -23; disappear for 20 sec., speed -28"/>
-    <string name="h3" value="MP -22; disappear for 30 sec., speed -26"/>
-    <string name="h4" value="MP -21; disappear for 40 sec., speed -24"/>
-    <string name="h5" value="MP -20; disappear for 50 sec., speed -22"/>
-    <string name="h6" value="MP -19; disappear for 60 sec., speed -20"/>
-    <string name="h7" value="MP -18; disappear for 70 sec., speed -18"/>
-    <string name="h8" value="MP -17; disappear for 80 sec., speed -16"/>
-    <string name="h9" value="MP -16; disappear for 90 sec., speed -14"/>
-    <string name="h10" value="MP -15; disappear for 100 sec., speed -12"/>
-    <string name="h11" value="MP -14; disappear for 110 sec., speed -10"/>
-    <string name="h12" value="MP -13; disappear for 120 sec., speed -8"/>
-    <string name="h13" value="MP -12; disappear for 130 sec., speed -7"/>
-    <string name="h14" value="MP -11; disappear for 140 sec., speed -6"/>
-    <string name="h15" value="MP -10; disappear for 150 sec., speed -5"/>
-    <string name="h16" value="MP -9; disappear for 160 sec., speed -4"/>
-    <string name="h17" value="MP -8; disappear for 170 sec., speed -3"/>
-    <string name="h18" value="MP -7; disappear for 180 sec., speed -2"/>
-    <string name="h19" value="MP -6; disappear for 190 sec., speed -1"/>
-    <string name="h20" value="MP -5; disappear for 200 sec., regular moving speed"/>
+    <string name="desc" value="[Master Level : 20]\nUses MP to hide in the shadows. You cannot be attacked by monsters, but you cannot attack either.\nRequired Skill : #cAt least Level 3 on Disorder#"/>
+    <string name="h1" value="MP -24. Disappear for 10 sec. speed -30."/>
+    <string name="h2" value="MP -23. Disappear for 20 sec. speed -28."/>
+    <string name="h3" value="MP -22. Disappear for 30 sec. speed -26."/>
+    <string name="h4" value="MP -21. Disappear for 40 sec. speed -24."/>
+    <string name="h5" value="MP -20. Disappear for 50 sec. speed -22."/>
+    <string name="h6" value="MP -19. Disappear for 60 sec. speed -20."/>
+    <string name="h7" value="MP -18. Disappear for 70 sec. speed -18."/>
+    <string name="h8" value="MP -17. Disappear for 80 sec. speed -16."/>
+    <string name="h9" value="MP -16. Disappear for 90 sec. speed -14."/>
+    <string name="h10" value="MP -15. Disappear for 100 sec. speed -12."/>
+    <string name="h11" value="MP -14. Disappear for 110 sec. speed -10."/>
+    <string name="h12" value="MP -13. Disappear for 120 sec. speed -8."/>
+    <string name="h13" value="MP -12. Disappear for 130 sec. speed -7."/>
+    <string name="h14" value="MP -11. Disappear for 140 sec. speed -6."/>
+    <string name="h15" value="MP -10. Disappear for 150 sec. speed -5."/>
+    <string name="h16" value="MP -9. Disappear for 160 sec. speed -4."/>
+    <string name="h17" value="MP -8. Disappear for 170 sec. speed -3."/>
+    <string name="h18" value="MP -7. Disappear for 180 sec. speed -2."/>
+    <string name="h19" value="MP -6. Disappear for 190 sec. speed -1."/>
+    <string name="h20" value="MP -5. Disappear for 200 sec. regular moving speed"/>
   </imgdir>
   <imgdir name="4001334">
     <string name="name" value="Double Stab"/>
-    <string name="desc" value="[Master Level : 20]\nUse MP to quickly stab a monster twice in one turn using a dagger."/>
-    <string name="h1" value="MP -6; damage 65%"/>
-    <string name="h2" value="MP -6; damage 68%"/>
-    <string name="h3" value="MP -6; damage 71%"/>
-    <string name="h4" value="MP -6; damage 74%"/>
-    <string name="h5" value="MP -7; damage 78%"/>
-    <string name="h6" value="MP -7; damage 81%"/>
-    <string name="h7" value="MP -7; damage 84%"/>
-    <string name="h8" value="MP -8; damage 88%"/>
-    <string name="h9" value="MP -8; damage 91%"/>
-    <string name="h10" value="MP -9; damage 95%"/>
-    <string name="h11" value="MP -9; damage 98%"/>
-    <string name="h12" value="MP -10; damage 102%"/>
-    <string name="h13" value="MP -10; damage 105%"/>
-    <string name="h14" value="MP -11; damage 109%"/>
-    <string name="h15" value="MP -11; damage 112%"/>
-    <string name="h16" value="MP -12; damage 116%"/>
-    <string name="h17" value="MP -12; damage 119%"/>
-    <string name="h18" value="MP -13; damage 123%"/>
-    <string name="h19" value="MP -13; damage 126%"/>
-    <string name="h20" value="MP -14; damage 130%"/>
+    <string name="desc" value="[Master Level : 20]\nUses MP to quickly stab one enemy twice with a dagger."/>
+    <string name="h1" value="MP -8. Damage 98%, attacks 2 times."/>
+    <string name="h2" value="MP -8. Damage 100%, attacks 2 times."/>
+    <string name="h3" value="MP -8. Damage 102%, attacks 2 times."/>
+    <string name="h4" value="MP -8. Damage 104%, attacks 2 times."/>
+    <string name="h5" value="MP -9. Damage 106%, attacks 2 times."/>
+    <string name="h6" value="MP -9. Damage 108%, attacks 2 times."/>
+    <string name="h7" value="MP -9. Damage 110%, attacks 2 times."/>
+    <string name="h8" value="MP -10. Damage 112%, attacks 2 times."/>
+    <string name="h9" value="MP -10. Damage 114%, attacks 2 times."/>
+    <string name="h10" value="MP -10. Damage 116%, attacks 2 times."/>
+    <string name="h11" value="MP -11. Damage 118%, attacks 2 times."/>
+    <string name="h12" value="MP -11. Damage 120%, attacks 2 times."/>
+    <string name="h13" value="MP -11. Damage 122%, attacks 2 times."/>
+    <string name="h14" value="MP -12. Damage 124%, attacks 2 times."/>
+    <string name="h15" value="MP -12. Damage 126%, attacks 2 times."/>
+    <string name="h16" value="MP -12. Damage 128%, attacks 2 times."/>
+    <string name="h17" value="MP -13. Damage 130%, attacks 2 times."/>
+    <string name="h18" value="MP -13. Damage 132%, attacks 2 times."/>
+    <string name="h19" value="MP -13. Damage 134%, attacks 2 times."/>
+    <string name="h20" value="MP -14. Damage 140%, attacks 2 times."/>
   </imgdir>
   <imgdir name="4001344">
     <string name="name" value="Lucky Seven"/>
-    <string name="desc" value="[Master Level : 20]\nUse MP to throw 2 throwing stars and apply damage based on LUK, regardless of the rate of Claw Mastery."/>
-    <string name="h1" value="MP -8; damage 58%"/>
-    <string name="h2" value="MP -8; damage 62%"/>
-    <string name="h3" value="MP -8; damage 66%"/>
-    <string name="h4" value="MP -8; damage 70%"/>
-    <string name="h5" value="MP -9; damage 76%"/>
-    <string name="h6" value="MP -9; damage 80%"/>
-    <string name="h7" value="MP -9; damage 84%"/>
-    <string name="h8" value="MP -10; damage 90%"/>
-    <string name="h9" value="MP -10; damage 94%"/>
-    <string name="h10" value="MP -11; damage 100%"/>
-    <string name="h11" value="MP -11; damage 104%"/>
-    <string name="h12" value="MP -12; damage 110%"/>
-    <string name="h13" value="MP -12; damage 114%"/>
-    <string name="h14" value="MP -13; damage 120%"/>
-    <string name="h15" value="MP -13; damage 124%"/>
-    <string name="h16" value="MP -14; damage 130%"/>
-    <string name="h17" value="MP -14; damage 134%"/>
-    <string name="h18" value="MP -15; damage 140%"/>
-    <string name="h19" value="MP -15; damage 144%"/>
-    <string name="h20" value="MP -16; damage 150%"/>
+    <string name="desc" value="[Master Level : 20]\nThrows 2 stars at one enemy. Damage is based on LUK and ignores Claw Mastery."/>
+    <string name="h1" value="MP -8. Damage 58%, throws 2 stars."/>
+    <string name="h2" value="MP -8. Damage 62%, throws 2 stars."/>
+    <string name="h3" value="MP -8. Damage 66%, throws 2 stars."/>
+    <string name="h4" value="MP -8. Damage 70%, throws 2 stars."/>
+    <string name="h5" value="MP -9. Damage 76%, throws 2 stars."/>
+    <string name="h6" value="MP -9. Damage 80%, throws 2 stars."/>
+    <string name="h7" value="MP -9. Damage 84%, throws 2 stars."/>
+    <string name="h8" value="MP -10. Damage 90%, throws 2 stars."/>
+    <string name="h9" value="MP -10. Damage 94%, throws 2 stars."/>
+    <string name="h10" value="MP -11. Damage 100%, throws 2 stars."/>
+    <string name="h11" value="MP -11. Damage 104%, throws 2 stars."/>
+    <string name="h12" value="MP -12. Damage 110%, throws 2 stars."/>
+    <string name="h13" value="MP -12. Damage 114%, throws 2 stars."/>
+    <string name="h14" value="MP -13. Damage 120%, throws 2 stars."/>
+    <string name="h15" value="MP -13. Damage 124%, throws 2 stars."/>
+    <string name="h16" value="MP -14. Damage 130%, throws 2 stars."/>
+    <string name="h17" value="MP -14. Damage 134%, throws 2 stars."/>
+    <string name="h18" value="MP -15. Damage 140%, throws 2 stars."/>
+    <string name="h19" value="MP -15. Damage 144%, throws 2 stars."/>
+    <string name="h20" value="MP -16. Damage 150%, throws 2 stars."/>
   </imgdir>
   <imgdir name="110">
     <string name="bookName" value="Fighter Techniques"/>
@@ -1417,7 +1417,7 @@
   </imgdir>
   <imgdir name="2200000">
     <string name="name" value="MP Eater"/>
-    <string name="desc" value="[Master Level : 20]\nAbsorbs the enemy&apos;s MP when attacking with Magic skills, until it reaches 0."/>
+    <string name="desc" value="[Master Level : 20]\nWhen a magic attack hits, has a chance to absorb MP from a non-boss monster. No effect if the monster has no MP."/>
     <string name="h1" value="For every attack, 11% Success rate,\r\nabsorb 21% of the enemy&apos;s MaxMP."/>
     <string name="h2" value="For every attack, 12% Success rate,\r\nabsorb 22% of the enemy&apos;s MaxMP."/>
     <string name="h3" value="For every attack, 13% Success rate,\r\nabsorb 23% of the enemy&apos;s MaxMP."/>
@@ -1441,7 +1441,7 @@
   </imgdir>
   <imgdir name="2201001">
     <string name="name" value="Meditation"/>
-    <string name="desc" value="[Master Level : 20]\nMeditate for a bit to temporarily boost up the magic attack of party members around the area.\nRequired Skill : #cAt least Level 3 on MP Eater#"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily increases the magic attack of nearby party members.\nRequired Skill : #cMP Eater Lv.3#"/>
     <string name="h1" value="MP -10; party&apos;s magic attack +1 for 10 sec."/>
     <string name="h2" value="MP -10; party&apos;s magic attack +2 for 20sec."/>
     <string name="h3" value="MP -10; party&apos;s magic attack +3 for 30 sec."/>
@@ -1465,7 +1465,7 @@
   </imgdir>
   <imgdir name="2201002">
     <string name="name" value="Teleport"/>
-    <string name="desc" value="[Master Level : 20]\nUse the arrow keys to teleport to other places in the same map on a set distance."/>
+    <string name="desc" value="[Master Level : 20]\nUse the arrow keys to teleport a set distance within the same map."/>
     <string name="h1" value="MP -60; teleport, with 130 in distance"/>
     <string name="h2" value="MP -57; teleport, with 130 in distance"/>
     <string name="h3" value="MP -54; teleport, with 130 in distance"/>
@@ -1489,7 +1489,7 @@
   </imgdir>
   <imgdir name="2201003">
     <string name="name" value="Slow"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily slows down the movement of up to 6 monsters. Cannot be used on the same monsters more than twice in a row.\nRequired Skill : #cAt least Level 5 on Teleport#"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily slows up to 6 nearby monsters. The effect cannot be stacked on the same target.\nRequired Skill : #cTeleport Lv.5#"/>
     <string name="h1" value="MP -8; enemy&apos;s moving speed -2 for 2 sec."/>
     <string name="h2" value="MP -8; enemy&apos;s moving speed -4 for 4 sec."/>
     <string name="h3" value="MP -8; enemy&apos;s moving speed -6 for 6 sec."/>
@@ -1513,7 +1513,7 @@
   </imgdir>
   <imgdir name="2201004">
     <string name="name" value="Cold Beam"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks a single monster with a sharp piece of Ice. The monster will freeze if hit.  Damages the fire-based enemies 1.5 times more, where as the ice-based enemies get only half the damage."/>
+    <string name="desc" value="[Master Level : 30]\nAttacks 1 enemy with ice magic and freezes it. Deals increased damage to fire-based enemies."/>
     <string name="h1" value="MP -12; Basic attack 13, mastery 15%"/>
     <string name="h2" value="MP -12; Basic attack 16, mastery 15%"/>
     <string name="h3" value="MP -12; Basic attack 19, mastery 15%"/>
@@ -1547,7 +1547,7 @@
   </imgdir>
   <imgdir name="2201005">
     <string name="name" value="Thunder Bolt"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks surrounding monsters with a thunder bolt.  All monsters in the range receive damage."/>
+    <string name="desc" value="[Master Level : 30]\nStrikes up to 6 nearby enemies with lightning."/>
     <string name="h1" value="MP -20; Basic attack 2, mastery 15%"/>
     <string name="h2" value="MP -20; Basic attack 4, mastery 15%"/>
     <string name="h3" value="MP -20; Basic attack 6, mastery 15%"/>
@@ -2382,37 +2382,37 @@
   </imgdir>
   <imgdir name="4201005">
     <string name="name" value="Savage Blow"/>
-    <string name="desc" value="[Master Level : 30]\nUse MP to attack an enemy up to 6 times in a row with a dagger."/>
-    <string name="h1" value="MP -15; attack 4x with 40% damage."/>
-    <string name="h2" value="MP -15; attack 4x with 44% damage."/>
-    <string name="h3" value="MP -15; attack 4x with 48% damage."/>
-    <string name="h4" value="MP -15; attack 4x with 52% damage."/>
-    <string name="h5" value="MP -15; attack 4x with 56% damage."/>
-    <string name="h6" value="MP -15; attack 4x with 60% damage."/>
-    <string name="h7" value="MP -15; attack 4x with 64% damage."/>
-    <string name="h8" value="MP -15; attack 4x with 68% damage."/>
-    <string name="h9" value="MP -15; attack 4x with 72% damage."/>
-    <string name="h10" value="MP -15; attack 4x with 74% damage."/>
-    <string name="h11" value="MP -18; attack 5x with 60% damage."/>
-    <string name="h12" value="MP -18; attack 5x with 62% damage."/>
-    <string name="h13" value="MP -18; attack 5x with 64% damage."/>
-    <string name="h14" value="MP -18; attack 5x with 66% damage."/>
-    <string name="h15" value="MP -18; attack 5x with 68% damage."/>
-    <string name="h16" value="MP -18; attack 5x with 70% damage."/>
-    <string name="h17" value="MP -18; attack 5x with 72% damage."/>
-    <string name="h18" value="MP -18; attack 5x with 74% damage."/>
-    <string name="h19" value="MP -18; attack 5x with 76% damage."/>
-    <string name="h20" value="MP -18; attack 5x with 78% damage."/>
-    <string name="h21" value="MP -27; attack 6x with 71% damage."/>
-    <string name="h22" value="MP -27; attack 6x with 72% damage."/>
-    <string name="h23" value="MP -27; attack 6x with 73% damage."/>
-    <string name="h24" value="MP -27; attack 6x with 74% damage."/>
-    <string name="h25" value="MP -27; attack 6x with 75% damage."/>
-    <string name="h26" value="MP -27; attack 6x with 76% damage."/>
-    <string name="h27" value="MP -27; attack 6x with 77% damage."/>
-    <string name="h28" value="MP -27; attack 6x with 78% damage."/>
-    <string name="h29" value="MP -27; attack 6x with 79% damage."/>
-    <string name="h30" value="MP -27; attack 6x with 80% damage."/>
+    <string name="desc" value="[Master Level : 30]\nUses MP to attack one enemy several times in a row with a dagger."/>
+    <string name="h1" value="MP -15. Attacks 4 times with 40% damage."/>
+    <string name="h2" value="MP -15. Attacks 4 times with 44% damage."/>
+    <string name="h3" value="MP -15. Attacks 4 times with 48% damage."/>
+    <string name="h4" value="MP -15. Attacks 4 times with 52% damage."/>
+    <string name="h5" value="MP -15. Attacks 4 times with 56% damage."/>
+    <string name="h6" value="MP -15. Attacks 4 times with 60% damage."/>
+    <string name="h7" value="MP -15. Attacks 4 times with 64% damage."/>
+    <string name="h8" value="MP -15. Attacks 4 times with 68% damage."/>
+    <string name="h9" value="MP -15. Attacks 4 times with 72% damage."/>
+    <string name="h10" value="MP -15. Attacks 4 times with 74% damage."/>
+    <string name="h11" value="MP -18. Attacks 5 times with 60% damage."/>
+    <string name="h12" value="MP -18. Attacks 5 times with 62% damage."/>
+    <string name="h13" value="MP -18. Attacks 5 times with 64% damage."/>
+    <string name="h14" value="MP -18. Attacks 5 times with 66% damage."/>
+    <string name="h15" value="MP -18. Attacks 5 times with 68% damage."/>
+    <string name="h16" value="MP -18. Attacks 5 times with 70% damage."/>
+    <string name="h17" value="MP -18. Attacks 5 times with 72% damage."/>
+    <string name="h18" value="MP -18. Attacks 5 times with 74% damage."/>
+    <string name="h19" value="MP -18. Attacks 5 times with 76% damage."/>
+    <string name="h20" value="MP -18. Attacks 5 times with 78% damage."/>
+    <string name="h21" value="MP -27. Attacks 6 times with 71% damage."/>
+    <string name="h22" value="MP -27. Attacks 6 times with 72% damage."/>
+    <string name="h23" value="MP -27. Attacks 6 times with 73% damage."/>
+    <string name="h24" value="MP -27. Attacks 6 times with 74% damage."/>
+    <string name="h25" value="MP -27. Attacks 6 times with 75% damage."/>
+    <string name="h26" value="MP -27. Attacks 6 times with 76% damage."/>
+    <string name="h27" value="MP -27. Attacks 6 times with 77% damage."/>
+    <string name="h28" value="MP -27. Attacks 6 times with 78% damage."/>
+    <string name="h29" value="MP -27. Attacks 6 times with 79% damage."/>
+    <string name="h30" value="MP -27. Attacks 6 times with 80% damage."/>
   </imgdir>
   <imgdir name="111">
     <string name="bookName" value="Crusader&apos;s Guide"/>
@@ -3525,7 +3525,7 @@
   </imgdir>
   <imgdir name="2210001">
     <string name="name" value="Element Amplification"/>
-    <string name="desc" value="[Master Level : 30]\n Boosts the capacity for all Magic attacks by using additional MP."/>
+    <string name="desc" value="[Master Level : 30]\nIncreases magic skill damage while increasing MP consumption."/>
     <string name="h1" value="Use 105% MP, Magic Attack 107%"/>
     <string name="h2" value="Use 110% MP, Magic Attack 109%"/>
     <string name="h3" value="Use 115% MP, Magic Attack 111%"/>
@@ -3559,7 +3559,7 @@
   </imgdir>
   <imgdir name="2211002">
     <string name="name" value="Ice Strike"/>
-    <string name="desc" value="[Master Level : 30]\nFires ice blocks at multiple enemies. If struck, all monsters other than ice-based ones will freeze. Cannot attack more than 6 at once."/>
+    <string name="desc" value="[Master Level : 30]\nDrops ice blocks on up to 6 enemies in range. Non-ice enemies freeze when hit."/>
     <string name="h1" value="Use MP 21, Attack 32, Mastery 15%, Attack Range 110%"/>
     <string name="h2" value="Use MP 22, Attack 34, Mastery 15%, Attack Range 110%"/>
     <string name="h3" value="Use MP 23, Attack 36, Mastery 15%, Attack Range 110%"/>
@@ -3593,7 +3593,7 @@
   </imgdir>
   <imgdir name="2211003">
     <string name="name" value="Thunder Spear"/>
-    <string name="desc" value="[Master Level : 30]\nGathers up the power of lightening and turns it into a spear, attacking a single enemy. Monsters will be damaged with a lightening-based attack."/>
+    <string name="desc" value="[Master Level : 30]\nForms a spear of lightning to attack 1 enemy with lightning magic."/>
     <string name="h1" value="Use MP 10, Attack 80, Mastery 15%"/>
     <string name="h2" value="Use MP 10, Attack 90, Mastery 15%"/>
     <string name="h3" value="Use MP 11, Attack 95, Mastery 15%"/>
@@ -3627,7 +3627,7 @@
   </imgdir>
   <imgdir name="2211004">
     <string name="name" value="Seal"/>
-    <string name="desc" value="[Master Level : 20]\nSeals up the enemies around you for a certain amount of time. Once sealed up, the monsters can&apos;t use attacking skills, but the skill does not work on boss monsters.\nRequired Skill : #cAt least Level 3 on Element Amplification#"/>
+    <string name="desc" value="[Master Level : 20]\nSeals up to 6 nearby enemies, preventing them from using skills. Does not work on bosses.\nRequired Skill : #cElement Amplification Lv.3#"/>
     <string name="h1" value="Use 12 MP, 38% chance of sealing up for 10 sec."/>
     <string name="h2" value="Use 12 MP, 41% chance of sealing up for 11 sec."/>
     <string name="h3" value="Use 12 MP, 44% chance of sealing up for 11 sec."/>
@@ -3651,31 +3651,31 @@
   </imgdir>
   <imgdir name="2211005">
     <string name="name" value="Spell Booster"/>
-    <string name="desc" value="[Master Level : 20]\nUses up a significant amount of HP and MP to increase the attacking speed for spells."/>
-    <string name="h1" value="Use HP 58, MP 53 to boost up the magic attacking speed to level 2 for 10 sec."/>
-    <string name="h2" value="Use HP 56, MP 51 to boost up the magic attacking speed to level 2 for 20 sec."/>
-    <string name="h3" value="Use HP 54, MP 49 to boost up the magic attacking speed to level 2 for 30 sec."/>
-    <string name="h4" value="Use HP 52, MP 47 to boost up the magic attacking speed to level 2 for 40 sec."/>
-    <string name="h5" value="Use HP 50, MP 45 to boost up the magic attacking speed to level 2 for 50 sec."/>
-    <string name="h6" value="Use HP 48, MP 43 to boost up the magic attacking speed to level 2 for 60 sec."/>
-    <string name="h7" value="Use HP 46, MP 41 to boost up the magic attacking speed to level 2 for 70 sec."/>
-    <string name="h8" value="Use HP 44, MP 39 to boost up the magic attacking speed to level 2 for 80 sec."/>
-    <string name="h9" value="Use HP 42, MP 37 to boost up the magic attacking speed to level 2 for 90 sec."/>
-    <string name="h10" value="Use HP 40, MP 35 to boost up the magic attacking speed to level 2 for 100 sec."/>
-    <string name="h11" value="Use HP 39, MP 34 to boost up the magic attacking speed to level 3 for 110 sec."/>
-    <string name="h12" value="Use HP 38, MP 33 to boost up the magic attacking speed to level 3 for 120 sec."/>
-    <string name="h13" value="Use HP 37, MP 32 to boost up the magic attacking speed to level 3 for 130 sec."/>
-    <string name="h14" value="Use HP 36, MP 31 to boost up the magic attacking speed to level 3 for 140 sec."/>
-    <string name="h15" value="Use HP 35, MP 30 to boost up the magic attacking speed to level 3 for 150 sec."/>
-    <string name="h16" value="Use HP 34, MP 29 to boost up the magic attacking speed to level 3 for 160 sec."/>
-    <string name="h17" value="Use HP 33, MP 28 to boost up the magic attacking speed to level 3 for 170 sec."/>
-    <string name="h18" value="Use HP 32, MP 27 to boost up the magic attacking speed to level 3 for 180 sec."/>
-    <string name="h19" value="Use HP 31, MP 26 to boost up the magic attacking speed to level 3 for 190 sec."/>
-    <string name="h20" value="Use HP 30, MP 25 to boost up the magic attacking speed to level 3 for 200 sec."/>
+    <string name="desc" value="[Master Level : 20]\nConsumes HP and MP to increase magic attack speed.\nRequired Skill : #cElement Amplification Lv.3#"/>
+    <string name="h1" value="Use HP 58, MP 53 to increase magic attack speed by 1 stage for 10 sec."/>
+    <string name="h2" value="Use HP 56, MP 51 to increase magic attack speed by 1 stage for 20 sec."/>
+    <string name="h3" value="Use HP 54, MP 49 to increase magic attack speed by 1 stage for 30 sec."/>
+    <string name="h4" value="Use HP 52, MP 47 to increase magic attack speed by 1 stage for 40 sec."/>
+    <string name="h5" value="Use HP 50, MP 45 to increase magic attack speed by 1 stage for 50 sec."/>
+    <string name="h6" value="Use HP 48, MP 43 to increase magic attack speed by 1 stage for 60 sec."/>
+    <string name="h7" value="Use HP 46, MP 41 to increase magic attack speed by 1 stage for 70 sec."/>
+    <string name="h8" value="Use HP 44, MP 39 to increase magic attack speed by 1 stage for 80 sec."/>
+    <string name="h9" value="Use HP 42, MP 37 to increase magic attack speed by 1 stage for 90 sec."/>
+    <string name="h10" value="Use HP 40, MP 35 to increase magic attack speed by 1 stage for 100 sec."/>
+    <string name="h11" value="Use HP 39, MP 34 to increase magic attack speed by 2 stages for 110 sec."/>
+    <string name="h12" value="Use HP 38, MP 33 to increase magic attack speed by 2 stages for 120 sec."/>
+    <string name="h13" value="Use HP 37, MP 32 to increase magic attack speed by 2 stages for 130 sec."/>
+    <string name="h14" value="Use HP 36, MP 31 to increase magic attack speed by 2 stages for 140 sec."/>
+    <string name="h15" value="Use HP 35, MP 30 to increase magic attack speed by 2 stages for 150 sec."/>
+    <string name="h16" value="Use HP 34, MP 29 to increase magic attack speed by 2 stages for 160 sec."/>
+    <string name="h17" value="Use HP 33, MP 28 to increase magic attack speed by 2 stages for 170 sec."/>
+    <string name="h18" value="Use HP 32, MP 27 to increase magic attack speed by 2 stages for 180 sec."/>
+    <string name="h19" value="Use HP 31, MP 26 to increase magic attack speed by 2 stages for 190 sec."/>
+    <string name="h20" value="Use HP 30, MP 25 to increase magic attack speed by 2 stages for 200 sec."/>
   </imgdir>
   <imgdir name="2211006">
     <string name="name" value="Element Composition"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks a single monster with Magic attack of Ice and Lightning features combined.  Very effective to the monsters vulnerable to ice and lightning, and if struck, the monster will freeze."/>
+    <string name="desc" value="[Master Level : 30]\nAttacks 1 enemy with combined ice and lightning magic, freezing the target on hit."/>
     <string name="h1" value="Use MP 14, Attack 80, Mastery 15%, freezes enemy for 1 sec."/>
     <string name="h2" value="Use MP 14, Attack 84, Mastery 15%, freezes enemy for 1 sec."/>
     <string name="h3" value="Use MP 14, Attack 87, Mastery 15%, freezes enemy for 1 sec."/>
@@ -4427,27 +4427,27 @@
   </imgdir>
   <imgdir name="4111003">
     <string name="name" value="Shadow Web"/>
-    <string name="desc" value="[Spider Web : 20]\nCreates a web of shadow of oneself to hold up to 6 monsters. Once stuck, the monsters held in the spiderweb will be unable to move."/>
-    <string name="h1" value="MP - 10; For 5 sec., holds the enemies with 42% success rate"/>
-    <string name="h2" value="MP - 10; For 5 sec., holds the enemies with 44% success rate"/>
-    <string name="h3" value="MP - 10; For 5 sec., holds the enemies with 46% success rate"/>
-    <string name="h4" value="MP - 10; For 5 sec., holds the enemies with 48% success rate"/>
-    <string name="h5" value="MP - 10; For 5 sec., holds the enemies with 50% success rate"/>
-    <string name="h6" value="MP - 14; For 6 sec., holds the enemies with 52% success rate"/>
-    <string name="h7" value="MP - 14; For 6 sec., holds the enemies with 54% success rate"/>
-    <string name="h8" value="MP - 14; For 6 sec., holds the enemies with 56% success rate"/>
-    <string name="h9" value="MP - 14; For 6 sec., holds the enemies with 58% success rate"/>
-    <string name="h10" value="MP - 14; For 6 sec., holds the enemies with 60% success rate"/>
-    <string name="h11" value="MP - 18; For 7 sec., holds the enemies with 62% success rate"/>
-    <string name="h12" value="MP - 18; For 7 sec., holds the enemies with 64% success rate"/>
-    <string name="h13" value="MP - 18; For 7 sec., holds the enemies with 66% success rate"/>
-    <string name="h14" value="MP - 18; For 7 sec., holds the enemies with 68% success rate"/>
-    <string name="h15" value="MP - 18; For 7 sec., holds the enemies with 70% success rate"/>
-    <string name="h16" value="MP - 22; For 8 sec., holds the enemies with 72% success rate"/>
-    <string name="h17" value="MP - 22; For 8 sec., holds the enemies with 74% success rate"/>
-    <string name="h18" value="MP - 22; For 8 sec., holds the enemies with 76% success rate"/>
-    <string name="h19" value="MP - 22; For 8 sec., holds the enemies with 78% success rate"/>
-    <string name="h20" value="MP - 22; For 8 sec., holds the enemies with 80% success rate"/>
+    <string name="desc" value="[Master Level : 20]\nCreates a web of shadow to hold up to 6 enemies. Enemies caught in the web cannot move."/>
+    <string name="h1" value="MP - 10. Holds up to 6 enemies for 5 sec. Success rate 42%."/>
+    <string name="h2" value="MP - 10. Holds up to 6 enemies for 5 sec. Success rate 44%."/>
+    <string name="h3" value="MP - 10. Holds up to 6 enemies for 5 sec. Success rate 46%."/>
+    <string name="h4" value="MP - 10. Holds up to 6 enemies for 5 sec. Success rate 48%."/>
+    <string name="h5" value="MP - 10. Holds up to 6 enemies for 5 sec. Success rate 50%."/>
+    <string name="h6" value="MP - 14. Holds up to 6 enemies for 6 sec. Success rate 52%."/>
+    <string name="h7" value="MP - 14. Holds up to 6 enemies for 6 sec. Success rate 54%."/>
+    <string name="h8" value="MP - 14. Holds up to 6 enemies for 6 sec. Success rate 56%."/>
+    <string name="h9" value="MP - 14. Holds up to 6 enemies for 6 sec. Success rate 58%."/>
+    <string name="h10" value="MP - 14. Holds up to 6 enemies for 6 sec. Success rate 60%."/>
+    <string name="h11" value="MP - 18. Holds up to 6 enemies for 7 sec. Success rate 62%."/>
+    <string name="h12" value="MP - 18. Holds up to 6 enemies for 7 sec. Success rate 64%."/>
+    <string name="h13" value="MP - 18. Holds up to 6 enemies for 7 sec. Success rate 66%."/>
+    <string name="h14" value="MP - 18. Holds up to 6 enemies for 7 sec. Success rate 68%."/>
+    <string name="h15" value="MP - 18. Holds up to 6 enemies for 7 sec. Success rate 70%."/>
+    <string name="h16" value="MP - 22. Holds up to 6 enemies for 8 sec. Success rate 72%."/>
+    <string name="h17" value="MP - 22. Holds up to 6 enemies for 8 sec. Success rate 74%."/>
+    <string name="h18" value="MP - 22. Holds up to 6 enemies for 8 sec. Success rate 76%."/>
+    <string name="h19" value="MP - 22. Holds up to 6 enemies for 8 sec. Success rate 78%."/>
+    <string name="h20" value="MP - 22. Holds up to 6 enemies for 8 sec. Success rate 80%."/>
   </imgdir>
   <imgdir name="4111004">
     <string name="name" value="Shadow Meso"/>
@@ -4485,37 +4485,37 @@
   </imgdir>
   <imgdir name="4111005">
     <string name="name" value="Avenger"/>
-    <string name="desc" value="[Master Level : 30]\nUses MP to make an enormous throwing star for attack. The throwing star will go through an enemy, and attack the ones behind it, too."/>
-    <string name="h1" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 65%"/>
-    <string name="h2" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 70%"/>
-    <string name="h3" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 75%"/>
-    <string name="h4" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 80%"/>
-    <string name="h5" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 85%"/>
-    <string name="h6" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 90%"/>
-    <string name="h7" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 95%"/>
-    <string name="h8" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 100%"/>
-    <string name="h9" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 105%"/>
-    <string name="h10" value="MP - 16; Uses 3 throwing stars to attack upto 4 enemies, Damage 110%"/>
-    <string name="h11" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 114%"/>
-    <string name="h12" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 118%"/>
-    <string name="h13" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 122%"/>
-    <string name="h14" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 126%"/>
-    <string name="h15" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 130%"/>
-    <string name="h16" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 134%"/>
-    <string name="h17" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 138%"/>
-    <string name="h18" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 142%"/>
-    <string name="h19" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 146%"/>
-    <string name="h20" value="MP - 23; Uses 3 throwing stars to attack upto 5 enemies, Damage 150%"/>
-    <string name="h21" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 153%"/>
-    <string name="h22" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 156%"/>
-    <string name="h23" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 159%"/>
-    <string name="h24" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 162%"/>
-    <string name="h25" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 165%"/>
-    <string name="h26" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 168%"/>
-    <string name="h27" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 171%"/>
-    <string name="h28" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 174%"/>
-    <string name="h29" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 177%"/>
-    <string name="h30" value="MP - 30; Uses 3 throwing stars to attack upto 6 enemies, Damage 180%"/>
+    <string name="desc" value="[Master Level : 30]\nUses MP to create a giant throwing star that pierces enemies and attacks enemies behind them."/>
+    <string name="h1" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 65%."/>
+    <string name="h2" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 70%."/>
+    <string name="h3" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 75%."/>
+    <string name="h4" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 80%."/>
+    <string name="h5" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 85%."/>
+    <string name="h6" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 90%."/>
+    <string name="h7" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 95%."/>
+    <string name="h8" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 100%."/>
+    <string name="h9" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 105%."/>
+    <string name="h10" value="MP -16. Uses 3 throwing stars to attack up to 4 enemies. Damage 110%."/>
+    <string name="h11" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 114%."/>
+    <string name="h12" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 118%."/>
+    <string name="h13" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 122%."/>
+    <string name="h14" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 126%."/>
+    <string name="h15" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 130%."/>
+    <string name="h16" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 134%."/>
+    <string name="h17" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 138%."/>
+    <string name="h18" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 142%."/>
+    <string name="h19" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 146%."/>
+    <string name="h20" value="MP -23. Uses 3 throwing stars to attack up to 5 enemies. Damage 150%."/>
+    <string name="h21" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 153%."/>
+    <string name="h22" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 156%."/>
+    <string name="h23" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 159%."/>
+    <string name="h24" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 162%."/>
+    <string name="h25" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 165%."/>
+    <string name="h26" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 168%."/>
+    <string name="h27" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 171%."/>
+    <string name="h28" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 174%."/>
+    <string name="h29" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 177%."/>
+    <string name="h30" value="MP -30. Uses 3 throwing stars to attack up to 6 enemies. Damage 180%."/>
   </imgdir>
   <imgdir name="4111006">
     <string name="name" value="Flash Jump"/>
@@ -4546,95 +4546,95 @@
   </imgdir>
   <imgdir name="4210000">
     <string name="name" value="Shield Mastery"/>
-    <string name="desc" value="[Master Level : 20]\nIncreases the def. of the equipped shield. Only works when the shield is equipped."/>
-    <string name="h1" value="Shield def. + 5%; Has to be equipped"/>
-    <string name="h2" value="Shield def. + 10%; Has to be equipped"/>
-    <string name="h3" value="Shield def. + 15%; Has to be equipped"/>
-    <string name="h4" value="Shield def. + 20%; Has to be equipped"/>
-    <string name="h5" value="Shield def. + 25%; Has to be equipped"/>
-    <string name="h6" value="Shield def. + 30%; Has to be equipped"/>
-    <string name="h7" value="Shield def. + 35%; Has to be equipped"/>
-    <string name="h8" value="Shield def. + 40%; Has to be equipped"/>
-    <string name="h9" value="Shield def. + 45%; Has to be equipped"/>
-    <string name="h10" value="Shield def. + 50%; Has to be equipped"/>
-    <string name="h11" value="Shield def. + 55%; Has to be equipped"/>
-    <string name="h12" value="Shield def. + 60%; Has to be equipped"/>
-    <string name="h13" value="Shield def. + 65%; Has to be equipped"/>
-    <string name="h14" value="Shield def. + 70%; Has to be equipped"/>
-    <string name="h15" value="Shield def. + 75%; Has to be equipped"/>
-    <string name="h16" value="Shield def. + 80%; Has to be equipped"/>
-    <string name="h17" value="Shield def. + 85%; Has to be equipped"/>
-    <string name="h18" value="Shield def. + 90%; Has to be equipped"/>
-    <string name="h19" value="Shield def. + 95%; Has to be equipped"/>
-    <string name="h20" value="Shield def. + 100%; Has to be equipped"/>
+    <string name="desc" value="[Master Level : 20]\nIncreases the weapon defense of the equipped shield. Only works when a shield is equipped."/>
+    <string name="h1" value="Shield def. + 5%. Has to be equipped."/>
+    <string name="h2" value="Shield def. + 10%. Has to be equipped."/>
+    <string name="h3" value="Shield def. + 15%. Has to be equipped."/>
+    <string name="h4" value="Shield def. + 20%. Has to be equipped."/>
+    <string name="h5" value="Shield def. + 25%. Has to be equipped."/>
+    <string name="h6" value="Shield def. + 30%. Has to be equipped."/>
+    <string name="h7" value="Shield def. + 35%. Has to be equipped."/>
+    <string name="h8" value="Shield def. + 40%. Has to be equipped."/>
+    <string name="h9" value="Shield def. + 45%. Has to be equipped."/>
+    <string name="h10" value="Shield def. + 50%. Has to be equipped."/>
+    <string name="h11" value="Shield def. + 55%. Has to be equipped."/>
+    <string name="h12" value="Shield def. + 60%. Has to be equipped."/>
+    <string name="h13" value="Shield def. + 65%. Has to be equipped."/>
+    <string name="h14" value="Shield def. + 70%. Has to be equipped."/>
+    <string name="h15" value="Shield def. + 75%. Has to be equipped."/>
+    <string name="h16" value="Shield def. + 80%. Has to be equipped."/>
+    <string name="h17" value="Shield def. + 85%. Has to be equipped."/>
+    <string name="h18" value="Shield def. + 90%. Has to be equipped."/>
+    <string name="h19" value="Shield def. + 95%. Has to be equipped."/>
+    <string name="h20" value="Shield def. + 100%. Has to be equipped."/>
   </imgdir>
   <imgdir name="4211001">
     <string name="name" value="Chakra"/>
-    <string name="desc" value="[Master Level : 30]\nUses MP to recover HP. Only works when the HP is less than 50%, and it&apos;ll stop if either attacked or moved."/>
-    <string name="h1" value="MP - 15, Recovery rate 9%; Damage during the recovery if hit: 200%"/>
-    <string name="h2" value="MP - 15, Recovery rate 18%; Damage during the recovery if hit: 196%"/>
-    <string name="h3" value="MP - 15, Recovery rate 27%; Damage during the recovery if hit: 192%"/>
-    <string name="h4" value="MP - 15, Recovery rate 36%; Damage during the recovery if hit: 188%"/>
-    <string name="h5" value="MP - 15, Recovery rate 45%; Damage during the recovery if hit: 184%"/>
-    <string name="h6" value="MP - 15, Recovery rate 54%; Damage during the recovery if hit: 180%"/>
-    <string name="h7" value="MP - 15, Recovery rate 62%; Damage during the recovery if hit: 176%"/>
-    <string name="h8" value="MP - 15, Recovery rate 70%; Damage during the recovery if hit: 172%"/>
-    <string name="h9" value="MP - 15, Recovery rate 78%; Damage during the recovery if hit: 168%"/>
-    <string name="h10" value="MP - 15, Recovery rate 86%; Damage during the recovery if hit: 164%"/>
-    <string name="h11" value="MP - 21, Recovery rate 94%; Damage during the recovery if hit: 160%"/>
-    <string name="h12" value="MP - 21, Recovery rate 101%; Damage during the recovery if hit: 157%"/>
-    <string name="h13" value="MP - 21, Recovery rate 108%; Damage during the recovery if hit: 154%"/>
-    <string name="h14" value="MP - 21, Recovery rate 115%; Damage during the recovery if hit: 151%"/>
-    <string name="h15" value="MP - 21, Recovery rate 122%; Damage during the recovery if hit: 148%"/>
-    <string name="h16" value="MP - 21, Recovery rate 129%; Damage during the recovery if hit: 145%"/>
-    <string name="h17" value="MP - 21, Recovery rate 135%; Damage during the recovery if hit: 142%"/>
-    <string name="h18" value="MP - 21, Recovery rate 141%; Damage during the recovery if hit: 139%"/>
-    <string name="h19" value="MP - 21, Recovery rate 147%; Damage during the recovery if hit: 136%"/>
-    <string name="h20" value="MP - 21, Recovery rate 153%; Damage during the recovery if hit: 133%"/>
-    <string name="h21" value="MP - 27, Recovery rate 159%; Damage during the recovery if hit: 130%"/>
-    <string name="h22" value="MP - 27, Recovery rate 164%; Damage during the recovery if hit: 128%"/>
-    <string name="h23" value="MP - 27, Recovery rate 169%; Damage during the recovery if hit: 126%"/>
-    <string name="h24" value="MP - 27, Recovery rate 174%; Damage during the recovery if hit: 124%"/>
-    <string name="h25" value="MP - 27, Recovery rate 179%; Damage during the recovery if hit: 122%"/>
-    <string name="h26" value="MP - 27, Recovery rate 184%; Damage during the recovery if hit: 120%"/>
-    <string name="h27" value="MP - 27, Recovery rate 188%; Damage during the recovery if hit: 118%"/>
-    <string name="h28" value="MP - 27, Recovery rate 192%; Damage during the recovery if hit: 116%"/>
-    <string name="h29" value="MP - 27, Recovery rate 196%; Damage during the recovery if hit: 114%"/>
-    <string name="h30" value="MP - 27, Recovery rate 200%; Damage during the recovery if hit: 112%"/>
+    <string name="desc" value="[Master Level : 30]\nUses MP to recover HP. Only works when HP is below 50%, and stops if you move or are attacked."/>
+    <string name="h1" value="MP - 15. Recovery rate 68%. Damage received during recovery 99%."/>
+    <string name="h2" value="MP - 15. Recovery rate 76%. Damage received during recovery 98%."/>
+    <string name="h3" value="MP - 15. Recovery rate 84%. Damage received during recovery 97%."/>
+    <string name="h4" value="MP - 15. Recovery rate 92%. Damage received during recovery 96%."/>
+    <string name="h5" value="MP - 15. Recovery rate 100%. Damage received during recovery 95%."/>
+    <string name="h6" value="MP - 15. Recovery rate 108%. Damage received during recovery 94%."/>
+    <string name="h7" value="MP - 15. Recovery rate 116%. Damage received during recovery 93%."/>
+    <string name="h8" value="MP - 15. Recovery rate 124%. Damage received during recovery 92%."/>
+    <string name="h9" value="MP - 15. Recovery rate 132%. Damage received during recovery 91%."/>
+    <string name="h10" value="MP - 15. Recovery rate 140%. Damage received during recovery 90%."/>
+    <string name="h11" value="MP - 21. Recovery rate 148%. Damage received during recovery 89%."/>
+    <string name="h12" value="MP - 21. Recovery rate 156%. Damage received during recovery 88%."/>
+    <string name="h13" value="MP - 21. Recovery rate 164%. Damage received during recovery 87%."/>
+    <string name="h14" value="MP - 21. Recovery rate 172%. Damage received during recovery 86%."/>
+    <string name="h15" value="MP - 21. Recovery rate 180%. Damage received during recovery 85%."/>
+    <string name="h16" value="MP - 21. Recovery rate 188%. Damage received during recovery 84%."/>
+    <string name="h17" value="MP - 21. Recovery rate 196%. Damage received during recovery 83%."/>
+    <string name="h18" value="MP - 21. Recovery rate 204%. Damage received during recovery 82%."/>
+    <string name="h19" value="MP - 21. Recovery rate 212%. Damage received during recovery 81%."/>
+    <string name="h20" value="MP - 21. Recovery rate 220%. Damage received during recovery 80%."/>
+    <string name="h21" value="MP - 27. Recovery rate 228%. Damage received during recovery 79%."/>
+    <string name="h22" value="MP - 27. Recovery rate 236%. Damage received during recovery 78%."/>
+    <string name="h23" value="MP - 27. Recovery rate 244%. Damage received during recovery 77%."/>
+    <string name="h24" value="MP - 27. Recovery rate 252%. Damage received during recovery 76%."/>
+    <string name="h25" value="MP - 27. Recovery rate 260%. Damage received during recovery 75%."/>
+    <string name="h26" value="MP - 27. Recovery rate 268%. Damage received during recovery 74%."/>
+    <string name="h27" value="MP - 27. Recovery rate 276%. Damage received during recovery 73%."/>
+    <string name="h28" value="MP - 27. Recovery rate 284%. Damage received during recovery 72%."/>
+    <string name="h29" value="MP - 27. Recovery rate 292%. Damage received during recovery 71%."/>
+    <string name="h30" value="MP - 27. Recovery rate 300%. Damage received during recovery 70%."/>
   </imgdir>
   <imgdir name="4211002">
     <string name="name" value="Assaulter"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks a single monster with incredible power and speed. The attacked may even be stunned on a low succcess rate."/>
-    <string name="h1" value="MP - 12, Damage 210%, Stunner 22%"/>
-    <string name="h2" value="MP - 12, Damage 220%, Stunner 24%"/>
-    <string name="h3" value="MP - 12, Damage 230%, Stunner 26%"/>
-    <string name="h4" value="MP - 12, Damage 240%, Stunner 28%"/>
-    <string name="h5" value="MP - 12, Damage 250%, Stunner 30%"/>
-    <string name="h6" value="MP - 12, Damage 260%, Stunner 32%"/>
-    <string name="h7" value="MP - 12, Damage 270%, Stunner 34%"/>
-    <string name="h8" value="MP - 12, Damage 280%, Stunner 36%"/>
-    <string name="h9" value="MP - 12, Damage 290%, Stunner 38%"/>
-    <string name="h10" value="MP - 12, Damage 300%, Stunner 40%"/>
-    <string name="h11" value="MP - 19, Damage 310%, Stunner 42%"/>
-    <string name="h12" value="MP - 19, Damage 320%, Stunner 44%"/>
-    <string name="h13" value="MP - 19, Damage 330%, Stunner 46%"/>
-    <string name="h14" value="MP - 19, Damage 340%, Stunner 48%"/>
-    <string name="h15" value="MP - 19, Damage 350%, Stunner 50%"/>
-    <string name="h16" value="MP - 19, Damage 360%, Stunner 52%"/>
-    <string name="h17" value="MP - 19, Damage 370%, Stunner 54%"/>
-    <string name="h18" value="MP - 19, Damage 380%, Stunner 56%"/>
-    <string name="h19" value="MP - 19, Damage 390%, Stunner 58%"/>
-    <string name="h20" value="MP - 19, Damage 400%, Stunner 60%"/>
-    <string name="h21" value="MP - 26, Damage 405%, Stunner 62%"/>
-    <string name="h22" value="MP - 26, Damage 410%, Stunner 64%"/>
-    <string name="h23" value="MP - 26, Damage 415%, Stunner 66%"/>
-    <string name="h24" value="MP - 26, Damage 420%, Stunner 68%"/>
-    <string name="h25" value="MP - 26, Damage 425%, Stunner 70%"/>
-    <string name="h26" value="MP - 26, Damage 430%, Stunner 72%"/>
-    <string name="h27" value="MP - 26, Damage 435%, Stunner 74%"/>
-    <string name="h28" value="MP - 26, Damage 440%, Stunner 76%"/>
-    <string name="h29" value="MP - 26, Damage 445%, Stunner 78%"/>
-    <string name="h30" value="MP - 26, Damage 450%, Stunner 80%"/>
+    <string name="desc" value="[Master Level : 30]\nAttacks one enemy with incredible power and speed. The enemy may be stunned."/>
+    <string name="h1" value="MP - 12. Damage 210%. Stuns for 2 sec with 22% success rate."/>
+    <string name="h2" value="MP - 12. Damage 220%. Stuns for 2 sec with 24% success rate."/>
+    <string name="h3" value="MP - 12. Damage 230%. Stuns for 2 sec with 26% success rate."/>
+    <string name="h4" value="MP - 12. Damage 240%. Stuns for 2 sec with 28% success rate."/>
+    <string name="h5" value="MP - 12. Damage 250%. Stuns for 2 sec with 30% success rate."/>
+    <string name="h6" value="MP - 12. Damage 260%. Stuns for 2 sec with 32% success rate."/>
+    <string name="h7" value="MP - 12. Damage 270%. Stuns for 2 sec with 34% success rate."/>
+    <string name="h8" value="MP - 12. Damage 280%. Stuns for 2 sec with 36% success rate."/>
+    <string name="h9" value="MP - 12. Damage 290%. Stuns for 2 sec with 38% success rate."/>
+    <string name="h10" value="MP - 12. Damage 300%. Stuns for 2 sec with 40% success rate."/>
+    <string name="h11" value="MP - 19. Damage 310%. Stuns for 3 sec with 42% success rate."/>
+    <string name="h12" value="MP - 19. Damage 320%. Stuns for 3 sec with 44% success rate."/>
+    <string name="h13" value="MP - 19. Damage 330%. Stuns for 3 sec with 46% success rate."/>
+    <string name="h14" value="MP - 19. Damage 340%. Stuns for 3 sec with 48% success rate."/>
+    <string name="h15" value="MP - 19. Damage 350%. Stuns for 3 sec with 50% success rate."/>
+    <string name="h16" value="MP - 19. Damage 360%. Stuns for 3 sec with 52% success rate."/>
+    <string name="h17" value="MP - 19. Damage 370%. Stuns for 3 sec with 54% success rate."/>
+    <string name="h18" value="MP - 19. Damage 380%. Stuns for 3 sec with 56% success rate."/>
+    <string name="h19" value="MP - 19. Damage 390%. Stuns for 3 sec with 58% success rate."/>
+    <string name="h20" value="MP - 19. Damage 400%. Stuns for 3 sec with 60% success rate."/>
+    <string name="h21" value="MP - 26. Damage 405%. Stuns for 4 sec with 62% success rate."/>
+    <string name="h22" value="MP - 26. Damage 410%. Stuns for 4 sec with 64% success rate."/>
+    <string name="h23" value="MP - 26. Damage 415%. Stuns for 4 sec with 66% success rate."/>
+    <string name="h24" value="MP - 26. Damage 420%. Stuns for 4 sec with 68% success rate."/>
+    <string name="h25" value="MP - 26. Damage 425%. Stuns for 4 sec with 70% success rate."/>
+    <string name="h26" value="MP - 26. Damage 430%. Stuns for 4 sec with 72% success rate."/>
+    <string name="h27" value="MP - 26. Damage 435%. Stuns for 4 sec with 74% success rate."/>
+    <string name="h28" value="MP - 26. Damage 440%. Stuns for 4 sec with 76% success rate."/>
+    <string name="h29" value="MP - 26. Damage 445%. Stuns for 4 sec with 78% success rate."/>
+    <string name="h30" value="MP - 26. Damage 450%. Stuns for 4 sec with 80% success rate."/>
   </imgdir>
   <imgdir name="4211003">
     <string name="name" value="Pickpocket"/>
@@ -4662,95 +4662,95 @@
   </imgdir>
   <imgdir name="4211004">
     <string name="name" value="Band of Thieves"/>
-    <string name="desc" value="[Master Level : 30]\nSummons fellow bandits to attack up to 6 monsters around the area."/>
-    <string name="h1" value="MP - 10, Damage 110%, 1 &quot;other self&quot; will attack enemies"/>
-    <string name="h2" value="MP - 10, Damage 120%, 1 &quot;other self&quot; will attack enemies"/>
-    <string name="h3" value="MP - 10, Damage 130%, 1 &quot;other self&quot; will attack enemies"/>
-    <string name="h4" value="MP - 10, Damage 140%, 1 &quot;other self&quot; will attack enemies"/>
-    <string name="h5" value="MP - 10, Damage 150%, 1 &quot;other self&quot; will attack enemies"/>
-    <string name="h6" value="MP - 10, Damage 160%, 1 &quot;other self&quot; will attack enemies"/>
-    <string name="h7" value="MP - 20, Damage 120%, 2 &quot;other selves&quot; will attack enemies"/>
-    <string name="h8" value="MP - 20, Damage 130%, 2 &quot;other selves&quot; will attack enemies"/>
-    <string name="h9" value="MP - 20, Damage 140%, 2 &quot;other selves&quot; will attack enemies"/>
-    <string name="h10" value="MP - 20, Damage 150%, 2 &quot;other selves&quot; will attack enemies"/>
-    <string name="h11" value="MP - 20, Damage 160%, 2 &quot;other selves&quot; will attack enemies"/>
-    <string name="h12" value="MP - 20, Damage 170%, 2 &quot;other selves&quot; will attack enemies"/>
-    <string name="h13" value="MP - 30, Damage 130%, 3 &quot;other selves&quot; will attack enemies"/>
-    <string name="h14" value="MP - 30, Damage 140%, 3 &quot;other selves&quot; will attack enemies"/>
-    <string name="h15" value="MP - 30, Damage 150%, 3 &quot;other selves&quot; will attack enemies"/>
-    <string name="h16" value="MP - 30, Damage 160%, 3 &quot;other selves&quot; will attack enemies"/>
-    <string name="h17" value="MP - 30, Damage 170%, 3 &quot;other selves&quot; will attack enemies"/>
-    <string name="h18" value="MP - 30, Damage 180%, 3 &quot;other selves&quot; will attack enemies"/>
-    <string name="h19" value="MP - 40, Damage 140%, 4 &quot;other selves&quot; will attack enemies"/>
-    <string name="h20" value="MP - 40, Damage 150%, 4 &quot;other selves&quot; will attack enemies"/>
-    <string name="h21" value="MP - 40, Damage 160%, 4 &quot;other selves&quot; will attack enemies"/>
-    <string name="h22" value="MP - 40, Damage 170%, 4 &quot;other selves&quot; will attack enemies"/>
-    <string name="h23" value="MP - 40, Damage 180%, 4 &quot;other selves&quot; will attack enemies"/>
-    <string name="h24" value="MP - 40, Damage 190%, 4 &quot;other selves&quot; will attack enemies"/>
-    <string name="h25" value="MP - 25, Damage 160%, 5 &quot;other selves&quot; will attack enemies"/>
-    <string name="h26" value="MP - 25, Damage 170%, 5 &quot;other selves&quot; will attack enemies"/>
-    <string name="h27" value="MP - 25, Damage 180%, 5 &quot;other selves&quot; will attack enemies"/>
-    <string name="h28" value="MP - 25, Damage 190%, 5 &quot;other selves&quot; will attack enemies"/>
-    <string name="h29" value="MP - 25, Damage 200%, 5 &quot;other selves&quot; will attack enemies"/>
-    <string name="h30" value="MP - 25, Damage 210%, 5 &quot;other selves&quot; will attack enemies"/>
+    <string name="desc" value="[Master Level : 30]\nSummons fellow bandits to attack nearby enemies, up to 6 enemies at once."/>
+    <string name="h1" value="MP - 10. Damage 110%. 1 bandit(s) attack up to 2 enemies."/>
+    <string name="h2" value="MP - 10. Damage 120%. 1 bandit(s) attack up to 2 enemies."/>
+    <string name="h3" value="MP - 10. Damage 130%. 1 bandit(s) attack up to 2 enemies."/>
+    <string name="h4" value="MP - 10. Damage 140%. 1 bandit(s) attack up to 2 enemies."/>
+    <string name="h5" value="MP - 10. Damage 150%. 1 bandit(s) attack up to 2 enemies."/>
+    <string name="h6" value="MP - 13. Damage 160%. 1 bandit(s) attack up to 2 enemies."/>
+    <string name="h7" value="MP - 13. Damage 120%. 2 bandit(s) attack up to 3 enemies."/>
+    <string name="h8" value="MP - 13. Damage 130%. 2 bandit(s) attack up to 3 enemies."/>
+    <string name="h9" value="MP - 13. Damage 140%. 2 bandit(s) attack up to 3 enemies."/>
+    <string name="h10" value="MP - 13. Damage 150%. 2 bandit(s) attack up to 3 enemies."/>
+    <string name="h11" value="MP - 16. Damage 160%. 2 bandit(s) attack up to 3 enemies."/>
+    <string name="h12" value="MP - 16. Damage 170%. 2 bandit(s) attack up to 3 enemies."/>
+    <string name="h13" value="MP - 16. Damage 130%. 3 bandit(s) attack up to 4 enemies."/>
+    <string name="h14" value="MP - 16. Damage 140%. 3 bandit(s) attack up to 4 enemies."/>
+    <string name="h15" value="MP - 16. Damage 150%. 3 bandit(s) attack up to 4 enemies."/>
+    <string name="h16" value="MP - 19. Damage 160%. 3 bandit(s) attack up to 4 enemies."/>
+    <string name="h17" value="MP - 19. Damage 170%. 3 bandit(s) attack up to 4 enemies."/>
+    <string name="h18" value="MP - 19. Damage 180%. 3 bandit(s) attack up to 4 enemies."/>
+    <string name="h19" value="MP - 19. Damage 140%. 4 bandit(s) attack up to 5 enemies."/>
+    <string name="h20" value="MP - 19. Damage 150%. 4 bandit(s) attack up to 5 enemies."/>
+    <string name="h21" value="MP - 22. Damage 160%. 4 bandit(s) attack up to 5 enemies."/>
+    <string name="h22" value="MP - 22. Damage 170%. 4 bandit(s) attack up to 5 enemies."/>
+    <string name="h23" value="MP - 22. Damage 180%. 4 bandit(s) attack up to 5 enemies."/>
+    <string name="h24" value="MP - 22. Damage 190%. 4 bandit(s) attack up to 5 enemies."/>
+    <string name="h25" value="MP - 22. Damage 160%. 5 bandit(s) attack up to 6 enemies."/>
+    <string name="h26" value="MP - 25. Damage 170%. 5 bandit(s) attack up to 6 enemies."/>
+    <string name="h27" value="MP - 25. Damage 180%. 5 bandit(s) attack up to 6 enemies."/>
+    <string name="h28" value="MP - 25. Damage 190%. 5 bandit(s) attack up to 6 enemies."/>
+    <string name="h29" value="MP - 25. Damage 200%. 5 bandit(s) attack up to 6 enemies."/>
+    <string name="h30" value="MP - 25. Damage 210%. 5 bandit(s) attack up to 6 enemies."/>
   </imgdir>
   <imgdir name="4211005">
     <string name="name" value="Meso Guard"/>
-    <string name="desc" value="[Master Level : 20]\nUses mesos to guard 50% of the damage received. Once the skill is used, it saves up a certain amount of mesos, and once damaged from then on out, the mesos will be used based on the damage received. The skill will be turned off when the saved mesos are used up.\nRequired Skill : #cAt least Level 3 on Chakra#"/>
-    <string name="h1" value="MP - 20, Save up 200 mesos, 90% of the guarded damage replaced with mesos"/>
-    <string name="h2" value="MP - 20, Save up 400 mesos, 90% of the guarded damage replaced with mesos"/>
-    <string name="h3" value="MP - 20, Save up 600 mesos, 89% of the guarded damage replaced with mesos"/>
-    <string name="h4" value="MP - 20, Save up 800 mesos, 89% of the guarded damage replaced with mesos"/>
-    <string name="h5" value="MP - 20, Save up 1000 mesos, 88% of the guarded damage replaced with mesos"/>
-    <string name="h6" value="MP - 25, Save up 1200 mesos, 88% of the guarded damage replaced with mesos"/>
-    <string name="h7" value="MP - 25, Save up 1400 mesos, 87% of the guarded damage replaced with mesos"/>
-    <string name="h8" value="MP - 25, Save up 1600 mesos, 87% of the guarded damage replaced with mesos"/>
-    <string name="h9" value="MP - 25, Save up 1800 mesos, 86% of the guarded damage replaced with mesos"/>
-    <string name="h10" value="MP - 25, Save up 2000 mesos, 86% of the guarded damage replaced with mesos"/>
-    <string name="h11" value="MP - 30, Save up 2100 mesos, 85% of the guarded damage replaced with mesos"/>
-    <string name="h12" value="MP - 30, Save up 2200 mesos, 85% of the guarded damage replaced with mesos"/>
-    <string name="h13" value="MP - 30, Save up 2300 mesos, 84% of the guarded damage replaced with mesos"/>
-    <string name="h14" value="MP - 30, Save up 2400 mesos, 84% of the guarded damage replaced with mesos"/>
-    <string name="h15" value="MP - 30, Save up 2500 mesos, 83% of the guarded damage replaced with mesos"/>
-    <string name="h16" value="MP - 35, Save up 2500 mesos, 82% of the guarded damage replaced with mesos"/>
-    <string name="h17" value="MP - 35, Save up 2500 mesos, 81% of the guarded damage replaced with mesos"/>
-    <string name="h18" value="MP - 35, Save up 2500 mesos, 80% of the guarded damage replaced with mesos"/>
-    <string name="h19" value="MP - 35, Save up 2500 mesos, 79% of the guarded damage replaced with mesos"/>
-    <string name="h20" value="MP - 35, Save up 2500 mesos, 78% of the guarded damage replaced with mesos"/>
+    <string name="desc" value="[Master Level : 20]\nUses mesos to reduce incoming damage by 50%. Mesos are consumed based on the guarded damage. The skill ends when you run out of mesos.\nRequired Skill : #cAt least Level 3 on Chakra#"/>
+    <string name="h1" value="MP - 20. For 33 sec. Reduces damage by 50%; mesos consumed at 90% of guarded damage."/>
+    <string name="h2" value="MP - 20. For 36 sec. Reduces damage by 50%; mesos consumed at 90% of guarded damage."/>
+    <string name="h3" value="MP - 20. For 39 sec. Reduces damage by 50%; mesos consumed at 89% of guarded damage."/>
+    <string name="h4" value="MP - 20. For 42 sec. Reduces damage by 50%; mesos consumed at 89% of guarded damage."/>
+    <string name="h5" value="MP - 20. For 45 sec. Reduces damage by 50%; mesos consumed at 88% of guarded damage."/>
+    <string name="h6" value="MP - 25. For 58 sec. Reduces damage by 50%; mesos consumed at 88% of guarded damage."/>
+    <string name="h7" value="MP - 25. For 61 sec. Reduces damage by 50%; mesos consumed at 87% of guarded damage."/>
+    <string name="h8" value="MP - 25. For 64 sec. Reduces damage by 50%; mesos consumed at 87% of guarded damage."/>
+    <string name="h9" value="MP - 25. For 67 sec. Reduces damage by 50%; mesos consumed at 86% of guarded damage."/>
+    <string name="h10" value="MP - 25. For 70 sec. Reduces damage by 50%; mesos consumed at 86% of guarded damage."/>
+    <string name="h11" value="MP - 30. For 83 sec. Reduces damage by 50%; mesos consumed at 85% of guarded damage."/>
+    <string name="h12" value="MP - 30. For 86 sec. Reduces damage by 50%; mesos consumed at 85% of guarded damage."/>
+    <string name="h13" value="MP - 30. For 89 sec. Reduces damage by 50%; mesos consumed at 84% of guarded damage."/>
+    <string name="h14" value="MP - 30. For 92 sec. Reduces damage by 50%; mesos consumed at 84% of guarded damage."/>
+    <string name="h15" value="MP - 30. For 95 sec. Reduces damage by 50%; mesos consumed at 83% of guarded damage."/>
+    <string name="h16" value="MP - 35. For 108 sec. Reduces damage by 50%; mesos consumed at 82% of guarded damage."/>
+    <string name="h17" value="MP - 35. For 111 sec. Reduces damage by 50%; mesos consumed at 81% of guarded damage."/>
+    <string name="h18" value="MP - 35. For 114 sec. Reduces damage by 50%; mesos consumed at 80% of guarded damage."/>
+    <string name="h19" value="MP - 35. For 117 sec. Reduces damage by 50%; mesos consumed at 79% of guarded damage."/>
+    <string name="h20" value="MP - 35. For 120 sec. Reduces damage by 50%; mesos consumed at 78% of guarded damage."/>
   </imgdir>
   <imgdir name="4211006">
     <string name="name" value="Meso Explosion"/>
-    <string name="desc" value="[Master Level : 30]\nExplodes the mesos dropped on the ground around you to attack monsters. The mesos from the monsters killed by someone else will not be able to be used for this."/>
-    <string name="h1" value="MP - 18, Mastery 50%, Explode upto 10"/>
-    <string name="h2" value="MP - 18, Mastery 52%, Explode upto 10"/>
-    <string name="h3" value="MP - 18, Mastery 54%, Explode upto 10"/>
-    <string name="h4" value="MP - 18, Mastery 56%, Explode upto 10"/>
-    <string name="h5" value="MP - 18, Mastery 58%, Explode upto 10"/>
-    <string name="h6" value="MP - 18, Mastery 60%, Explode upto 12"/>
-    <string name="h7" value="MP - 18, Mastery 62%, Explode upto 12"/>
-    <string name="h8" value="MP - 18, Mastery 64%, Explode upto 12"/>
-    <string name="h9" value="MP - 18, Mastery 66%, Explode upto 12"/>
-    <string name="h10" value="MP - 18, Mastery 68%, Explode upto 12"/>
-    <string name="h11" value="MP - 24, Mastery 70%, Explode upto 14"/>
-    <string name="h12" value="MP - 24, Mastery 72%, Explode upto 14"/>
-    <string name="h13" value="MP - 24, Mastery 74%, Explode upto 14"/>
-    <string name="h14" value="MP - 24, Mastery 76%, Explode upto 14"/>
-    <string name="h15" value="MP - 24, Mastery 78%, Explode upto 14"/>
-    <string name="h16" value="MP - 24, Mastery 80%, Explode upto 16"/>
-    <string name="h17" value="MP - 24, Mastery 82%, Explode upto 16"/>
-    <string name="h18" value="MP - 24, Mastery 84%, Explode upto 16"/>
-    <string name="h19" value="MP - 24, Mastery 86%, Explode upto 16"/>
-    <string name="h20" value="MP - 24, Mastery 88%, Explode upto 16"/>
-    <string name="h21" value="MP - 30, Mastery 90%, Explode upto 18"/>
-    <string name="h22" value="MP - 30, Mastery 92%, Explode upto 18"/>
-    <string name="h23" value="MP - 30, Mastery 93%, Explode upto 18"/>
-    <string name="h24" value="MP - 30, Mastery 94%, Explode upto 18"/>
-    <string name="h25" value="MP - 30, Mastery 95%, Explode upto 18"/>
-    <string name="h26" value="MP - 30, Mastery 96%, Explode upto 20"/>
-    <string name="h27" value="MP - 30, Mastery 97%, Explode upto 20"/>
-    <string name="h28" value="MP - 30, Mastery 98%, Explode upto 20"/>
-    <string name="h29" value="MP - 30, Mastery 99%, Explode upto 20"/>
-    <string name="h30" value="MP - 30, Mastery 100%, Explode upto 20"/>
+    <string name="desc" value="[Master Level : 30]\nExplodes mesos dropped on the ground to attack enemies. Mesos dropped by monsters killed by someone else cannot be used."/>
+    <string name="h1" value="MP - 18. Mastery 50%. Explodes up to 10 mesos and attacks up to 6 enemies."/>
+    <string name="h2" value="MP - 18. Mastery 52%. Explodes up to 10 mesos and attacks up to 6 enemies."/>
+    <string name="h3" value="MP - 18. Mastery 54%. Explodes up to 10 mesos and attacks up to 6 enemies."/>
+    <string name="h4" value="MP - 18. Mastery 56%. Explodes up to 10 mesos and attacks up to 6 enemies."/>
+    <string name="h5" value="MP - 18. Mastery 58%. Explodes up to 10 mesos and attacks up to 6 enemies."/>
+    <string name="h6" value="MP - 18. Mastery 60%. Explodes up to 12 mesos and attacks up to 6 enemies."/>
+    <string name="h7" value="MP - 18. Mastery 62%. Explodes up to 12 mesos and attacks up to 6 enemies."/>
+    <string name="h8" value="MP - 18. Mastery 64%. Explodes up to 12 mesos and attacks up to 6 enemies."/>
+    <string name="h9" value="MP - 18. Mastery 66%. Explodes up to 12 mesos and attacks up to 6 enemies."/>
+    <string name="h10" value="MP - 18. Mastery 68%. Explodes up to 12 mesos and attacks up to 6 enemies."/>
+    <string name="h11" value="MP - 24. Mastery 70%. Explodes up to 14 mesos and attacks up to 6 enemies."/>
+    <string name="h12" value="MP - 24. Mastery 72%. Explodes up to 14 mesos and attacks up to 6 enemies."/>
+    <string name="h13" value="MP - 24. Mastery 74%. Explodes up to 14 mesos and attacks up to 6 enemies."/>
+    <string name="h14" value="MP - 24. Mastery 76%. Explodes up to 14 mesos and attacks up to 6 enemies."/>
+    <string name="h15" value="MP - 24. Mastery 78%. Explodes up to 14 mesos and attacks up to 6 enemies."/>
+    <string name="h16" value="MP - 24. Mastery 80%. Explodes up to 16 mesos and attacks up to 6 enemies."/>
+    <string name="h17" value="MP - 24. Mastery 82%. Explodes up to 16 mesos and attacks up to 6 enemies."/>
+    <string name="h18" value="MP - 24. Mastery 84%. Explodes up to 16 mesos and attacks up to 6 enemies."/>
+    <string name="h19" value="MP - 24. Mastery 86%. Explodes up to 16 mesos and attacks up to 6 enemies."/>
+    <string name="h20" value="MP - 24. Mastery 88%. Explodes up to 16 mesos and attacks up to 6 enemies."/>
+    <string name="h21" value="MP - 30. Mastery 90%. Explodes up to 18 mesos and attacks up to 6 enemies."/>
+    <string name="h22" value="MP - 30. Mastery 92%. Explodes up to 18 mesos and attacks up to 6 enemies."/>
+    <string name="h23" value="MP - 30. Mastery 93%. Explodes up to 18 mesos and attacks up to 6 enemies."/>
+    <string name="h24" value="MP - 30. Mastery 94%. Explodes up to 18 mesos and attacks up to 6 enemies."/>
+    <string name="h25" value="MP - 30. Mastery 95%. Explodes up to 18 mesos and attacks up to 6 enemies."/>
+    <string name="h26" value="MP - 30. Mastery 96%. Explodes up to 20 mesos and attacks up to 6 enemies."/>
+    <string name="h27" value="MP - 30. Mastery 97%. Explodes up to 20 mesos and attacks up to 6 enemies."/>
+    <string name="h28" value="MP - 30. Mastery 98%. Explodes up to 20 mesos and attacks up to 6 enemies."/>
+    <string name="h29" value="MP - 30. Mastery 99%. Explodes up to 20 mesos and attacks up to 6 enemies."/>
+    <string name="h30" value="MP - 30. Mastery 100%. Explodes up to 20 mesos and attacks up to 6 enemies."/>
   </imgdir>
   <imgdir name="900">
     <string name="bookName" value="Admin. Skill Book (Normal)"/>
@@ -4810,7 +4810,7 @@
   </imgdir>
   <imgdir name="0001005">
     <string name="name" value="Echo of Hero"/>
-    <string name="desc" value="[Master Level : 1]\n Increase weapon attack and magic attack on all players around. \n#cTerms between skills : 2hours#"/>
+    <string name="desc" value="[Master Level : 1]\n Increase weapon attack and magic attack on all players around. \n#cTerms between skills : 300 seconds#"/>
     <string name="h1" value="MP -30 Weapon attack +4%, Magic attack +4%  for 40Minutes"/>
   </imgdir>
   <imgdir name="112">
@@ -6054,7 +6054,7 @@
   </imgdir>
   <imgdir name="2221000">
     <string name="name" value="Maple Warrior"/>
-    <string name="desc" value="Increase all players&apos; stats within a party by certain percentage "/>
+    <string name="desc" value="Temporarily increases all stats of party members by a percentage."/>
     <string name="h1" value="MP - 10 ,  For 30Secs, all stats + 1% "/>
     <string name="h2" value="MP - 10 ,  For 60Secs, all stats + 1% "/>
     <string name="h3" value="MP - 10 ,  For 90Secs, all stats + 2% "/>
@@ -6088,7 +6088,7 @@
   </imgdir>
   <imgdir name="2221001">
     <string name="name" value="Big Bang"/>
-    <string name="desc" value="Gathers up numerous particles from the surrounding area to form an energy vortex, culminating in a powerful explosion."/>
+    <string name="desc" value="Charge energy from the surroundings, then release an explosion that attacks up to 6 enemies."/>
     <string name="h1" value="MP - 25 , Max attack 160, Mastery 35%"/>
     <string name="h2" value="MP - 25 , Max attack 170, Mastery 35%"/>
     <string name="h3" value="MP - 25 , Max attack 180, Mastery 35%"/>
@@ -6122,7 +6122,7 @@
   </imgdir>
   <imgdir name="2221002">
     <string name="name" value="Mana Reflection"/>
-    <string name="desc" value="By drawing on incredible inner strength, enables one to reverse the flow of Mana back to the monster, returning the damage received from the monster. The returned damage cannot exceed 20% of maxHP of the monster."/>
+    <string name="desc" value="When hit by magic damage, has a chance to reflect a portion of the damage to the enemy. Reflected damage cannot exceed 20% of the monster&apos;s MaxHP and does not affect bosses."/>
     <string name="h1" value="MP - 26 , for duration of 10secs, with success rate 31%, returns 55% of magic damage received back to enemy.."/>
     <string name="h2" value="MP - 27 , for duration of 20secs, with success rate 32%, returns 60% of magic damage received back to enemy.."/>
     <string name="h3" value="MP - 28 , for duration of 30secs, with success rate 33%, returns 65% of magic damage received back to enemy.."/>
@@ -6156,41 +6156,41 @@
   </imgdir>
   <imgdir name="2221003">
     <string name="name" value="Ice Demon"/>
-    <string name="desc" value="Provides consistent damage to a monster using ice pieces from Ice Demon. Monsters stricken by Ice Demon become vulnerable to fire-based attacks."/>
-    <string name="h1" value="MP - 15 , Basic attack 42, Mastery 15%, for 10secs, attack up to 2 enemies."/>
-    <string name="h2" value="MP - 15 , Basic attack 44, Mastery 15%, for 10secs, attack up to 2 enemies."/>
-    <string name="h3" value="MP - 15 , Basic attack 46, Mastery 15%, for 10secs, attack up to 2 enemies."/>
-    <string name="h4" value="MP - 15 , Basic attack 48, Mastery 20%, for 10secs, attack up to 2 enemies."/>
-    <string name="h5" value="MP - 15 , Basic attack 50, Mastery 20%, for 10secs, attack up to 2 enemies."/>
-    <string name="h6" value="MP - 15 , Basic attack 52, Mastery 20%, for 10secs, attack up to 2 enemies."/>
-    <string name="h7" value="MP - 18 , Basic attack 54, Mastery 25%, for 10secs, attack up to 3 enemies."/>
-    <string name="h8" value="MP - 18 , Basic attack 56, Mastery 25%, for 10secs, attack up to 3 enemies."/>
-    <string name="h9" value="MP - 18 , Basic attack 58, Mastery 25%, for 10secs, attack up to 3 enemies."/>
-    <string name="h10" value="MP - 18 , Basic attack 60, Mastery 30%, for 10secs, attack up to 3 enemies."/>
-    <string name="h11" value="MP - 18 , Basic attack 62, Mastery 30%, for 10secs, attack up to 3 enemies."/>
-    <string name="h12" value="MP - 18 , Basic attack 64, Mastery 30%, for 10secs, attack up to 3 enemies."/>
-    <string name="h13" value="MP - 21 , Basic attack 66, Mastery 35%, for 10secs, attack up to 4 enemies."/>
-    <string name="h14" value="MP - 21 , Basic attack 68, Mastery 35%, for 10secs, attack up to 4 enemies."/>
-    <string name="h15" value="MP - 21 , Basic attack 70, Mastery 35%, for 10secs, attack up to 4 enemies."/>
-    <string name="h16" value="MP - 21 , Basic attack 72, Mastery 40%, for 10secs, attack up to 4 enemies."/>
-    <string name="h17" value="MP - 21 , Basic attack 74, Mastery 40%, for 10secs, attack up to 4 enemies."/>
-    <string name="h18" value="MP - 21 , Basic attack 76, Mastery 40%, for 10secs, attack up to 4 enemies."/>
-    <string name="h19" value="MP - 31 , Basic attack 78, Mastery 45%, for 15secs, attack up to 5 enemies."/>
-    <string name="h20" value="MP - 31 , Basic attack 80, Mastery 45%, for 15secs, attack up to 5 enemies."/>
-    <string name="h21" value="MP - 31 , Basic attack 82, Mastery 45%, for 15secs, attack up to 5 enemies."/>
-    <string name="h22" value="MP - 31 , Basic attack 84, Mastery 50%, for 15secs, attack up to 5 enemies."/>
-    <string name="h23" value="MP - 31 , Basic attack 86, Mastery 50%, for 15secs, attack up to 5 enemies."/>
-    <string name="h24" value="MP - 31 , Basic attack 88, Mastery 50%, for 15secs, attack up to 5 enemies."/>
-    <string name="h25" value="MP - 34 , Basic attack 90, Mastery 55%, for 15secs, attack up to 6 enemies."/>
-    <string name="h26" value="MP - 34 , Basic attack 92, Mastery 55%, for 15secs, attack up to 6 enemies."/>
-    <string name="h27" value="MP - 34 , Basic attack 94, Mastery 55%, for 15secs, attack up to 6 enemies."/>
-    <string name="h28" value="MP - 34 , Basic attack 96, Mastery 60%, for 15secs, attack up to 6 enemies."/>
-    <string name="h29" value="MP - 34 , Basic attack 98, Mastery 60%, for 15secs, attack up to 6 enemies."/>
-    <string name="h30" value="MP - 34 , Basic attack 100, Mastery 60%, for 15secs, attack up to 6 enemies."/>
+    <string name="desc" value="Attacks multiple enemies and deals damage over time. Enemies hit become vulnerable to fire-based attacks."/>
+    <string name="h1" value="MP - 15, Basic attack 42, Mastery 15%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h2" value="MP - 15, Basic attack 44, Mastery 15%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h3" value="MP - 15, Basic attack 46, Mastery 15%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h4" value="MP - 15, Basic attack 48, Mastery 20%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h5" value="MP - 15, Basic attack 50, Mastery 20%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h6" value="MP - 15, Basic attack 52, Mastery 20%, for 10 sec, attacks up to 2 enemies."/>
+    <string name="h7" value="MP - 18, Basic attack 54, Mastery 25%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h8" value="MP - 18, Basic attack 56, Mastery 25%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h9" value="MP - 18, Basic attack 58, Mastery 25%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h10" value="MP - 18, Basic attack 60, Mastery 30%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h11" value="MP - 18, Basic attack 62, Mastery 30%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h12" value="MP - 18, Basic attack 64, Mastery 30%, for 10 sec, attacks up to 3 enemies."/>
+    <string name="h13" value="MP - 21, Basic attack 66, Mastery 35%, for 10 sec, attacks up to 4 enemies."/>
+    <string name="h14" value="MP - 21, Basic attack 68, Mastery 35%, for 10 sec, attacks up to 4 enemies."/>
+    <string name="h15" value="MP - 21, Basic attack 70, Mastery 35%, for 10 sec, attacks up to 4 enemies."/>
+    <string name="h16" value="MP - 21, Basic attack 72, Mastery 40%, for 15 sec, attacks up to 4 enemies."/>
+    <string name="h17" value="MP - 21, Basic attack 74, Mastery 40%, for 15 sec, attacks up to 4 enemies."/>
+    <string name="h18" value="MP - 21, Basic attack 76, Mastery 40%, for 15 sec, attacks up to 4 enemies."/>
+    <string name="h19" value="MP - 31, Basic attack 78, Mastery 45%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h20" value="MP - 31, Basic attack 80, Mastery 45%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h21" value="MP - 31, Basic attack 82, Mastery 45%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h22" value="MP - 31, Basic attack 84, Mastery 50%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h23" value="MP - 31, Basic attack 86, Mastery 50%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h24" value="MP - 31, Basic attack 88, Mastery 50%, for 15 sec, attacks up to 5 enemies."/>
+    <string name="h25" value="MP - 34, Basic attack 90, Mastery 55%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h26" value="MP - 34, Basic attack 92, Mastery 55%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h27" value="MP - 34, Basic attack 94, Mastery 55%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h28" value="MP - 34, Basic attack 96, Mastery 60%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h29" value="MP - 34, Basic attack 98, Mastery 60%, for 15 sec, attacks up to 6 enemies."/>
+    <string name="h30" value="MP - 34, Basic attack 100, Mastery 60%, for 15 sec, attacks up to 6 enemies."/>
   </imgdir>
   <imgdir name="2221004">
     <string name="name" value="Infinity"/>
-    <string name="desc" value="Enables one to temporarily draw magic powers from sources surrounding the mage and use it in place of one&apos;s own MP."/>
+    <string name="desc" value="Temporarily allows skills to be used without consuming MP. #cCooldown: 3 min.#"/>
     <string name="h1" value="For 11secs, Mana is left intacted."/>
     <string name="h2" value="For 12secs, Mana is left intacted."/>
     <string name="h3" value="For 13secs, Mana is left intacted."/>
@@ -6224,7 +6224,7 @@
   </imgdir>
   <imgdir name="2221005">
     <string name="name" value="Ifrit"/>
-    <string name="desc" value="Calls upon the Ifrit familiar, who is fire-based. Attacks up to 3 monsters."/>
+    <string name="desc" value="Summons the fire-based Ifrit to attack up to 3 enemies.\nRequired Skill : #cIce Demon Lv.5#"/>
     <string name="h1" value="MP - 13 , Basic attack 183, for 15secs"/>
     <string name="h2" value="MP - 16 , Basic attack 186, for 20secs"/>
     <string name="h3" value="MP - 19 , Basic attack 189, for 25secs"/>
@@ -6258,7 +6258,7 @@
   </imgdir>
   <imgdir name="2221006">
     <string name="name" value="Chain Lightning"/>
-    <string name="desc" value="Attacks a single monster using a high-voltage lightning attack. If struck, monsters around the affected monster will receive damage as well."/>
+    <string name="desc" value="Attacks 1 enemy with high-voltage lightning, then chains to nearby enemies. The number of targets increases with skill level."/>
     <string name="h1" value="MP - 16 , Basic attack 103, Mastery 15%, Damage up to  2enemies."/>
     <string name="h2" value="MP - 16 , Basic attack 106, Mastery 15%, Damage up to  2enemies."/>
     <string name="h3" value="MP - 16 , Basic attack 109, Mastery 15%, Damage up to  2enemies."/>
@@ -6292,7 +6292,7 @@
   </imgdir>
   <imgdir name="2221007">
     <string name="name" value="Blizzard"/>
-    <string name="desc" value="Summons spears of ice from the sky, showering up to 15 monsters at one time with a nasty blizzard. Incurs tremedous ice-based damages to the attacked."/>
+    <string name="desc" value="Summons ice spears to attack up to 15 enemies with powerful ice damage. #cCooldown: 10 sec.#"/>
     <string name="h1" value="MP - 2100 , Basic attack 330"/>
     <string name="h2" value="MP - 2200 , Basic attack 340"/>
     <string name="h3" value="MP - 2300 , Basic attack 350"/>
@@ -6326,12 +6326,12 @@
   </imgdir>
   <imgdir name="2221008">
     <string name="name" value="Hero&apos;s Will"/>
-    <string name="desc" value="Enables one to shrug off abnormal conditions. The higher the skill level, the more types of abnormal conditions one can nullify."/>
-    <string name="h1" value="MP - 30 escape from abnormal condition, Terms between skills 600secs"/>
-    <string name="h2" value="MP - 30 escape from abnormal condition, Terms between skills 540secs"/>
-    <string name="h3" value="MP - 30 escape from abnormal condition, Terms between skills 480secs"/>
-    <string name="h4" value="MP - 30 escape from abnormal condition, Terms between skills 420secs"/>
-    <string name="h5" value="MP - 30 escape from abnormal condition, Terms between skills 360secs"/>
+    <string name="desc" value="Removes abnormal conditions such as Seduce, Zombify, and Confuse. Cooldown decreases as the skill level increases."/>
+    <string name="h1" value="MP - 30, removes abnormal conditions, cooldown 600 sec."/>
+    <string name="h2" value="MP - 30, removes abnormal conditions, cooldown 540 sec."/>
+    <string name="h3" value="MP - 30, removes abnormal conditions, cooldown 480 sec."/>
+    <string name="h4" value="MP - 30, removes abnormal conditions, cooldown 420 sec."/>
+    <string name="h5" value="MP - 30, removes abnormal conditions, cooldown 360 sec."/>
   </imgdir>
   <imgdir name="232">
     <string name="bookName" value="Highest class of Holy Magic"/>
@@ -7204,7 +7204,7 @@
   </imgdir>
   <imgdir name="4121000">
     <string name="name" value="Maple Warrior"/>
-    <string name="desc" value="Increase all players&apos; stats within a party by certain percentage "/>
+    <string name="desc" value="Increases all party members&apos; stats by a certain percentage for a set time."/>
     <string name="h1" value="MP - 10 ,  For 30Secs, all stats + 1% "/>
     <string name="h2" value="MP - 10 ,  For 60Secs, all stats + 1% "/>
     <string name="h3" value="MP - 10 ,  For 90Secs, all stats + 2% "/>
@@ -7238,37 +7238,37 @@
   </imgdir>
   <imgdir name="4120002">
     <string name="name" value="Shadow Shifter"/>
-    <string name="desc" value="With great reflexes, enables one to avoid the monster&apos;s attack."/>
-    <string name="h1" value="Avoid enemy&apos;s attack with success rate 1%"/>
-    <string name="h2" value="Avoid enemy&apos;s attack with success rate 2%"/>
-    <string name="h3" value="Avoid enemy&apos;s attack with success rate 3%"/>
-    <string name="h4" value="Avoid enemy&apos;s attack with success rate 4%"/>
-    <string name="h5" value="Avoid enemy&apos;s attack with success rate 5%"/>
-    <string name="h6" value="Avoid enemy&apos;s attack with success rate 6%"/>
-    <string name="h7" value="Avoid enemy&apos;s attack with success rate 7%"/>
-    <string name="h8" value="Avoid enemy&apos;s attack with success rate 8%"/>
-    <string name="h9" value="Avoid enemy&apos;s attack with success rate 9%"/>
-    <string name="h10" value="Avoid enemy&apos;s attack with success rate 10%"/>
-    <string name="h11" value="Avoid enemy&apos;s attack with success rate 11%"/>
-    <string name="h12" value="Avoid enemy&apos;s attack with success rate 12%"/>
-    <string name="h13" value="Avoid enemy&apos;s attack with success rate 13%"/>
-    <string name="h14" value="Avoid enemy&apos;s attack with success rate 14%"/>
-    <string name="h15" value="Avoid enemy&apos;s attack with success rate 15%"/>
-    <string name="h16" value="Avoid enemy&apos;s attack with success rate 16%"/>
-    <string name="h17" value="Avoid enemy&apos;s attack with success rate 17%"/>
-    <string name="h18" value="Avoid enemy&apos;s attack with success rate 18%"/>
-    <string name="h19" value="Avoid enemy&apos;s attack with success rate 19%"/>
-    <string name="h20" value="Avoid enemy&apos;s attack with success rate 20%"/>
-    <string name="h21" value="Avoid enemy&apos;s attack with success rate 21%"/>
-    <string name="h22" value="Avoid enemy&apos;s attack with success rate 22%"/>
-    <string name="h23" value="Avoid enemy&apos;s attack with success rate 23%"/>
-    <string name="h24" value="Avoid enemy&apos;s attack with success rate 24%"/>
-    <string name="h25" value="Avoid enemy&apos;s attack with success rate 25%"/>
-    <string name="h26" value="Avoid enemy&apos;s attack with success rate 26%"/>
-    <string name="h27" value="Avoid enemy&apos;s attack with success rate 27%"/>
-    <string name="h28" value="Avoid enemy&apos;s attack with success rate 28%"/>
-    <string name="h29" value="Avoid enemy&apos;s attack with success rate 29%"/>
-    <string name="h30" value="Avoid enemy&apos;s attack with success rate 30%"/>
+    <string name="desc" value="With great reflexes, enables one to avoid enemy attacks."/>
+    <string name="h1" value="Avoid enemy attacks with 1% success rate."/>
+    <string name="h2" value="Avoid enemy attacks with 2% success rate."/>
+    <string name="h3" value="Avoid enemy attacks with 3% success rate."/>
+    <string name="h4" value="Avoid enemy attacks with 4% success rate."/>
+    <string name="h5" value="Avoid enemy attacks with 5% success rate."/>
+    <string name="h6" value="Avoid enemy attacks with 6% success rate."/>
+    <string name="h7" value="Avoid enemy attacks with 7% success rate."/>
+    <string name="h8" value="Avoid enemy attacks with 8% success rate."/>
+    <string name="h9" value="Avoid enemy attacks with 9% success rate."/>
+    <string name="h10" value="Avoid enemy attacks with 10% success rate."/>
+    <string name="h11" value="Avoid enemy attacks with 11% success rate."/>
+    <string name="h12" value="Avoid enemy attacks with 12% success rate."/>
+    <string name="h13" value="Avoid enemy attacks with 13% success rate."/>
+    <string name="h14" value="Avoid enemy attacks with 14% success rate."/>
+    <string name="h15" value="Avoid enemy attacks with 15% success rate."/>
+    <string name="h16" value="Avoid enemy attacks with 16% success rate."/>
+    <string name="h17" value="Avoid enemy attacks with 17% success rate."/>
+    <string name="h18" value="Avoid enemy attacks with 18% success rate."/>
+    <string name="h19" value="Avoid enemy attacks with 19% success rate."/>
+    <string name="h20" value="Avoid enemy attacks with 20% success rate."/>
+    <string name="h21" value="Avoid enemy attacks with 21% success rate."/>
+    <string name="h22" value="Avoid enemy attacks with 22% success rate."/>
+    <string name="h23" value="Avoid enemy attacks with 23% success rate."/>
+    <string name="h24" value="Avoid enemy attacks with 24% success rate."/>
+    <string name="h25" value="Avoid enemy attacks with 25% success rate."/>
+    <string name="h26" value="Avoid enemy attacks with 26% success rate."/>
+    <string name="h27" value="Avoid enemy attacks with 27% success rate."/>
+    <string name="h28" value="Avoid enemy attacks with 28% success rate."/>
+    <string name="h29" value="Avoid enemy attacks with 29% success rate."/>
+    <string name="h30" value="Avoid enemy attacks with 30% success rate."/>
   </imgdir>
   <imgdir name="4121003">
     <string name="name" value="Taunt"/>
@@ -7408,37 +7408,37 @@
   </imgdir>
   <imgdir name="4121007">
     <string name="name" value="Triple Throw"/>
-    <string name="desc" value="Attacks one monster by simultaneously throwing 3 stars."/>
-    <string name="h1" value="MP - 11, Damage 102%"/>
-    <string name="h2" value="MP - 11, Damage 104%"/>
-    <string name="h3" value="MP - 11, Damage 106%"/>
-    <string name="h4" value="MP - 12, Damage 108%"/>
-    <string name="h5" value="MP - 12, Damage 110%"/>
-    <string name="h6" value="MP - 12, Damage 112%"/>
-    <string name="h7" value="MP - 13, Damage 114%"/>
-    <string name="h8" value="MP - 13, Damage 116%"/>
-    <string name="h9" value="MP - 13, Damage 118%"/>
-    <string name="h10" value="MP - 14, Damage 120%"/>
-    <string name="h11" value="MP - 14, Damage 122%"/>
-    <string name="h12" value="MP - 14, Damage 124%"/>
-    <string name="h13" value="MP - 15, Damage 126%"/>
-    <string name="h14" value="MP - 15, Damage 128%"/>
-    <string name="h15" value="MP - 15, Damage 130%"/>
-    <string name="h16" value="MP - 16, Damage 132%"/>
-    <string name="h17" value="MP - 16, Damage 134%"/>
-    <string name="h18" value="MP - 16, Damage 136%"/>
-    <string name="h19" value="MP - 17, Damage 138%"/>
-    <string name="h20" value="MP - 17, Damage 140%"/>
-    <string name="h21" value="MP - 17, Damage 141%"/>
-    <string name="h22" value="MP - 18, Damage 142%"/>
-    <string name="h23" value="MP - 18, Damage 143%"/>
-    <string name="h24" value="MP - 18, Damage 144%"/>
-    <string name="h25" value="MP - 19, Damage 145%"/>
-    <string name="h26" value="MP - 19, Damage 146%"/>
-    <string name="h27" value="MP - 19, Damage 147%"/>
-    <string name="h28" value="MP - 20, Damage 148%"/>
-    <string name="h29" value="MP - 20, Damage 149%"/>
-    <string name="h30" value="MP - 20, Damage 150%"/>
+    <string name="desc" value="Attacks one enemy by simultaneously throwing 3 stars."/>
+    <string name="h1" value="MP -11. Damage 102%, throws 3 stars."/>
+    <string name="h2" value="MP -11. Damage 104%, throws 3 stars."/>
+    <string name="h3" value="MP -11. Damage 106%, throws 3 stars."/>
+    <string name="h4" value="MP -12. Damage 108%, throws 3 stars."/>
+    <string name="h5" value="MP -12. Damage 110%, throws 3 stars."/>
+    <string name="h6" value="MP -12. Damage 112%, throws 3 stars."/>
+    <string name="h7" value="MP -13. Damage 114%, throws 3 stars."/>
+    <string name="h8" value="MP -13. Damage 116%, throws 3 stars."/>
+    <string name="h9" value="MP -13. Damage 118%, throws 3 stars."/>
+    <string name="h10" value="MP -14. Damage 120%, throws 3 stars."/>
+    <string name="h11" value="MP -14. Damage 122%, throws 3 stars."/>
+    <string name="h12" value="MP -14. Damage 124%, throws 3 stars."/>
+    <string name="h13" value="MP -15. Damage 126%, throws 3 stars."/>
+    <string name="h14" value="MP -15. Damage 128%, throws 3 stars."/>
+    <string name="h15" value="MP -15. Damage 130%, throws 3 stars."/>
+    <string name="h16" value="MP -16. Damage 132%, throws 3 stars."/>
+    <string name="h17" value="MP -16. Damage 134%, throws 3 stars."/>
+    <string name="h18" value="MP -16. Damage 136%, throws 3 stars."/>
+    <string name="h19" value="MP -17. Damage 138%, throws 3 stars."/>
+    <string name="h20" value="MP -17. Damage 140%, throws 3 stars."/>
+    <string name="h21" value="MP -17. Damage 141%, throws 3 stars."/>
+    <string name="h22" value="MP -18. Damage 142%, throws 3 stars."/>
+    <string name="h23" value="MP -18. Damage 143%, throws 3 stars."/>
+    <string name="h24" value="MP -18. Damage 144%, throws 3 stars."/>
+    <string name="h25" value="MP -19. Damage 145%, throws 3 stars."/>
+    <string name="h26" value="MP -19. Damage 146%, throws 3 stars."/>
+    <string name="h27" value="MP -19. Damage 147%, throws 3 stars."/>
+    <string name="h28" value="MP -20. Damage 148%, throws 3 stars."/>
+    <string name="h29" value="MP -20. Damage 149%, throws 3 stars."/>
+    <string name="h30" value="MP -20. Damage 150%, throws 3 stars."/>
   </imgdir>
   <imgdir name="4121008">
     <string name="name" value="Ninja Storm"/>
@@ -7476,19 +7476,19 @@
   </imgdir>
   <imgdir name="4121009">
     <string name="name" value="Hero&apos;s Will"/>
-    <string name="desc" value="Enables one to shrug off abnormal conditions. The higher the skill level, the more types of abnormal conditions one can nullify."/>
-    <string name="h1" value="MP - 30 escape from abnormal condition, Terms between skills 600secs"/>
-    <string name="h2" value="MP - 30 escape from abnormal condition, Terms between skills 540secs"/>
-    <string name="h3" value="MP - 30 escape from abnormal condition, Terms between skills 480secs"/>
-    <string name="h4" value="MP - 30 escape from abnormal condition, Terms between skills 420secs"/>
-    <string name="h5" value="MP - 30 escape from abnormal condition, Terms between skills 360secs"/>
+    <string name="desc" value="Removes abnormal conditions such as seduce, zombify, and confusion. The higher the skill level, the shorter the cooldown."/>
+    <string name="h1" value="MP - 30. Escape from abnormal conditions. Cooldown 10 min."/>
+    <string name="h2" value="MP - 30. Escape from abnormal conditions. Cooldown 9 min."/>
+    <string name="h3" value="MP - 30. Escape from abnormal conditions. Cooldown 8 min."/>
+    <string name="h4" value="MP - 30. Escape from abnormal conditions. Cooldown 7 min."/>
+    <string name="h5" value="MP - 30. Escape from abnormal conditions. Cooldown 6 min."/>
   </imgdir>
   <imgdir name="422">
     <string name="bookName" value="Secret Skills of Shadower"/>
   </imgdir>
   <imgdir name="4221000">
     <string name="name" value="Maple Warrior"/>
-    <string name="desc" value="Increase all players&apos; stats within a party by certain percentage "/>
+    <string name="desc" value="Increases all party members&apos; stats by a certain percentage for a set time."/>
     <string name="h1" value="MP - 10 ,  For 30Secs, all stats + 1% "/>
     <string name="h2" value="MP - 10 ,  For 60Secs, all stats + 1% "/>
     <string name="h3" value="MP - 10 ,  For 90Secs, all stats + 2% "/>
@@ -7522,37 +7522,37 @@
   </imgdir>
   <imgdir name="4221001">
     <string name="name" value="Assassinate"/>
-    <string name="desc" value="Strikes an unsuspecting monster at its vital spots 4 times. The last strike can be lethal with a given success rate.  Only works with Dark Sight enabled."/>
-    <string name="h1" value="MP - 21, Attack 34%, for 6secs, accumulative damage, Critical Damage 105%, for success rate 32%"/>
-    <string name="h2" value="MP - 22, Attack 38%, for 6secs, accumulative damage, Critical Damage 110%, for success rate 34%"/>
-    <string name="h3" value="MP - 23, Attack 42%, for 6secs, accumulative damage, Critical Damage 115%, for success rate 36%"/>
-    <string name="h4" value="MP - 24, Attack 46%, for 6secs, accumulative damage, Critical Damage 120%, for success rate 38%"/>
-    <string name="h5" value="MP - 25, Attack 50%, for 6secs, accumulative damage, Critical Damage 125%, for success rate 40%"/>
-    <string name="h6" value="MP - 26, Attack 54%, for 6secs, accumulative damage, Critical Damage 130%, for success rate 42%"/>
-    <string name="h7" value="MP - 27, Attack 58%, for 6secs, accumulative damage, Critical Damage 135%, for success rate 44%"/>
-    <string name="h8" value="MP - 28, Attack 62%, for 6secs, accumulative damage, Critical Damage 140%, for success rate 46%"/>
-    <string name="h9" value="MP - 29, Attack 66%, for 6secs, accumulative damage, Critical Damage 145%, for success rate 48%"/>
-    <string name="h10" value="MP - 30, Attack 70%, for 6secs, accumulative damage, Critical Damage 150%, for success rate 50%"/>
-    <string name="h11" value="MP - 31, Attack 73%, for 9secs, accumulative damage, Critical Damage 155%, for success rate 52%"/>
-    <string name="h12" value="MP - 32, Attack 76%, for 9secs, accumulative damage, Critical Damage 160%, for success rate 54%"/>
-    <string name="h13" value="MP - 33, Attack 79%, for 9secs, accumulative damage, Critical Damage 165%, for success rate 56%"/>
-    <string name="h14" value="MP - 34, Attack 82%, for 9secs, accumulative damage, Critical Damage 170%, for success rate 58%"/>
-    <string name="h15" value="MP - 35, Attack 85%, for 9secs, accumulative damage, Critical Damage 175%, for success rate 60%"/>
-    <string name="h16" value="MP - 36, Attack 88%, for 9secs, accumulative damage, Critical Damage 180%, for success rate 62%"/>
-    <string name="h17" value="MP - 37, Attack 91%, for 9secs, accumulative damage, Critical Damage 185%, for success rate 64%"/>
-    <string name="h18" value="MP - 38, Attack 94%, for 9secs, accumulative damage, Critical Damage 190%, for success rate 66%"/>
-    <string name="h19" value="MP - 39, Attack 97%, for 9secs, accumulative damage, Critical Damage 195%, for success rate 68%"/>
-    <string name="h20" value="MP - 40, Attack 100%, for 9secs, accumulative damage, Critical Damage 200%, for success rate 70%"/>
-    <string name="h21" value="MP - 41, Attack 102%, for 12secs, accumulative damage, Critical Damage 205%, for success rate 72%"/>
-    <string name="h22" value="MP - 42, Attack 104%, for 12secs, accumulative damage, Critical Damage 210%, for success rate 74%"/>
-    <string name="h23" value="MP - 43, Attack 106%, for 12secs, accumulative damage, Critical Damage 215%, for success rate 76%"/>
-    <string name="h24" value="MP - 44, Attack 108%, for 12secs, accumulative damage, Critical Damage 220%, for success rate 78%"/>
-    <string name="h25" value="MP - 45, Attack 110%, for 12secs, accumulative damage, Critical Damage 225%, for success rate 80%"/>
-    <string name="h26" value="MP - 44, Attack 112%, for 12secs, accumulative damage, Critical Damage 230%, for success rate 82%"/>
-    <string name="h27" value="MP - 43, Attack 114%, for 12secs, accumulative damage, Critical Damage 235%, for success rate 84%"/>
-    <string name="h28" value="MP - 42, Attack 116%, for 12secs, accumulative damage, Critical Damage 240%, for success rate 86%"/>
-    <string name="h29" value="MP - 41, Attack 118%, for 12secs, accumulative damage, Critical Damage 245%, for success rate 88%"/>
-    <string name="h30" value="MP - 40, Attack 120%, for 12secs, accumulative damage, Critical Damage 250%, for success rate 90%"/>
+    <string name="desc" value="Strikes an unsuspecting enemy from Dark Sight. Attacks 3 times, then the final strike can deal critical damage with a given success rate."/>
+    <string name="h1" value="MP - 21. Damage 170%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 105% with 32% success rate."/>
+    <string name="h2" value="MP - 22. Damage 190%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 110% with 34% success rate."/>
+    <string name="h3" value="MP - 23. Damage 210%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 115% with 36% success rate."/>
+    <string name="h4" value="MP - 24. Damage 230%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 120% with 38% success rate."/>
+    <string name="h5" value="MP - 25. Damage 250%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 125% with 40% success rate."/>
+    <string name="h6" value="MP - 26. Damage 270%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 130% with 42% success rate."/>
+    <string name="h7" value="MP - 27. Damage 290%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 135% with 44% success rate."/>
+    <string name="h8" value="MP - 28. Damage 310%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 140% with 46% success rate."/>
+    <string name="h9" value="MP - 29. Damage 330%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 145% with 48% success rate."/>
+    <string name="h10" value="MP - 30. Damage 350%, attacks 3 times. Accumulates damage for 6 sec. Final strike critical damage 150% with 50% success rate."/>
+    <string name="h11" value="MP - 31. Damage 365%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 155% with 52% success rate."/>
+    <string name="h12" value="MP - 32. Damage 380%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 160% with 54% success rate."/>
+    <string name="h13" value="MP - 33. Damage 395%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 165% with 56% success rate."/>
+    <string name="h14" value="MP - 34. Damage 410%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 170% with 58% success rate."/>
+    <string name="h15" value="MP - 35. Damage 425%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 175% with 60% success rate."/>
+    <string name="h16" value="MP - 36. Damage 440%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 180% with 62% success rate."/>
+    <string name="h17" value="MP - 37. Damage 455%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 185% with 64% success rate."/>
+    <string name="h18" value="MP - 38. Damage 470%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 190% with 66% success rate."/>
+    <string name="h19" value="MP - 39. Damage 485%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 195% with 68% success rate."/>
+    <string name="h20" value="MP - 40. Damage 500%, attacks 3 times. Accumulates damage for 9 sec. Final strike critical damage 200% with 70% success rate."/>
+    <string name="h21" value="MP - 41. Damage 510%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 205% with 72% success rate."/>
+    <string name="h22" value="MP - 42. Damage 520%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 210% with 74% success rate."/>
+    <string name="h23" value="MP - 43. Damage 530%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 215% with 76% success rate."/>
+    <string name="h24" value="MP - 44. Damage 540%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 220% with 78% success rate."/>
+    <string name="h25" value="MP - 45. Damage 550%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 225% with 80% success rate."/>
+    <string name="h26" value="MP - 44. Damage 560%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 230% with 82% success rate."/>
+    <string name="h27" value="MP - 43. Damage 570%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 235% with 84% success rate."/>
+    <string name="h28" value="MP - 42. Damage 580%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 240% with 86% success rate."/>
+    <string name="h29" value="MP - 41. Damage 590%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 245% with 88% success rate."/>
+    <string name="h30" value="MP - 40. Damage 600%, attacks 3 times. Accumulates damage for 12 sec. Final strike critical damage 250% with 90% success rate."/>
   </imgdir>
   <imgdir name="4220002">
     <string name="name" value="Shadow Shifter"/>
@@ -7760,12 +7760,12 @@
   </imgdir>
   <imgdir name="4221008">
     <string name="name" value="Hero&apos;s Will"/>
-    <string name="desc" value="Enables one to shrug off abnormal conditions. The higher the skill level, the more types of abnormal conditions one can nullify."/>
-    <string name="h1" value="MP - 30 escape from abnormal condition, Terms between skills 600secs"/>
-    <string name="h2" value="MP - 30 escape from abnormal condition, Terms between skills 540secs"/>
-    <string name="h3" value="MP - 30 escape from abnormal condition, Terms between skills 480secs"/>
-    <string name="h4" value="MP - 30 escape from abnormal condition, Terms between skills 420secs"/>
-    <string name="h5" value="MP - 30 escape from abnormal condition, Terms between skills 360secs"/>
+    <string name="desc" value="Removes abnormal conditions such as seduce, zombify, and confusion. The higher the skill level, the shorter the cooldown."/>
+    <string name="h1" value="MP - 30. Escape from abnormal conditions. Cooldown 10 min."/>
+    <string name="h2" value="MP - 30. Escape from abnormal conditions. Cooldown 9 min."/>
+    <string name="h3" value="MP - 30. Escape from abnormal conditions. Cooldown 8 min."/>
+    <string name="h4" value="MP - 30. Escape from abnormal conditions. Cooldown 7 min."/>
+    <string name="h5" value="MP - 30. Escape from abnormal conditions. Cooldown 6 min."/>
   </imgdir>
   <imgdir name="0001006">
     <string name="name" value="Jump Down"/>
@@ -11566,7 +11566,7 @@
   </imgdir>
   <imgdir name="10001005">
     <string name="name" value="Echo of Hero"/>
-    <string name="desc" value="[Master Lever : 1]\n Increase weapon attack and magic attack on all players around. \n#cTerms between skills : 2hours#"/>
+    <string name="desc" value="[Master Lever : 1]\n Increase weapon attack and magic attack on all players around. \n#cTerms between skills : 300 seconds#"/>
     <string name="h1" value="Consumes MP 30 and increases Weapon &amp; Magic Attack by 4% for 40Minutes."/>
   </imgdir>
   <imgdir name="10001006">
@@ -11749,7 +11749,7 @@
   </imgdir>
   <imgdir name="20001005">
     <string name="name" value="Echo of Hero"/>
-    <string name="desc" value="[Master Level : 1]\n Increase weapon attack and magic attack on all players around. \n#cTerms between skills : 2hours#"/>
+    <string name="desc" value="[Master Level : 1]\n Increase weapon attack and magic attack on all players around. \n#cTerms between skills : 300 seconds#"/>
     <string name="h1" value="MP -30 Weapon attack +2%, Magic attack +2%  for 40Minutes"/>
   </imgdir>
   <imgdir name="20001006">

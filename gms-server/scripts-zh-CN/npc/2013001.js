@@ -155,7 +155,7 @@ function action(mode, type, selection) {
                     }
                     if (total != 3) {
                         const GameConfig = Java.type('org.gms.config.GameConfig');
-                        if(GameConfig.getServerBoolean("use_enable_solo_expeditions") && eim.getPlayerCount() == 1){
+                        if(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1){
                             cm.getMap().getReactorByName("stone4").forceHitReactor(1);
                             eim.giveEventPlayersExp(3500);
                             clearStage(4, eim);
