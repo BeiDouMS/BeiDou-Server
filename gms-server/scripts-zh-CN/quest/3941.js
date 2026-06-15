@@ -45,7 +45,7 @@ function start(mode, type, selection) {
 
         if (status == 0) {
             if (!isTigunMorphed(qm.getPlayer())) {
-                qm.sendNext("这是什么？我不能简单地把女王的丝绸交给任何人，声称他们会立刻交给女王。离开我的视线。");
+                qm.sendNext("这是什么？我不能随便把王妃的丝绸交给一个自称要立刻送去的人。快离开，别挡着我。");
                 status = 1;
                 return;
             }
@@ -57,7 +57,7 @@ function start(mode, type, selection) {
                 return;
             }
 
-            qm.sendNext("女王现在就想要她的丝绸？好的，我这就拿出来。等一会儿。");
+            qm.sendNext("王妃现在就要她的丝绸？好的，我这就拿出来。等一会儿。");
             qm.forceStartQuest();
         } else if (status == 2) {
             qm.dispose();
@@ -90,7 +90,7 @@ function end(mode, type, selection) {
             if (qm.canHold(4031571,1)) {
                 qm.gainItem(4031571);
 
-                qm.sendNext("拿去吧。请尽快交给女王，提古，如果事情延误她会很生气的。");
+                qm.sendNext("拿去吧。请尽快交给王妃，提干。事情要是耽误了，她会很生气的。");
                 qm.forceCompleteQuest();
             } else {
                 qm.sendNext("嘿，你的背包空间不足。我会帮你留着，你整理好背包再来取...");
