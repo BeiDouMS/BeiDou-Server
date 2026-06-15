@@ -26,7 +26,7 @@
 
 var status;
 var ticketId = 5451000;
-var mapName = ["Henesys", "Ellinia", "Perion", "Kerning City", "Sleepywood", "Mushroom Shrine", "Showa Spa (M)", "Showa Spa (F)", "New Leaf City", "Nautilus"];
+var mapName = ["射手村", "魔法密林", "勇士部落", "废弃都市", "林中之城", "蘑菇神社", "昭和澡堂（男）", "昭和澡堂（女）", "新叶城", "诺特勒斯号"];
 var curMapName = "";
 
 function start() {

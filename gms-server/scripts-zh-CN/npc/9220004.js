@@ -23,7 +23,7 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendSimple("#b<突袭任务：快乐村>#k\r\n突袭就是许多人联合起来试图击败极其强大的生物。这里也不例外。每个人都可以参与击败出现的生物。你会做什么？\r\n#b\r\n#L0#召唤雪人孩子。\r\n#L1#召唤迷失的鲁道夫。\r\n#L2#什么都不做，只是放松一下。#k");
+            cm.sendSimple("#b<突袭任务：幸福村>#k\r\n突袭就是许多人联合起来试图击败极其强大的生物。这里也不例外。每个人都可以参与击败出现的生物。你会做什么？\r\n#b\r\n#L0#召唤雪人孩子。\r\n#L1#召唤迷失的鲁道夫。\r\n#L2#什么都不做，只是放松一下。#k");
         } else if (status == 1) {
             if (selection == 0) {
                 if (cm.getMap().getMonsters().size() > 1) {  //reactor as a monster? wtf

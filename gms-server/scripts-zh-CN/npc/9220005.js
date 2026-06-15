@@ -23,7 +23,7 @@ function action(mode, type, selection) {
             if (cm.getChar().getMapId() == 209000000) {
                 cm.sendYesNo("你想前往 #b雪花洒#k 的地方吗？");
             } else if (cm.getChar().getMapId() == 209080000) {
-                cm.sendYesNo("你希望回到快乐村吗？");
+                cm.sendYesNo("你希望回到幸福村吗？");
             } else {
                 cm.sendOk("你还好吗？");
                 cm.dispose();
