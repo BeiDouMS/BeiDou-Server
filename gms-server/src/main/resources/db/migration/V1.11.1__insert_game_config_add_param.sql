@@ -1,6 +1,6 @@
 -- 是否开启范围宠吸功能
 INSERT INTO `game_config`(`config_type`, `config_sub_type`, `config_clazz`, `config_code`, `config_value`, `config_desc`, `update_time`)
-SELECT 'server', 'Game Mechanics', 'java.lang.Boolean', 'pet_itemvac', 'true', 'pet_itemvac', '2026-06-01 14:00:00'
+SELECT 'server', 'Game Mechanics', 'java.lang.Boolean', 'pet_itemvac', 'false', 'pet_itemvac', '2026-06-01 14:00:00'
 WHERE NOT EXISTS (
     SELECT 1 FROM `game_config` WHERE `config_code` = 'pet_itemvac'
 );
