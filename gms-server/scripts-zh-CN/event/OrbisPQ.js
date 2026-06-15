@@ -194,9 +194,14 @@ function respawnStages(eim) {}
 
 function playerEntry(eim, player) {
     var map = eim.getMapInstance(entryMap);
+    if (eim.getProperty("stage0NpcSpawned") != "1") {
+        const Point = Java.type('java.awt.Point');
+        eim.spawnNpc(2013001, new Point(377, 66), map);
+        eim.setProperty("stage0NpcSpawned", "1");
+    }
     player.changeMap(map, map.getPortal(0));
 
-    var texttt = "你好，我是女神的内侍官#e#b帮佣易克#n#k。\r\n别紧张，你现在还看不到我。\r\n当女神石化时，我也同时失去了力量，所以现在你只能看到我微弱的闪光。\r\n如果你能收集到魔法云的力量，我就能恢复形体变回原样。\r\n请帮我收集 #b#e20#n#k 朵 #b#e#v4001063##t4001063##k#n 带回来。";
+    var texttt = "你好，我是女神的内侍官#e#b帮佣易克#n#k。\r\n别紧张，第一阶段的魔法云收集已经简化。\r\n请让#b队长#k直接和我对话，我会带大家继续前进。";
     player.getAbstractPlayerInteraction().npcTalk(2013001, texttt);
 }
 

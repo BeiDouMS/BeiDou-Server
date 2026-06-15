@@ -37,12 +37,16 @@ function action(mode, type, selection) {
         status++;
         if (cm.getPlayer().getMapId() == 920010100) { //Center tower
             if (status == 0) {
-                cm.sendYesNo("我已经解除了阻止通往塔楼监狱储藏室的咒语。你可能会在那里找到一些好东西……或者，你可能想现在离开。你准备好离开了吗？");
+                cm.sendNext("谢谢你救出了我，雅典娜。请接受这份奖励，愿女神的祝福与你同在。");
             } else if (status == 1) {
-                cm.warp(920011300, 0);
-                cm.dispose();
+                if (cm.getEventInstance().giveEventReward(cm.getPlayer())) {
+                    cm.warp(200080101, 0);
+                    cm.dispose();
+                } else {
+                    cm.sendOk("请先在背包中腾出空间。");
+                    cm.dispose();
+                }
             }
-
         } else if (cm.getPlayer().getMapId() == 920011100) {
             if (status == 0) {
                 cm.sendYesNo("所以，你准备好退出了吗？");
