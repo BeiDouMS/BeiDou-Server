@@ -87,7 +87,7 @@ function action(mode, type, selection) {
                 cm.sendOk("#e#b<Party Quest: Forest of Poison Haze>#k#n\r\nIn this PQ, your mission is to progressively make your way through the woods, taking on all baddies in your path, solving many puzzles you encounter and rallying yourselves to take the best of teamwork to overcome time limits and powerful creatures. Clearing the final boss, your team have a chance to obtain a marble that, #bwhen dropped by the fountain at the exit map#k, will guarantee the team extra prizes. Good luck.");
                 cm.dispose();
             } else {
-                cm.sendSimple("So, what prize do you want to obtain?\r\n#b#L0#Give me Altaire Earrings.\r\n#L1#Give me Glittering Altaire Earrings.\r\n#L2#Give me Brilliant Altaire Earrings");
+                cm.sendSimple("So, what prize do you want to obtain?\r\n#b#L0##t1032060#\r\n#L1##t1032061#");
             }
         } else if (status == 2) {
             if (selection == 0) {
@@ -96,7 +96,7 @@ function action(mode, type, selection) {
                     cm.gainItem(4001198, -10);
                     cm.dispose();
                 } else {
-                    cm.sendOk("You either have Altair Earrings already or you do not have 10 Altair Fragments.");
+                    cm.sendOk("You either have #t1032060# already or you do not have 10 #t4001198#.");
                     cm.dispose();
                 }
             } else if (selection == 1) {
@@ -106,17 +106,7 @@ function action(mode, type, selection) {
                     cm.gainItem(4001198, -10);
                     cm.dispose();
                 } else {
-                    cm.sendOk("You either don't have Altair Earrings already or you do not have 10 Altair Fragments.");
-                    cm.dispose();
-                }
-            } else if (selection == 2) {
-                if (cm.haveItem(1032061) && !cm.haveItem(1032072) && cm.haveItem(4001198, 10)) {
-                    cm.gainItem(1032061, -1);
-                    cm.gainItem(1032072, 1);    // thanks yuxaij for noticing unexpected itemid here
-                    cm.gainItem(4001198, -10);
-                    cm.dispose();
-                } else {
-                    cm.sendOk("You either don't have Glittering Altair Earrings already or you do not have 10 Altair Fragments.");
+                    cm.sendOk("You either don't have #t1032060# already or you do not have 10 #t4001198#.");
                     cm.dispose();
                 }
             }

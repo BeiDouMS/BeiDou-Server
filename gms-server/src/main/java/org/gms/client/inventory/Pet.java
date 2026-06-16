@@ -227,7 +227,7 @@ public class Pet extends Item {
             enjoyed = false;
         }
 
-        owner.getMap().broadcastMessage(PacketCreator.petFoodResponse(owner.getId(), slot, enjoyed, false));
+        owner.getMap().broadcastMessage(PacketCreator.petFoodResponse(owner.getId(), slot, enjoyed, owner.hasPetChatballoon(slot)));
         saveToDb();
 
         Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());

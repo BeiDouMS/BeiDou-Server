@@ -67,6 +67,10 @@ function clearStage(stage, eim, curMap) {
 }
 
 function rectangleStages(eim, property, areaCombos, areaRects) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1){
+        return true;
+    }
     var c = eim.getProperty(property);
     if (c == null) {
         c = Math.floor(Math.random() * areaCombos.length);
@@ -134,6 +138,12 @@ function action(mode, type, selection) {
                     cm.sendNext("Incredible! You cleared all the stages to get to this point. Here's a small prize for your job well done. Before you accept it, however, please make sure your use and etc. inventories have empty slots available.");
                 }
             } else if (curMap == 103000800) {   // stage 1
+                const GameConfig = Java.type('org.gms.config.GameConfig');
+                if (eim.getPlayerCount() == 1 && !GameConfig.getServerBoolean("use_enable_stage_skip")) {
+                    cm.sendOk("The mechanisms here require teamwork to solve. It will be difficult to face alone. Find reliable companions and come back to challenge it together!");
+                    cm.dispose();
+                    return;
+                }
                 if (cm.isEventLeader()) {
                     var numpasses = eim.getPlayerCount() - 1;     // minus leader
 

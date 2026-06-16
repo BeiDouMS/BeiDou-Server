@@ -90,7 +90,7 @@ public final class PacketProcessor {
     }
 
     public PacketHandler getHandler(short packetId) {
-        if (packetId > handlers.length) {
+        if (packetId < 0 || packetId >= handlers.length) {
             return null;
         }
         PacketHandler handler = handlers[packetId];

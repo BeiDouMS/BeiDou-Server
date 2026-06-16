@@ -19,7 +19,7 @@ function action(mode, type, selection) {
         if (!inHuntingGround) {
             if (cm.isQuestStarted(quest)) {
                 if (!cm.getPlayer().haveItemEquipped(1003036)) {
-                    cm.sendOk("前方的道路有一股奇怪的气味... 进入之前装备 #rgas mask#k。");
+                    cm.sendOk("前方的道路有一股奇怪的气味……进入之前请先装备#r狂野之眼的防毒面具#k。");
                     cm.dispose();
                     return;
                 }
