@@ -27,6 +27,19 @@ var answers;
 var correctAnswer;
 var questionNum;
 
+function startFinalQuestIfNeeded() {
+    if (cm.isQuestStarted(8010)) {
+        cm.completeQuest(8010);
+        cm.startQuest(8012);
+        return true;
+    }
+    if (cm.isQuestCompleted(8010) && !cm.isQuestStarted(8012) && !cm.isQuestCompleted(8012)) {
+        cm.startQuest(8012);
+        return true;
+    }
+    return cm.isQuestStarted(8012);
+}
+
 function start() {
     status = -1;
     questions = ["火狸不会掉落以下哪种物品？", "哪位 NPC 负责在废弃都市和古代神社之间接送旅客？", "古代神社出售的哪种食物可以提升攻击力？", "以下哪种物品不是小混混掉落的？", "以下哪种物品并不存在？", "昭和村的蔬菜店老板叫什么名字？", "以下哪种物品确实存在？", "古代神社一带最强的头目叫什么？", "以下哪件装备的职业或等级说明不匹配？", "以下哪种拉面不是古代神社机器人商店出售的？", "以下哪位 NPC 不在昭和电影院前？"]
@@ -45,7 +58,7 @@ function action(mode, type, selection) {
             status--;
         }
         if (status == 0 && mode == 1) {
-            if (cm.isQuestStarted(8012) && !cm.haveItem(4031064)) { //quest in progress
+            if (startFinalQuestIfNeeded() && !cm.haveItem(4031064)) { //quest in progress
                 cm.sendYesNo("你都找到了吗？你打算尝试回答我所有的问题吗？");
             } else { //quest not started or already completed
                 //cm.sendOk("喵喵喵！");//lol what's this?
