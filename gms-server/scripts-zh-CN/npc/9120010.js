@@ -74,13 +74,13 @@ function action(mode, type, selection) {
             prizeItem = reward[itemSet][0];
             prizeQuantity = reward[itemSet][1];
             if (!cm.canHold(prizeItem)) {
-                cm.sendNext("如果你的装备、使用或其他物品栏已满，我无法给你奖励。请立即去看一下。");
+                cm.sendNext("如果你的装备、消耗或其他物品栏已满，我就无法给你奖励。请先整理一下物品栏。");
             } else if (cm.hasItem(requiredItem, 100)) {   // check they have >= 100 in Inventory
                 cm.gainItem(requiredItem, -100);
                 cm.gainItem(prizeItem, prizeQuantity);
-                cm.sendOk("嗯...如果不是这个小小的划痕...唉。恐怕我只能认定这是一个标准品质的物品。好吧，这是给你的#t" + prizeItem + "#。");
+                cm.sendOk("嗯……虽然品质只能算普通，不过这份奖励归你了。\r\n#t" + prizeItem + "#");
             } else {
-                cm.sendOk("嘿，你以为你在干什么？去欺骗那些不懂得在说什么的人。不要来骗我！");
+                cm.sendOk("数量不够哦。请带来 100 个相同的材料再来找我。");
             }
             cm.dispose();
         }
@@ -88,7 +88,7 @@ function action(mode, type, selection) {
 }
 
 function makeChoices(a) {
-    var result = "The items I'm looking for are 1,2,3 ... phew, too many to\r\nmention. Anyhow, if you gather up 100 of the same items,\r\nthen i may trade it with something similiar. What? You may\r\nnot know this, but i keep my end of the promise, so you\r\nneed not worry. Now, shall we trade?\r\n";
+    var result = "我正在收集一些特别的材料。只要你带来 100 个相同的材料，我就可以和你交换一份奖励。怎么样，要交换吗？\r\n";
     for (var x = 0; x < a.length; x++) {
         result += " #L" + x + "##v" + a[x] + "##t" + a[x] + "##l\r\n";
     }
