@@ -84,6 +84,9 @@ public final class UseItemHandler extends AbstractPacketHandler {
                     }
 
                     remove(c, slot);
+                } else if (itemId == 2030009 || itemId == 2030010) {
+                    c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("UseItemHandler.message2")));
+                    c.sendPacket(PacketCreator.enableActions());
                 }
                 return;
             } else if (ItemConstants.isAntibanishScroll(itemId)) {
