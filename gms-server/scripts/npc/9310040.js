@@ -6,6 +6,9 @@ var Quest = Java.type('org.gms.server.quest.Quest');
 var QUEST_FIND_SENIOR_1 = 8538;
 var QUEST_FIND_SENIOR_2 = 8539;
 
+var ITEM_LETTER_TO_SENIOR = 4031786;
+var ITEM_LETTER_FROM_SENIOR = 4031787;
+
 function start() {
     status = -1;
     flow = null;
@@ -36,6 +39,7 @@ function action(mode, type, selection) {
 
     if (status == 0) {
         if (cm.isQuestStarted(QUEST_FIND_SENIOR_1) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_1) &&
+            cm.haveItem(ITEM_LETTER_TO_SENIOR, 1) &&
             Quest.getInstance(QUEST_FIND_SENIOR_1).canComplete(player, npcId)) {
             flow = "complete8538";
             cm.sendNext("Amitabha. Greetings, traveler. What brings you to seek me out?");
@@ -70,6 +74,7 @@ function action(mode, type, selection) {
         if (flow == "complete8538") {
             Quest.getInstance(QUEST_FIND_SENIOR_1).complete(player, npcId);
             if (cm.isQuestCompleted(QUEST_FIND_SENIOR_1)) {
+                cm.removeItem(ITEM_LETTER_TO_SENIOR, 1);
                 cm.sendOk("Thank you very much. I've been out so long that my junior must have been quite worried. Come find me again later.");
             } else {
                 cm.sendOk("Unable to complete the quest at this time. (Please ensure you have the required item and sufficient inventory space.)");
@@ -81,6 +86,7 @@ function action(mode, type, selection) {
         if (flow == "start8539") {
             Quest.getInstance(QUEST_FIND_SENIOR_2).start(player, npcId);
             if (cm.isQuestStarted(QUEST_FIND_SENIOR_2)) {
+                cm.gainItem(ITEM_LETTER_FROM_SENIOR, 1);
                 cm.sendOk("Thank you kindly.");
             } else {
                 cm.sendOk("Unable to start the quest at this time. (Please check level/job requirements and ensure you have inventory space.)");

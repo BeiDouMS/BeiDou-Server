@@ -6,6 +6,9 @@ var Quest = Java.type('org.gms.server.quest.Quest');
 var QUEST_FIND_SENIOR_1 = 8538;
 var QUEST_FIND_SENIOR_2 = 8539;
 
+var ITEM_LETTER_TO_SENIOR = 4031786;
+var ITEM_LETTER_FROM_SENIOR = 4031787;
+
 function start() {
     status = -1;
     flow = null;
@@ -36,6 +39,7 @@ function action(mode, type, selection) {
 
     if (status == 0) {
         if (cm.isQuestStarted(QUEST_FIND_SENIOR_2) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_2) &&
+            cm.haveItem(ITEM_LETTER_FROM_SENIOR, 1) &&
             Quest.getInstance(QUEST_FIND_SENIOR_2).canComplete(player, npcId)) {
             flow = "complete8539";
             cm.sendNext("啊，师兄的信。原来师兄正在精修禅宗，多谢施主带来师兄的音信。小僧无以为报，些许物件，还请施主笑纳。");
@@ -74,7 +78,10 @@ function action(mode, type, selection) {
 
         if (flow == "complete8539") {
             Quest.getInstance(QUEST_FIND_SENIOR_2).complete(player, npcId);
-            if (!cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
+            if (cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
+                cm.removeItem(ITEM_LETTER_FROM_SENIOR, 1);
+                cm.sendOk("小僧无以为报，些许物件，还请施主笑纳。");
+            } else {
                 cm.sendOk("似乎暂时无法完成任务（请确认携带了师兄的信，并确保背包有空位）。");
             }
             cm.dispose();
@@ -89,6 +96,7 @@ function action(mode, type, selection) {
         if (flow == "start8538") {
             Quest.getInstance(QUEST_FIND_SENIOR_1).start(player, npcId);
             if (cm.isQuestStarted(QUEST_FIND_SENIOR_1)) {
+                cm.gainItem(ITEM_LETTER_TO_SENIOR, 1);
                 cm.sendOk("小僧的师兄法号#b#p9310040##k，还请施主代为寻找。");
             } else {
                 cm.sendOk("似乎暂时无法接取任务（请确认等级/职业条件，并确保背包有空位）。");
