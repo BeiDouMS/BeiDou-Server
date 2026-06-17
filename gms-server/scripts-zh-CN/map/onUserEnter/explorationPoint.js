@@ -30,13 +30,13 @@ function start(ms) {
     } else if (ms.getPlayer().getMapId() >= 105040300 && ms.getPlayer().getMapId() <= 105090900) {
         ms.explorerQuest(29014, "林中之城探险家");//Sleepywood Explorer
     } else if (ms.getPlayer().getMapId() >= 200000000 && ms.getPlayer().getMapId() <= 211041800) {
-        ms.explorerQuest(29006, "冰峰雪域山脉探险家");//El Nath Mts. Explorer
+        ms.explorerQuest(29006, "冰峰雪域探险家");//El Nath Mts. Explorer
     } else if (ms.getPlayer().getMapId() >= 220000000 && ms.getPlayer().getMapId() <= 222020000) {
         ms.explorerQuest(29007, "时间静止之湖探险家");//Ludus Lake Explorer
     } else if (ms.getPlayer().getMapId() >= 230000000 && ms.getPlayer().getMapId() <= 230040401) {
         ms.explorerQuest(29008, "海底探险家");//Undersea Explorer
     } else if (ms.getPlayer().getMapId() >= 250000000 && ms.getPlayer().getMapId() <= 251010500) {
-        ms.explorerQuest(29009, "武陵探险家");//Mu Lung Explorer
+        ms.explorerQuest(29009, "武陵道场探险家");//Mu Lung Explorer
     } else if (ms.getPlayer().getMapId() >= 260000000 && ms.getPlayer().getMapId() <= 261030000) {
         ms.explorerQuest(29010, "尼哈沙漠探险家");//Nihal Desert Explorer
     } else if (ms.getPlayer().getMapId() >= 240000000 && ms.getPlayer().getMapId() <= 240050000) {
