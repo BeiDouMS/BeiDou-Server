@@ -226,14 +226,15 @@ public class ExportPatch {
     /**
      * 调用 {@code git diff fromCommit..HEAD -- <file>} 并把输出写到 {@code outFile}。
      * <p>
-     * 使用 {@code --binary} 保证二进制文件也可还原；{@code -U10} 增加上下文行数便于人工对照。
+     * 使用 {@code --binary} 保证二进制文件也可还原；{@code -U30} 增加上下文行数，
+     * 确保 imgdir 嵌套开标签能被包含进来，便于 patcher 恢复完整节点路径。
      * </p>
      */
     private static void writeFileDiff(String fromCommit, String file, Path gitDir, Path outFile) throws IOException {
         Process process = new ProcessBuilder(
                 "git", "-c", "core.quotePath=false", "diff",
                 "--binary",
-                "-U10",
+                "-U30",
                 fromCommit + "..HEAD",
                 "--",
                 file
