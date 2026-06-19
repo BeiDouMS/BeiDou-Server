@@ -111,7 +111,10 @@ public class GuildCharacter {
 
     public void setGuildId(int gid) {
         guildid = gid;
-        character.setGuildId(gid);
+        if (character != null) {
+            character.setGuildId(gid);
+            org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(character);
+        }
     }
 
     public int getGuildRank() {
