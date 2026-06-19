@@ -78,7 +78,15 @@ public final class ViewAllCharRegisterPicHandler extends AbstractPacketHandler {
         c.setChannel(channel);
 
         String pic = p.readString();
-        c.setPic(pic);
+        // 仅在账号尚未设置过 PIC 时允许写入；已有 PIC 必须走专门的修改流程（验旧 PIC + 密码），
+        // 否则攻击者拿到密码后可直接覆盖 PIC，原玩家就再也登不进。
+        if (c.getPic() == null || c.getPic().isEmpty()) {
+            c.setPic(pic);
+        } else {
+            log.warn("账号 {} 试图通过 ViewAllCharRegisterPic 覆盖已有 PIC，断开会话", c.getAccountName());
+            SessionCoordinator.getInstance().closeSession(c, true);
+            return;
+        }
 
         String[] socket = server.getInetSocket(c, c.getWorld(), channel);
         if (socket == null) {
