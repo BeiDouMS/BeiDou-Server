@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendAcceptDecline("我有个请求。你能不能向 #bMaed#k 要一瓶我设计的药剂？显然，不要提到我让你这样做，那会是个问题。由于与 Huroids 的接触，#bKeeny#k 生病了，这让我非常烦恼，以至于我无法在我的研究上取得进展……请 #r把药剂带给她#k，这样我才能感觉好些，并开始取得进展。我指望你了.");
+            qm.sendAcceptDecline("我有个请求。你能不能去向#b麦麦德#k要一瓶我设计的药剂？当然，千万别提是我让你去的，否则会很麻烦。#b琦尼#k因为接触胡洛伊德而病倒了，这件事让我一直无法安心推进研究……请#r把药剂带给她#k，这样我才能放心下来，继续我的研究。拜托你了。");
         } else if (status == 1) {
             qm.forceStartQuest();
             qm.dispose();
