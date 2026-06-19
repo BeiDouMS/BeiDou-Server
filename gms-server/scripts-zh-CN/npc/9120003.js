@@ -35,7 +35,7 @@
 var price = 300;
 
 function start() {
-    cm.sendYesNo("你想进入浴池吗？这将是" + price + "金币。");
+    cm.sendYesNo("要进入澡堂吗？入场费是 " + price + " 金币。");
 }
 
 function action(mode, type, selection) {
@@ -47,7 +47,7 @@ function action(mode, type, selection) {
         return;
     }
     if (cm.getMeso() < price) {
-        cm.sendOk("请检查并查看您是否有" + price + "金币进入这个地方。");
+        cm.sendOk("金币不足。进入澡堂需要 " + price + " 金币。");
     } else {
         cm.gainMeso(-price);
         cm.warp(801000100 + 100 * cm.getPlayer().getGender(), "out00");
