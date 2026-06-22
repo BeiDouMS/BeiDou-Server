@@ -9,8 +9,8 @@
  ---------------------------------------------------------------------------------------------------
  **/
 
-var menu = new Array("武陵", "天空之城", "百草堂", "武陵");
-var cost = new Array(1500, 1500, 500, 1500);
+var menu = new Array("武陵", "天空之城", "百草堂");
+var cost = new Array(1500, 1500, 500);
 var hak;
 var slct;
 var display = "";
@@ -52,7 +52,7 @@ function action(mode, type, selection) {
                 btwmsg = "#b武陵#k 到 #b天空之城#k";
             }
             if (cm.getPlayer().getMapId() == 251000000) {
-                cm.sendYesNo("你好。旅行进行得怎么样？我一直负责载送像你这样的旅行者前往#b" + menu[3] + "#k。虽然没有船那么平稳，但只要抓紧一些，我能比船更快抵达。只要支付#b" + cost[2] + "金币#k，我现在就带你过去。");
+                cm.sendYesNo("你好。旅行进行得怎么样？我一直负责载送像你这样的旅行者前往#b" + menu[0] + "#k。虽然没有船那么平稳，但只要抓紧一些，我能比船更快抵达。只要支付#b" + cost[2] + "金币#k，我现在就带你过去。");
                 status++;
             } else if (cm.getPlayer().getMapId() == 250000100) {
                 cm.sendSimple("怎么样？从 " + btwmsg + " 很快吧？如果你想继续出发，我也可以载你去其他地方。给我一些辛苦钱就行。\r\n" + display);
