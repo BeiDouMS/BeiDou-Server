@@ -107,9 +107,205 @@
             :width="400"
             :style="{ minWidth: '400px' }"
           />
+          <a-table-column
+            :title="$t('informationSearch.column.operation')"
+            align="center"
+            :width="120"
+          >
+            <template #cell="{ record }">
+              <a-button
+                type="primary"
+                size="mini"
+                @click="handleDistribute(record)"
+              >
+                {{ $t('informationSearch.button.distribute') }}
+              </a-button>
+            </template>
+          </a-table-column>
         </template>
       </a-table>
     </a-card>
+
+    <!-- 选择玩家弹窗 -->
+    <a-modal
+      v-model:visible="selectorVisible"
+      :title="$t('informationSearch.characterSelector.title')"
+      :width="750"
+      :footer="false"
+    >
+      <a-form :model="selectorCondition">
+        <a-form-item
+          :label="$t('informationSearch.characterSelector.column.id')"
+        >
+          <a-input-number v-model="selectorCondition.characterId" allow-clear />
+        </a-form-item>
+        <a-form-item
+          :label="$t('informationSearch.characterSelector.column.name')"
+        >
+          <a-input v-model="selectorCondition.characterName" allow-clear />
+        </a-form-item>
+        <a-space class="a-form-item-btn">
+          <a-button type="primary" @click="searchCharacter">
+            {{ $t('informationSearch.characterSelector.searchButton') }}
+          </a-button>
+        </a-space>
+      </a-form>
+      <a-table :data="characterList" row-key="characterId" :pagination="false">
+        <template #columns>
+          <a-table-column
+            :title="$t('informationSearch.characterSelector.column.id')"
+            data-index="characterId"
+            align="center"
+          />
+          <a-table-column
+            :title="$t('informationSearch.characterSelector.column.name')"
+            data-index="characterName"
+            align="center"
+          />
+          <a-table-column
+            :title="
+              $t('informationSearch.characterSelector.column.onlineStatus')
+            "
+            data-index="online"
+            align="center"
+          >
+            <template #cell="{ record }">
+              <a-tag v-if="record.onlineStatus" color="green">
+                {{ $t('informationSearch.characterSelector.online') }}
+              </a-tag>
+              <a-tag v-else color="gray">
+                {{ $t('informationSearch.characterSelector.offline') }}
+              </a-tag>
+            </template>
+          </a-table-column>
+          <a-table-column
+            :title="$t('informationSearch.characterSelector.column.operation')"
+          >
+            <template #cell="{ record }">
+              <a-button
+                type="primary"
+                size="mini"
+                @click="selectCharacter(record)"
+              >
+                {{ $t('informationSearch.characterSelector.selectButton') }}
+              </a-button>
+            </template>
+          </a-table-column>
+        </template>
+      </a-table>
+    </a-modal>
+
+    <!-- 下发弹窗（普通道具） -->
+    <a-modal
+      v-model:visible="itemFormVisible"
+      :title="itemFormTitle"
+      :ok-loading="loading"
+      :mask-closable="false"
+      :esc-to-close="false"
+      :ok-text="$t('informationSearch.button.confirm')"
+      :on-before-ok="submitItem"
+    >
+      <a-form :model="itemForm" layout="horizontal">
+        <a-form-item :label="$t('informationSearch.form.player')">
+          <a-space>
+            <a-tag color="red">{{ itemForm.playerId }}</a-tag>
+            <a-tag color="blue">{{ itemForm.player }}</a-tag>
+          </a-space>
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.itemId')">
+          <a-tag color="arcoblue">{{ itemForm.id }}</a-tag>
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.itemName')">
+          <span>{{ currentItemName }}</span>
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.quantity')">
+          <a-input-number v-model="itemForm.quantity" :min="1" />
+        </a-form-item>
+      </a-form>
+    </a-modal>
+
+    <!-- 下发弹窗（装备） -->
+    <a-modal
+      v-model:visible="equipFormVisible"
+      :title="equipFormTitle"
+      :ok-loading="loading"
+      :mask-closable="false"
+      :esc-to-close="false"
+      :ok-text="$t('informationSearch.button.confirm')"
+      :on-before-ok="submitEquip"
+    >
+      <a-form :model="equipForm" layout="horizontal">
+        <a-form-item :label="$t('informationSearch.form.player')">
+          <a-space>
+            <a-tag color="red">{{ equipForm.playerId }}</a-tag>
+            <a-tag color="blue">{{ equipForm.player }}</a-tag>
+          </a-space>
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.itemId')">
+          <a-tag color="arcoblue">{{ equipForm.id }}</a-tag>
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.itemName')">
+          <span>{{ currentItemName }}</span>
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.quantity')">
+          <a-input-number v-model="equipForm.quantity" :min="1" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.str')">
+          <a-input-number v-model="equipForm.str" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.dex')">
+          <a-input-number v-model="equipForm.dex" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.int')">
+          <a-input-number v-model="equipForm.int" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.luk')">
+          <a-input-number v-model="equipForm.luk" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.hp')">
+          <a-input-number v-model="equipForm.hp" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.mp')">
+          <a-input-number v-model="equipForm.mp" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.pAtk')">
+          <a-input-number v-model="equipForm.pAtk" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.mAtk')">
+          <a-input-number v-model="equipForm.mAtk" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.pDef')">
+          <a-input-number v-model="equipForm.pDef" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.mDef')">
+          <a-input-number v-model="equipForm.mDef" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.acc')">
+          <a-input-number v-model="equipForm.acc" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.avoid')">
+          <a-input-number v-model="equipForm.avoid" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.hands')">
+          <a-input-number v-model="equipForm.hands" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.speed')">
+          <a-input-number v-model="equipForm.speed" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.jump')">
+          <a-input-number v-model="equipForm.jump" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.upgradeSlot')">
+          <a-input-number v-model="equipForm.upgradeSlot" />
+        </a-form-item>
+        <a-form-item :label="$t('informationSearch.form.expire')">
+          <a-input-number
+            v-model="equipForm.expire"
+            :placeholder="$t('informationSearch.form.expire.placeholder')"
+          />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
@@ -124,6 +320,8 @@
     InformationResult,
     informationSearch,
   } from '@/api/information';
+  import { getCharacterList, InventoryCondition } from '@/api/inventory';
+  import { GiveForm, givePlayerSrc, getEquInitialInfo } from '@/api/player';
 
   const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
@@ -184,6 +382,180 @@
     }
     return tag;
   };
+
+  // ==================== 下发逻辑 ====================
+  const selectorVisible = ref(false);
+  const characterList = ref<any[]>([]);
+  const selectorCondition = ref<InventoryCondition>({
+    characterId: undefined,
+    characterName: undefined,
+    pageNo: 1,
+    pageSize: 20,
+  });
+  const currentItem = ref<InformationResult | null>(null);
+  const currentItemName = ref('');
+
+  const itemFormVisible = ref(false);
+  const itemFormTitle = ref('');
+  const itemForm = ref<GiveForm>({
+    type: 5,
+    playerId: undefined,
+    player: undefined,
+    id: undefined,
+    quantity: 1,
+  });
+
+  const equipFormVisible = ref(false);
+  const equipFormTitle = ref('');
+  const equipForm = ref<GiveForm>({
+    type: 6,
+    playerId: undefined,
+    player: undefined,
+    id: undefined,
+    quantity: 1,
+    str: undefined,
+    dex: undefined,
+    int: undefined,
+    luk: undefined,
+    hp: undefined,
+    mp: undefined,
+    pAtk: undefined,
+    mAtk: undefined,
+    pDef: undefined,
+    mDef: undefined,
+    acc: undefined,
+    avoid: undefined,
+    hands: undefined,
+    speed: undefined,
+    jump: undefined,
+    upgradeSlot: undefined,
+    expire: undefined,
+  });
+
+  const handleDistribute = (record: InformationResult) => {
+    currentItem.value = record;
+    currentItemName.value = record.name;
+    selectorCondition.value = {
+      characterId: undefined,
+      characterName: undefined,
+      pageNo: 1,
+      pageSize: 20,
+    };
+    characterList.value = [];
+    selectorVisible.value = true;
+  };
+
+  const searchCharacter = async () => {
+    setLoading(true);
+    try {
+      const { data } = await getCharacterList(selectorCondition.value);
+      characterList.value = data.records;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectCharacter = async (record: any) => {
+    const playerId = record.characterId;
+    const playerName = record.characterName;
+
+    if (currentItem.value?.type === 'eqp') {
+      // 装备类型
+      equipForm.value = {
+        type: 6,
+        playerId,
+        player: playerName,
+        id: currentItem.value?.id,
+        quantity: 1,
+        str: undefined,
+        dex: undefined,
+        int: undefined,
+        luk: undefined,
+        hp: undefined,
+        mp: undefined,
+        pAtk: undefined,
+        mAtk: undefined,
+        pDef: undefined,
+        mDef: undefined,
+        acc: undefined,
+        avoid: undefined,
+        hands: undefined,
+        speed: undefined,
+        jump: undefined,
+        upgradeSlot: undefined,
+        expire: undefined,
+      };
+      equipFormTitle.value = `${t('informationSearch.button.distribute')} - ${
+        currentItem.value?.name
+      }`;
+      equipFormVisible.value = true;
+      // 自动获取装备初始属性
+      await loadEquipInitialInfo(currentItem.value?.id as number);
+    } else {
+      // 普通道具类型
+      itemForm.value = {
+        type: 5,
+        playerId,
+        player: playerName,
+        id: currentItem.value?.id,
+        quantity: 1,
+      };
+      itemFormTitle.value = `${t('informationSearch.button.distribute')} - ${
+        currentItem.value?.name
+      }`;
+      itemFormVisible.value = true;
+    }
+    selectorVisible.value = false;
+  };
+
+  const loadEquipInitialInfo = async (id: number) => {
+    if (!id) return;
+    setLoading(true);
+    try {
+      const { data } = await getEquInitialInfo(id);
+      equipForm.value.str = data.str;
+      equipForm.value.dex = data.dex;
+      equipForm.value.int = data.int;
+      equipForm.value.luk = data.luk;
+      equipForm.value.hp = data.hp;
+      equipForm.value.mp = data.mp;
+      equipForm.value.pAtk = data.patk;
+      equipForm.value.mAtk = data.matk;
+      equipForm.value.pDef = data.pdef;
+      equipForm.value.mDef = data.mdef;
+      equipForm.value.acc = data.acc;
+      equipForm.value.avoid = data.avoid;
+      equipForm.value.hands = data.hands;
+      equipForm.value.speed = data.speed;
+      equipForm.value.jump = data.jump;
+      equipForm.value.upgradeSlot = data.upgradeSlot;
+      equipForm.value.expire = data.expire;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const submitItem = async () => {
+    setLoading(true);
+    try {
+      await givePlayerSrc(itemForm.value);
+      Message.success(t('message.success'));
+      itemFormVisible.value = false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const submitEquip = async () => {
+    setLoading(true);
+    try {
+      await givePlayerSrc(equipForm.value);
+      Message.success(t('message.success'));
+      equipFormVisible.value = false;
+    } finally {
+      setLoading(false);
+    }
+  };
 </script>
 
 <script lang="ts">
@@ -214,5 +586,27 @@
   }
   :deep(.arco-table-th:nth-child(4)) {
     min-width: 400px;
+  }
+  :deep(.arco-table-th:nth-child(5)) {
+    min-width: 100px;
+  }
+
+  .a-form-item-btn {
+    margin-left: 0px;
+    margin-bottom: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+  }
+  @media (min-width: @screen-xs) {
+    .a-form-item-btn {
+      margin-left: 10px;
+      margin-bottom: 0px;
+      width: auto;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+    }
   }
 </style>
