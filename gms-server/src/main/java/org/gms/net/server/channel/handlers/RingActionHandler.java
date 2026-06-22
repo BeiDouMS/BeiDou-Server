@@ -210,6 +210,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
             partner.setPartnerId(-1);
             partner.setMarriageItemId(-1);
             partner.setMarriageRing(null);
+            org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(partner);
         }
 
         chr.dropMessage(5, "You have successfully break the marriage with " + Character.getNameById(partnerid) + ".");
@@ -220,6 +221,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         chr.setPartnerId(-1);
         chr.setMarriageItemId(-1);
         chr.setMarriageRing(null);
+        org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(chr);
     }
 
     private static void resetRingId(Character player) {
@@ -308,6 +310,8 @@ public final class RingActionHandler extends AbstractPacketHandler {
         partner.setMarriageRing(Ring.loadFromDb(rings.getRight()));
         InventoryManipulator.addFromDrop(partner.getClient(), ringEqp, false, -1);
         partner.broadcastMarriageMessage();
+        org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(player);
+        org.gms.server.quest.medal.OutstandingCitizenMedal.refreshEligibility(partner);
     }
 
     @Override

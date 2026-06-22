@@ -7426,17 +7426,17 @@
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="28103">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 海盗"/>
-        <string name="parent" value="丘比特的信使 - 海盗"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 海盗：捎东西给理查德"/>
+        <string name="parent" value="丘比特的信使 - 海盗：捎东西给理查德"/>
         <int name="order" value="1"/>
         <string name="0" value="水手的妻子吗？看来她确实需要帮忙。"/>
-        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b25个软羽毛#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
+        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b25个柔软羽毛#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
         <string name="2" value="我把材料交给了理查德，他向我道了谢。安琪莉知道后一定会很高兴。"/>
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="28104">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 海盗"/>
-        <string name="parent" value="丘比特的信使 - 海盗"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 海盗：回信给安琪莉"/>
+        <string name="parent" value="丘比特的信使 - 海盗：回信给安琪莉"/>
         <int name="order" value="2"/>
         <string name="0" value="好吧，现在得去见那位水手本人了。他会在哪里呢？"/>
         <string name="1" value="我把东西交给了理查德，他拜托我把他的信带回给妻子。"/>
@@ -9671,15 +9671,22 @@
         <int name="viewMedalItem" value="1142082"/>
     </imgdir>
     <imgdir name="29508">
-        <string name="name" value="挑战勋章-最佳公民勋章"/>
+        <string name="name" value="挑战勋章 - 最佳公民勋章"/>
         <int name="area" value="51"/>
-        <string name="0" value="#b#eTitle Challenge - Outstanding Citizen#n\nParticipate in #k#bMarriage, Guild, and Family#k activities! Dalair, on behalf of the God of Honor, is looking for active citizens. He says anyone who participates in a #bMarriage#k and a #bGuild#k, and #bhas at least 1 Junior#k, will receive the #e#bOutstanding Citizen#k#n title."/>
-        <string name="1" value="#b#eTitle Challenge - Outstanding Citizen#n#k\n Actively participate in Marriage, Guild, and Family activities."/>
-        <string name="2" value="#b#eTitle Challenge - Outstanding Citizen#n#k\n\nYou have acquired the #bOutstanding Citizen#k title and the associated medal."/>
-        <string name="demandSummary" value="Be part of a Marriage and a Guild, and register at least 1 Junior."/>
+        <string name="0" value="#b#e挑战勋章 - 最佳公民勋章#n\n积极参与#k#b结婚、公会和家族#k活动吧！达利尔代表荣誉之神寻找活跃的市民。只要你已经#b结婚#k、#b加入公会#k，并且#b拥有至少 1 名后辈#k，就能获得#e#b最佳公民勋章#k#n称号。"/>
+        <string name="1" value="#b#e挑战勋章 - 最佳公民勋章#n#k\n积极参与结婚、公会和家族活动。"/>
+        <string name="2" value="#b#e挑战勋章 - 最佳公民勋章#n#k\n\n你已经获得#b最佳公民勋章#k称号和对应勋章。"/>
+        <string name="demandSummary" value="完成结婚、加入公会，并拥有至少 1 名后辈。"/>
         <string name="rewardSummary" value="#Wbasic# #v1142081:##t1142081:# 1"/>
         <int name="medalCategory" value="2"/>
         <int name="viewMedalItem" value="1142081"/>
+    </imgdir>
+    <imgdir name="29580">
+        <string name="name" value="最佳公民勋章资格状态"/>
+        <int name="area" value="51"/>
+        <string name="0" value="最佳公民勋章挑战的内部资格状态。"/>
+        <string name="1" value="最佳公民勋章挑战的内部资格状态。"/>
+        <string name="2" value="最佳公民勋章挑战的内部资格状态。"/>
     </imgdir>
     <imgdir name="29509">
         <string name="name" value="坚强的挑战者"/>
@@ -11338,7 +11345,7 @@
     </imgdir>
     <imgdir name="3239">
         <string name="name" value="修理配件的下落"/>
-        <string name="parent" value="丢失的空间"/>
+        <string name="parent" value=""/>
         <string name="0" value="要找玩具工厂某处的助教 尚。"/>
         <string name="1" value="在玩具厂见到了助教 尚。尚说最近发生了玩具厂机械的配件丢失的事件。他拜托我替他找那个配件。通过尚到隐藏配件的玩具工厂&lt;骨干工程1&gt;第4地区后，收集10个配件。\n\n#t4031092#  #b#c4031092#/10#k"/>
         <string name="2" value="都找到在玩具工厂丢失的10个配件给助教 尚了。今后玩具工厂也能正常运转吧？"/>
@@ -11405,28 +11412,28 @@
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3248">
-        <string name="name" value="Operation Strategy 1 : Collect All the Eggs"/>
-        <string name="parent" value="The Clocktower Monster Wipe-Out Operation"/>
+        <string name="name" value="作战第1阶段：回收所有的蛋"/>
+        <string name="parent" value="时间塔怪物扫荡作战"/>
         <int name="order" value="1"/>
-        <string name="0" value="#b#p2041026##k in the #b#m220000000# Clocktower basement#k has proposed to begin a Clocktower Monster Wipe-Out Operation. What does he mean by that? Let&apos;s go find #p2041026#."/>
-        <string name="1" value="The Clocktower Monster Wipe-Out Operation has begun. #p2041026# asks you to bring back #b#o4230113##k, #b#o3230306##k, and #b#t4031991##k... It seems he wants to exterminate all the eggs first. Alright, whatever he wants!\nHe says you can find other eggs by hunting #rTick, Tick-Tock, or Chronos type monsters#k, but #b#o5220003s# have a tendency to hatch their eggs in another bird&apos;s nest#k, so their eggs would be amongst eggs of other birds. It seems you have to crack other eggs to find it and take it over to #t4031991#. \n\n#i2022354##t2022354# #b#c2022354#/10#k \n#i2022355##t2022355# #b#c2022355#/10#k \n#i4031991##t4031991# #b#c4031991#/10#k"/>
-        <string name="2" value="You have found all the eggs and gave them to #p2041026#. Ghosthunter Bob seems satisfied and suggest you engage in the operation. "/>
+        <string name="0" value="位于#b#m220000000#时间塔地下#k的#b#p2041026##k提出要展开时间塔怪物扫荡作战。这到底是什么意思呢？去找#p2041026#问问吧。"/>
+        <string name="1" value="时间塔怪物扫荡作战已经开始。#p2041026#让我带回#b#o4230113##k、#b#o3230306##k和#b#t4031991##k……看来他想先把所有的蛋清除掉。好吧，就照他说的做！\n他说，捕捉#r时之啾啾、时之鬼爵或恶魔之母系列怪物#k，就能找到其他蛋。不过#b#o5220003#喜欢把自己的蛋下在其他鸟的巢里#k，所以它的蛋会混在其他蛋中。看来必须把其他蛋打开确认，才能找到#t4031991#。\n\n#i2022354##t2022354# #b#c2022354#/10#k \n#i2022355##t2022355# #b#c2022355#/10#k \n#i4031991##t4031991# #b#c4031991#/10#k"/>
+        <string name="2" value="找齐所有的蛋并交给了#p2041026#。幽灵猎人 巴柏似乎很满意，并建议我继续参加作战。"/>
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3249">
-        <string name="name" value="Operation Strategy 2 : Defeat the Monsters"/>
-        <string name="parent" value="The Clocktower Monster Wipe-Out Operation"/>
+        <string name="name" value="作战第2阶段：消灭怪物"/>
+        <string name="parent" value="时间塔怪物扫荡作战"/>
         <int name="order" value="2"/>
-        <string name="1" value="Operation strategy 2 is much simpler than strategy 1. It was to defeat the monsters! You must defeat #r#o4230113##k, #r#o3230306##k, #r#o4230114##k, #r#o4230115##k, and even #r#o5220003##k, so it&apos;s not child&apos;s play... but let&apos;s defeat the monsters.\n\n#o4230113# #r#a32491##k \n#o3230306# #r#a32492##k \n#o4230114# #r#a32493##k \n#o4230115# #r#a32494##k \n#o5220003# #r#a32495##k "/>
-        <string name="2" value="You have reported to #p2041026# after defeating all the monsters. It&apos;s not as easy as it may seem since there are so many types of monsters to hunt!"/>
+        <string name="1" value="作战第2阶段比第1阶段简单多了，就是消灭怪物！必须消灭#r#o4230113##k、#r#o3230306##k、#r#o4230114##k、#r#o4230115##k，甚至还要消灭#r#o5220003##k，所以可不是闹着玩的……不过还是去消灭它们吧。\n\n#o4230113# #r#a32491##k \n#o3230306# #r#a32492##k \n#o4230114# #r#a32493##k \n#o4230115# #r#a32494##k \n#o5220003# #r#a32495##k "/>
+        <string name="2" value="消灭所有怪物后，向#p2041026#进行了报告。要猎杀这么多种怪物，可不像看起来那么简单！"/>
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3250">
-        <string name="name" value="Operation Strategy 3: A Cute Baby Bird"/>
-        <string name="parent" value="The Clocktower Monster Wipe-Out Operation"/>
+        <string name="name" value="作战第3阶段：可爱的小鸟"/>
+        <string name="parent" value="时间塔怪物扫荡作战"/>
         <int name="order" value="3"/>
-        <string name="1" value="#p2041026# seems to be preoccupied with raising birds. According to the new research conducted, #o5220003#s have undergone changes under the management of Papulatus, but can make great pets when tamed. He has given you a cute baby bird, saying you can feed the bird #b#t4031992#s#k that can be obtained from the Clocktower Monsters. He has asked you to return the bird when it&apos;s fully grown."/>
-        <string name="2" value="The baby bird has become full-fledged since you&apos;ve been diligently feeding the bird #t4031992#s. Although it&apos;s sad to let go of the bird to which you have grown attached, but you have no choice but to return the bird to Ghosthunter Bob. Be well, bird."/>
+        <string name="1" value="#p2041026#似乎正忙着养鸟。根据最新研究，#o5220003#是在帕普拉图斯的支配下才发生变化的，但只要好好驯养，也能成为很棒的宠物。他给了我一只可爱的小鸟，并说可以喂它吃从时间塔怪物身上获得的#b#t4031992##k。等小鸟完全长大后，再把它交还给他。"/>
+        <string name="2" value="一直坚持喂食#t4031992#后，小鸟终于完全长大了。虽然舍不得离开这只已经产生感情的小鸟，但还是只能把它交还给幽灵猎人 巴柏。再见了，小鸟。"/>
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3300">
@@ -12415,22 +12422,22 @@
     <imgdir name="3435">
         <string name="name" value="打退外星章鱼枪"/>
         <string name="0" value="去罗斯韦尔草原找冒险勇者"/>
-        <string name="1" value="在地球本部附近遇到了冒险勇者 绿虎. 他已经听到了我的消息.他劝我跟他们一起做冒险勇者的任务.我要首先完成冒险勇者 绿虎的任务.那是打退100个外星章鱼枪的任务\n\n打退外星章鱼枪 : #b#a34351##k"/>
-        <string name="2" value="我打退了100个打退外星章鱼枪.但冒险勇者的任务还没结束. 那我以后有空还要去绿虎."/>
+        <string name="1" value="在地球防卫总部附近遇到了冒险勇者绿虎。他已经听说过我的事，并邀请我一起执行冒险勇者的任务。首先要完成绿虎交给我的任务：消灭100只外星章鱼枪。\n\n外星章鱼枪：#b#a34351##k"/>
+        <string name="2" value="我消灭了100只外星章鱼枪。不过冒险勇者的任务似乎还没结束，以后有空再去找绿虎吧。"/>
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3436">
         <string name="name" value="打退外星章鱼坦克"/>
         <string name="0" value="去罗斯韦尔草原找冒险勇者"/>
-        <string name="1" value="在地球本部附近在见到了冒险勇者 绿虎.他拜托我这次打退比以前更强的外星章鱼坦克. 我要打退它们后收集80个外星章鱼的头盔. \n\n#t4000121# #b#c4000121##k/80"/>
-        <string name="2" value="我打退打退外星章鱼坦克后收集它们的头盔给绿虎了.但冒险勇者的任务好像还没结束，有了机会再去找他."/>
+        <string name="1" value="在地球防卫总部附近再次见到了冒险勇者绿虎。他拜托我消灭比外星章鱼枪更强的外星章鱼坦克，并收集80个外星章鱼头盔。\n\n#t4000121# #b#c4000121##k/80"/>
+        <string name="2" value="我消灭了外星章鱼坦克，并把收集到的头盔交给了绿虎。不过冒险勇者的任务好像还没结束，有机会再去找他吧。"/>
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3437">
         <string name="name" value="打退外星章鱼坦克和外星章鱼激光棒"/>
         <string name="0" value="去罗斯韦尔草原找冒险勇者"/>
-        <string name="1" value="在地球本部附近再见到了冒险勇者 绿虎. 他最后拜托我这次再打退外星章鱼坦克, 同时收集外星章鱼激光棒的武器的任务.我要打退200个外星章鱼坦克.同时要收集150个光线枪.\n\n外星章鱼坦克 : #b#a34371##k"/>
-        <string name="2" value="我打退外星章鱼坦克了, 而且外星章鱼激光棒的光线枪也都收集好了. 冒险勇者很高兴地说他想希望有机会再跟我一起进行任务."/>
+        <string name="1" value="在地球防卫总部附近又见到了冒险勇者绿虎。他最后一次拜托我消灭外星章鱼坦克，并收集外星章鱼激光棒携带的光线枪。我要消灭150只外星章鱼坦克，并收集120把光线枪。\n\n外星章鱼坦克：#b#a34371##k\n#t4000122# #b#c4000122##k/120"/>
+        <string name="2" value="我消灭了外星章鱼坦克，也收集齐了外星章鱼激光棒的光线枪。冒险勇者很高兴，说以后有机会还想和我一起执行任务。"/>
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3438">
@@ -12458,9 +12465,9 @@
         <string name="name" value="士兵克斌的休假请托"/>
         <string name="parent" value="黄金海滩自由旅行券"/>
         <int name="order" value="1"/>
-        <string name="0" value="听说有人在地球本部遗失了自由旅行券... 要不要去帮助他呢，有空的话去一趟地球本部吧。"/>
+        <string name="0" value="听说地球防卫总部有人捡到了一张破损的自由旅行券……有空的话，要不要去帮帮他呢？"/>
         <string name="1" value="士兵克斌虽然入伍了，却一直负责地球本部的守卫任务，没能真正参加战斗。厌倦守卫工作的他想争取休假去旅行，所以拜托我去消灭外星章鱼枪，并收集它们的触角作为业绩证明。听说外星章鱼枪还带着某个破损的旅行券，也一并找找看吧。\n\n #t4000120# #b#c4000120##k/25 \n #t4031206# #b#c4031206##k/1"/>
-        <string name="2" value="用已被撕裂的旅行券能够做什么呢？不管怎样，先按照票上写的去找导游爱丽吧。"/>
+        <string name="2" value="这张被撕裂的旅行券能用来做什么呢？不管怎样，先按照票背面的提示去找导游爱丽吧。"/>
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3442">
@@ -12468,7 +12475,7 @@
         <string name="parent" value="黄金海滩自由旅行券"/>
         <int name="order" value="2"/>
         <string name="1" value="爱丽说破损的自由旅行券已经无法使用，也不能重新补发。不过她提到，天空之城的导游贵英也许知道修复方法。带着破损的自由旅行券去找贵英吧。"/>
-        <string name="2" value="呃.. 直接给一个新的多好，但不能啊。既然来到这里了，那就做到底吧。"/>
+        <string name="2" value="看来不能直接补发一张新的旅行券。既然已经查到这里了，就继续想办法把它修好吧。"/>
         <int name="area" value="37"/>
     </imgdir>
     <imgdir name="3443">
@@ -12489,7 +12496,7 @@
     <imgdir name="3445">
         <string name="name" value="自由的灵魂"/>
         <string name="0" value="幽灵的数量越来越多，快坚持不下去了。还是去见一下特派到玩具城的#p2041026#吧。"/>
-        <string name="1" value="经过玩具城下方的时间通道，可在附近见到#p2041026#。他请求我让#o6230500#得到自由，并将其灵魂带来。\n\n#t4000144# #b#c4000144#/100#k"/>
+        <string name="1" value="经过玩具城下方的时间通道，可在附近见到#p2041026#。他请求我让#o6230500#得到自由，并将其灵魂带来。\n\n#t4000144# #b#c4000144#/80#k"/>
         <string name="2" value="帮助幽灵猎人 巴柏让大恶灵附身的娃娃获得了自由。"/>
         <int name="area" value="37"/>
     </imgdir>
@@ -13352,15 +13359,15 @@
         <int name="area" value="41"/>
     </imgdir>
     <imgdir name="3715">
-        <string name="name" value="The Suspicious Wanderer"/>
+        <string name="name" value="可疑的流浪者"/>
         <int name="area" value="41"/>
-        <string name="0" value="There is a rumor that Han the Broker of Magatia has acquired a new piece of information. Sounds exciting…"/>
-        <string name="1" value="Han the Broker says a suspicious wanderer was staying in Magatia until just a few days ago, but then disappeared without a trace. Han the Broker thinks you might be able to find the wanderer if you follow the traces he left and suggests you first go to Ariant to find him."/>
-        <string name="2" value="You met Syras at Ariant Station to ask about the suspicious wanderer that Han the Broker has told you about. Syras at the ticket box desk said a strange man bought a ticket to Orbis."/>
-        <string name="parent" value="The Truth Behind that Man"/>
+        <string name="0" value="有传闻说玛加提亚的后街小贩得到了一条新情报。听起来很有意思……"/>
+        <string name="1" value="后街小贩说，几天前还有一个可疑的流浪者住在玛加提亚，但后来突然消失得无影无踪。他认为如果沿着流浪者留下的踪迹追查，也许能找到那个人，并建议你先去阿里安特找找看。"/>
+        <string name="2" value="你在阿里安特车站见到了售票员赛拉斯，询问后街小贩提到的可疑流浪者。赛拉斯说，有个奇怪的男人买了前往天空之城的车票。"/>
+        <string name="parent" value="那个人背后的真相"/>
         <int name="order" value="1"/>
-        <string name="demandSummary" value="#bTalk to Syras, the ticket agent at Ariant Station."/>
-        <string name="rewardSummary" value="EXP 30,000\r\nCan participate in the &quot;Wanderer&apos;s Whereabouts 1&quot; quest.\r\n"/>
+        <string name="demandSummary" value="#b与阿里安特车站售票员赛拉斯对话。"/>
+        <string name="rewardSummary" value="经验值 30,000\r\n可参加“流浪者的行踪1”任务。\r\n"/>
     </imgdir>
     <imgdir name="3716">
         <string name="name" value="The Wanderer&apos;s Whereabouts 1"/>
@@ -14038,11 +14045,11 @@
         <int name="area" value="49"/>
     </imgdir>
     <imgdir name="3845">
-        <string name="name" value="The Rumor in the Sea of Fog"/>
+        <string name="name" value="雾海中的传闻"/>
         <int name="area" value="44"/>
-        <string name="0" value="Captain Hwang from Herb Town wants to tell you a creepy rumor about the Sea of Fog, located east of Herb Town. His story could be interesting. How about it, huh?"/>
-        <string name="1" value="Captain Hwang from Herb Town tells you about the eastern route that connects Herb Town and Aqua Road. As the longest waterway in Maple World, this route passes through what is known as the #b&quot;Sea of Fog&quot;#k, located east of Mu Lung Garden. He says there is a rumor that a ghost ship sails around this Sea of Fog.\r\nCaptain Hwang then suggests that you look for the ghost ship. He hints that you might be able to get some information from the Dolphin Taxi."/>
-        <string name="2" value="Captain Hwang from Herb Town told you about the eastern route that connects Herb Town and Aqua Road. As the longest waterway in Maple World, this route passes through what is known as the #b&quot;Sea of Fog&quot;#k, located east of Mu Lung Garden. He says there is a rumor that a ghost ship sails around this Sea of Fog. You were instantly drawn to Captain Hwang&apos;s story and arrived in an unknown island in the Sea of Fog. You discovered the ghost ship with the help of the Dolphin Taxi, which brought you to that mysterious place."/>
+        <string name="0" value="百草村的黄船长想告诉你一个关于百草村东边雾海的诡异传闻。他的故事似乎很有趣，要不要听听看？"/>
+        <string name="1" value="百草村的黄船长讲述了连接百草村和水下世界的东部航线。这条航线是冒险岛世界最长的水路，途经武陵桃园东边被称为#b&quot;雾海&quot;#k的海域。据说有一艘幽灵船在雾海中出没。\r\n黄船长建议你去寻找那艘幽灵船，并提示说也许能从海豚出租车那里得到一些线索。"/>
+        <string name="2" value="百草村的黄船长讲述了连接百草村和水下世界的东部航线。这条航线是冒险岛世界最长的水路，途经武陵桃园东边被称为#b&quot;雾海&quot;#k的海域。据说有一艘幽灵船在雾海中出没。你被黄船长的故事吸引，在海豚出租车的帮助下来到了雾海中的无名小岛，并发现了那艘幽灵船。"/>
         <int name="autoStart" value="1"/>
     </imgdir>
     <imgdir name="3900">
@@ -14221,8 +14228,8 @@
         <string name="name" value="沙子图团员的请求?! 1"/>
         <string name="parent" value="沙子图团员的请求?!"/>
         <int name="order" value="1"/>
-        <string name="0" value="#b#m260000000##k 村庄外的 #b#p2101012##k…… 也许他是#m260000000#的秘密组织沙子图团？去找找吧。"/>
-        <string name="1" value="#p2101012#说自己是沙子图团员，需要我帮他找必要的材料，去盗窃王妃的宝物。用#b#t4000329##k制绳子，赶紧去抓#r#o2100102##k吧。\n\n#i4000329# #t4000329#  #b#c4000329##k/30"/>
+        <string name="0" value="#b#m260000000##k村庄外的#b#p2101012##k行踪有些可疑……他似乎和#m260000000#的秘密组织沙子图团有关，去找他问问吧。"/>
+        <string name="1" value="#p2101012#说自己是沙子图团员，需要我帮他准备盗取王妃宝物用的材料。他说可以用#b#t4000329##k制绳子，先去抓#r#o2100102##k吧。\n\n#i4000329# #t4000329#  #b#c4000329##k/30"/>
         <string name="2" value="给#p2101012#送去了#t4000329# 30个。虽然不是什么大事，但希望可以帮到沙子图团。"/>
         <int name="area" value="44"/>
     </imgdir>
@@ -14230,8 +14237,8 @@
         <string name="name" value="沙子图团员的请求?! 2"/>
         <string name="parent" value="沙子图团员的请求?!"/>
         <int name="order" value="2"/>
-        <string name="0" value="#b#m260000000##k村庄外的#b#p2101012##k。他是#m260000000#的秘密组织，沙子图团团员。沙子图团为村庄居民做了很多事，不知能不能帮帮他们？"/>
-        <string name="1" value="#p2101012#说盗取王妃宝物时需要毒针，希望可以找到材料#b#t4000330##k。为了沙子图团，赶紧去办吧。 \n\n#i4000330# #t4000330#  #b#c4000330##k/50"/>
+        <string name="0" value="#b#m260000000##k村庄外的#b#p2101012##k说自己是沙子图团团员。沙子图团为村庄居民做了很多事，不知能不能继续帮帮他们？"/>
+        <string name="1" value="#p2101012#说盗取王妃宝物时需要毒针，希望我找来制作毒针的材料#b#t4000330##k。为了沙子图团，赶紧去办吧。\n\n#i4000330# #t4000330#  #b#c4000330##k/50"/>
         <string name="2" value="给#p2101012#找来了所有#t4000330#。沙子图团需要找的东西真多啊，真是辛苦……"/>
         <int name="area" value="44"/>
     </imgdir>
@@ -14239,9 +14246,9 @@
         <string name="name" value="沙子图团员的请求?! 3"/>
         <string name="parent" value="沙子图团员的请求?!"/>
         <int name="order" value="3"/>
-        <string name="0" value="为了#m260000000# 村庄居民而努力的沙子图团。能为他们做点什么呢？#b#m260010400##k的#b#p2101012##k据说是沙子图团员，去找找他吧。"/>
-        <string name="1" value="#p2101012#说这次一定要盗取王妃的宝物，要去#b宫殿#k。不能让王妃发现，得避开王妃和宫殿内的警卫，利用#b宫内的隐蔽的入口#k，小心翼翼地拿来王妃装饰柜中的#b戒子#k。不过之前为什么要做毒针和绳子呢？看起来没什么用哦？\n\n#i4031578# #t4031578#  #b#c4031578##k/1"/>
-        <string name="2" value="把盗来的戒子给了#p2101012#。呼～ 完成任务了。但是……这种事情不是应该由经验丰富的团员亲自做吗？"/>
+        <string name="0" value="为了#m260000000#村庄居民而努力的沙子图团。#b#m260010400##k的#b#p2101012##k说自己还有事需要帮忙，去找找他吧。"/>
+        <string name="1" value="#p2101012#说这次一定要盗取王妃的宝物，要去#b宫殿#k。不能让王妃发现，得避开王妃和宫殿内的警卫，利用#b宫内隐蔽的入口#k，小心翼翼地拿来王妃装饰柜中的#b戒指#k。不过之前为什么要做毒针和绳子呢？看起来没什么用哦？\n\n#i4031578# #t4031578#  #b#c4031578##k/1"/>
+        <string name="2" value="把盗来的戒指给了#p2101012#。呼～ 完成任务了。但是……这种事情不是应该由经验丰富的团员亲自做吗？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3924">
@@ -14249,32 +14256,33 @@
         <string name="parent" value="沙子图团和红蝎子团"/>
         <int name="order" value="1"/>
         <string name="0" value="#b#m260010400##k的#p2101012#。他好像发火了…… 宝物都拿给他了，还有什么事呢？"/>
-        <string name="1" value="#p2101012#说把盗取的宝物藏到了岩石后头，结果被谁给偷走了。据他描述盗走宝物的人是舞姬#p2101000#。去找#b#p2101000##k吧。"/>
-        <string name="2" value="盗走宝物的人好像的确是#p2101000#。但听到#p2101000#的话，好像有些奇怪？"/>
+        <string name="1" value="#p2101012#说把盗来的宝物藏在岩石后面，结果被人偷走了。据他描述，拿走宝物的人是舞姬#p2101000#。去找#b#p2101000##k吧。"/>
+        <string name="2" value="拿走宝物的人好像的确是#p2101000#。但听到#p2101000#的解释后，事情好像有些不对劲？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3925">
         <string name="name" value="真假"/>
         <string name="parent" value="沙子图团和红蝎子团"/>
         <int name="order" value="2"/>
-        <string name="0" value="听#p2101000#说，好像除了沙子图团之外，还有其他秘密组织。红蝎子团…… 到底是什么团体呢？"/>
-        <string name="1" value="#p2101000#说宝物是欺负居民的红蝎子团的，所以拿回来给了人们。什么？那#p2101012#是红蝎子团的人？但他说他是沙子团团员啊……"/>
-        <string name="2" value="#p2101000#说 #p2101012#是假的，他周边一定有红蝎子团的据点，去那儿找找。进入洞口需要特殊的暗号，把宝物拿来放在居民家的话，可能会被报复…… 但是已经知道暗号又是什么意思呢？"/>
+        <string name="0" value="听#p2101000#说，除了沙子图团之外，还有另一个秘密组织。红蝎子团……到底是什么团体呢？"/>
+        <string name="1" value="#p2101000#说，那些宝物本来就是红蝎子团从居民那里抢来的，所以她才拿回来分给人们。什么？那#p2101012#其实是红蝎子团的人？可他明明说自己是沙子图团团员啊……"/>
+        <string name="2" value="#p2101000#说#p2101012#是假冒的，他附近一定有红蝎子团的据点。进入洞口需要特殊暗号，而西琳说我其实已经知道暗号了……难道就是那个可疑的咒语？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3926">
         <string name="name" value="教训红蝎子团"/>
         <string name="parent" value="沙子图团和红蝎子团"/>
         <int name="order" value="3"/>
-        <string name="1" value="依#p2101000#的话，去红蝎子团的据点偷了宝物。要把这个放在居民家里。西琳说，居民家中用X标示的家是与红蝎子团有联系的人，不能把宝物放在这些家里……"/>
-        <string name="2" value="把宝物放在用O标示的家中。这应该算是对红蝎子团的有力的报复吧……"/>
+        <string name="0" value="根据#p2101000#的提示，去红蝎子团的据点，把他们偷来的宝物取出来，再分给真正需要帮助的居民。"/>
+        <string name="1" value="依#p2101000#的话，去红蝎子团的据点取出了宝物。接下来要把宝物放进居民家的柜子里。西琳说，门口有X标记的房子和红蝎子团有联系，绝对不能把宝物放在那里……"/>
+        <string name="2" value="把宝物放进了有O标记的居民家中。这应该算是对红蝎子团的有力反击吧……"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3927">
         <string name="name" value="秘密组织的存在"/>
         <string name="0" value="以#t4011008#产地而闻名的#b#m260000000##k。但是#m260000000#的人们看起来不是很富有。据说都是因为#m260000000#的王妃…… 在村子中央跳舞的舞姬，#b#p2101000##k可能知道关于王妃的传闻？"/>
         <string name="1" value="向#p2101000#询问了王妃的事情，她透露了很多对于王妃的不满， 也提到了#b沙子图团#k。沙子图团是把贪心王妃的宝石盗取，分给人们的秘密组织。好帅的侠盗啊。#p2101000#听到要加入沙子图团，犹豫了一下之后说找到写有#b沙子图团的墙#k就能了解他们。找到墙之后再去找#b#p2101000##k。"/>
-        <string name="2" value="找到了有沙子图团标志的墙。仔细看好像有关于沙子图团的提示…… 这个提示是铁锤，短刀，弓？什么意思呢？"/>
+        <string name="2" value="找到了有沙子图团标志的墙。仔细看，好像有关于沙子图团的提示……铁锤、短剑、弓箭？这是什么意思呢？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3928">
@@ -14298,9 +14306,9 @@
         <string name="name" value="携詹的沙子图团"/>
         <string name="parent" value="携詹所说的沙子图团"/>
         <int name="order" value="3"/>
-        <string name="0" value="通过了#p2101011#的所有考验。现在可以成为沙子图团员了吧？去找一起帮助人们的#b#p2101011##k问问吧。"/>
-        <string name="1" value="#p2101011#说拥有很多财富但不贪心，可以为#m260000000#的人们付出的人，才能成为沙子图团员。能否为了沙子图团交#b10000金币#k。"/>
-        <string name="2" value="虽然是辛苦攒的钱，但是为了#m260000000#居民，毫不犹豫地拿出了10000金币给了他。他说已经通过了他所有的考验。但是也要通过除了#p2101011#，其他人的考验……  这么说来秘密之墙上写着弓和弓箭，铁锤，短剑吧？"/>
+        <string name="0" value="通过了#p2101011#的所有考验。现在应该得到他的认可了吧？去找一直帮助人们的#b#p2101011##k问问吧。"/>
+        <string name="1" value="#p2101011#说拥有很多财富但不贪心，可以为#m260000000#的人们付出的人，才能成为沙子图团员。能否为了沙子图团拿出#b10000金币#k。"/>
+        <string name="2" value="虽然是辛苦攒的钱，但是为了#m260000000#居民，毫不犹豫地拿出了10000金币给了他。他说我已经通过了他的所有考验。但是还要通过其他成员的考验……这么说来，秘密之墙上除了弓箭，还写着铁锤和短剑吧？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3931">
@@ -14308,7 +14316,7 @@
         <string name="parent" value="阿丁所说的沙子图团"/>
         <int name="order" value="1"/>
         <string name="0" value="在#p2103001#看到的铁锤这个词…… 应该是指拥有铁锤的某个人。#m260000000#拥有铁锤的人好像只有#p2101003#……？"/>
-        <string name="1" value="#p2101003#果然是沙子图团员。但是#p2101003#说只有强悍的人才能成为沙子图团员，需要证明自己是强者。证明方法是击退凶狠的#r#o2100105##k…… #o2100105#？要一举击退它们！\n\n#o2100105# #r#a39311##k"/>
+        <string name="1" value="#p2101003#果然是沙子图团员。但是#p2101003#说只有强悍的人才能成为沙子图团员，需要证明自己是强者。证明方法是击退凶狠的#r#o2100105##k……#o2100105#？那就一口气击退它们！\n\n#o2100105# #r#a39311##k"/>
         <string name="2" value="击退了#o2100105#，但#p2101003#说还不足以成为沙子图团员，还不能认可。"/>
         <int name="area" value="44"/>
     </imgdir>
@@ -14316,8 +14324,8 @@
         <string name="name" value="阿丁的考验"/>
         <string name="parent" value="阿丁所说的沙子图团"/>
         <int name="order" value="2"/>
-        <string name="1" value="重新去找了#p2101003#，#p2101003#说击退攻击#m260000000#居民的#r#o2100106##k和 #r#o2100107# 30只#k，并拿#b#t4000326##k和 #b#t4000327##k各 #b20个#k，就可以成为沙子图团员。\n\n#o2100106# #r#a39321##k\n#o2100107# #r#a39322##k\n\n#i4000326# #t4000326# #b#c4000326# / 20#k\n#i4000327# #t4000327# #b#c4000327# / 20#k"/>
-        <string name="2" value="击退了#o2100106#和 #o2100107#，#p2101003#看起来非常惊讶。呵呵，没想到我能做到吧～ 那现在可以成为沙子图团员了吧？"/>
+        <string name="1" value="重新去找了#p2101003#，#p2101003#说，只要击退攻击#m260000000#居民的#r#o2100106##k和#r#o2100107#各#r30只#k，并拿来#b#t4000326##k和#b#t4000327##k各#b20个#k，就能证明我的实力。\n\n#o2100106# #r#a39321##k\n#o2100107# #r#a39322##k\n\n#i4000326# #t4000326# #b#c4000326# / 20#k\n#i4000327# #t4000327# #b#c4000327# / 20#k"/>
+        <string name="2" value="击退了#o2100106#和#o2100107#，#p2101003#看起来非常惊讶。呵呵，没想到我能做到吧～那现在可以得到他的认可了吧？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3933">
@@ -14325,24 +14333,24 @@
         <string name="parent" value="阿丁所说的沙子图团"/>
         <int name="order" value="3"/>
         <string name="0" value="通过了#p2101003#的所有考验。现在可以成为沙子图团员了吧？去找#p2101003#问问吧。"/>
-        <string name="1" value="#p2101003#说要与王妃这个可怕的敌人作战，沙子图团必须变得很强，如果能打败他，就让我进入沙子图团…… 能击败#p2101003#吗？\n\n阿丁的分身 #r#a39331##k"/>
-        <string name="2" value="看起来很迟钝，而且有大肚子，但#p2101003#很强。但毕竟在对决中获胜了，现在可以成为沙子图团员了吧？#p2101003#说要成为沙子图团员的话，还要获得其他两个成员的认可。这么说来#p2103001#上除了铁锤还有弓和弓箭，短剑等词汇啊？"/>
+        <string name="1" value="#p2101003#说，要与王妃这个可怕的敌人作战，沙子图团必须变得很强。如果能在对练中打败他，他就认可我的实力……能击败#p2101003#吗？\n\n阿丁的分身 #r#a39331##k"/>
+        <string name="2" value="虽然看起来有些迟钝，还挺着大肚子，但#p2101003#真的很强。总算在对练中获胜了，现在应该得到他的认可了吧？#p2101003#说，想成为沙子图团员，还要获得其他两个成员的认可。这么说来，#p2103001#上除了铁锤，还有弓箭和短剑等提示啊。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3934">
         <string name="name" value="拥有短剑的女子"/>
         <string name="parent" value="呃拉斯卡所说的沙子图团"/>
         <int name="order" value="1"/>
-        <string name="0" value="#p2103001#上看到的短剑这个词…… 可能是指拥有短剑的某个人？#m260000000#中拥有短剑的人只有#p2101002#吧……"/>
-        <string name="1" value="#p2101002#是沙子图团的团员！怪不得有一种危险的气息…… 告诉她想要进入沙子图团吧，#p2101002#说进入王妃的宝物仓库，盗取宝物的话，可以让我成为沙子图团员。关于王妃宝物的信息要问#b宫殿里的某个人#k吧……"/>
-        <string name="2" value="住在宫殿里，但不是王妃那边的人，去找讲故事的人#p2101008#问问宝物的情况吧。"/>
+        <string name="0" value="在#p2103001#上看到的“短剑”这个词……可能是指拥有短剑的某个人？#m260000000#中拥有短剑的人，应该只有#p2101002#吧……"/>
+        <string name="1" value="#p2101002#果然是沙子图团的团员！怪不得有一种危险的气息……告诉她想要进入沙子图团后，#p2101002#说如果能潜入王妃的宝物仓库并盗出宝物，就会认可我。关于王妃宝物的信息，也许要问#b宫殿里的某个人#k……"/>
+        <string name="2" value="住在宫殿里，却不像是王妃那边的人……去找讲故事的人#p2101008#问问宝物的情况吧。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3935">
         <string name="name" value="呃拉斯卡的考验"/>
         <string name="parent" value="呃拉斯卡所说的沙子图团"/>
         <int name="order" value="2"/>
-        <string name="1" value="沙子图团的事一句都没提，但#p2101008#直接告诉了王妃的宝物仓库所在地。暗暗的灯光下，隐藏的路…… 只要去偷#b#t4031574##k就可以了吧？\n\n#i4031574# #t4031574# #b#c4031574#/1#k"/>
+        <string name="1" value="#p2101008#一句都没提沙子图团，却直接告诉了我王妃宝物仓库的线索。昏暗灯光下的隐藏道路……只要去偷#b#t4031574##k就可以了吧？\n\n#i4031574# #t4031574# #b#c4031574#/1#k"/>
         <string name="2" value="把宝物送给了呃拉斯卡。呃拉斯卡吓了一跳…… 挑剔的她也会认可我吧？"/>
         <int name="area" value="44"/>
     </imgdir>
@@ -14351,31 +14359,31 @@
         <string name="parent" value="呃拉斯卡所说的沙子图团"/>
         <int name="order" value="3"/>
         <string name="0" value="通过了#p2101002#的所有考验了。现在可以成为沙子图团员了吧？去找最值得信任的#p2101002#问问吧。"/>
-        <string name="1" value="#p2101002#说沙子图团员要怀着对王妃的憎恨和愤怒，但不能把它表现出来。对于团员来说最重要的是耐性。耐性…… 这个和提炼有联系。就按呃拉斯卡说的，提炼#b#t4011008# 2个#k吧。\n\n#i4011008# #t4011008#  #b#c4011008#/2"/>
-        <string name="2" value="拿到#t4011008#的#p2101002#说凭这个耐心可以成为沙子图团员。如果能通过其他人的考验就可以成为沙子图团员。其他团员？ 这么说来墙上还有弓和铁锤等词啊？"/>
+        <string name="1" value="#p2101002#说沙子图团员要怀着对王妃的愤怒，却不能轻易表露出来。对团员来说最重要的是耐心。耐心……这和提炼有关。就按呃拉斯卡说的，提炼#b#t4011008# 2个#k吧。\n\n#i4011008# #t4011008#  #b#c4011008#/2"/>
+        <string name="2" value="拿到#t4011008#后，#p2101002#说凭这份耐心，我已经得到她的认可。如果能通过其他人的考验，就可以成为沙子图团员。其他团员？这么说来，墙上还有弓箭和铁锤等词啊？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3937">
         <string name="name" value="沙子图团的身份"/>
-        <string name="0" value="通过了所有沙子图团员的考验，并且被他们认可了。现在去他们的秘密基地吧。"/>
+        <string name="0" value="通过了所有沙子图团员的考验，并且得到了他们的认可。现在去他们的秘密基地吧。"/>
         <string name="1" value="沙子图团团长#b#p2101010##k说已经通过了所有团员的考验，讲起了关于#m260000000#的苏丹和王妃的故事。讲完故事之后，他看了一眼#m260000000#，说等下定决心进入沙子图团之后再来。"/>
-        <string name="2" value="已经被#p2101010#认可进入沙子图团了。以后作为沙子图团员，要为#m260000000#而努力。"/>
+        <string name="2" value="已经被#p2101010#认可，正式加入沙子图团了。以后作为沙子图团员，要为#m260000000#而努力。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3938">
         <string name="name" value="第一个任务"/>
         <string name="parent" value="沙子图团的第一个任务"/>
         <int name="order" value="1"/>
-        <string name="0" value="为了#m260000000#居民而努力的沙子图团。成为了沙子图团员要接受任务了吧？去找#b#p2101010##k吧。"/>
-        <string name="1" value="#p2101010#说这次任务是把王妃想买的昂贵的丝绸秘密调出，分给人们。计划是，装成守卫王妃物品的警卫，把东西拿过来！只要拿来#b#p2101004#的头发#k，#p2101010#就可以制变身药。\n\n#i4031570# #t4031570# #b#c4031570# /#k1#k"/>
-        <string name="2" value="给了#p2101010# #p2101004#的头发…… 不 #p2101004#的胡子。只要等变身药制成就可以了…… 会作成什么样呢？"/>
+        <string name="0" value="为了#m260000000#居民而努力的沙子图团。既然已经成为团员，也该接受第一个任务了吧？去找#b#p2101010##k吧。"/>
+        <string name="1" value="#p2101010#说这次任务是把王妃想买的昂贵丝绸秘密调出来，分给人们。计划是装成守卫王妃物品的警卫，把东西拿过来！只要拿来#b#p2101004#的头发#k，#p2101010#就可以制作变身药。\n\n#i4031570# #t4031570# #b#c4031570# /#k1#k"/>
+        <string name="2" value="把#p2101004#的头发……不，是#p2101004#的胡子交给了#p2101010#。只要等变身药制成就可以了……会做成什么样呢？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3939">
-        <string name="name" value="提干的头发"/>
+        <string name="name" value="提干的头发？"/>
         <string name="0" value="答应#p2101010#拿来#p2101004#的头发，得赶紧去取…… 怎么取呢？去#b#p2101004##k那儿看看吧。"/>
         <string name="1" value="#p2101004#说不能给他的头发，但可以给一根他的胡子。但要拿昂贵的#b#t4010007# 1个#k来交换…… \n\n#i4010007# #t4010007# #b#c4010007#/1#k"/>
-        <string name="2" value="给了#p2101004# #t4010007#，拿到了一根胡子。虽然不是头发，但这个也应该没有问题吧？赶紧拿给#p2101010#吧。"/>
+        <string name="2" value="给了#p2101004# #t4010007#，拿到了一根胡子。虽然不是头发，但应该也能用吧？赶紧拿给#p2101010#吧。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3940">
@@ -14384,14 +14392,14 @@
         <int name="order" value="2"/>
         <string name="0" value="现在#p2101010#差不多已经制好提干变身药了吧？去找#b#p2101010##k吧。"/>
         <string name="1" value="从#p2101010#那儿得到了可以变身为#p2101004#的变身药。虽然很怪异，但既然说吃了之后可以变成#p2101004#，只能暂且相信了。赶紧吃#p2101004#变身药，去#b#m260010600##k，从#b#p2101013##k那儿拿#b丝绸#k吧。\n\n#i4031571# #t4031571# #b#c4031571#/1#k"/>
-        <string name="2" value="从#p2101004#那儿拿到了王妃订的丝绸，送给了#p2101010#。好！作为沙子图团员的第一个任务圆满完成了。"/>
+        <string name="2" value="从#p2101013#那儿拿到了王妃订的丝绸，并送给了#p2101010#。好！作为沙子图团员的第一个任务圆满完成了。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3941">
         <string name="name" value="抢夺王妃的丝绸"/>
         <string name="0" value="作为沙子图团员，正在执行第一个任务…… 任务是抢夺王妃订的丝绸！以#p2101004#的模样去#b#m260010600##k，与王妃做丝绸生意的 #b#p2101013##k那儿拿到丝绸。"/>
-        <string name="1" value="#p2101013#以怀疑地眼神看着。呜呜…… 要好好说话，拿到#b丝绸#k。"/>
-        <string name="2" value="好不容易从#p2101013#那儿拿到了丝绸。呼，模仿别人真不是一件容易的事啊…… 还好成功了，去找#p2101010#？"/>
+        <string name="1" value="#p2101013#用怀疑的眼神看着我。呜呜……要好好说话，拿到#b丝绸#k。"/>
+        <string name="2" value="好不容易从#p2101013#那儿拿到了丝绸。呼，模仿别人真不是一件容易的事啊……还好成功了，去找#p2101010#报告吧。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3942">
@@ -14423,10 +14431,10 @@
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3946">
-        <string name="name" value="对于善行的适当的补偿"/>
-        <string name="0" value="被声称沙子图团的红蝎子团骗，反而帮了红蝎子团。幸好及时发现并把红蝎子的宝物分给了村子里的人，现在心安理得了…… 但不知为什么#b西琳#k还有话要说……"/>
-        <string name="1" value="西琳说做了这些事早已弥补了帮助红蝎子团的事件，可以适当的要求些#b补偿#k。补偿？是谁给补偿呢？"/>
-        <string name="2" value="作为善行的补偿，拿了几个宝物箱中的宝物。嗯，这个算是适当的补偿吧。"/>
+        <string name="name" value="善行应得的补偿"/>
+        <string name="0" value="被冒充沙子图团的红蝎子团骗了，反而帮了他们。幸好及时发现真相，并把红蝎子团的宝物分给了村子里的人，现在总算心安理得了……但#b西琳#k好像还有话要说。"/>
+        <string name="1" value="西琳说我已经弥补了被红蝎子团利用的事，可以适当地拿些#b补偿#k。她暗示我回到红蝎子团据点的宝物箱看看。"/>
+        <string name="2" value="作为善行的补偿，从宝物箱里拿了一些宝石和矿石。嗯，这应该算是适当的补偿吧。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3947">
@@ -14437,34 +14445,34 @@
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3948">
-        <string name="name" value="Sejan&apos;s Good Habit"/>
-        <string name="0" value="#b#p2101011##k in #b#m260000200##k seems to be in some kind of trouble... I should go pay him visit."/>
-        <string name="1" value="I met with #b#p2101011##k.  He said because he hadn&apos;t been feeling good, he didn&apos;t collect his arrows for a week and now he has lost some.  I promised #b#p2101011##k that I would collect and bring him back all his missing arrows.  But I didn&apos;t know it was that many.  How many arrows does #b#p2101011##k shoot everyday? \n I thought I heard somewhere that they sell #b#t02060001##k in either #r#m220000000##k or #r#m222000000##k..."/>
-        <string name="2" value="#b#p2101011##k started practicing shooting arrows again.   I wanted to ask #b#p2101011##k how many arrows he shoots on average in one day... but he looked so focused as he was training to fight against the queen, I felt like I shouldn&apos;t bother him."/>
+        <string name="name" value="携詹的好习惯"/>
+        <string name="0" value="#b#m260000200##k的#b#p2101011##k好像遇到了什么麻烦……去看看他吧。"/>
+        <string name="1" value="见到了#b#p2101011##k。他说因为身体不舒服，有一个星期没有回收射出去的箭矢，结果弄丢了一些。我答应#b#p2101011##k帮他把丢失的箭矢全部找回来。可是没想到数量竟然那么多。#b#p2101011##k每天到底要射多少支箭啊？\n听说#b#t02060001##k在#r#m220000000##k或#r#m222000000##k有卖……"/>
+        <string name="2" value="#b#p2101011##k又开始练习射箭了。本来想问问#b#p2101011##k平均一天会射多少支箭……但他看起来正专心训练，准备与王妃作战，我觉得还是不要打扰他比较好。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3949">
-        <string name="name" value="Jiyur&apos;s Palace Entry Pass"/>
-        <string name="parent" value="In Search for His Sister"/>
+        <string name="name" value="吉尤尔的宫殿出入资格证"/>
+        <string name="parent" value="寻找姐姐"/>
         <int name="order" value="1"/>
-        <string name="0" value="#b#p2101001##k says he is going to see his sister.  I&apos;m worried since he&apos;s just a kid.  Maybe I should go see him."/>
-        <string name="1" value="I didn&apos;t really believe it when #p2101001# said he was going inside the palace to see his sister... The plan #p2101001# thought of was to buy #b#t04031582##k from #b#p2101004##k.  Since I already said I would pay for it knowing that #p2101001# has no money... I guess I need to keep the promise now.\n\n#i04031582# #t04031582#  #b#c04031582##k / 1"/>
-        <string name="2" value="#p2101001# looked so happy when he received the #b#t04031582##k ... Then just like that, he ran off to the palace.  I&apos;ll have to ask him later if he was able to meet his sister.  But... was he supposed to write his name on the #t04031582#?  I&apos;ve never heard of that before."/>
+        <string name="0" value="#b#p2101001##k说他要去见姐姐。他还只是个孩子，真让人担心。去看看他吧。"/>
+        <string name="1" value="#p2101001#说要进宫殿见姐姐时，我其实不太相信……#p2101001#想到的办法，是从#b#p2101004##k那里买#b#t04031582##k。既然知道#p2101001#没钱时我已经答应替他付钱……现在就得遵守约定了。\n\n#i04031582# #t04031582#  #b#c04031582##k / 1"/>
+        <string name="2" value="#p2101001#收到#b#t04031582##k后看起来非常高兴……然后就那样跑去宫殿了。之后得问问他有没有见到姐姐。不过……#t04031582#上是需要写名字的吗？我从来没听说过。"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3950">
-        <string name="name" value="Dealing with Tigun"/>
-        <string name="parent" value="In Search for His Sister"/>
+        <string name="name" value="对付提干"/>
+        <string name="parent" value="寻找姐姐"/>
         <int name="order" value="2"/>
-        <string name="1" value="I feel bad for #p2101001#.  He really wanted to get in the palace...  I should step in and try to convince #b#p2101004##k.  A fine of #b50000 mesos#k... I&apos;ll pay it off instead and ask for him to let #p2101001# to meet his sister.\n\n#b50000 mesos#k"/>
-        <string name="2" value="It is unfortunate that #p2101001# wasn&apos;t able to meet his sister but it&apos;s good to know that they can at least send and receive letters from each other.  But, #p2101004#!  Don&apos;t you think the delivery fee is a bit ridiculous?"/>
+        <string name="1" value="#p2101001#真可怜。他真的很想进宫殿……我得出面试着说服#b#p2101004##k。罚款#b50000金币#k……就由我来替他付掉，再拜托对方让#p2101001#见到姐姐吧。\n\n#b50000金币#k"/>
+        <string name="2" value="#p2101001#没能见到姐姐虽然很遗憾，但至少知道他们可以互相寄信了。不过，#p2101004#！你不觉得这个送信手续费有点太离谱了吗？"/>
         <int name="area" value="44"/>
     </imgdir>
     <imgdir name="3951">
-        <string name="name" value="The Tree Cutter&apos;s Test"/>
-        <string name="0" value="#b#p2071011##k in #b#m222010102##k is looking for me? That&apos;s strange.  What does he want with me...? "/>
-        <string name="1" value="I spoke with #p2071011#.  He saw that I come here often, so he wanted to tell me to stay away from this dangerous place.  But, seriously?  He&apos;s afraid to walk around the forest because of #o5100003#?  If I don&apos;t convince #p2071011# that I&apos;m strong enough to handle myself here, he might physically drag me out of  #m222000000#.  I better hurry up and prove it to him!\n\n#r30 minute time limit\n#k#o5100003#  #r#a39511##k"/>
-        <string name="2" value="#p2071011# was amazed that I was able to hunt all the #o5100003# in such a short time.  But after all that work, all I got was permission to freely roam around the forest...  Wonderful..."/>
+        <string name="name" value="樵夫的考验"/>
+        <string name="0" value="#b#m222010102##k的#b#p2071011##k在找我？真奇怪，他找我有什么事呢……"/>
+        <string name="1" value="和#p2071011#谈过了。他看到我最近常来这里，就想劝我远离这个危险的地方。可是，真的吗？他是因为害怕#o5100003#才不敢在森林里走动？如果不能让#p2071011#相信我有足够的实力照顾自己，他可能会把我硬拖出#m222000000#。得快点证明给他看！\n\n#r30分钟限制时间\n#k#o5100003#  #r#a39511##k"/>
+        <string name="2" value="#p2071011#很惊讶我能在这么短的时间内猎杀所有#o5100003#。可辛苦了半天，得到的只是可以在森林里自由走动的许可……真不错……"/>
         <int name="timeLimit" value="1800"/>
         <int name="area" value="37"/>
     </imgdir>
@@ -17869,91 +17877,91 @@
         <string name="2" value="I really doubt that those potions enable eternal youth. Oh well, she likes it anyways, and that&apos;s the bottom line. I&apos;ll just leave her be."/>
         <int name="area" value="48"/>
     </imgdir>
-    <imgdir name="8034">
-        <string name="name" value="玛雅的关切 1"/>
-        <string name="parent" value="玛雅的关切"/>
-        <int name="order" value="1"/>
-        <string name="0" value="对了，玛雅最近怎么样？我得去看看她！"/>
-        <string name="1" value="玛雅正在照顾一只重伤的小狮子。我知道这并不是大家希望我们做的事情，但玛雅坚持要这么做，我必须支持她。唉……为了处理伤口，她说需要 #b50 #t02050003#s#k, #b20 #t04000086#s#k 和 #b20 #t04000023#s#k。\n\n#t02050003# #b#c02050003##k/50\n#t04000086#  #b#c04000086##k/20\n#t04000023#  #b#c04000023##k/20"/>
-        <string name="2" value="伤口已经消毒，但小狮子需要休息。它似乎因为这一切而非常疲惫。"/>
-        <int name="area" value="30"/>
-    </imgdir>
-    <imgdir name="8035">
-        <string name="name" value="玛雅的关切 2"/>
-        <string name="parent" value="玛雅的关切"/>
-        <int name="order" value="2"/>
-        <string name="0" value="小狮子的情况让我很担心。我得去玛雅家看看。"/>
-        <string name="1" value="现在，小狮子中毒了！为了排毒，需要#b50 #t02050000##ks、#b30 #t04000076#s#k和#b30 #t04000058#s#k。快点！\n#t02050000#  #b#c02050000##k/50 \n#t04000076#  #b#c04000076##k/30 \n#t04000058#  #b#c04000058##k/30"/>
-        <string name="2" value="这药应该能在它好好睡一晚后排除体内的毒素。这样就可以了吗？我最好问问玛雅。"/>
-        <int name="area" value="30"/>
-    </imgdir>
-    <imgdir name="8036">
-        <string name="name" value="玛雅的关切 3"/>
-        <string name="parent" value="玛雅的关切"/>
-        <int name="order" value="3"/>
-        <string name="0" value="我觉得我们已经迎来了转机。这就能解决问题吗？我需要问问玛雅。"/>
-        <string name="1" value="为了加快小狮子的康复，玛雅让我帮忙收集一些鱼，必须是新鲜的。由于#b#o5400000##k喜欢吃新鲜鱼，我最好准备#b100 #t4000088#s#k。\n#t4000088#  #b#c4000088##k/100"/>
-        <string name="2" value="我在这里所能做的一切都已经完成。接下来就交给玛雅吧。希望小狮子能够早日康复！"/>
-        <int name="area" value="30"/>
-    </imgdir>
-    <imgdir name="8037">
-        <string name="name" value="小狮子的项链 1"/>
-        <string name="parent" value="小狮子的项链"/>
-        <int name="order" value="1"/>
-        <string name="0" value="对了，小狮子最近怎么样？我得去玛雅家看看。"/>
-        <string name="1" value="玛雅决定给小狮子打扮一下，用一条项链把它伪装成家猫。因为在当地商场买一条可能会暴露它的身份，所以她想让我去找明珠港的特奥帮忙。"/>
-        <string name="2" value="特奥决定帮助制作小狮子的项链。"/>
-        <int name="area" value="30"/>
-    </imgdir>
-    <imgdir name="8038">
-        <string name="name" value="小狮子的项链 2"/>
-        <string name="parent" value="小狮子的项链"/>
-        <int name="order" value="2"/>
-        <string name="0" value="特奥决定帮助制作小狮子的项链。我得赶紧问问他。"/>
-        <string name="1" value="特奥似乎很忙，于是我决定自己去收集材料。我需要准备#b50 #t04000033#s#k、#b50 #t04000030#s#k和#b7 #t04000061##k，然后交给特奥。\n\n#t04000033#  #b#c04000033##k/50\n#t04000030#  #b#c04000030##k/50\n#t04000061#  #b#c04000061##k/7"/>
-        <string name="2" value="把材料交给特奥后，他很快就送去珠宝商那里制作。制作出来的是一条美丽的项链，使用了黑鳄鱼皮和龙皮。现在我得把这个展示给玛雅看看。"/>
-        <int name="area" value="30"/>
-    </imgdir>
-    <imgdir name="8039">
-        <string name="name" value="小狮子的项链 3"/>
-        <string name="parent" value="小狮子的项链"/>
-        <int name="order" value="3"/>
-        <string name="1" value="把材料交给特奥后，他很快就送去珠宝商那里制作。这条美丽的项链由黑鳄鱼皮和龙皮制成。现在我得把它展示给玛雅看看。"/>
-        <string name="2" value="有了这条项链，小狮子现在可一点也不像个怪物了。真是太好了！"/>
-        <int name="area" value="30"/>
-    </imgdir>
-    <imgdir name="8040">
-        <string name="name" value="小狮子的旅程"/>
-        <string name="0" value="小狮子现在和玛雅在外面玩吗？我得去玛雅家看看他们。"/>
-        <string name="1" value="显然，给小狮子留下伤疤的是#b#o5130104##k，这也是它尽管戴着项链还是不敢离开家的原因。我需要准备#b100 #t04000051#s#k来增强它的信心。\n#t04000051#  #b#c04000051##k/100"/>
-        <string name="2" value="玛雅说小狮子的朋友们来过，并且和它一起离开了。至少小狮子不是一个人。虽然玛雅可能在哭，但我认为让小狮子去和朋友们生活是最好的选择。"/>
-        <int name="area" value="30"/>
-    </imgdir>
+      <imgdir name="8034">
+    <string name="name" value="玛亚的关切 1"/>
+    <string name="parent" value="玛亚的关切"/>
+    <int name="order" value="1"/>
+    <string name="0" value="对了，玛亚最近怎么样？我得去看看她。"/>
+    <string name="1" value="玛亚正在照顾一只受重伤的幼年独角狮。虽然大家未必愿意帮助怪物，但玛亚坚持要救它，我也想帮她。为了给伤口消毒并包扎，需要#b50个#t02050003##k、#b20个#t04000086##k和#b20个#t04000023##k。\n\n#t02050003# #b#c02050003##k/50\n#t04000086#  #b#c04000086##k/20\n#t04000023#  #b#c04000023##k/20"/>
+    <string name="2" value="伤口已经消毒，但幼年独角狮还需要休息。经历了这一切，它看起来非常疲惫。"/>
+    <int name="area" value="30"/>
+  </imgdir>
+      <imgdir name="8035">
+    <string name="name" value="玛亚的关切 2"/>
+    <string name="parent" value="玛亚的关切"/>
+    <int name="order" value="2"/>
+    <string name="0" value="幼年独角狮的情况让我很担心。我得去玛亚家看看。"/>
+    <string name="1" value="幼年独角狮中毒了！为了制作解毒药，需要#b50个#t02050000##k、#b30个#t04000076##k和#b30个#t04000058##k。得快点。\n#t02050000#  #b#c02050000##k/50\n#t04000076#  #b#c04000076##k/30\n#t04000058#  #b#c04000058##k/30"/>
+    <string name="2" value="这份药应该能在它睡一晚后清除体内毒素。这样就可以了吗？我最好再问问玛亚。"/>
+    <int name="area" value="30"/>
+  </imgdir>
+      <imgdir name="8036">
+    <string name="name" value="玛亚的关切 3"/>
+    <string name="parent" value="玛亚的关切"/>
+    <int name="order" value="3"/>
+    <string name="0" value="我觉得情况已经开始好转了。这样就能解决问题吗？我需要问问玛亚。"/>
+    <string name="1" value="为了让幼年独角狮恢复体力，玛亚让我帮忙收集一些新鲜的鱼。#b#o5400000##k只吃最新鲜的鱼，我得准备#b100个#t4000088##k。\n#t4000088#  #b#c4000088##k/100"/>
+    <string name="2" value="我能做的都已经做完了。接下来就交给玛亚吧。希望莱昂内尔能够早日康复！"/>
+    <int name="area" value="30"/>
+  </imgdir>
+      <imgdir name="8037">
+    <string name="name" value="莱昂内尔的项链 1"/>
+    <string name="parent" value="莱昂内尔的项链"/>
+    <int name="order" value="1"/>
+    <string name="0" value="幼年独角狮最近怎么样了？我得去玛亚家看看。"/>
+    <string name="1" value="玛亚决定给它取名为莱昂内尔，并用项链把它伪装成家猫。为了避免在射手村买项链引起注意，她让我去明珠港找特奥帮忙。"/>
+    <string name="2" value="特奥答应帮忙制作莱昂内尔的项链。"/>
+    <int name="area" value="30"/>
+  </imgdir>
+      <imgdir name="8038">
+    <string name="name" value="莱昂内尔的项链 2"/>
+    <string name="parent" value="莱昂内尔的项链"/>
+    <int name="order" value="2"/>
+    <string name="0" value="特奥答应帮忙制作莱昂内尔的项链。我得赶紧问问他。"/>
+    <string name="1" value="特奥似乎很忙，于是我决定自己去收集材料。我需要准备#b50个#t04000033##k、#b50个#t04000030##k和#b7个#t04000061##k，然后交给特奥。\n\n#t04000033#  #b#c04000033##k/50\n#t04000030#  #b#c04000030##k/50\n#t04000061#  #b#c04000061##k/7"/>
+    <string name="2" value="把材料交给特奥后，他很快就送去珠宝店制作。做出来的是一条用黑鳄鱼皮和龙皮制成的漂亮项链。现在我要把它拿给玛亚。"/>
+    <int name="area" value="30"/>
+  </imgdir>
+      <imgdir name="8039">
+    <string name="name" value="莱昂内尔的项链 3"/>
+    <string name="parent" value="莱昂内尔的项链"/>
+    <int name="order" value="3"/>
+    <string name="1" value="特奥把材料送去珠宝店，很快做好了一条由黑鳄鱼皮和龙皮制成的漂亮项链。现在我要把它拿给玛亚。"/>
+    <string name="2" value="戴上项链后，莱昂内尔看起来一点也不像怪物了。太好了！"/>
+    <int name="area" value="30"/>
+  </imgdir>
+      <imgdir name="8040">
+    <string name="name" value="莱昂内尔的旅程"/>
+    <string name="0" value="莱昂内尔现在能和玛亚一起外出了吗？我得去玛亚家看看他们。"/>
+    <string name="1" value="原来让莱昂内尔留下伤痕的是#b#o5130104##k，所以即使戴上项链，它仍然害怕出门。我需要收集#b100个#t04000051##k，帮它克服对狼的恐惧。\n#t04000051#  #b#c04000051##k/100"/>
+    <string name="2" value="玛亚说莱昂内尔的朋友们来找它，并和它一起离开了。至少莱昂内尔不是孤单一人。玛亚虽然很难过，但让莱昂内尔回到朋友身边，或许才是最好的选择。"/>
+    <int name="area" value="30"/>
+  </imgdir>
     <imgdir name="8041">
         <string name="name" value="怪物传闻坊"/>
         <string name="parent" value="怪物传闻坊"/>
         <int name="order" value="1"/>
-        <string name="0" value="我听说埃尔纳斯的斯卡杜尔被怪物袭击了。我得去找他聊聊。"/>
-        <string name="1" value="显然，狐狸，也就是珀斯上尉也遭遇了那个臭名昭著的怪物。我得去了解一下情况。"/>
-        <string name="2" value="为了收集有关这个怪物的信息，我得帮珀斯上尉一个忙。你在开玩笑吗？"/>
+        <string name="0" value="听说冰封雪域的斯卡德被某只怪物袭击了。我得去找他了解情况。"/>
+        <string name="1" value="原来珀斯上尉也被那只臭名昭著的怪物袭击过。我得去问问他。"/>
+        <string name="2" value="为了打听那只怪物的情报，我得先帮珀斯上尉一个忙。真是的……"/>
         <int name="area" value="33"/>
     </imgdir>
     <imgdir name="8042">
-        <string name="name" value="狐狸真迷人"/>
+        <string name="name" value="珀斯上尉的情报"/>
         <string name="parent" value="怪物传闻坊"/>
         <int name="order" value="2"/>
-        <string name="0" value="为了收集有关这个怪物的信息，我得帮珀斯上尉一个忙。你在开玩笑吗？"/>
-        <string name="1" value="为了进一步了解这个怪物，我需要给珀斯上尉#b50 #t04000129#s#k。\n#t04000129#  #b#c04000129##k/50"/>
-        <string name="2" value="难怪……他提到，地球防御总部似乎也在着手对付这个怪物。他说我可以通过偷听 马斯特将军 来了解更多情况。这可不容易……"/>
+        <string name="0" value="为了打听那只怪物的情报，我得先帮珀斯上尉一个忙。真是的……"/>
+        <string name="1" value="为了进一步了解那只怪物，我需要交给珀斯上尉#b50个#t04000129##k。\n#t04000129#  #b#c04000129##k/50"/>
+        <string name="2" value="难怪……据珀斯上尉所说，地球防御本部似乎也在行动，准备对付那只怪物。他建议我去偷听马斯特将军，也许能知道更多内情。这可不容易……"/>
         <int name="area" value="48"/>
     </imgdir>
     <imgdir name="8043">
-        <string name="name" value="狼人"/>
+        <string name="name" value="白狼人"/>
         <string name="parent" value="怪物传闻坊"/>
         <int name="order" value="3"/>
-        <string name="0" value="难怪……他说，地球防御总部似乎也在积极行动以击败那个怪物。他提到我可以通过偷听 马斯特 将军 来了解更多情况。这可不容易……"/>
-        <string name="1" value="不可能……其中一个#b#o8140000#s#k可能正在策划什么阴险的事情……我不能让他们在这里对无辜的人造成破坏。虽然这可能不是玛雅想听到的，但我必须消灭这些#b#o8140000#s#k。\n#t04000054# #b#c04000054##k/50"/>
-        <string name="2" value="我没有找到戴着项链的#b#o8140000##k。我相信它肯定还活着某个地方。我知道这听起来有些奇怪，但我决定相信这个事实。"/>
+        <string name="0" value="难怪……据珀斯上尉所说，地球防御本部似乎正在准备对付那只怪物。他说偷听马斯特将军的谈话，也许能知道更多内情。这可不容易……"/>
+        <string name="1" value="不可能……这些#b#o8140000##k可能正在策划什么阴谋。我不能让它们伤害无辜的人。虽然这可能不是玛亚想听到的，但我必须消灭这些#b#o8140000##k。\n#t04000054# #b#c04000054##k/50"/>
+        <string name="2" value="我没有找到戴着项链的#b#o8140000##k。我相信莱昂内尔一定还活在某个地方。虽然听起来有些奇怪，但我愿意相信这一点。"/>
         <int name="area" value="10"/>
     </imgdir>
     <imgdir name="8047">
@@ -18062,21 +18070,21 @@
         <int name="area" value="48"/>
     </imgdir>
     <imgdir name="8061">
-        <string name="name" value="Doll in the Dark 1"/>
-        <string name="parent" value="Doll in the Dark"/>
+        <string name="name" value="黑暗中的娃娃 1"/>
+        <string name="parent" value="黑暗中的娃娃"/>
         <int name="order" value="1"/>
-        <string name="0" value="#b#p1012109##k of #b#m100000000##k in Victoria Island has apparently started writing a book."/>
-        <string name="1" value="#p1012109# of #m100000000# has requested my help in writing his book. For more information, he recommended me to talk to #b#p2041022##k in #b#m220000400##k of Ludibrium. Should I go there...?"/>
-        <string name="2" value="#b#p2041022##k asked me to look for some subjects worthy of writing a book on. I should talk to him when the research is over."/>
+        <string name="0" value="维多利亚岛#m100000000#的#b#p1012109##k似乎开始撰写一本新书。"/>
+        <string name="1" value="#m100000000#的#p1012109#拜托我协助他撰写新书。为了获得更多资料，他建议我去玩具城#m220000400#找#b#p2041022##k谈谈。要去看看吗？"/>
+        <string name="2" value="#b#p2041022##k让我寻找适合写进书里的研究对象。调查结束后，再去找他谈谈吧。"/>
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8062">
-        <string name="name" value="Doll in the Dark 2"/>
-        <string name="parent" value="Doll in the Dark"/>
+        <string name="name" value="黑暗中的娃娃 2"/>
+        <string name="parent" value="黑暗中的娃娃"/>
         <int name="order" value="2"/>
-        <string name="0" value="#b#p2041022##k said he looked for some subjects that may go along with the book that&apos;s being written. What do I need to do now? I better ask him."/>
-        <string name="1" value="#p2041022# requested me to defeat #b#o6230400##k and collect #b50 #t04000143#s#k so I can hand them to #b#p1012109##k. I don&apos;t know if #p1012109# wants to be in on this, but I&apos;ll ask first."/>
-        <string name="2" value="Just the way #p2041022# ordered, I gathered up #b50 #t04000143#s#k from #b#o6230400##k, and gave them to #p1012109# of #m100000000#. #p1012109# seemed very ecstatic, and rewarded me for my effort, but will that really help him write the next chapter?"/>
+        <string name="0" value="#b#p2041022##k说他找到了一些适合那本新书的研究对象。接下来该做什么呢？去问问他吧。"/>
+        <string name="1" value="#p2041022#让我打倒#b#o6230400##k并收集#b50个#t4000143##k，交给#m100000000#的#b#p1012109##k。不知道#p1012109#是否需要这些材料，先去问问他吧。"/>
+        <string name="2" value="按照#p2041022#的建议，我从#b#o6230400##k身上收集了#b50个#t4000143##k，并交给了#m100000000#的#p1012109#。#p1012109#非常高兴，还给了我谢礼。不知道这些资料能不能帮他写出下一章呢？"/>
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8064">
@@ -18385,79 +18393,83 @@
     </imgdir>
     <imgdir name="8231">
         <string name="name" value="愚者的黄金"/>
-        <string name="0" value="在马斯特利亚和新叶城发生了这么多奇怪的事情，莉塔·罗莉丝肯定忙得不可开交！我敢打赌她一定乐意接受我的帮助……或许我还能借此赚些赏金！只需快速前往废弃都市地铁站，我就能出发去新叶城！"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="1"/>
+        <string name="0" value="新叶城一带发生了这么多奇怪的事情，莉塔·罗莉丝肯定忙得不可开交！我敢打赌她一定乐意接受我的帮助……或许我还能借此赚些赏金！只需快速前往废弃都市地铁站，我就能出发去新叶城！"/>
         <string name="1" value="我与莉塔交谈过，她提到幻影森林里有个捣蛋鬼在游荡。这给她带来了不少麻烦——对于像她这样的战士来说，这实在让人感到惊讶。我已同意帮助她清除这些恶劣生物，作为证明，我需要带回#b30#k颗她所称的#b幸运符#k，这些奇怪的银苜蓿。我会提高警惕——据说那片森林闹鬼……"/>
-        <string name="2" value="我深入疯狂的幻影森林，遇到了一些小妖精，并经过一番战斗后收集到了30颗幸运符。我将它们带回给Lita以领取赏金！她对我的帮助表示感谢，并提到我可以回来找她进行更多的赏金工作！"/>
+        <string name="2" value="我深入疯狂的幻影森林，遇到了一些小妖精，并经过一番战斗后收集到了30颗幸运符。我将它们带回给莉塔以领取赏金！她对我的帮助表示感谢，并提到我可以回来找她进行更多的赏金工作！"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8232">
         <string name="name" value="愚者的黄金"/>
-        <string name="0" value="马斯特里亚和新叶城发生了这么多奇怪的事情，莉塔·罗莉丝肯定忙得不可开交！我打赌她很愿意接受我的帮助……也许我还能顺便赚点赏金！坐上废弃都市的地铁，我就能去新叶城了！"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="2"/>
+        <string name="0" value="新叶城一带发生了这么多奇怪的事情，莉塔·罗莉丝肯定忙得不可开交！我打赌她很愿意接受我的帮助……也许我还能顺便赚点赏金！坐上废弃都市的地铁，我就能去新叶城了！"/>
         <string name="1" value="我和莉塔聊过，发现#b#m682000001##k里似乎有个捣蛋鬼在游荡。这给她带来了不少麻烦——对于像她这样的战士来说，这实在让人感到惊讶。我已答应帮她清除森林里的这些邪恶生物，作为证明，我需要带回来#b30#k个她称之为#b#t4032031##k的东西。我会保持警惕——据说那片森林闹鬼……"/>
         <string name="2" value="我冒险进入了疯狂的幻影森林，遇到了一些小妖精，经过一系列战斗后，获得了30个#b#t4032031##k。我将它们交还给莉塔以领取赏金！她对我的帮助表示感谢，并提到我可以再来找她领取更多赏金任务！"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8233">
-        <string name="name" value="Rags to Riches"/>
-        <string name="parent" value="Bounty Hunter."/>
-        <int name="order" value="1"/>
-        <string name="0" value="With all the strange occurrences in Masteria and New Leaf City, Lita Lawless must be busy! I&apos;ll bet that she&apos;s willing to accept my help...maybe I can earn some mesos in the process! A quick jaunt to the Kerning City subway and I&apos;ll be on my way to New Leaf City!"/>
-        <string name="1" value="I spoke with LIta, and it seems that there strange, powerful spirits drifting about the Phantom Forest. These strange spirits seemingly have no desire, save for tormenting others. I&apos;ve agreed to eliminate 30 of them, and bring their soiled rags to Lita as proof of valor. I&apos;d better keep sharp-that forest has driven quite a few travelers mad with its confusion..."/>
-        <string name="2" value="I navigated the Phantom Forest and collected 30 of the Soiled Rags the Elder Wraiths had upon them. It was strange to finally fight one, they were eerily quiet for being so vicious. I wonder if there&apos;s more to their story...perhaps someone in the Phantom Forest would know..."/>
+        <string name="name" value="破布生财"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="3"/>
+        <string name="0" value="新叶城一带发生了这么多怪事，莉塔·罗莉丝肯定忙得不可开交！我打赌她会愿意接受我的帮助……说不定我还能顺便赚点赏金。只要从废弃都市地铁出发，很快就能到新叶城！"/>
+        <string name="1" value="我和莉塔谈过了。幻影森林里似乎有一些强大的怨灵四处游荡，它们除了折磨别人之外好像没有别的目的。我答应消灭它们，并带回#b30#k个#b#t4032011##k作为英勇的证明。那片森林已经让不少旅行者迷失发疯，我最好保持警惕……"/>
+        <string name="2" value="我穿过幻影森林，收集到了长者幽灵身上的30个#b#t4032011##k。真正和它们交手后感觉很奇怪，它们明明那么凶残，却安静得令人发毛。我怀疑这背后还有别的故事……也许幻影森林里有人知道些什么。"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8234">
-        <string name="name" value="Rags to Riches."/>
-        <string name="parent" value="Bounty Hunter."/>
-        <int name="order" value="2"/>
-        <string name="0" value="With all the strange occurrences in Masteria and New Leaf City, Lita Lawless must be busy! I&apos;ll bet that she&apos;s willing to accept my help...maybe I can earn some mesos in the process! A quick jaunt to the Kerning City subway and I&apos;ll be on my way to New Leaf City!"/>
-        <string name="1" value="I spoke with LIta, and it seems that there strange, powerful spirits drifting about the Phantom Forest. These strange spirits seemingly have no desire, save for tormenting others. I&apos;ve agreed to eliminate 30 of them, and bring their soiled rags to Lita as proof of valor. I&apos;d better keep sharp-that forest has driven quite a few travelers mad with its confusion..."/>
-        <string name="2" value="I navigated the Phantom Forest and collected 30 of the Soiled Rags the Elder Wraiths had upon them. It was strange to finally fight one, they were eerily quiet for being so vicious. I wonder if there&apos;s more to their story...perhaps someone in the Phantom Forest would know..."/>
+        <string name="name" value="破布生财 - 后续"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="4"/>
+        <string name="0" value="新叶城一带发生了这么多怪事，莉塔·罗莉丝肯定忙得不可开交！我打赌她会愿意接受我的帮助……说不定我还能顺便赚点赏金。只要从废弃都市地铁出发，很快就能到新叶城！"/>
+        <string name="1" value="我和莉塔谈过了。幻影森林里似乎有一些强大的怨灵四处游荡，它们除了折磨别人之外好像没有别的目的。我答应消灭它们，并带回#b30#k个#b#t4032011##k作为英勇的证明。那片森林已经让不少旅行者迷失发疯，我最好保持警惕……"/>
+        <string name="2" value="我穿过幻影森林，收集到了长者幽灵身上的30个#b#t4032011##k。真正和它们交手后感觉很奇怪，它们明明那么凶残，却安静得令人发毛。我怀疑这背后还有别的故事……也许幻影森林里有人知道些什么。"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8235">
-        <string name="name" value="One Step A-Head"/>
-        <string name="parent" value="Bounty Hunter.."/>
-        <int name="order" value="1"/>
-        <string name="0" value="With all the strange occurrences in Masteria and New Leaf City, Lita Lawless must be busy! I&apos;ll bet that she&apos;s willing to accept my help...maybe I can earn some mesos in the process! A quick jaunt to the Kerning City subway and I&apos;ll be on my way to New Leaf City!"/>
-        <string name="1" value="I spoke with Lita, and she told me the tragic origin of the Headless Horseman. He was a former warrior of Crimsonwood Keep that was experimented on the mysterious Alchemist, the same one who corrupted the Krakians. He now roams the Phantom Forest, and I must bring his Jack O&apos;Lantern head to Lita as proof of my triumph! "/>
-        <string name="2" value="It was a tough fight, but I brought down the mighty horseman and returned his Jack O&apos;Lantern to Lita. I wonder how many other lives the mysterious Alchemist has ruined..."/>
+        <string name="name" value="一步之遥"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="5"/>
+        <string name="0" value="新叶城一带发生了这么多怪事，莉塔·罗莉丝肯定忙得不可开交！我打赌她会愿意接受我的帮助……说不定我还能顺便赚点赏金。只要从废弃都市地铁出发，很快就能到新叶城！"/>
+        <string name="1" value="我和莉塔谈过了，她告诉我无头骑士的悲惨来历。他曾经是绯红要塞的战士，却被那位神秘炼金术士拿来做实验；腐化克拉奇亚人的也是同一个人。现在无头骑士徘徊在幻影森林中，我必须把他的#b#t4031903##k带回给莉塔，作为完成赏金的证明！"/>
+        <string name="2" value="这是一场艰难的战斗，但我击败了强大的无头骑士，并把#b#t4031903##k带回给莉塔。不知道还有多少生命被那个神秘炼金术士毁掉了……"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8236">
-        <string name="name" value="One Step A-Head."/>
-        <string name="parent" value="Bounty Hunter.."/>
-        <int name="order" value="2"/>
-        <string name="0" value="With all the strange occurrences in Masteria and New Leaf City, Lita Lawless must be busy! I&apos;ll bet that she&apos;s willing to accept my help...maybe I can earn some mesos in the process! A quick jaunt to the Kerning City subway and I&apos;ll be on my way to New Leaf City!"/>
-        <string name="1" value="I spoke with Lita, and she told me the tragic origin of the Headless Horseman. He was a former warrior of Crimsonwood Keep that was experimented on the mysterious Alchemist, the same one who corrupted the Krakians. He now roams the Phantom Forest, and I must bring his Jack O&apos;Lantern head to Lita as proof of my triumph! "/>
-        <string name="2" value="It was a tough fight, but I brought down the mighty horseman and returned his Jack O&apos;Lantern to Lita. I wonder how many other lives the mysterious Alchemist has ruined..."/>
+        <string name="name" value="一步之遥 - 后续"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="6"/>
+        <string name="0" value="新叶城一带发生了这么多怪事，莉塔·罗莉丝肯定忙得不可开交！我打赌她会愿意接受我的帮助……说不定我还能顺便赚点赏金。只要从废弃都市地铁出发，很快就能到新叶城！"/>
+        <string name="1" value="我和莉塔谈过了，她告诉我无头骑士的悲惨来历。他曾经是绯红要塞的战士，却被那位神秘炼金术士拿来做实验；腐化克拉奇亚人的也是同一个人。现在无头骑士徘徊在幻影森林中，我必须把他的#b#t4031903##k带回给莉塔，作为完成赏金的证明！"/>
+        <string name="2" value="这是一场艰难的战斗，但我击败了强大的无头骑士，并把#b#t4031903##k带回给莉塔。不知道还有多少生命被那个神秘炼金术士毁掉了……"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8237">
-        <string name="name" value="Catch a Bigfoot by the Toe"/>
-        <string name="parent" value="Bounty Hunter..."/>
-        <int name="order" value="1"/>
-        <string name="0" value="With all the strange occurrences in Masteria and New Leaf City, Lita Lawless must be busy! I&apos;ll bet that she&apos;s willing to accept my help...maybe I can earn some mesos in the process! A quick jaunt to the Kerning City subway and I&apos;ll be on my way to New Leaf City!"/>
-        <string name="1" value="I spoke with Lita, and I&apos;m pretty sure I&apos;m getting the short end of the stick on this one. I have to venture into the Phantom Forest and find this creature they&apos;ve named Bigfoot and claim its toe as the proof of bounty. Everyone else who&apos;s gone after this thing has never come back-I&apos;d better stock up on potions and keep my guard up-who knows when it could appear?"/>
-        <string name="2" value="I found this mysterious creature, and Lita wasn&apos;t kidding when she said it wrecked everyone that came after it! Although, when I was fighting it, I got the feeling that the Leprechaun on its back was just luring him into things...maybe it just doesn&apos;t know better? At any rate, I returned the Toe to Lita and claimed the Bounty.  The more mesos, the better!"/>
+        <string name="name" value="抓住大脚怪的脚趾"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="7"/>
+        <string name="0" value="新叶城一带发生了这么多怪事，莉塔·罗莉丝肯定忙得不可开交！我打赌她会愿意接受我的帮助……说不定我还能顺便赚点赏金。只要从废弃都市地铁出发，很快就能到新叶城！"/>
+        <string name="1" value="我和莉塔谈过了，这次我大概是接了个苦差事。我要深入幻影森林，找到被称作大脚怪的生物，并取回它的#b#t4032013##k作为赏金凭证。之前追捕它的人都没有回来——我最好多准备些药水，随时保持戒备，谁知道它什么时候会出现？"/>
+        <string name="2" value="我找到了那个神秘生物。莉塔说它把所有追捕者都打得落花流水，看来一点也不夸张！不过战斗时我总觉得，它背上的小妖精像是在诱导它惹事……也许它只是分不清好坏？总之，我把#b#t4032013##k交给莉塔，领到了赏金。金币当然越多越好！"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8238">
-        <string name="name" value="Catch a Bigfoot by the Toe."/>
-        <string name="parent" value="Bounty Hunter..."/>
-        <int name="order" value="2"/>
-        <string name="0" value="With all the strange occurrences in Masteria and New Leaf City, Lita Lawless must be busy! I&apos;ll bet that she&apos;s willing to accept my help...maybe I can earn some mesos in the process! A quick jaunt to the Kerning City subway and I&apos;ll be on my way to New Leaf City!"/>
-        <string name="1" value="I spoke with Lita, and I&apos;m pretty sure I&apos;m getting the short end of the stick on this one. I have to venture into the Phantom Forest and find this creature they&apos;ve named Bigfoot and claim its toe as the proof of bounty. Everyone else who&apos;s gone after this thing has never come back-I&apos;d better stock up on potions and keep my guard up-who knows when it could appear?"/>
-        <string name="2" value="I found this mysterious creature, and Lita wasn&apos;t kidding when she said it wrecked everyone that came after it! Although, when I was fighting it, I got the feeling that the Leprechaun on its back was just luring him into things...maybe it just doesn&apos;t know better? At any rate, I returned the Toe to Lita and claimed the Bounty.  The more mesos, the better!"/>
+        <string name="name" value="抓住大脚怪的脚趾 - 后续"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="8"/>
+        <string name="0" value="新叶城一带发生了这么多怪事，莉塔·罗莉丝肯定忙得不可开交！我打赌她会愿意接受我的帮助……说不定我还能顺便赚点赏金。只要从废弃都市地铁出发，很快就能到新叶城！"/>
+        <string name="1" value="我和莉塔谈过了，这次我大概是接了个苦差事。我要深入幻影森林，找到被称作大脚怪的生物，并取回它的#b#t4032013##k作为赏金凭证。之前追捕它的人都没有回来——我最好多准备些药水，随时保持戒备，谁知道它什么时候会出现？"/>
+        <string name="2" value="我找到了那个神秘生物。莉塔说它把所有追捕者都打得落花流水，看来一点也不夸张！不过战斗时我总觉得，它背上的小妖精像是在诱导它惹事……也许它只是分不清好坏？总之，我把#b#t4032013##k交给莉塔，领到了赏金。金币当然越多越好！"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8239">
-        <string name="name" value="Bounty Master"/>
-        <string name="parent" value="Bounty Hunter...."/>
-        <int name="order" value="1"/>
-        <string name="0" value="I&apos;ve completed all Bounty Hunter bounties for Lita Lawless! I think its about time I&apos;m deputized!  I should head to New Leaf City and find out more!"/>
-        <string name="1" value="I spoke with Lita, and she&apos;s all set to deputize me whenever I&apos;m ready!  Completing all those quests was hard, but well worth the effort!"/>
-        <string name="2" value="I&apos;ve been deputized by Lita Lawless as an official protector of New Leaf City!  I&apos;ve sworn to defend the area, and Masteria in general from all future threats...and from what it looks like, there&apos;s going to be a lot of them!"/>
+        <string name="name" value="赏金大师"/>
+        <string name="parent" value="赏金猎人"/>
+        <int name="order" value="9"/>
+        <string name="0" value="我已经完成了莉塔·罗莉丝发布的所有赏金任务！我想是时候接受任命了。去新叶城找她了解详情吧！"/>
+        <string name="1" value="我和莉塔谈过了，只要我准备好，她随时都能正式任命我！完成这些任务并不容易，但绝对值得。"/>
+        <string name="2" value="我已经被莉塔·罗莉丝任命为新叶城的正式守护者！我发誓要保护这一带，守护新叶城免受未来的威胁……而且看起来，麻烦恐怕还会有很多！"/>
         <int name="area" value="45"/>
     </imgdir>
     <imgdir name="8245">
@@ -18994,35 +19006,35 @@
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8850">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 新手"/>
-        <string name="parent" value="丘比特的信使 - 新手"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 新手：捎东西给理查德"/>
+        <string name="parent" value="丘比特的信使 - 新手：捎东西给理查德"/>
         <int name="order" value="1"/>
         <string name="0" value="水手的妻子吗？看来她确实需要帮忙。"/>
-        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b25个硬羽毛#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
+        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b25个粗羽毛#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
         <string name="2" value="我把材料交给了理查德，他向我道了谢。安琪莉知道后一定会很高兴。"/>
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8851">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 战士"/>
-        <string name="parent" value="丘比特的信使 - 战士"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 战士：捎东西给理查德"/>
+        <string name="parent" value="丘比特的信使 - 战士：捎东西给理查德"/>
         <int name="order" value="1"/>
         <string name="0" value="水手的妻子吗？看来她确实需要帮忙。"/>
-        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b15个粘蜘蛛网#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
+        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b15个粘糊糊的蜘蛛网#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
         <string name="2" value="我把材料交给了理查德，他向我道了谢。安琪莉知道后一定会很高兴。"/>
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8852">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 法师"/>
-        <string name="parent" value="丘比特的信使 - 法师"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 法师：捎东西给理查德"/>
+        <string name="parent" value="丘比特的信使 - 法师：捎东西给理查德"/>
         <int name="order" value="1"/>
         <string name="0" value="水手的妻子吗？看来她确实需要帮忙。"/>
-        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b月光精灵的月块#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
+        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b1个月光精灵的月块#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
         <string name="2" value="我把材料交给了理查德，他向我道了谢。安琪莉知道后一定会很高兴。"/>
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8853">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 弓箭手"/>
-        <string name="parent" value="丘比特的信使 - 弓箭手"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 弓箭手：捎东西给理查德"/>
+        <string name="parent" value="丘比特的信使 - 弓箭手：捎东西给理查德"/>
         <int name="order" value="1"/>
         <string name="0" value="水手的妻子吗？看来她确实需要帮忙。"/>
         <string name="1" value="我已经和安琪莉谈过了。她想让我把#b20个玩具小鸭#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
@@ -19030,17 +19042,17 @@
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8854">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 飞侠"/>
-        <string name="parent" value="丘比特的信使 - 飞侠"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 飞侠：捎东西给理查德"/>
+        <string name="parent" value="丘比特的信使 - 飞侠：捎东西给理查德"/>
         <int name="order" value="1"/>
         <string name="0" value="水手的妻子吗？看来她确实需要帮忙。"/>
-        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b20个捕鼠器#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
+        <string name="1" value="我已经和安琪莉谈过了。她想让我把#b20个老鼠陷阱#k送给她的丈夫水手理查德。他在水下世界的太公船上工作。等我把东西收齐后，就去船上交给他，然后回来告诉安琪莉一切顺利。"/>
         <string name="2" value="我把材料交给了理查德，他向我道了谢。安琪莉知道后一定会很高兴。"/>
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8855">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 新手"/>
-        <string name="parent" value="丘比特的信使 - 新手"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 新手：回信给安琪莉"/>
+        <string name="parent" value="丘比特的信使 - 新手：回信给安琪莉"/>
         <int name="order" value="2"/>
         <string name="0" value="好吧，现在得去见那位水手本人了。他会在哪里呢？"/>
         <string name="1" value="我把东西交给了理查德，他拜托我把他的信带回给妻子。"/>
@@ -19048,8 +19060,8 @@
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8856">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 战士"/>
-        <string name="parent" value="丘比特的信使 - 战士"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 战士：回信给安琪莉"/>
+        <string name="parent" value="丘比特的信使 - 战士：回信给安琪莉"/>
         <int name="order" value="2"/>
         <string name="0" value="好吧，现在得去见那位水手本人了。他会在哪里呢？"/>
         <string name="1" value="我把东西交给了理查德，他拜托我把他的信带回给妻子。"/>
@@ -19057,8 +19069,8 @@
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8857">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 法师"/>
-        <string name="parent" value="丘比特的信使 - 法师"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 法师：回信给安琪莉"/>
+        <string name="parent" value="丘比特的信使 - 法师：回信给安琪莉"/>
         <int name="order" value="2"/>
         <string name="0" value="好吧，现在得去见那位水手本人了。他会在哪里呢？"/>
         <string name="1" value="我把东西交给了理查德，他拜托我把他的信带回给妻子。"/>
@@ -19066,8 +19078,8 @@
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8858">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 弓箭手"/>
-        <string name="parent" value="丘比特的信使 - 弓箭手"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 弓箭手：回信给安琪莉"/>
+        <string name="parent" value="丘比特的信使 - 弓箭手：回信给安琪莉"/>
         <int name="order" value="2"/>
         <string name="0" value="好吧，现在得去见那位水手本人了。他会在哪里呢？"/>
         <string name="1" value="我把东西交给了理查德，他拜托我把他的信带回给妻子。"/>
@@ -19075,8 +19087,8 @@
         <int name="area" value="30"/>
     </imgdir>
     <imgdir name="8859">
-        <string name="name" value="阿莫里亚：丘比特的信使 - 飞侠"/>
-        <string name="parent" value="丘比特的信使 - 飞侠"/>
+        <string name="name" value="阿莫里亚：丘比特的信使 - 飞侠：回信给安琪莉"/>
+        <string name="parent" value="丘比特的信使 - 飞侠：回信给安琪莉"/>
         <int name="order" value="2"/>
         <string name="0" value="好吧，现在得去见那位水手本人了。他会在哪里呢？"/>
         <string name="1" value="我把东西交给了理查德，他拜托我把他的信带回给妻子。"/>
@@ -21907,10 +21919,10 @@
         <int name="area" value="50"/>
     </imgdir>
     <imgdir name="9878">
-        <string name="name" value="Magatia, the City of Alchemy"/>
-        <string name="0" value="A new region has been discovered recently. If you wish to find out about the city of alchemy, talk to Cassandra, who claims to know everything about Maple World."/>
-        <string name="1" value="Cassandra says she can use her magic to send you over to Magatia. If you are determined to go to Magatia, talk to #bCassandra#k."/>
-        <string name="2" value="You have arrived in Magatia, the city of alchemy."/>
+        <string name="name" value="玛加提亚，炼金术之城"/>
+        <string name="0" value="最近发现了一个新的地区。如果你想了解炼金术之城，就去找自称无所不知的卡珊德拉谈谈吧。"/>
+        <string name="1" value="卡珊德拉说她可以用魔法把你送到玛加提亚。如果你确定要前往玛加提亚，就去找#b卡珊德拉#k吧。"/>
+        <string name="2" value="你已经抵达炼金术之城玛加提亚。"/>
         <int name="area" value="50"/>
     </imgdir>
     <imgdir name="9879">
@@ -22596,8 +22608,7 @@
         <string name="name" value="秘密食谱"/>
         <int name="area" value="30"/>
         <string name="0" value="#b东东#k本来说如果能接受他的委托，他就会欣然地为招待会做准备……但找到他之后，他冲我大声嚷嚷，说“还说什么宴会”……到底发生了什么事情？"/>
-        <string name="1" value="食谱弄丢了？在秘密泄露之前，赶快帮他找到食谱。
-打猎#r废都广场3～4层#k的吊娃娃机，应该就能找到了吧？"/>
+        <string name="1" value="食谱弄丢了？在秘密泄露之前，赶快帮他找到食谱。\n打猎#r废都广场3～4层#k的吊娃娃机，应该就能找到了吧？"/>
         <string name="2" value="终于说服了七星级厨师东东。把这个好消息告诉#b拉娜#k吧。"/>
         <string name="demandSummary" value="#i4032508:# #t4032508:# #c4032508# / 1 "/>
         <string name="rewardSummary" value="13,200 EXP\r\n"/>
@@ -22821,77 +22832,77 @@
         <string name="0" value="最近#b#p9310010##k家家畜变得很暴躁，农活也变得很困难。去找找他吧。"/>
         <string name="1" value="击退暴躁的家畜之后，去找#b#p9310010##k。\n\n#t4000189# #b#c4000189# / 100 #k \n#t4000190# #b#c4000190# / 100 #k"/>
         <string name="2" value="击败了暴躁的家畜。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="变得暴躁的家畜"/>
     </imgdir>
     <imgdir name="4101">
         <string name="0" value="去找需要帮助的#b#p9310010##k吧。"/>
         <string name="1" value="把#b#p9310010##k给的介绍书拿给#b#p9310008##k。\n\n#t4031288 # #b#c4031288 # / 1 #k "/>
         <string name="2" value="见到了#b#p9310008##k。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="杨叔叔的介绍"/>
     </imgdir>
     <imgdir name="4102">
         <string name="0" value="重新和#b#p9310008##k搭话吧。"/>
         <string name="1" value="击退#r#o9600005##k和#r#o9600006##k，向#b#p9310008##k证明我的能力吧。\n\n#t4000191# #b#c4000191# / 100 #k\n#t4000192# #b#c4000192# / 100 #k"/>
         <string name="2" value="向#b#p9310008##k证明了我的能力。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="资格证明"/>
     </imgdir>
     <imgdir name="4103">
         <string name="0" value="重新和#b#p9310008##k搭话吧。"/>
         <string name="1" value="带着#b#t4031289##k去找#b#p9310004##k，并打败#r#o9600009##k吧。得到#t4031227#的话，回去找#p9310008#。\n\n#t4031227# #b#c4031227# / 1 #k"/>
         <string name="2" value="拯救了处于危险之中的上海。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="秘密任务"/>
     </imgdir>
     <imgdir name="4104">
         <string name="0" value="去找#b#p9310012##k吧。"/>
         <string name="1" value="据说去帮#b#p9310010##k农活的话，可以找到#b#p9310012##k丢失的物品...\n\n#t4031290# #b#c4031290# / 1 #k"/>
         <string name="2" value="#b#p9310012##k找到了丢失的物品。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="摄影师赵先生的请求"/>
     </imgdir>
     <imgdir name="4105">
         <string name="0" value="去找#b#p9310010##k吧。"/>
         <string name="1" value="去帮#b#p9310010##k吧。\n\n#t4000193# #b#c4000193# / 100 #k"/>
         <string name="2" value="帮#b#p9310010##k做农活，得到了#b#p9310012##k丢失的物品。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="帮杨先生做农活"/>
     </imgdir>
     <imgdir name="4106">
         <string name="0" value="丢了用在照相机上的三脚架，去找#b#p9310010##k吧。"/>
         <string name="1" value="去帮#b#p9310010##k。\n\n#t4000192# #b#c4000192# / 50 #k"/>
         <string name="2" value="帮助了#b#p9310010##k，并得到了#b#p9310012##k丢失的物品。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="丢失的照相机用三脚架"/>
     </imgdir>
     <imgdir name="4107">
         <string name="0" value="去看看上海外滩的#b#p9310011##k。"/>
         <string name="1" value="送给#b#p9310011##k #b#t04000187##k吧。\n\n#t04000187# #b#c04000187# / 100 #k"/>
         <string name="2" value="送给#b#p9310011##k #b#t04000187##k，并得倒了好吃的#b#t2022064##k。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="和街头小贩吕氏进行物物交换I"/>
     </imgdir>
     <imgdir name="4108">
         <string name="0" value="去看看上海外滩的#b#p9310011##k。"/>
         <string name="1" value="送给#b#p9310011##k #b#t4000188##k吧。\n\n#t4000188# #b#c04000188# / 100 #k"/>
         <string name="2" value="送给#b#p9310011##k #b#t4000188##k，并得到了好吃的#b#t2022063##k。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="和街头小贩吕氏进行物物交换II"/>
     </imgdir>
     <imgdir name="4109">
         <string name="0" value="去和#b#p9310005##k搭话吧。"/>
         <string name="1" value="答应#b#p9310005##k的请求，击退#r#o9600008##k，并把证据拿给他吧。\n\n#t4000194# #b#c4000194# / 50 #k"/>
         <string name="2" value="帮了#b#p9310005##k。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="郑警官的请求"/>
     </imgdir>
     <imgdir name="8510">
         <string name="0" value="要去徐州岔道见杨叔叔吧。"/>
         <string name="1" value="最近村落的牲口变成了怪物开始攻击居民和旅行者，听说这些事情都是怪物抢走村落的宝物赤珠后才发生的。我会帮助他，但他还不能相信我的能力，所以我要打退山羊后收集#b100个山羊角和60个黑山羊角#k给他。那么他也可以相信我吧？\n\n #t4000190# #b#c4000190##k / 100 \n#t4000191# #b#c4000191##k / 60"/>
         <string name="2" value="打退山羊和黑山羊后收集齐了角。杨叔叔说他可以相信我。他给了我一张介绍信。这是跟上海警察推荐我的文件。那么我要去上海外滩找上海警察处长。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="农民的拜托"/>
         <int name="order" value="1"/>
         <string name="parent" value="牲口的造反"/>
@@ -22900,7 +22911,7 @@
         <string name="0" value="杨叔叔给了我介绍信。我要拿这张介绍信去上海外滩找警察处长。"/>
         <string name="1" value="按照警察的调查在这个事件的背后有很危险的怪物。为了打退这个怪物已经派了很多警察。但太多警察出动后，现在上海附近的治安情况不太好。警察处长拜托了我替他们去打退牛类的怪物。听说这些牛类的怪物是这附近最危险的怪物。我要打退牛和犁杖牛后收集#b100个鼻环和100个犁杖#k给他。\n\n#t4000192# #b#c4000192##k / 100 \n#t4000193# #b#c4000193##k / 100"/>
         <string name="2" value="我打退了牛类的怪物后给了他从牛和犁杖牛身上得到的物品。警察处长现在完全相信我了，他说他要写一张资格证明书给我了。我要等一会儿再去找他。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="资格证明"/>
         <int name="order" value="2"/>
         <string name="parent" value="牲口的造反"/>
@@ -22909,7 +22920,7 @@
         <string name="0" value="警察处长说等一会儿后再找他。。。"/>
         <string name="1" value="警察处长写了一张资格证明书给我。那么我要去抓住这件事情的元凶，然后要找回赤珠。\n\n #t4031735# #b#c4031735##k / 1"/>
         <string name="2" value="我找回赤珠后给处长了。但他说虽然回收了珠子，但变成怪物的牲口还变不回来。所以警察他们打算研究赤珠的秘密。我也希望研究快点得到好结果。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="寻找赤珠"/>
         <int name="order" value="3"/>
         <string name="parent" value="牲口的造反"/>
@@ -22918,35 +22929,35 @@
         <string name="0" value="要去上海外滩找摄影师赵。"/>
         <string name="1" value="摄影师赵是几个月前从农村过来上海做拍照的工作。 但他离家的时候把三脚架忘记在家里了。所以他拍照的时候总觉得不方便。他拜托我去他的老家拿三脚架来。\n\n #t4031290# #b#c4031290##k / 1"/>
         <string name="2" value="从他的老家拿三脚架给他了。我希望以后小赵跟他的姐姐多多联系。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="摄影师的拜托"/>
     </imgdir>
     <imgdir name="8514">
         <string name="0" value="为了拿到三脚架要去徐州平原找摄影师的姐姐。"/>
         <string name="1" value="摄影师的姐姐，赵小姐现在很生气。因为摄影师赵，一句话也没跟他姐姐说，就带着家里最贵重的物品离家出去上海了。为了安慰姐姐。我要收集#b100个羊毛#k给她。\n\n #t4000189# #b#c4000189##k / 100"/>
         <string name="2" value="我都收集齐100个羊毛后给赵小姐后终于收到了三脚架。希望兄妹尽快和解。。。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="姐姐的愤怒"/>
     </imgdir>
     <imgdir name="8515">
         <string name="0" value="要去上海外滩的小摊。"/>
         <string name="1" value="小摊老板吕，他最近生意不太好。所以他想更换一下销售的食品。他说如果我收集#b50个鸡爪和50个鸭蛋#k给他，他就交换给我#r30个玉米和30个糖葫芦#k。这对我来说也不算吃亏。\n\n#t4000187# #b#c4000187##k / 50 \n#t4000188# #b#c4000188##k / 50"/>
         <string name="2" value="我收集鸡爪和鸭蛋给他后收到了玉米和糖葫芦。这些东西看起来非常好吃。我以后也要常常利用这个交易吧。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="食品交换"/>
     </imgdir>
     <imgdir name="8530">
         <string name="0" value="听说想要进#b#m702100000##k要找少林#b#p9310041#。"/>
         <string name="1" value="#b#p9310041##k说最近山路上的怪物和强盗变多了，伤害了很多香客和旅游者。希望我能帮忙清理一下，带给他：\n#r#t4000393# 50#k个,#r#t4000394# 40#k个,#r#t4000395# 30#k个,#r#t4000396# 20#k个,#r#t4000397# 10#k个，就可以让我进#b#m702100000##k参观。 \n\n#t4000393#  #b#c4000393##k / 50\n#t4000394#  #b#c4000394##k / 40\n#t4000395#  #b#c4000395##k / 30\n#t4000396#  #b#c4000396##k / 20\n#t4000397#  #b#c4000397##k / 10"/>
         <string name="2" value="清理了大量盘踞在山路上的怪物，收集好了道具，终于可以进少林参观了。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="拜山门"/>
     </imgdir>
     <imgdir name="8531">
         <string name="0" value="藏经阁的#b#p9310048##k好象是个大高手的样子。"/>
         <string name="1" value="#b#p9310048##k觉得少林出现大量怪物最大的秘密就在藏经阁。希望我消灭#b100只 #o9600020##k，并收集#r50个#t4000407##k 回来给他分析。 \n\n #o9600020# #r#a85311##k \n #t4000407# #b#c4000407##k / 50"/>
         <string name="2" value="消灭了那么多#b#o9600020##k，还带回了#b#t4000407##k，#p9310048#很高兴，让我过段时间再来找他"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="藏经阁的秘密1"/>
         <int name="order" value="1"/>
         <string name="parent" value="藏经阁的秘密"/>
@@ -22954,7 +22965,7 @@
     <imgdir name="8532">
         <string name="1" value="#b#p9310048##k分析了#t4000407##k的构造以及其中蕴涵的气息，认为需要更强大的怪物身上的东西。希望我再去消灭 #r80个#o9600024##k，并收集 #r50个#t4000402##k带给藏经阁的#b#p9310046#。 \n\n#t4000402# #b#c4000402##k / 50\n#o9600024# #r#a85321#"/>
         <string name="2" value="消灭了#o9600024#，并收集了#t4000402#带给了#b#p9310046#大师#k，希望这次能找到怪物出现的原因。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="藏经阁的秘密2"/>
         <int name="order" value="2"/>
         <string name="parent" value="藏经阁的秘密"/>
@@ -22962,7 +22973,7 @@
     <imgdir name="8533">
         <string name="1" value="#b#p9310046#大师#k研究了我带来的东西以后觉得有些眉目了，但是还需要藏经阁里另一位#b#p9310047#大师#k确认一下。还要带#r50个#t4000406##k给#b#p9310047#大师#k进行研究，顺便再消灭#r50个#o9600019##k吧。\n\n#t4000406# #b#c4000406##k / 50\n#o9600019# #r#a85331#"/>
         <string name="2" value="收集足够的#t4000406#带给了#p9310047#大师，大师要闭关一段时间，让我一会再去找他。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="藏经阁的秘密3"/>
         <int name="order" value="3"/>
         <string name="parent" value="藏经阁的秘密"/>
@@ -22970,7 +22981,7 @@
     <imgdir name="8534">
         <string name="1" value="#b#p9310047#大师#k出关后告诉我关键在于控制机关人的机关。于是要我收集 #r30个#t4000406#、30个#t4000402#、30个#t4000407##k，并交给#b#p9310048##k。\n\n#t4000406# #b#c4000406##k / 30\n#t4000402# #b#c4000402##k / 30\n#t4000407# #b#c4000407##k / 30"/>
         <string name="2" value="#b#p9310048##k对3种机关人的核心研究后表示找到了怪物的秘密，希望我找几个人一起去阁顶调查一下#b达摩画像。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="藏经阁的秘密4"/>
         <int name="order" value="4"/>
         <string name="parent" value="藏经阁的秘密"/>
@@ -22979,21 +22990,21 @@
         <string name="0" value="嵩阳镇的#b#p9310049##k好象在找人帮忙。"/>
         <string name="1" value="原来#b#p9310049##k与少林#b#p9310053##k是老朋友,很久没见面了，想要去少林看望一下。但是最近镇外出现大量怪物，老人出门比较危险。希望我帮忙消灭#r100只 #o9600012##k 和#r50只 #o9600013##k \n\n#o9600012# #r#a85361##k\n#o9600013# #r#a85362##k"/>
         <string name="2" value="消灭了不少#b#o9600012##k 和#b#o9600013##k，现在镇子周围要安全一些了吧，希望两位老人见面愉快。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="镇长的委托"/>
     </imgdir>
     <imgdir name="8537">
         <string name="0" value="#b#m702010000##k下经常会有需要帮助的人。"/>
         <string name="1" value="在#b#m702010000##k下遇到了#b#p9310042##k，她是替丈夫来还愿的。因为怪物袭击，受伤了。需要我帮她买点药品和食品来。\n\n#t2010002# #b#c2010002##k / 50\n#t2000011# #b#c2000011##k / 20\n#t2050003# #b#c2050003##k / 10"/>
         <string name="2" value="到#b嵩阳镇的杂货店#k顺利买到了药物和食品，帮助#b#p9310042##k完成了对丈夫的承诺。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="还愿"/>
     </imgdir>
     <imgdir name="8538">
         <string name="0" value="少林寺的小沙弥#b#p9310052##k好象遇到了什么麻烦。"/>
         <string name="1" value="原来#b#p9310052##k的师兄外出苦修。但是过了约定时间却还没有回来，有点担心，希望我去找找。他师兄法号：#b#p9310040##k。好象在哪里见到过啊"/>
         <string name="2" value="在#b#m702030000##k发现了#b#p9310040#和尚#k，但是他似乎还在修行中，听说小师弟担心，让我给#b#p9310052##k带个信。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="寻找师兄1"/>
         <int name="order" value="1"/>
         <string name="parent" value="寻找师兄"/>
@@ -23002,7 +23013,7 @@
         <string name="0" value="#b#p9310040##k和尚#k有事情拜托。"/>
         <string name="1" value="为了不让小师弟担心，希望我带个信给#b#p9310052#。"/>
         <string name="2" value="带了#p9310040#的信给#b#p9310052##k，这下他该放心了吧。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="寻找师兄2"/>
         <int name="order" value="2"/>
         <string name="parent" value="寻找师兄"/>
@@ -23011,7 +23022,7 @@
         <string name="0" value="少林方丈大师似乎有烦恼的事情啊"/>
         <string name="1" value="方丈大师告诉我保存在少林的108颗灭魔佛珠是镇压妖怪的法宝。但是最近发现被窃了。经过努力寻回了一些，但还有几个怎么也找不到了。详细情况要问问负责此事的#b#p9310051#。"/>
         <string name="2" value="#b#p9310051##k说明了情况，果然很严重啊。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="佛珠1"/>
         <int name="order" value="1"/>
         <string name="parent" value="佛珠"/>
@@ -23020,7 +23031,7 @@
         <string name="0" value="#b#p9310051##k需要帮助。"/>
         <string name="1" value="#b#p9310051##k告诉我，最近妖怪突然增加，已经找回的那8颗佛珠就是在那些妖怪身上发现的。所以剩下的100个应该也是某些妖怪藏起来了。希望我找到100颗玉佛珠并交给山门的#b#p9310041#。\n\n#t4000403# #b#c4000403##k / 100"/>
         <string name="2" value="终于在那些怪物身上找到的失落的佛珠，#b#p9310041##k还真是亲切啊。"/>
-        <int name="area" value="45"/>
+        <int name="area" value="42"/>
         <string name="name" value="佛珠2"/>
         <int name="order" value="2"/>
         <string name="parent" value="佛珠"/>

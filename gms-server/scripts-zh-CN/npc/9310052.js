@@ -1,16 +1,17 @@
-/*
-	NPC Name: 		虚竹
-	Map(s): 		Mount Song: Mahavira Hall (702100000)
-	Description: 	Quest NPC - 寻找师兄 chain
-	Quest: 			8538 (寻找师兄1), 8539 (寻找师兄2)
-*/
+var status = -1;
+var flow = null;
 
-var status = 0;
-var questAction = "";
+var Quest = Java.type('org.gms.server.quest.Quest');
+
+var QUEST_FIND_SENIOR_1 = 8538;
+var QUEST_FIND_SENIOR_2 = 8539;
+
+var ITEM_LETTER_TO_SENIOR = 4031786;
+var ITEM_LETTER_FROM_SENIOR = 4031787;
 
 function start() {
     status = -1;
-    questAction = "";
+    flow = null;
     action(1, 0, 0);
 }
 
@@ -19,41 +20,94 @@ function action(mode, type, selection) {
         cm.dispose();
         return;
     }
-    if (mode == 0) {
+
+    if (flow == "start8538" && status == 1 && mode == 0) {
+        cm.sendOk("阿弥陀佛，施主既有要事在身，小僧不敢叨扰。施主若得闲暇时，再来帮小僧便可...");
         cm.dispose();
         return;
     }
-    status++;
+
+    if (mode == 0 && status >= 0) {
+        cm.dispose();
+        return;
+    }
+
+    status += (mode == 1 ? 1 : -1);
+
+    var player = cm.getPlayer();
+    var npcId = cm.getNpc();
 
     if (status == 0) {
-        if (cm.isQuestCompleted(8538) && cm.isQuestStarted(8539) && cm.haveItem(4031787, 1)) {
-            questAction = "complete8539";
-            cm.sendNext("啊，师兄的信！原来师兄正在精修禅宗，多谢施主带来师兄的音信。小僧无以为报，些许物件，还请施主笑纳。");
-        } else if (cm.isQuestCompleted(8539)) {
-            cm.sendNext("多谢施主带来师兄的音信。");
-            cm.dispose();
-        } else if (cm.isQuestStarted(8538)) {
-            cm.sendNext("施主找到我师兄了吗？他在山腰苦修，就在#b#m702030000##k。");
-            cm.dispose();
-        } else if (!cm.isQuestStarted(8538) && !cm.isQuestCompleted(8538)) {
-            questAction = "start8538";
-            cm.sendYesNo("这位施主，小僧有事相求，万望施主不吝相助。");
-        } else {
-            cm.sendNext("今天也要好好修炼啊");
-            cm.dispose();
+        if (cm.isQuestStarted(QUEST_FIND_SENIOR_2) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_2) &&
+            cm.haveItem(ITEM_LETTER_FROM_SENIOR, 1) &&
+            Quest.getInstance(QUEST_FIND_SENIOR_2).canComplete(player, npcId)) {
+            flow = "complete8539";
+            cm.sendNext("啊，师兄的信。原来师兄正在精修禅宗，多谢施主带来师兄的音信。小僧无以为报，些许物件，还请施主笑纳。");
+            return;
         }
-    } else if (status == 1) {
-        if (questAction == "complete8539") {
-            cm.completeQuest(8539);
-            cm.sendNext("小僧无以为报，些许物件，还请施主笑纳。");
-            cm.dispose();
-        } else {
-            cm.startQuest(8538);
-            cm.sendNext("小僧有个师兄早年外出苦修，时日已久却不见音信，小僧好不挂念，还请施主代为寻找。小僧的师兄法号#b#p9310040##k。");
+
+        if (!cm.isQuestStarted(QUEST_FIND_SENIOR_1) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_1) &&
+            Quest.getInstance(QUEST_FIND_SENIOR_1).canStart(player, npcId)) {
+            flow = "start8538";
+            cm.sendNext("这位施主，小僧有事相求，万望施主不吝相助。");
+            return;
         }
-    } else if (status == 2) {
-        cm.sendNextPrev("请施主去#b#m702030000##k寻找我的师兄。");
-    } else {
+
+        if (cm.isQuestStarted(QUEST_FIND_SENIOR_1) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_1)) {
+            cm.sendOk("小僧的师兄法号#b#p9310040##k，还请施主代为寻找。");
+            cm.dispose();
+            return;
+        }
+
+        if (cm.isQuestStarted(QUEST_FIND_SENIOR_2) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
+            cm.sendOk("师兄的书信还未送到吗？请施主见到师兄后替小僧带回音信。");
+            cm.dispose();
+            return;
+        }
+
+        cm.sendDefault();
         cm.dispose();
+        return;
     }
+
+    if (status == 1) {
+        if (flow == "start8538") {
+            cm.sendAcceptDecline("小僧有个师兄早年外出苦修，时日已久却不见音信，小僧好不挂念，还请施主代为寻找。小僧的师兄法号#b#p9310040##k。");
+            return;
+        }
+
+        if (flow == "complete8539") {
+            Quest.getInstance(QUEST_FIND_SENIOR_2).complete(player, npcId);
+            if (cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
+                cm.removeItem(ITEM_LETTER_FROM_SENIOR, 1);
+                cm.sendOk("小僧无以为报，些许物件，还请施主笑纳。");
+            } else {
+                cm.sendOk("似乎暂时无法完成任务（请确认携带了师兄的信，并确保背包有空位）。");
+            }
+            cm.dispose();
+            return;
+        }
+
+        cm.dispose();
+        return;
+    }
+
+    if (status == 2) {
+        if (flow == "start8538") {
+            Quest.getInstance(QUEST_FIND_SENIOR_1).start(player, npcId);
+            if (cm.isQuestStarted(QUEST_FIND_SENIOR_1)) {
+                cm.gainItem(ITEM_LETTER_TO_SENIOR, 1);
+                cm.sendOk("小僧的师兄法号#b#p9310040##k，还请施主代为寻找。");
+            } else {
+                cm.sendOk("似乎暂时无法接取任务（请确认等级/职业条件，并确保背包有空位）。");
+            }
+            cm.dispose();
+            return;
+        }
+
+        cm.dispose();
+        return;
+    }
+
+    cm.dispose();
 }

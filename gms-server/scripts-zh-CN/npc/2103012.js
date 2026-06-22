@@ -22,6 +22,7 @@
  */
 
 var status;
+var slot = 3;
 
 function start() {
     status = -1;
@@ -43,17 +44,28 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            if (cm.isQuestStarted(3926)) {
-                var progress = cm.getQuestProgress(3926);
-                var slot = 3;
+            if (!cm.isQuestStarted(3926)) {
+                cm.sendOk("这里似乎没有什么特别的。");
+                cm.dispose();
+                return;
+            }
 
-                var ch = progress[slot];
-                if (ch == '2') {
+            var progress = cm.getQuestProgress(3926);
+            var ch = progress[slot];
+            if (ch == '3') {
+                cm.sendOk("这里已经放过#b#t4031579##k了。");
+            } else if (ch == '2') {
+                if (!cm.haveItem(4031579, 1)) {
+                    cm.sendOk("你身上没有#b#t4031579##k。先去红蝎子团据点的大箱子里拿一些宝物吧。");
+                } else {
                     var nextProgress = progress.substr(0, slot) + '3' + progress.substr(slot + 1);
 
                     cm.gainItem(4031579, -1);
                     cm.setQuestProgress(3926, nextProgress);
+                    cm.sendOk("你悄悄把#b#t4031579##k放在了居民家里。");
                 }
+            } else {
+                cm.sendOk("这里不是需要放宝物的地方。");
             }
 
             cm.dispose();
