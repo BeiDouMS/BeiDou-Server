@@ -270,14 +270,14 @@ function action(mode, type, selection) {
                     cm.dispose();
 
                 } else if (selection == 4) {
-                    var selStr = "Very well, instead I offer a steadfast #bore refining#k service for you, taxing #r" + ((feeMultiplier * 100) | 0) + "%#k over the usual fee to synthetize them. What will you do?#b";
+                    var selStr = "好吧，我也可以为你提供稳定的#b矿石精炼#k服务，不过合成费用会比平时多收#r" + ((feeMultiplier * 100) | 0) + "%#k。你想做什么？#b";
 
-                    var options = ["Refine mineral ores", "Refine jewel ores"];
+                    var options = ["精炼矿石母矿", "精炼宝石母矿"];
                     if (refineCrystals) {
-                        options.push("Refine crystal ores");
+                        options.push("精炼水晶母矿");
                     }
                     if (refineRocks) {
-                        options.push("Refine plates/jewels");
+                        options.push("合成矿石成品/宝石");
                     }
 
                     for (var i = 0; i < options.length; i++) {
