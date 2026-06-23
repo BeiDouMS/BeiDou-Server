@@ -454,27 +454,47 @@ public final class Channel {
     }
 
     private static String[] getEvents() {
-        // 优先取语言文件夹，没有则取scripts
+        // 事件脚本固定放在 scripts/event 以及对应的语言目录 scripts-语言/event。
         String scriptName = "scripts";
         String eventPath = "event";
+        // 读取当前服务端语言配置，用来定位语言事件脚本目录。
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
         String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
 
+        // 默认目录保留英文原版事件，语言目录只保留已本地化的事件。
         Path scriptPath = Path.of(scriptName, eventPath);
         Path scriptLangPath = Path.of(scriptLangName, eventPath);
-        Path actualPath = Files.exists(scriptLangPath) ? scriptLangPath : scriptPath;
 
+        // 先枚举默认事件，保证未翻译事件不会因为语言目录存在而丢失。
         List<String> events = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(actualPath)) {
+        addEvents(scriptPath, events);
+        // 再枚举语言事件，补充中文专属事件；同名事件会在 addEvents 中去重。
+        addEvents(scriptLangPath, events);
+        // 这里只返回事件名，真正加载脚本时仍由 AbstractScriptManager 做文件级回退。
+        return events.toArray(new String[0]);
+    }
+
+    private static void addEvents(Path eventPath, List<String> events) {
+        // 某些语言可能没有 event 目录，没有目录时直接跳过，继续使用默认事件。
+        if (!Files.isDirectory(eventPath)) {
+            return;
+        }
+
+        // 只枚举 JS 事件脚本，避免把其他辅助文件当成事件名注册。
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(eventPath, "*.js")) {
             for (Path path : stream) {
+                // 事件管理器使用不带 .js 后缀的脚本名。
                 String fileName = path.getFileName().toString();
-                events.add(fileName.substring(0, fileName.length() - 3));
+                String eventName = fileName.substring(0, fileName.length() - 3);
+                // 默认目录和语言目录可能存在同名事件，同名只注册一次。
+                if (!events.contains(eventName)) {
+                    events.add(eventName);
+                }
             }
         } catch (IOException e) {
             log.warn("Unable to load events !");
             e.printStackTrace();
         }
-        return events.toArray(new String[0]);
     }
 
     public int getStoredVar(int key) {
