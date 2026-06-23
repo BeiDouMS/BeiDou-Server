@@ -41,6 +41,7 @@ import java.nio.file.Path;
  */
 public abstract class AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(AbstractScriptManager.class);
+    private static final String SCRIPT_DIRECTORY = "scripts";
     private final ScriptEngineFactory sef;
 
     protected AbstractScriptManager() {
@@ -48,30 +49,34 @@ public abstract class AbstractScriptManager {
     }
 
     protected ScriptEngine getInvocableScriptEngine(String path) {
-        // 优先取语言文件夹，没有则取scripts
-        String scriptName = "scripts";
+        // 读取当前服务端语言配置，用于拼出 scripts-语言 目录名，例如 scripts-zh-CN。
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-        String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
 
-        Path scriptPath = Path.of(scriptName, path);
-        Path scriptLangPath = Path.of(scriptLangName, path);
+        // 默认脚本目录始终是 scripts，里面保留英文原版脚本。
+        Path scriptPath = Path.of(SCRIPT_DIRECTORY, path);
+        // 语言脚本目录只放已本地化的脚本文件，不要求复制完整 scripts 目录。
+        Path scriptLangPath = Path.of(SCRIPT_DIRECTORY + "-" + serviceProperty.getLanguage(), path);
 
+        // 按文件级别选择脚本：先找语言文件，找不到再回退到英文原版文件。
         Path actualPath;
         if (Files.exists(scriptLangPath)) {
             actualPath = scriptLangPath;
-        } else if (Files.exists(scriptPath)){
+        } else if (Files.exists(scriptPath)) {
             actualPath = scriptPath;
         } else {
             return null;
         }
 
+        // 为本次实际命中的脚本文件创建独立 JS 引擎。
         ScriptEngine engine = sef.getScriptEngine();
         if (!(engine instanceof GraalJSScriptEngine graalScriptEngine)) {
             throw new IllegalStateException(I18nUtil.getExceptionMessage("AbstractScriptManager.getInvocableScriptEngine.exception1"));
         }
 
+        // 开启脚本访问 Java 类的能力，保持现有脚本里的 Java.type 调用可用。
         enableScriptHostAccess(graalScriptEngine);
 
+        // 用 UTF-8 读取并执行脚本；执行失败时返回 null，让调用方按原逻辑处理缺失脚本。
         try (BufferedReader br = Files.newBufferedReader(actualPath, StandardCharsets.UTF_8)) {
             engine.eval(br);
         } catch (final ScriptException | IOException t) {
@@ -83,25 +88,30 @@ public abstract class AbstractScriptManager {
     }
 
     protected ScriptEngine getInvocableScriptEngine(String path, Client c) {
-        ScriptEngine engine = c.getScriptEngine("scripts/" + path);
+        // 缓存键统一使用默认脚本前缀加相对路径，避免读取和写入缓存时使用不同 key。
+        String scriptKey = SCRIPT_DIRECTORY + "/" + path;
+        ScriptEngine engine = c.getScriptEngine(scriptKey);
         if (engine == null) {
+            // 客户端当前没有缓存时，再按文件级 i18n 规则加载脚本。
             engine = getInvocableScriptEngine(path);
-            c.setScriptEngine(path, engine);
+            c.setScriptEngine(scriptKey, engine);
         }
 
         return engine;
     }
 
     /**
-     * Allow usage of "Java.type()" in script to look up host class
+     * 允许脚本通过 Java.type() 查找并调用服务端 Java 类。
      */
     private void enableScriptHostAccess(GraalJSScriptEngine engine) {
+        // GraalJS 的 host 访问开关需要写入引擎作用域绑定。
         Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
         bindings.put("polyglot.js.allowHostAccess", true);
         bindings.put("polyglot.js.allowHostClassLookup", true);
     }
 
     protected void resetContext(String path, Client c) {
-        c.removeScriptEngine("scripts/" + path);
+        // 重置时使用同一个缓存 key，确保能清掉上面 setScriptEngine 写入的脚本引擎。
+        c.removeScriptEngine(SCRIPT_DIRECTORY + "/" + path);
     }
 }

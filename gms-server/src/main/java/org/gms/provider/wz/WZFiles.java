@@ -29,12 +29,19 @@ public enum WZFiles {
     }
 
     public Path getFile() {
-        // 优先取语言文件夹，没有则取wz
-        Path wzPath = Path.of(DIRECTORY, fileName);
-        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-        Path langPath = Path.of(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
+        Path langPath = getLanguageFile();
 
-        return Files.exists(langPath) ? langPath : wzPath;
+        // 兼容旧调用：语言目录存在时优先使用，否则使用原始 WZ。
+        return Files.exists(langPath) ? langPath : getBaseFile();
+    }
+
+    public Path getBaseFile() {
+        return Path.of(DIRECTORY, fileName);
+    }
+
+    public Path getLanguageFile() {
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        return Path.of(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
     }
 
     public String getFilePath() {
