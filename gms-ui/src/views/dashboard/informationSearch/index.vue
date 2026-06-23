@@ -114,6 +114,7 @@
           >
             <template #cell="{ record }">
               <a-button
+                v-if="['consume', 'eqp', 'etc', 'ins'].includes(record.type)"
                 type="primary"
                 size="mini"
                 @click="handleDistribute(record)"
@@ -246,9 +247,6 @@
         </a-form-item>
         <a-form-item :label="$t('informationSearch.form.itemName')">
           <span>{{ currentItemName }}</span>
-        </a-form-item>
-        <a-form-item :label="$t('informationSearch.form.quantity')">
-          <a-input-number v-model="equipForm.quantity" :min="1" />
         </a-form-item>
         <a-form-item :label="$t('informationSearch.form.str')">
           <a-input-number v-model="equipForm.str" />
@@ -399,6 +397,7 @@
   const itemFormTitle = ref('');
   const itemForm = ref<GiveForm>({
     type: 5,
+    worldId: undefined,
     playerId: undefined,
     player: undefined,
     id: undefined,
@@ -409,6 +408,7 @@
   const equipFormTitle = ref('');
   const equipForm = ref<GiveForm>({
     type: 6,
+    worldId: undefined,
     playerId: undefined,
     player: undefined,
     id: undefined,
@@ -463,6 +463,7 @@
       // 装备类型
       equipForm.value = {
         type: 6,
+        worldId: record.world || record.worldId,
         playerId,
         player: playerName,
         id: currentItem.value?.id,
@@ -495,6 +496,7 @@
       // 普通道具类型
       itemForm.value = {
         type: 5,
+        worldId: record.world || record.worldId,
         playerId,
         player: playerName,
         id: currentItem.value?.id,
