@@ -138,12 +138,12 @@
         <a-form-item
           :label="$t('informationSearch.characterSelector.column.id')"
         >
-          <a-input-number v-model="selectorCondition.characterId" allow-clear />
+          <a-input-number v-model="selectorCondition.id" allow-clear />
         </a-form-item>
         <a-form-item
           :label="$t('informationSearch.characterSelector.column.name')"
         >
-          <a-input v-model="selectorCondition.characterName" allow-clear />
+          <a-input v-model="selectorCondition.name" allow-clear />
         </a-form-item>
         <a-space class="a-form-item-btn">
           <a-button type="primary" @click="searchCharacter">
@@ -155,12 +155,12 @@
         <template #columns>
           <a-table-column
             :title="$t('informationSearch.characterSelector.column.id')"
-            data-index="characterId"
+            data-index="id"
             align="center"
           />
           <a-table-column
             :title="$t('informationSearch.characterSelector.column.name')"
-            data-index="characterName"
+            data-index="name"
             align="center"
           />
           <a-table-column
@@ -318,8 +318,12 @@
     InformationResult,
     informationSearch,
   } from '@/api/information';
-  import { getCharacterList, InventoryCondition } from '@/api/inventory';
-  import { GiveForm, givePlayerSrc, getEquInitialInfo } from '@/api/player';
+  import {
+    getPlayerList,
+    GiveForm,
+    givePlayerSrc,
+    getEquInitialInfo,
+  } from '@/api/player';
 
   const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
@@ -384,9 +388,14 @@
   // ==================== 下发逻辑 ====================
   const selectorVisible = ref(false);
   const characterList = ref<any[]>([]);
-  const selectorCondition = ref<InventoryCondition>({
-    characterId: undefined,
-    characterName: undefined,
+  const selectorCondition = ref<{
+    id?: number;
+    name?: string;
+    pageNo: number;
+    pageSize: number;
+  }>({
+    id: undefined,
+    name: undefined,
     pageNo: 1,
     pageSize: 20,
   });
@@ -448,7 +457,12 @@
   const searchCharacter = async () => {
     setLoading(true);
     try {
-      const { data } = await getCharacterList(selectorCondition.value);
+      const { data } = await getPlayerList(
+        selectorCondition.value.pageNo,
+        selectorCondition.value.pageSize,
+        selectorCondition.value.id,
+        selectorCondition.value.name
+      );
       characterList.value = data.records;
     } finally {
       setLoading(false);
@@ -456,14 +470,14 @@
   };
 
   const selectCharacter = async (record: any) => {
-    const playerId = record.characterId;
-    const playerName = record.characterName;
+    const playerId = record.id;
+    const playerName = record.name;
 
     if (currentItem.value?.type === 'eqp') {
       // 装备类型
       equipForm.value = {
         type: 6,
-        worldId: record.world || record.worldId,
+        worldId: record.world,
         playerId,
         player: playerName,
         id: currentItem.value?.id,
@@ -496,7 +510,7 @@
       // 普通道具类型
       itemForm.value = {
         type: 5,
-        worldId: record.world || record.worldId,
+        worldId: record.world,
         playerId,
         player: playerName,
         id: currentItem.value?.id,
