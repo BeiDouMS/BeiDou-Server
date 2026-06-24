@@ -7,12 +7,6 @@ import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.server.life.Monster;
 import org.gms.server.quest.Quest;
 
-/**
- * 特级挑战勋章的轻量化实现。
- *
- * <p>这些勋章原始数据里有“全服第一”“定期重置”“捐献排行”等机制，本服目前没有对应系统。
- * 这里统一改成可控的个人条件：脚本负责领奖判断，击杀和嘉年华结算负责写入任务进度。</p>
- */
 public final class SpecialChallengeMedal {
     // 任务 ID：脚本和事件回调用这些 ID 读写对应任务状态。
     public static final int MAPLE_IDOL_QUEST_ID = 29500;
