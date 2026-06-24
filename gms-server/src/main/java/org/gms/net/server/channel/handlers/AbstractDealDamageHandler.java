@@ -1355,7 +1355,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 AutobanFactory.ATTACK_INTERVAL.alert(chr, reason);
                 break;
             case PASS:
-                break;
+                return;
         }
 
         long globalInterval = chr.getGlobalInterval(now);
@@ -1372,14 +1372,26 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             WindArcher.HURRICANE,          // 风灵 暴风箭雨
             Corsair.RAPID_FIRE,            // 火枪 金属风暴
             Evan.FIRE_BREATH,              // 龙 火焰喷射
-            Evan.ICE_BREATH                // 龙 寒冰喷射
+            Evan.ICE_BREATH,               // 龙 寒冰喷射
+            Hero.BRANDISH,                 // 英雄 轻舞飞扬（客户端已改为按住连发）
+            DawnWarrior.BRANDISH           // 魂骑士 轻舞飞扬（同上）
     );
 
-    /** 被动触伤技能：频率由怪物碰撞控制，全跳过 */
+    /** 被动触伤技能：频率不由玩家输入控制，全跳过 */
     private static final Set<Integer> PASSIVE_SKILL_ID_SET = Set.of(
             Aran.BODY_PRESSURE,            // 战神 身体压杀
             Marauder.ENERGY_CHARGE,        // 船长 能量汇集
-            ThunderBreaker.ENERGY_CHARGE   // 雷鸣 能量汇集
+            ThunderBreaker.ENERGY_CHARGE,  // 雷鸣 能量汇集
+            Fighter.FINAL_ATTACK_SWORD,    // 剑客 终极剑
+            Fighter.FINAL_ATTACK_AXE,      // 剑客 终极斧
+            Page.FINAL_ATTACK_SWORD,       // 勇士 终极剑
+            Page.FINAL_ATTACK_BW,          // 勇士 终极棍
+            Spearman.FINAL_ATTACK_SPEAR,   // 枪战士 终极枪
+            Spearman.FINAL_ATTACK_POLEARM, // 枪战士 终极矛
+            Hunter.FINAL_ATTACK,           // 猎人 终极弓
+            Crossbowman.FINAL_ATTACK,      // 弩弓手 终极弩
+            DawnWarrior.FINAL_ATTACK,      // 魂骑士 终极剑
+            WindArcher.FINAL_ATTACK        // 风灵使者 终极弓
     );
 
 
