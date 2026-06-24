@@ -108,13 +108,13 @@ public final class PetLootHandler extends AbstractPacketHandler {
     private boolean checkPetPickupDistance(Character chr, Pet pet, MapObject ob) {
         Point petPos = pet.getPos();
         // 宠物刚召唤尚未移动时 pos 为 (0,0)，跳过检测
-        if (petPos.getX() == 0 && petPos.getY() == 0) {
+        if (petPos.x == 0 && petPos.y == 0) {
             return true;
         }
 
         Point itemPos = ob.getPosition();
-        int diffX = Math.abs(petPos.getX() - itemPos.getX());
-        int diffY = Math.abs(petPos.getY() - itemPos.getY());
+        int diffX = Math.abs(petPos.x - itemPos.x);
+        int diffY = Math.abs(petPos.y - itemPos.y);
 
         // 全图真空：远超正常拾取范围，直接判定为作弊
         if (diffX > 800 || diffY > 600) {
