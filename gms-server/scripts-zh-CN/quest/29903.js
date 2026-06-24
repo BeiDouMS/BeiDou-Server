@@ -29,7 +29,7 @@ var status = -1;
 
 function start(mode, type, selection) {
     if (qm.forceStartQuest()) {
-        qm.showInfoText("你已经获得了<大师冒险家>头衔. 你可以去找达赖尔领取勋章.");
+        qm.showInfoText("你已经获得了<大师冒险家>头衔. 你可以去找德烈领取勋章.");
     }
     qm.dispose();
 }

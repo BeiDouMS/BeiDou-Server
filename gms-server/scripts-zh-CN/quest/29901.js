@@ -29,7 +29,7 @@ var status = -1;
 
 function start(mode, type, selection) {
     if (qm.forceStartQuest()) {
-        qm.showInfoText("您已经获得了<中级冒险家>头衔. 您可以从达赖尔获得勋章.");
+        qm.showInfoText("您已经获得了<中级冒险家>头衔. 您可以从德烈处获得勋章.");
     }
     qm.dispose();
 }
