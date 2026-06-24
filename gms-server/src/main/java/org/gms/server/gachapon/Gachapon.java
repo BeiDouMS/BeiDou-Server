@@ -23,6 +23,7 @@ package org.gms.server.gachapon;
 
 import lombok.Getter;
 import org.gms.client.Character;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.NpcId;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
@@ -162,7 +163,9 @@ public class Gachapon {
     }
 
     public static void log(Character player, int itemId, String map) {
-        String itemName = ItemInformationProvider.getInstance().getName(itemId);
-        log.info(I18nUtil.getLogMessage("Gachapon.log.info"), player.getName(), itemName, itemId, map);
+        if (GameConfig.getServerBoolean("use_enable_gachapon_log")) {
+            String itemName = ItemInformationProvider.getInstance().getName(itemId);
+            log.info(I18nUtil.getLogMessage("Gachapon.log.info"), player.getName(), itemName, itemId, map);
+        }
     }
 }
