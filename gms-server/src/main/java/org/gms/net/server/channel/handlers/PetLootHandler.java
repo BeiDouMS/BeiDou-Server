@@ -100,19 +100,27 @@ public final class PetLootHandler extends AbstractPacketHandler {
     }
 
     /**
-     * 检测宠物位置与物品位置的距离，防止全图吸物作弊。
+     * 检测宠物/玩家位置与物品位置的距离，防止全图吸物作弊。
+     * 先检玩家位置（覆盖传送门瞬移、多平台等宠物滞后场景），再检宠物位置。
      * 宠物刚召唤(位置未初始化)时跳过检测，避免误判。
      *
      * @return true=距离合法，false=距离异常已拦截
      */
     private boolean checkPetPickupDistance(Character chr, Pet pet, MapObject ob) {
+        Point itemPos = ob.getPosition();
+
+        // 玩家预检：玩家本人就在物品附近→合法捡取，跳过宠物距离检测
+        Point chrPos = chr.getPosition();
+        if (Math.abs(chrPos.x - itemPos.x) <= 800 && Math.abs(chrPos.y - itemPos.y) <= 600) {
+            return true;
+        }
+
         Point petPos = pet.getPos();
         // 宠物刚召唤尚未移动时 pos 为 (0,0)，跳过检测
         if (petPos.x == 0 && petPos.y == 0) {
             return true;
         }
 
-        Point itemPos = ob.getPosition();
         int diffX = Math.abs(petPos.x - itemPos.x);
         int diffY = Math.abs(petPos.y - itemPos.y);
 
