@@ -28,5 +28,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("Dangerous roads, dark dungeons, and endless monsters could not make you turn back. You kept challenging the impossible until the path opened.\r\n\r\nPlease accept the #b#t" + medalId + "##k. The title of Persevering Challenger is now yours.");
     qm.dispose();
 }

@@ -29,5 +29,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("You studied monsters not only by fighting them, but by learning their habits, traces, and secrets. That knowledge is a weapon of its own.\r\n\r\nPlease accept the #b#t" + medalId + "##k. From now on, you may proudly be called a Monster Expert.");
     qm.dispose();
 }

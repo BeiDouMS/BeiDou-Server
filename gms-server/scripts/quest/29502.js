@@ -29,5 +29,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("Even the strange power of Pink Bean could not stop your resolve. Maple World will remember the day you overcame that legend.\r\n\r\nPlease accept the #b#t" + medalId + "##k. Wear it as proof that you stood against Pink Bean and won.");
     qm.dispose();
 }

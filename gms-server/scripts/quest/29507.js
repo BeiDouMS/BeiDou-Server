@@ -29,5 +29,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("Your pet follows you not because of orders, but because of trust. That bond is more precious than any trophy.\r\n\r\nPlease accept the #b#t" + medalId + "##k. May everyone see what a wonderful pet owner you are.");
     qm.dispose();
 }

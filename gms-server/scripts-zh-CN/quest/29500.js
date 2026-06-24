@@ -27,5 +27,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("你的名字已经在冒险岛世界里传开了。人气不是偶然的掌声，而是大家记住你冒险足迹的证明。\r\n\r\n请收下#b#t" + medalId + "##k。从今天起，你就是名副其实的冒险岛偶像明星。");
     qm.dispose();
 }

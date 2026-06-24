@@ -27,5 +27,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("宠物跟随你，并不是因为命令，而是因为信任。能把这份羁绊培养到如此深厚，本身就是了不起的冒险。\r\n\r\n请收下#b#t" + medalId + "##k。愿所有人都看见你是一位真正可爱的宠物主人。");
     qm.dispose();
 }

@@ -27,5 +27,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("暗黑龙王的咆哮，终于在你的面前沉寂了。能够从那场战斗中归来并带回胜利的人，绝不会是普通冒险家。\r\n\r\n请收下#b#t" + medalId + "##k。暗黑龙王杀手的荣耀，属于你。");
     qm.dispose();
 }

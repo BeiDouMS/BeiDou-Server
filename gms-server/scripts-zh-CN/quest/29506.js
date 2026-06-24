@@ -30,5 +30,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("你并不是只会取胜，而是用判断、节奏和胆识持续赢下去。真正的嘉年华天才，就该有这样的战绩。\r\n\r\n请收下#b#t" + medalId + "##k。你的胜率，比任何夸耀都更有说服力。");
     qm.dispose();
 }

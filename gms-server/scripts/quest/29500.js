@@ -29,5 +29,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("Your name is already being carried across Maple World. That kind of fame is not luck; it is proof that people remember your adventures.\r\n\r\nPlease accept the #b#t" + medalId + "##k. From today on, you stand among the true Maple Idol Stars.");
     qm.dispose();
 }

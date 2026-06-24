@@ -29,5 +29,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("A warm heart can build more than stone walls and bright streets. Your contribution will help many travelers who come after you.\r\n\r\nPlease accept the #b#t" + medalId + "##k. This title honors the kindness behind your strength.");
     qm.dispose();
 }

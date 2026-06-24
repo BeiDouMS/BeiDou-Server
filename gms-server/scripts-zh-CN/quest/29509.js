@@ -26,5 +26,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("危险的道路、幽暗的迷宫、数不清的怪物，都没能让你停下脚步。你一次次迎向挑战，直到把道路亲手打开。\r\n\r\n请收下#b#t" + medalId + "##k。坚强的挑战者这个称号，现在属于你。");
     qm.dispose();
 }

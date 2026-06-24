@@ -29,5 +29,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("The roar of Horntail has finally gone silent before you. Few adventurers can return from that battle and speak of victory.\r\n\r\nPlease accept the #b#t" + medalId + "##k. The title of Horntail Slayer belongs to you.");
     qm.dispose();
 }

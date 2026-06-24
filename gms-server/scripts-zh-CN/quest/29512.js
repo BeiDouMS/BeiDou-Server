@@ -27,5 +27,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("你了解怪物，不只是靠战斗，更靠观察它们的习性、踪迹与秘密。知识同样是一把锋利的武器。\r\n\r\n请收下#b#t" + medalId + "##k。从现在起，你可以自豪地被称为怪物博士。");
     qm.dispose();
 }

@@ -27,5 +27,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("真正温暖人心的力量，不只来自武器，也来自愿意帮助他人的善意。你的贡献会让后来者走得更安心。\r\n\r\n请收下#b#t" + medalId + "##k。这份称号，献给你藏在强大背后的爱心。");
     qm.dispose();
 }

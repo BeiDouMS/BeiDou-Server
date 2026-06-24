@@ -27,5 +27,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("一场胜利也许是运气，一百场胜利就是宣言。你在怪物嘉年华2中的战绩，已经没人能够忽视。\r\n\r\n请收下#b#t" + medalId + "##k。百战百胜者的名号，配得上你的实力。");
     qm.dispose();
 }

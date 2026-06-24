@@ -29,5 +29,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("One victory can be luck, but one hundred victories are a declaration. Your record in Monster Carnival 2 has become impossible to ignore.\r\n\r\nPlease accept the #b#t" + medalId + "##k. You have earned the name of Absolute Victory Carnivalian.");
     qm.dispose();
 }

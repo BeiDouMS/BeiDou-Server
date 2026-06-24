@@ -27,5 +27,6 @@ function awardMedal(medalId) {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("品克缤那不可思议的力量，也没能动摇你的决心。冒险岛世界会记住你战胜传说的这一刻。\r\n\r\n请收下#b#t" + medalId + "##k。它将证明你曾直面品克缤，并取得胜利。");
     qm.dispose();
 }

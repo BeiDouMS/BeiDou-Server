@@ -32,5 +32,6 @@ function awardMedal(medalId) {
 
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
+    qm.sendOk("You did not simply win; you kept winning with discipline, judgment, and nerve. That is the mark of a true Carnival genius.\r\n\r\nPlease accept the #b#t" + medalId + "##k. Your record speaks louder than any boast.");
     qm.dispose();
 }
