@@ -1,12 +1,34 @@
 var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
 
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
 function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.CARNIVAL_GENIUS_MEDAL_ID)) {
+        return;
+    }
     qm.forceStartQuest();
     qm.sendOk("Play at least #b" + Medal.CARNIVAL_GENIUS_MIN_MATCHES + "#k Monster Carnival 2 matches and keep a win rate of #b" + Medal.CARNIVAL_GENIUS_WIN_RATE + "%#k or higher.");
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.CARNIVAL_GENIUS_MEDAL_ID)) {
+        return;
+    }
     var wins = Medal.getProgress(qm.getPlayer(), Medal.CARNIVAL_GENIUS_QUEST_ID, Medal.PROGRESS_WINS);
     var losses = Medal.getProgress(qm.getPlayer(), Medal.CARNIVAL_GENIUS_QUEST_ID, Medal.PROGRESS_LOSSES);
     var matches = wins + losses;

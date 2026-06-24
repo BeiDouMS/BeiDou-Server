@@ -1,12 +1,34 @@
 var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
 
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
 function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.MAPLE_IDOL_MEDAL_ID)) {
+        return;
+    }
     qm.forceStartQuest();
     qm.sendOk("Reach #b" + Medal.MAPLE_IDOL_REQUIRED_FAME + "#k fame, then return to receive the #b#t" + Medal.MAPLE_IDOL_MEDAL_ID + "##k.");
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.MAPLE_IDOL_MEDAL_ID)) {
+        return;
+    }
     var player = qm.getPlayer();
     if (player.getFame() < Medal.MAPLE_IDOL_REQUIRED_FAME) {
         qm.sendOk("You need #b" + Medal.MAPLE_IDOL_REQUIRED_FAME + "#k fame to receive this medal.\r\nCurrent fame: #r" + player.getFame() + "#k");

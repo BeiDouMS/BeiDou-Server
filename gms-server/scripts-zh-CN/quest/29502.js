@@ -1,12 +1,34 @@
 var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
 
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
 function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.PINK_BEAN_SLAYER_MEDAL_ID)) {
+        return;
+    }
     qm.forceStartQuest();
     qm.sendOk("击败品克缤 #b" + Medal.PINK_BEAN_REQUIRED_KILLS + "#k 次后，再来领取#b#t" + Medal.PINK_BEAN_SLAYER_MEDAL_ID + "##k。");
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.PINK_BEAN_SLAYER_MEDAL_ID)) {
+        return;
+    }
     var kills = Medal.getProgress(qm.getPlayer(), Medal.PINK_BEAN_SLAYER_QUEST_ID, Medal.PROGRESS_KILLS);
     if (kills < Medal.PINK_BEAN_REQUIRED_KILLS) {
         qm.sendOk("请先击败品克缤，再回来报告。\r\n进度：#r" + kills + "#k / " + Medal.PINK_BEAN_REQUIRED_KILLS);

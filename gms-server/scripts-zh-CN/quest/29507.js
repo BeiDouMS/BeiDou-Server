@@ -1,12 +1,34 @@
 var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
 
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
 function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.PET_OWNER_MEDAL_ID)) {
+        return;
+    }
     qm.forceStartQuest();
     qm.sendOk("将宠物亲密度提升到 #b" + Medal.PET_REQUIRED_TAMENESS + "#k 后，再来领取#b#t" + Medal.PET_OWNER_MEDAL_ID + "##k。");
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.PET_OWNER_MEDAL_ID)) {
+        return;
+    }
     var tameness = Medal.getMaxPetTameness(qm.getPlayer());
     if (tameness < Medal.PET_REQUIRED_TAMENESS) {
         qm.sendOk("你的宠物亲密度还不够。\r\n最高亲密度：#r" + tameness + "#k / " + Medal.PET_REQUIRED_TAMENESS);

@@ -1,12 +1,34 @@
 var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
 
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
 function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.CARNIVAL_GENIUS_MEDAL_ID)) {
+        return;
+    }
     qm.forceStartQuest();
     qm.sendOk("参加至少 #b" + Medal.CARNIVAL_GENIUS_MIN_MATCHES + "#k 场怪物嘉年华2，并保持 #b" + Medal.CARNIVAL_GENIUS_WIN_RATE + "%#k 以上胜率。");
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.CARNIVAL_GENIUS_MEDAL_ID)) {
+        return;
+    }
     var wins = Medal.getProgress(qm.getPlayer(), Medal.CARNIVAL_GENIUS_QUEST_ID, Medal.PROGRESS_WINS);
     var losses = Medal.getProgress(qm.getPlayer(), Medal.CARNIVAL_GENIUS_QUEST_ID, Medal.PROGRESS_LOSSES);
     var matches = wins + losses;

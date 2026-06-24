@@ -1,12 +1,34 @@
 var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
 
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
 function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.CARNIVAL_VICTORY_MEDAL_ID)) {
+        return;
+    }
     qm.forceStartQuest();
     qm.sendOk("Win Monster Carnival 2 #b" + Medal.CARNIVAL_REQUIRED_WINS + "#k times, then return to receive the #b#t" + Medal.CARNIVAL_VICTORY_MEDAL_ID + "##k.");
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.CARNIVAL_VICTORY_MEDAL_ID)) {
+        return;
+    }
     var wins = Medal.getProgress(qm.getPlayer(), Medal.CARNIVAL_VICTORY_QUEST_ID, Medal.PROGRESS_WINS);
     if (wins < Medal.CARNIVAL_REQUIRED_WINS) {
         qm.sendOk("Keep winning in Monster Carnival 2.\r\nWins: #r" + wins + "#k / " + Medal.CARNIVAL_REQUIRED_WINS);

@@ -1,12 +1,34 @@
 var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
 
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
 function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.MAPLE_IDOL_MEDAL_ID)) {
+        return;
+    }
     qm.forceStartQuest();
     qm.sendOk("人气达到 #b" + Medal.MAPLE_IDOL_REQUIRED_FAME + "#k 后，再来领取#b#t" + Medal.MAPLE_IDOL_MEDAL_ID + "##k。");
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.MAPLE_IDOL_MEDAL_ID)) {
+        return;
+    }
     var player = qm.getPlayer();
     if (player.getFame() < Medal.MAPLE_IDOL_REQUIRED_FAME) {
         qm.sendOk("领取这枚勋章需要人气达到 #b" + Medal.MAPLE_IDOL_REQUIRED_FAME + "#k。\r\n当前人气：#r" + player.getFame() + "#k");

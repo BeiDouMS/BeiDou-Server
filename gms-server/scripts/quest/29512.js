@@ -1,12 +1,34 @@
 var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
 
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
 function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.MONSTER_EXPERT_MEDAL_ID)) {
+        return;
+    }
     qm.forceStartQuest();
     qm.sendOk("Collect #b" + Medal.MONSTER_BOOK_REQUIRED_CARDS + "#k monster cards, then return to receive the #b#t" + Medal.MONSTER_EXPERT_MEDAL_ID + "##k.");
     qm.dispose();
 }
 
 function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.MONSTER_EXPERT_MEDAL_ID)) {
+        return;
+    }
     var cards = Medal.getMonsterBookCards(qm.getPlayer());
     if (cards < Medal.MONSTER_BOOK_REQUIRED_CARDS) {
         qm.sendOk("Collect more monster cards.\r\nCards: #r" + cards + "#k / " + Medal.MONSTER_BOOK_REQUIRED_CARDS);
