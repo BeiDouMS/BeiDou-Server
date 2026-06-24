@@ -10,6 +10,7 @@ import org.gms.net.server.world.PartyCharacter;
 import org.gms.server.TimerManager;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Reactor;
+import org.gms.server.quest.medal.SpecialChallengeMedal;
 import org.gms.util.PacketCreator;
 
 import java.util.concurrent.ScheduledFuture;
@@ -260,6 +261,7 @@ public class MonsterCarnival {
                 for (PartyCharacter mpc : leader1.getParty().getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
+                        SpecialChallengeMedal.onMonsterCarnivalFinished(mc, cpq1, true);
                         mc.gainFestivalPoints(this.redTotalCP);
                         mc.setMonsterCarnival(null);
                         if (cpq1) {
@@ -274,6 +276,7 @@ public class MonsterCarnival {
                 for (PartyCharacter mpc : leader2.getParty().getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
+                        SpecialChallengeMedal.onMonsterCarnivalFinished(mc, cpq1, false);
                         mc.gainFestivalPoints(this.blueTotalCP);
                         mc.setMonsterCarnival(null);
                         if (cpq1) {
@@ -289,6 +292,7 @@ public class MonsterCarnival {
                 for (PartyCharacter mpc : leader2.getParty().getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
+                        SpecialChallengeMedal.onMonsterCarnivalFinished(mc, cpq1, true);
                         mc.gainFestivalPoints(this.blueTotalCP);
                         mc.setMonsterCarnival(null);
                         if (cpq1) {
@@ -303,6 +307,7 @@ public class MonsterCarnival {
                 for (PartyCharacter mpc : leader1.getParty().getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
+                        SpecialChallengeMedal.onMonsterCarnivalFinished(mc, cpq1, false);
                         mc.gainFestivalPoints(this.redTotalCP);
                         mc.setMonsterCarnival(null);
                         if (cpq1) {
