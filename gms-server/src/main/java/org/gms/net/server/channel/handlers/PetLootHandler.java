@@ -115,6 +115,14 @@ public final class PetLootHandler extends AbstractPacketHandler {
             return true;
         }
 
+        // 传送补偿预检：玩家最近使用内传送门，捡取传送前位置的遗留物品时放行
+        Point beforePos = chr.getPetLootTeleportBeforePos();
+        if (beforePos != null
+                && Math.abs(beforePos.x - itemPos.x) <= 800
+                && Math.abs(beforePos.y - itemPos.y) <= 600) {
+            return true;
+        }
+
         Point petPos = pet.getPos();
         // 宠物刚召唤尚未移动时 pos 为 (0,0)，跳过检测
         if (petPos.x == 0 && petPos.y == 0) {
