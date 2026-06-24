@@ -261,6 +261,7 @@ public class MonsterCarnival {
                 for (PartyCharacter mpc : leader1.getParty().getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
+                        // 怪物嘉年华结算时同步记录特级挑战勋章的个人胜负场进度。
                         SpecialChallengeMedal.onMonsterCarnivalFinished(mc, cpq1, true);
                         mc.gainFestivalPoints(this.redTotalCP);
                         mc.setMonsterCarnival(null);
@@ -276,6 +277,7 @@ public class MonsterCarnival {
                 for (PartyCharacter mpc : leader2.getParty().getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
+                        // 怪物嘉年华结算时同步记录特级挑战勋章的个人胜负场进度。
                         SpecialChallengeMedal.onMonsterCarnivalFinished(mc, cpq1, false);
                         mc.gainFestivalPoints(this.blueTotalCP);
                         mc.setMonsterCarnival(null);
@@ -292,6 +294,7 @@ public class MonsterCarnival {
                 for (PartyCharacter mpc : leader2.getParty().getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
+                        // 怪物嘉年华结算时同步记录特级挑战勋章的个人胜负场进度。
                         SpecialChallengeMedal.onMonsterCarnivalFinished(mc, cpq1, true);
                         mc.gainFestivalPoints(this.blueTotalCP);
                         mc.setMonsterCarnival(null);
@@ -307,6 +310,7 @@ public class MonsterCarnival {
                 for (PartyCharacter mpc : leader1.getParty().getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
+                        // 怪物嘉年华结算时同步记录特级挑战勋章的个人胜负场进度。
                         SpecialChallengeMedal.onMonsterCarnivalFinished(mc, cpq1, false);
                         mc.gainFestivalPoints(this.redTotalCP);
                         mc.setMonsterCarnival(null);
