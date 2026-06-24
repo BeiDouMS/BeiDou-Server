@@ -29,7 +29,7 @@ var status = -1;
 
 function start(mode, type, selection) {
     if (qm.forceStartQuest()) {
-        qm.showInfoText("您已经获得了<少年冒险家>头衔. 您可以从达赖尔获得勋章.");
+        qm.showInfoText("您已经获得了<中级冒险家>头衔. 您可以从达赖尔获得勋章.");
     }
     qm.dispose();
 }
@@ -41,14 +41,14 @@ function end(mode, type, selection) {
         qm.dispose();
     } else {
         if (status == 0) {
-            qm.sendNext("恭喜你获得了 #b<少年冒险家>#k 头衔. 祝您在未来的工作中一切顺利！ 继续加油吧勇士.\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n #v1142108:# #t1142108# 1");
+            qm.sendNext("恭喜你获得了 #b<中级冒险家>#k 头衔. 祝您在未来的工作中一切顺利！ 继续加油吧勇士.\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n #v1142108:# #t1142108# 1");
         } else if (status == 1) {
             if (qm.canHold(1142108)) {
                 qm.gainItem(1142108);
                 qm.forceCompleteQuest();
                 qm.dispose();
             } else {
-                qm.sendNext("Please make room in your inventory");//NOT GMS LIKE
+                qm.sendNext("请给背包留出空位");//NOT GMS LIKE
             }
         } else if (status == 2) {
             qm.dispose();
