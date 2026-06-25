@@ -63,7 +63,7 @@ function action(mode, type, selection) {
             if (mons < 10000) {
                 cm.sendOk("请在月台消灭至少 10,000 只怪物后再来找我。\r\n击杀数：#r" + mons + "#k / 10000");
             } else {
-                cm.sendOk("你已经足以被称为荣誉乘务员。请前往勋章老人处领取勋章。");
+                cm.sendOk("你已经足以被称为荣誉乘务员。请前往德烈处领取勋章。");
             }
         }
         cm.dispose();

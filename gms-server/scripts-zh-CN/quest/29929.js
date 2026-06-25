@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("男性角色达到 13 级后，前往勋章老人处领取#b#t1140001##k。");
+    qm.sendOk("男性角色达到 13 级后，前往德烈处领取#b#t1140001##k。");
     qm.dispose();
 }
 

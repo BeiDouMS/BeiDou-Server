@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("在废弃地铁月台消灭 10,000 只怪物后，前往林车长或勋章老人处领取#b#t1142141##k。");
+    qm.sendOk("在废弃地铁月台消灭 10,000 只怪物后，前往林车长或德烈处领取#b#t1142141##k。");
     qm.dispose();
 }
 

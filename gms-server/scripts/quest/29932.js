@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("Defeat 50,000 monsters in Nett's Pyramid, then speak with Duarte or the Medal Master to receive #b#t1142142##k.");
+    qm.sendOk("Defeat 50,000 monsters in Nett's Pyramid, then speak with Duarte or Dalair to receive #b#t1142142##k.");
     qm.dispose();
 }
 

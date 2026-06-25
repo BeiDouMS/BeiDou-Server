@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("成为 70 级以上战神后，前往勋章老人处领取#b#t1142131##k。");
+    qm.sendOk("成为 70 级以上战神后，前往德烈处领取#b#t1142131##k。");
     qm.dispose();
 }
 

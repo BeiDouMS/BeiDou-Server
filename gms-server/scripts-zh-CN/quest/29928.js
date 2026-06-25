@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("成为 200 级战神后，前往勋章老人处领取#b#t1142133##k。");
+    qm.sendOk("成为 200 级战神后，前往德烈处领取#b#t1142133##k。");
     qm.dispose();
 }
 

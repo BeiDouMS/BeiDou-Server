@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("Defeat 10,000 monsters on the Abandoned Subway Platform, then speak with Mr. Lim or the Medal Master to receive #b#t1142141##k.");
+    qm.sendOk("Defeat 10,000 monsters on the Abandoned Subway Platform, then speak with Mr. Lim or Dalair to receive #b#t1142141##k.");
     qm.dispose();
 }
 

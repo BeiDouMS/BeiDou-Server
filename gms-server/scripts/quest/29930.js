@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("Reach level 13 with a female character, then speak with the Medal Master to receive #b#t1141001##k.");
+    qm.sendOk("Reach level 13 with a female character, then speak with Dalair to receive #b#t1141001##k.");
     qm.dispose();
 }
 

@@ -63,7 +63,7 @@ function action(mode, type, selection) {
             if (mons < 10000) {
                 cm.sendOk("Please defeat at least 10,000 monsters on the platform and look for me again.\r\nKills: #r" + mons + "#k / 10000");
             } else {
-                cm.sendOk("You have done enough to be recognized as an Honorary Subway Worker. Speak with the Medal Master to receive the medal.");
+                cm.sendOk("You have done enough to be recognized as an Honorary Subway Worker. Speak with Dalair to receive the medal.");
             }
         }
         cm.dispose();

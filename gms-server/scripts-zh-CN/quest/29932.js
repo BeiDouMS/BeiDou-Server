@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("在奈特的金字塔中消灭 50,000 只怪物后，前往杜阿特或勋章老人处领取#b#t1142142##k。");
+    qm.sendOk("在奈特的金字塔中消灭 50,000 只怪物后，前往杜阿特或德烈处领取#b#t1142142##k。");
     qm.dispose();
 }
 

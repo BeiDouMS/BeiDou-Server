@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("Reach level 120 as an Aran, then speak with the Medal Master to receive #b#t1142132##k.");
+    qm.sendOk("Reach level 120 as an Aran, then speak with Dalair to receive #b#t1142132##k.");
     qm.dispose();
 }
 
