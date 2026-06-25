@@ -1748,7 +1748,7 @@ public class StatEffect {
     }
 
     private boolean isInfusion() {
-        return skill && (sourceid == Buccaneer.SPEED_INFUSION || sourceid == Corsair.SPEED_INFUSION || sourceid == ThunderBreaker.SPEED_INFUSION);
+        return skill && (sourceid == Buccaneer.SPEED_INFUSION || sourceid == Corsair.HEROS_WILL || sourceid == ThunderBreaker.SPEED_INFUSION);
     }
 
     private boolean isCygnusFA() {
