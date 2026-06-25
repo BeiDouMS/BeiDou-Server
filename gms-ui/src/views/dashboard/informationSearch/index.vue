@@ -164,22 +164,6 @@
             align="center"
           />
           <a-table-column
-            :title="
-              $t('informationSearch.characterSelector.column.onlineStatus')
-            "
-            data-index="online"
-            align="center"
-          >
-            <template #cell="{ record }">
-              <a-tag v-if="record.onlineStatus" color="green">
-                {{ $t('informationSearch.characterSelector.online') }}
-              </a-tag>
-              <a-tag v-else color="gray">
-                {{ $t('informationSearch.characterSelector.offline') }}
-              </a-tag>
-            </template>
-          </a-table-column>
-          <a-table-column
             :title="$t('informationSearch.characterSelector.column.operation')"
           >
             <template #cell="{ record }">
@@ -463,6 +447,9 @@
         selectorCondition.value.id,
         selectorCondition.value.name
       );
+      if (!data.records || data.records.length === 0) {
+        Message.warning(t('informationSearch.characterSelector.notFound'));
+      }
       characterList.value = data.records;
     } finally {
       setLoading(false);

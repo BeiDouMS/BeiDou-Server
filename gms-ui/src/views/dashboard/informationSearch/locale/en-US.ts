@@ -49,12 +49,10 @@ export default {
   'informationSearch.characterSelector.title': 'Select Character',
   'informationSearch.characterSelector.column.id': 'Character ID',
   'informationSearch.characterSelector.column.name': 'Character Name',
-  'informationSearch.characterSelector.column.onlineStatus': 'Online Status',
   'informationSearch.characterSelector.column.operation': 'Operation',
   'informationSearch.characterSelector.searchButton': 'Search',
   'informationSearch.characterSelector.selectButton': 'Select',
-  'informationSearch.characterSelector.online': 'Online',
-  'informationSearch.characterSelector.offline': 'Offline',
+  'informationSearch.characterSelector.notFound': 'Not online or not found',
 
   'informationSearch.check.filter': 'Search text can not be empty',
 };

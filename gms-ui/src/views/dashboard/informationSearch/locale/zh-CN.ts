@@ -49,12 +49,10 @@ export default {
   'informationSearch.characterSelector.title': '选择玩家',
   'informationSearch.characterSelector.column.id': '角色ID',
   'informationSearch.characterSelector.column.name': '角色名',
-  'informationSearch.characterSelector.column.onlineStatus': '在线状态',
   'informationSearch.characterSelector.column.operation': '操作',
   'informationSearch.characterSelector.searchButton': '查询',
   'informationSearch.characterSelector.selectButton': '选择',
-  'informationSearch.characterSelector.online': '在线',
-  'informationSearch.characterSelector.offline': '离线',
+  'informationSearch.characterSelector.notFound': '未上线或不存在',
 
   'informationSearch.check.filter': '搜索文本不能为空',
 };
