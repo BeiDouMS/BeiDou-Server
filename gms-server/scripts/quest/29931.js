@@ -1,4 +1,4 @@
-var MEDAL_ID = 1142132;
+var MEDAL_ID = 1142141;
 
 function finishIfAlreadyAwarded() {
     if (qm.isQuestCompleted(qm.getQuest())) {
@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("Reach level 120 as an Aran, then speak with the Medal Master to receive #b#t1142132##k.");
+    qm.sendOk("Defeat 10,000 monsters on the Abandoned Subway Platform, then speak with Mr. Lim or the Medal Master to receive #b#t1142141##k.");
     qm.dispose();
 }
 
@@ -30,8 +30,9 @@ function end(mode, type, selection) {
         return;
     }
     var player = qm.getPlayer();
-    if (player.getLevel() < 120 || ((player.getJob().getId() / 100) | 0) != 21) {
-        qm.sendOk("You must be a level 120 or higher Aran to receive this medal.");
+    var count = qm.getQuestProgressInt(29931, 7662);
+    if (count < 10000) {
+        qm.sendOk("Please keep eliminating monsters on the Abandoned Subway Platform.\r\nProgress: #r" + count + "#k / 10000");
         qm.dispose();
         return;
     }
@@ -49,6 +50,6 @@ function awardMedal() {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
-    qm.sendOk("Hope has taken root where rage and confusion once stood. The hero who protects others has begun to stand tall again.\r\n\r\nPlease accept #b#t1142132##k. Let it carry the hope you have restored.");
+    qm.sendOk("The abandoned platform is safer because you refused to abandon it. Every monster you drove back helped the subway breathe again.\r\n\r\nPlease accept #b#t1142141##k. Kerning City's rails will remember your work.");
     qm.dispose();
 }

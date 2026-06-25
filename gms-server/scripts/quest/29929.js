@@ -1,4 +1,4 @@
-var MEDAL_ID = 1142132;
+var MEDAL_ID = 1140001;
 
 function finishIfAlreadyAwarded() {
     if (qm.isQuestCompleted(qm.getQuest())) {
@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("Reach level 120 as an Aran, then speak with the Medal Master to receive #b#t1142132##k.");
+    qm.sendOk("Reach level 13 with a male character, then speak with the Medal Master to receive #b#t1140001##k.");
     qm.dispose();
 }
 
@@ -30,8 +30,8 @@ function end(mode, type, selection) {
         return;
     }
     var player = qm.getPlayer();
-    if (player.getLevel() < 120 || ((player.getJob().getId() / 100) | 0) != 21) {
-        qm.sendOk("You must be a level 120 or higher Aran to receive this medal.");
+    if (player.getLevel() < 13 || player.getGender() != 0) {
+        qm.sendOk("A male character of level 13 or higher is required to receive this medal.");
         qm.dispose();
         return;
     }
@@ -49,6 +49,6 @@ function awardMedal() {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
-    qm.sendOk("Hope has taken root where rage and confusion once stood. The hero who protects others has begun to stand tall again.\r\n\r\nPlease accept #b#t1142132##k. Let it carry the hope you have restored.");
+    qm.sendOk("Winter crowns those who keep moving even when the cold tries to slow every step. Your resolve has given this season a worthy king.\r\n\r\nPlease accept #b#t1140001##k. May your name be remembered with the brightness of winter snow.");
     qm.dispose();
 }

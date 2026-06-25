@@ -1,15 +1,15 @@
-var MEDAL_ID = 1142132;
+var MEDAL_ID = 1141001;
 
 function finishIfAlreadyAwarded() {
     if (qm.isQuestCompleted(qm.getQuest())) {
-        qm.sendOk("You have already received #b#t" + MEDAL_ID + "##k, and this achievement is already recorded in your journey.");
+        qm.sendOk("你已经获得过#b#t" + MEDAL_ID + "##k，这项挑战已经记录在你的冒险履历里了。");
         qm.dispose();
         return true;
     }
     if (qm.haveItemWithId(MEDAL_ID, true)) {
         qm.forceCompleteQuest();
         qm.earnTitle(qm.getMedalName());
-        qm.sendOk("You have already received #b#t" + MEDAL_ID + "##k, and this achievement is already recorded in your journey.");
+        qm.sendOk("你已经获得过#b#t" + MEDAL_ID + "##k，这项挑战已经记录在你的冒险履历里了。");
         qm.dispose();
         return true;
     }
@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("Reach level 120 as an Aran, then speak with the Medal Master to receive #b#t1142132##k.");
+    qm.sendOk("女性角色达到 13 级后，前往勋章老人处领取#b#t1141001##k。");
     qm.dispose();
 }
 
@@ -30,8 +30,8 @@ function end(mode, type, selection) {
         return;
     }
     var player = qm.getPlayer();
-    if (player.getLevel() < 120 || ((player.getJob().getId() / 100) | 0) != 21) {
-        qm.sendOk("You must be a level 120 or higher Aran to receive this medal.");
+    if (player.getLevel() < 13 || player.getGender() != 1) {
+        qm.sendOk("领取这枚勋章需要女性角色达到 #b13 级以上#k。");
         qm.dispose();
         return;
     }
@@ -41,7 +41,7 @@ function end(mode, type, selection) {
 function awardMedal() {
     if (!qm.haveItem(MEDAL_ID)) {
         if (!qm.canHold(MEDAL_ID)) {
-            qm.sendOk("Please make 1 empty slot in your Equip inventory.");
+            qm.sendOk("请在装备栏空出 1 个位置。");
             qm.dispose();
             return;
         }
@@ -49,6 +49,6 @@ function awardMedal() {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
-    qm.sendOk("Hope has taken root where rage and confusion once stood. The hero who protects others has begun to stand tall again.\r\n\r\nPlease accept #b#t1142132##k. Let it carry the hope you have restored.");
+    qm.sendOk("冬天会考验每一位冒险家的脚步，而你的优雅与坚韧没有被寒风夺走半分。这个季节，理应为你加冕。\r\n\r\n请收下#b#t1141001##k。愿你的名字如冬雪般明亮。");
     qm.dispose();
 }

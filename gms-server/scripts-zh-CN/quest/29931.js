@@ -1,15 +1,15 @@
-var MEDAL_ID = 1142132;
+var MEDAL_ID = 1142141;
 
 function finishIfAlreadyAwarded() {
     if (qm.isQuestCompleted(qm.getQuest())) {
-        qm.sendOk("You have already received #b#t" + MEDAL_ID + "##k, and this achievement is already recorded in your journey.");
+        qm.sendOk("你已经获得过#b#t" + MEDAL_ID + "##k，这项挑战已经记录在你的冒险履历里了。");
         qm.dispose();
         return true;
     }
     if (qm.haveItemWithId(MEDAL_ID, true)) {
         qm.forceCompleteQuest();
         qm.earnTitle(qm.getMedalName());
-        qm.sendOk("You have already received #b#t" + MEDAL_ID + "##k, and this achievement is already recorded in your journey.");
+        qm.sendOk("你已经获得过#b#t" + MEDAL_ID + "##k，这项挑战已经记录在你的冒险履历里了。");
         qm.dispose();
         return true;
     }
@@ -21,7 +21,7 @@ function start(mode, type, selection) {
         return;
     }
     qm.forceStartQuest();
-    qm.sendOk("Reach level 120 as an Aran, then speak with the Medal Master to receive #b#t1142132##k.");
+    qm.sendOk("在废弃地铁月台消灭 10,000 只怪物后，前往林车长或勋章老人处领取#b#t1142141##k。");
     qm.dispose();
 }
 
@@ -30,8 +30,9 @@ function end(mode, type, selection) {
         return;
     }
     var player = qm.getPlayer();
-    if (player.getLevel() < 120 || ((player.getJob().getId() / 100) | 0) != 21) {
-        qm.sendOk("You must be a level 120 or higher Aran to receive this medal.");
+    var count = qm.getQuestProgressInt(29931, 7662);
+    if (count < 10000) {
+        qm.sendOk("请继续在废弃地铁月台消灭怪物。\r\n当前进度：#r" + count + "#k / 10000");
         qm.dispose();
         return;
     }
@@ -41,7 +42,7 @@ function end(mode, type, selection) {
 function awardMedal() {
     if (!qm.haveItem(MEDAL_ID)) {
         if (!qm.canHold(MEDAL_ID)) {
-            qm.sendOk("Please make 1 empty slot in your Equip inventory.");
+            qm.sendOk("请在装备栏空出 1 个位置。");
             qm.dispose();
             return;
         }
@@ -49,6 +50,6 @@ function awardMedal() {
     }
     qm.forceCompleteQuest();
     qm.earnTitle(qm.getMedalName());
-    qm.sendOk("Hope has taken root where rage and confusion once stood. The hero who protects others has begun to stand tall again.\r\n\r\nPlease accept #b#t1142132##k. Let it carry the hope you have restored.");
+    qm.sendOk("废弃月台因为你的坚持而重新看见了安全的希望。你击退的不只是怪物，也是笼罩在地铁线路上的阴影。\r\n\r\n请收下#b#t1142141##k。废都的轨道，会记住你的付出。");
     qm.dispose();
 }
