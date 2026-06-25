@@ -27,10 +27,23 @@ var answers;
 var correctAnswer;
 var questionNum;
 
+function startFinalQuestIfNeeded() {
+    if (cm.isQuestStarted(8010)) {
+        cm.completeQuest(8010);
+        cm.startQuest(8012);
+        return true;
+    }
+    if (cm.isQuestCompleted(8010) && !cm.isQuestStarted(8012) && !cm.isQuestCompleted(8012)) {
+        cm.startQuest(8012);
+        return true;
+    }
+    return cm.isQuestStarted(8012);
+}
+
 function start() {
     status = -1;
-    questions = ["火焰浣熊不会掉落以下哪些物品？", "哪个NPC负责将旅客从废弃都市运送到古代神社，然后再运回？", "古代神社出售的哪些物品可以提高你的攻击力？", "以下哪些装备不会被删除？", "以下哪些物品不存在？", "昭和村的蔬菜店老板叫什么名字？", "这些物品中有哪些是存在的？", "古代神社最强的boss叫什么？", "这些物品中，哪一个的类别或级别描述不匹配？", "这些面条中，哪一条不是古代神社里NPC卖的？", "这些NPC中，哪一个不站在昭和电影院前？"]
-    answers = [["浣熊柴火", "实心号角", "红砖"], ["佩利", "导游妮妮", "波利"], ["章鱼串", "日本炒面", "天妇罗"], ["徽章", "衣服", "项链"], ["冷冻金枪鱼", "风扇", "苍蝇拍"], ["萨米", "卡米", "由美"], ["云狐牙齿", "幽灵花束", "云狐尾巴"], ["天狗", "蓝蘑菇王", "姬神"], ["木精灵枪-战士专用武器", "橡皮榔头-单手剑", "枫树杖-51级装备"], ["日式拉面(豚骨)", "日式拉面(海鲜)", "味噌拉面"], ["绘里香", "黑泽", "阿利博士"]];
+    questions = ["火狸不会掉落以下哪种物品？", "哪位 NPC 负责在废弃都市和古代神社之间接送旅客？", "古代神社出售的哪种食物可以提升攻击力？", "以下哪种物品不是小混混掉落的？", "以下哪种物品并不存在？", "昭和村的蔬菜店老板叫什么名字？", "以下哪种物品确实存在？", "古代神社一带最强的头目叫什么？", "以下哪件装备的职业或等级说明不匹配？", "以下哪种拉面不是古代神社机器人商店出售的？", "以下哪位 NPC 不在昭和电影院前？"]
+    answers = [["狸柴火", "坚硬的角", "红砖"], ["佩利", "导游妮妮", "波利"], ["章鱼烧", "炒面", "天妇罗"], ["小混混 A 的徽章", "小混混 B 的束腰", "小混混 C 的项链"], ["冷冻金枪鱼", "扇子", "苍蝇拍"], ["纱美", "嘉美", "由美"], ["云狐的牙齿", "幽灵的花束", "黑云狐的尾巴"], ["乌鸦天狗", "蓝蘑菇王", "姬神"], ["竹枪 - 战士专用武器", "橡皮榔头 - 单手剑", "神秘手杖 - 51级装备"], ["蘑菇拉面（豚骨）", "蘑菇拉面（盐味）", "蘑菇味噌拉面"], ["绘里香", "黑泽", "阿利博士"]];
     correctAnswer = [1, 1, 0, 1, 2, 2, 2, 0, 0, 2, 2];
     action(1, 0, 0);
 }
@@ -45,7 +58,7 @@ function action(mode, type, selection) {
             status--;
         }
         if (status == 0 && mode == 1) {
-            if (cm.isQuestStarted(8012) && !cm.haveItem(4031064)) { //quest in progress
+            if (startFinalQuestIfNeeded() && !cm.haveItem(4031064)) { //quest in progress
                 cm.sendYesNo("你都找到了吗？你打算尝试回答我所有的问题吗？");
             } else { //quest not started or already completed
                 //cm.sendOk("喵喵喵！");//lol what's this?
@@ -57,28 +70,28 @@ function action(mode, type, selection) {
                 hasChicken = false;
             }
             if (!hasChicken) {
-                cm.sendOk("什么？不行！300！三百。不少。如果你想要更多，就给我，但我至少需要300。我们不是所有人都像你一样又大又饱满…");
+                cm.sendOk("什么？不行！我要 300 个，一个都不能少。想挑战的话，就先带 300 个炸鸡来。不是谁都像你一样吃得这么饱……");
                 cm.dispose();
             } else {
                 cm.gainItem(2020001, -300)
-                cm.sendNext("干得好！现在等一下……嘿，看这里！我这里有些食物！自己拿吧。好了，现在是时候问你们一些问题了。我相信你们已经意识到了，但记住，如果你们答错了，一切都结束了。要么全赢，要么全输！");
+                cm.sendNext("很好！等一下……看，我这里有吃的。你们先吃吧。好了，现在轮到我提问了。记住，只要答错一次就结束，要么全对，要么重来！");
             }
         } else if (status == 7 && mode == 1) { //2-6 are the questions
             if (selection != correctAnswer.pop()) {
-                cm.sendNext("嗯……反正所有人都会犯错！如果你想再试一次，那就给我拿300只炸鸡来。")
+                cm.sendNext("嗯……人类果然会犯错！想再试一次的话，就带 300 个炸鸡来。")
                 cm.dispose();
             } else {
-                cm.sendNext("哎呀，你所有的问题都答对了。总的来说，我可能不喜欢人类，但我讨厌食言，所以，正如我所承诺的，这是橙色大理石。")
+                cm.sendNext("喵……竟然全都答对了。虽然我不太喜欢人类，但我不会食言。这颗 #b#t4031064##k 就给你吧。")
             }
         } else if (status == 8 && mode == 1) { //gain marble
             cm.gainItem(4031064, 1);
-            cm.sendOk("我们的交易已经结束，非常感谢！你可以离开了！");
+            cm.sendOk("我们的交易结束了。谢谢，你可以走了。喵～");
             cm.dispose();
         } else if (status >= 2 && status <= 6 && mode == 1) {//questions
             var cont = true;
             if (status > 2) {
                 if (selection != correctAnswer.pop()) {
-                    cm.sendNext("嗯……反正所有人都会犯错！如果你想再试一次，那就给我拿300只炸鸡来。")
+                    cm.sendNext("嗯……人类果然会犯错！想再试一次的话，就带 300 个炸鸡来。")
                     cm.dispose();
                     cont = false;
                 }
@@ -99,7 +112,7 @@ function action(mode, type, selection) {
                 }
                 var question = questions.pop();
                 var answer = answers.pop();
-                var prompt = "问题 no." + (status - 1) + ": " + question;
+                var prompt = "第 " + (status - 1) + " 题：" + question;
                 for (var i = 0; i < answer.length; i++) {
                     prompt += "\r\n#b#L" + i + "#" + answer[i] + "#l#k";
                 }

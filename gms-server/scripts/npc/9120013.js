@@ -27,6 +27,19 @@ var answers;
 var correctAnswer;
 var questionNum;
 
+function startFinalQuestIfNeeded() {
+    if (cm.isQuestStarted(8010)) {
+        cm.completeQuest(8010);
+        cm.startQuest(8012);
+        return true;
+    }
+    if (cm.isQuestCompleted(8010) && !cm.isQuestStarted(8012) && !cm.isQuestCompleted(8012)) {
+        cm.startQuest(8012);
+        return true;
+    }
+    return cm.isQuestStarted(8012);
+}
+
 function start() {
     status = -1;
     questions = ["Which of these items does the Flaming Raccoon NOT drop?", "Which NPC is responsible for transporting travellers from Kerning City to Zipangu, and back?", "Which of the items sold at the Mushroom Shrine increases your attack power?", "Which of these items do the Extras NOT drop?", "Which of these items DO NOT exist??", "What's the name of the vegetable store owner in Showa Town?", "Which of these items DO exist?", "What is the name of the strongest boss in the Mushroom Shrine?", "Which one of these items has a mis-matched class or level description?", "Which of these noodles are NOT being sold by Robo at the Mushroom Shrine?", "Which of these NPCs do NOT stand in front of Showa Movie Theater?"]
@@ -45,7 +58,7 @@ function action(mode, type, selection) {
             status--;
         }
         if (status == 0 && mode == 1) {
-            if (cm.isQuestStarted(8012) && !cm.haveItem(4031064)) { //quest in progress
+            if (startFinalQuestIfNeeded() && !cm.haveItem(4031064)) { //quest in progress
                 cm.sendYesNo("Did you get them all? Are you going to try to answer all of my questions?");
             } else { //quest not started or already completed
                 //cm.sendOk("Meeeoooowww!");//lol what's this?

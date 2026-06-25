@@ -60,23 +60,26 @@ public class LoginBypassCoordinator {
     }
 
     public void registerLoginBypassEntry(Hwid hwid, int accId, boolean pic) {
-        long expireTime = (pic ? GameConfig.getServerInt("bypass_pic_expiration") : GameConfig.getServerInt("bypass_pin_expiration"));
-        if (expireTime > 0) {
+        long expireTimeMin = (pic ? GameConfig.getServerInt("bypass_pic_expiration") : GameConfig.getServerInt("bypass_pin_expiration"));
+        if (expireTimeMin > 0) {
             Pair<Hwid, Integer> entry = new Pair<>(hwid, accId);
-            expireTime = Server.getInstance().getCurrentTime() + MINUTES.toMillis(expireTime);
-            try {
-                pic |= loginBypass.get(entry).getLeft();
-                expireTime = Math.max(loginBypass.get(entry).getRight(), expireTime);
-            } catch (NullPointerException npe) {
-            }
-
-            loginBypass.put(entry, new Pair<>(pic, expireTime));
+            long newExpireTime = Server.getInstance().getCurrentTime() + MINUTES.toMillis(expireTimeMin);
+            final boolean newPic = pic;
+            // 用 compute 原子合并旧值，避免并发 check-then-act 丢失 pic=true 的状态
+            loginBypass.compute(entry, (k, old) -> {
+                if (old == null) {
+                    return new Pair<>(newPic, newExpireTime);
+                }
+                boolean mergedPic = old.getLeft() || newPic;
+                long mergedExpire = Math.max(old.getRight(), newExpireTime);
+                return new Pair<>(mergedPic, mergedExpire);
+            });
         }
     }
 
     public void unregisterLoginBypassEntry(Hwid hwid, int accId) {
-        String hwidValue = hwid == null ? null : hwid.hwid();
-        Pair<String, Integer> entry = new Pair<>(hwidValue, accId);
+        // 修复 key 类型 bug：原代码用 Pair<String, Integer> 与 Map 的 Pair<Hwid, Integer> 哈希不一致，导致永远删不掉。
+        Pair<Hwid, Integer> entry = new Pair<>(hwid, accId);
         loginBypass.remove(entry);
     }
 

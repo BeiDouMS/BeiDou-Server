@@ -9,8 +9,8 @@
  ---------------------------------------------------------------------------------------------------
  **/
 
-var menu = new Array("桃花仙境", "天空之城", "灵药幻境", "桃花仙境");
-var cost = new Array(1500, 1500, 1500, 1500);
+var menu = new Array("武陵", "天空之城", "百草堂");
+var cost = new Array(1500, 1500, 500);
 var hak;
 var slct;
 var display = "";
@@ -41,23 +41,23 @@ function action(mode, type, selection) {
         if (status == 0) {
             for (var i = 0; i < menu.length; i++) {
                 if (cm.getPlayer().getMapId() == 200000141 && i < 1) {
-                    display += "\r\n#L" + i + "##b" + menu[i] + "(" + cost[i] + " mesos)#k";
+                    display += "\r\n#L" + i + "##b" + menu[i] + "（" + cost[i] + "金币）#k";
                 } else if (cm.getPlayer().getMapId() == 250000100 && i > 0 && i < 3) {
-                    display += "\r\n#L" + i + "##b" + menu[i] + "(" + cost[i] + " mesos)#k";
+                    display += "\r\n#L" + i + "##b" + menu[i] + "（" + cost[i] + "金币）#k";
                 }
             }
             if (cm.getPlayer().getMapId() == 200000141 || cm.getPlayer().getMapId() == 251000000) {
-                btwmsg = "#b天空之城#k 到 #b桃花仙境#k";
+                btwmsg = "#b天空之城#k 到 #b武陵#k";
             } else if (cm.getPlayer().getMapId() == 250000100) {
-                btwmsg = "#b桃花仙境#k 到 #b天空之城#k";
+                btwmsg = "#b武陵#k 到 #b天空之城#k";
             }
             if (cm.getPlayer().getMapId() == 251000000) {
-                cm.sendYesNo("你好。旅行进行得怎么样？我一直在像你这样的旅行者运送到#b" + menu[3] + "#k，而且……你有兴趣吗？这种方式没有船稳定，所以你得紧紧抓住，但我可以比船快得多地到达那里。只要你支付#b" + cost[3] + "金币#k，我就会带你去那里。");
+                cm.sendYesNo("你好。旅行进行得怎么样？我一直负责载送像你这样的旅行者前往#b" + menu[0] + "#k。虽然没有船那么平稳，但只要抓紧一些，我能比船更快抵达。只要支付#b" + cost[2] + "金币#k，我现在就带你过去。");
                 status++;
             } else if (cm.getPlayer().getMapId() == 250000100) {
-                cm.sendSimple("怎么样？我从 " + btwmsg + "再到现在。我的速度很快的吧，如果你想返回 #b" + menu[1] + "#k，那么我们就立刻出发，不过还是得给我一些辛苦钱，价格是 #b" + cost[3] + " 金币#k。" + display);
+                cm.sendSimple("怎么样？从 " + btwmsg + " 很快吧？如果你想继续出发，我也可以载你去其他地方。给我一些辛苦钱就行。\r\n" + display);
             } else {
-                cm.sendSimple("如果想从 " + btwmsg + "去的话。给我些辛苦钱就送你。我送你比起你走着去快多了。怎么样？\r\n" + display);
+                cm.sendSimple("如果你想从 " + btwmsg + "，给我些辛苦钱就行。我载你过去，比你自己走要快多了。怎么样？\r\n" + display);
             }
         } else if (status == 1) {
             slct = selection;

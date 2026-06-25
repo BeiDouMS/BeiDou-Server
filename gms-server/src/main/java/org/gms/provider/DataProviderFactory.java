@@ -24,6 +24,7 @@ package org.gms.provider;
 import org.gms.provider.wz.WZFiles;
 import org.gms.provider.wz.XMLWZFile;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class DataProviderFactory {
@@ -32,6 +33,13 @@ public class DataProviderFactory {
     }
 
     public static DataProvider getDataProvider(WZFiles in) {
-        return getWZ(in.getFile());
+        Path basePath = in.getBaseFile();
+        Path languagePath = in.getLanguageFile();
+        DataProvider baseProvider = getWZ(basePath);
+        if (!Files.exists(languagePath) || languagePath.equals(basePath)) {
+            return baseProvider;
+        }
+        // 中文 WZ 只维护被本地化过的文件，缺失的文件继续回退到原始 WZ。
+        return new LocalizedDataProvider(getWZ(languagePath), baseProvider);
     }
 }
