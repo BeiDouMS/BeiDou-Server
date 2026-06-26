@@ -120,14 +120,14 @@ function action(mode, type, selection) {
             var prompt = "你想制作#b" + makeQty + "个#t" + item + "##k吗？制作这些#t" + item + "#需要以下材料：\r\n";
             if (mats instanceof Array) {
                 for (var i = 0; i < mats.length; i++) {
-                    prompt += "\r\n#i" + mats[i] + "# " + matQty[i] * makeQty + "? #t" + mats[i] + "#";
+                    prompt += "\r\n#i" + mats[i] + "# " + matQty[i] * makeQty + "个 #t" + mats[i] + "#";
                 }
             } else {
-                prompt += "\r\n#i" + mats + "# " + matQty * makeQty + "? #t" + mats + "#";
+                prompt += "\r\n#i" + mats + "# " + matQty * makeQty + "个 #t" + mats + "#";
             }
 
             if (matMeso > 0) {
-                prompt += "\r\n#i4031138# " + matMeso * makeQty + " ??";
+                prompt += "\r\n#i4031138# " + matMeso * makeQty + " 金币";
             }
 
             cm.sendYesNo(prompt);
@@ -147,10 +147,10 @@ function action(mode, type, selection) {
             var prompt = "你想制作#b#t" + item + "##k吗？制作#t" + item + "#需要以下材料：";
             if (mats instanceof Array) {
                 for (var i = 0; i < mats.length; i++) {
-                    prompt += "\r\n#i" + mats[i] + "# " + matQty[i] + "? #t" + mats[i] + "#";
+                    prompt += "\r\n#i" + mats[i] + "# " + matQty[i] + "个 #t" + mats[i] + "#";
                 }
             } else {
-                prompt += "\r\n#i" + mats + "# " + matQty + "? #t" + mats + "#";
+                prompt += "\r\n#i" + mats + "# " + matQty + "个 #t" + mats + "#";
             }
 
             cm.sendYesNo(prompt);
