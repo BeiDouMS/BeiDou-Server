@@ -19,28 +19,33 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-var status = 0;
+var status = -1;
 var selected = -1;
 var party = 0;
+var questComplete = false;
 
 function start() {
-    cm.sendOk("The PyramidPQ is currently unavailable.");
-    cm.dispose();
-}
+    status = -1;
+    selected = -1;
+    party = 0;
+    questComplete = false;
 
-/*function start() {
-	status = -1;
-	var text = "You should NOT talk to this NPC in this map.";
-	if (cm.getMapId() == 926020001)
-		text = "Stop! You've succesfully passed Nett's test. By Nett's grace, you will now be given the opportunity to enter Pharaoh Yeti's Tomb. Do you wish to enter it now?\r\n\r\n#b#L0# Yes, I will go now.#l\r\n#L1# No, I will go later.#l";
-	else if (cm.getMapId() == 926010000)
-		text = "I am Duarte.\r\n\r\n#b#L0# Ask about the Pyramid.#l\r\n#e#L1# Enter the Pyramid.#l#n\r\n\r\n#L2# Find a Party.#l\r\n\r\n#L3# Enter Pharaoh Yeti's Tomb.#l\r\n#L4# Ask about Pharaoh Yeti's treasures.#l\r\n#L5# Receive the <Protector of Pharaoh> Medal.#l";
-	else 
-		text = "Do you want to forfeit the challenge and leave?\r\n\r\n#b#L0# Leave#l";
-		
-	cm.sendSimple(text);
+    var text = "You should NOT talk to this NPC in this map.";
+    if (cm.getMapId() == 926020001 || cm.getMapId() == 926010001) {
+        text = "Stop! You've successfully passed Nett's test. By Nett's grace, you will now be given the opportunity to enter Pharaoh Yeti's Tomb. Do you wish to enter it now?\r\n\r\n#b#L0# Yes, I will go now.#l\r\n#L1# No, I will go later.#l";
+    } else if (cm.getMapId() == 926010000) {
+        if (cm.isQuestStarted(3955)) {
+            questComplete = true;
+            cm.sendNext("Fools. A sea of fools. Are all humans this foolish? Even one who called himself a scholar dared to venture here. But is not death something to avoid?\r\n\r\n#b#L0# I am here on behalf of that scholar, Byron.#l#k");
+            return;
+        }
+        text = "I am Duarte.\r\n\r\n#b#L0# Ask about the Pyramid.#l\r\n#e#L1# Enter the Pyramid.#l#n\r\n\r\n#L2# Find a Party.#l\r\n\r\n#L3# Enter Pharaoh Yeti's Tomb.#l\r\n#L4# Ask about Pharaoh Yeti's treasures.#l\r\n#L5# Receive the <Protector of Pharaoh> Medal.#l";
+    } else {
+        text = "Do you want to forfeit the challenge and leave?\r\n\r\n#b#L0# Leave#l";
+    }
+
+    cm.sendSimple(text);
 }
-*/
 
 function action(mode, type, selection) {
     if (mode == 0 && type == 0) {
@@ -50,6 +55,18 @@ function action(mode, type, selection) {
         return;
     } else {
         status++;
+    }
+
+    if (questComplete) {
+        if (status == 0) {
+            cm.sendNext("I see. That fool. I was merciful enough to save him from the throngs of death, and instead he drags himself to another one of its doorsteps. So be it. Let us see if he can escape the breath of Anubis.");
+        } else if (status == 1) {
+            cm.forceCompleteQuest(3955);
+            cm.sendNext("I will permit your entrance, but it remains to be seen if the Pyramid will accept you as well. If it does, then you will acquire the Pharaoh Yeti's Gem. If you bring that to me, I will lead you directly to a spot where you can acquire many other rare gems.");
+        } else {
+            cm.dispose();
+        }
+        return;
     }
 
     if (cm.getMapId() == 926010000) {
@@ -68,15 +85,22 @@ function action(mode, type, selection) {
             } else if (selection == 3) {
                 cm.sendSimple("What gem have you brought?\r\n\r\n#L0##i4001322# #t4001322##l\r\n#L1##i4001323# #t4001323##l\r\n#L2##i4001324# #t4001324##l\r\n#L3##i4001325# #t4001325##l");
             } else if (selection == 4) {
-                cm.sendNext("Inside Pharaoh Yeti's Tomb, you can acquire a #e#b#t2022613##k#n by proving yourself capable of defeating the #bPharaoh Jr. Yeti#k, the Pharaoh's clone. Inside that box lies a very special treasure. It is the #e#b#t1132012##k#n.\r\n#i1132012:# #t1132012#\r\n\r\n And if you are somehow able to survive Hell Mode, you will receive the #e#b#t1132013##k#n.\r\n\r\n#i1132013:# #t1132013#\r\n\r\n Though, of course, Nett won't allow that to happen.");
+                cm.sendNext("Inside Pharaoh Yeti's Tomb, you can acquire a #e#b#t2022613##k#n by proving yourself capable of defeating the #bPharaoh Jr. Yeti#k, the Pharaoh's clone. Inside that box lies a very special treasure. It is the #e#b#t1132012##k#n.\r\n#i1132012:# #t1132012#\r\n\r\nIf you survive Hell Mode, the stronger Pharaoh Jr. Yeti can drop #e#b#t2022618##k#n, which also contains the #e#b#t1132013##k#n.\r\n\r\n#i1132013:# #t1132013#\r\n\r\nThough, of course, Nett won't allow that to happen.");
             } else if (selection == 5) {
-                var progress = cm.getQuestProgressInt(29932);
-                if (progress >= 50000) {
-                    cm.dispose();
+                var progress = cm.getQuestProgressInt(29932, 7760);
+                if (cm.isQuestCompleted(29932) || cm.haveItem(1142142)) {
+                    cm.sendOk("You have already received the <Protector of Pharaoh> Medal.");
+                } else if (progress >= 50000) {
+                    if (!cm.canHold(1142142)) {
+                        cm.sendOk("Please make sure your Equip inventory has enough space before receiving the medal.");
+                    } else {
+                        cm.gainItem(1142142, 1);
+                        cm.forceCompleteQuest(29932);
+                        cm.sendOk("You have proven yourself as the Protector of Pharaoh. Please accept the medal.");
+                    }
                 } else {
-                    cm.sendNext("");
+                    cm.sendNext("You have not yet met the requirement. Defeat 50,000 monsters in Nett's Pyramid, then return to me.\r\nCurrent defeated monsters: " + progress + ".");
                 }
-
             }
         } else if (status == 1) {
             if (selected == 0) {
@@ -85,26 +109,14 @@ function action(mode, type, selection) {
                 party = selection;
                 cm.sendSimple("You who lack fear of death's cruelty, make your decision!\r\n#L0##i3994115##l#L1##i3994116##l#L2##i3994117##l#L3##i3994118##l");
             } else if (selected == 3) {
-                if (selection == 0) {
-                    if (cm.haveItem(4001322)) {
-                        return;
-                    }
-                } else if (selection == 1) {
-                    if (cm.haveItem(4001323)) {
-                        return;
-                    }
-                } else if (selection == 2) {
-                    if (cm.haveItem(4001324)) {
-                        return;
-                    }
-                } else if (selection == 3) {
-                    if (cm.haveItem(4001325)) {
-                        return;
-                    }
+                var gems = [4001322, 4001323, 4001324, 4001325];
+                if (selection >= 0 && selection < gems.length && cm.haveItem(gems[selection])) {
+                    cm.gainItem(gems[selection], -1);
+                    cm.warp(926010010 + selection);
+                } else {
+                    cm.sendOk("You'll need a gem to enter Pharaoh Yeti's Tomb. Are you sure you have one?");
                 }
-                cm.sendOk("You'll need a gem to enter Pharaoh Yeti's Tomb. Are you sure you have one?");
                 cm.dispose();
-            } else if (selected == 5) {
             } else {
                 cm.dispose();
             }
@@ -113,35 +125,21 @@ function action(mode, type, selection) {
                 cm.sendNextPrev("Those who are able to withstand Nett's wrath will be honored, but those who fail will face destruction. This is all the advice I can give you. The rest is in your hands.");
             } else if (selected == 1) {
                 var mode = "EASY";
-                //Finish this
-                var pqparty = cm.getPlayer().getParty();
                 if (party == 1) {
-                    if (pqparty == null) {
-                        cm.sendOk("Create a party first.");//BE NICE
+                    if (cm.getParty() == null) {
+                        cm.sendOk("Create a party first.");
                         cm.dispose();
                         return;
-                    } else {
-                        if (pqparty.getMembers().size() < 2) {
-                            cm.sendOk("Get more members...");
-                            cm.dispose();
-                            return;
-                        } else {
-                            var i = 0;
-                            for (var a = 0; a < pq.getMembers().size(); a++) {
-                                var pqchar = pq.getMembers().get(a);
-                                if (i > 1) {
-                                    break;
-                                }
-                                if (pqchar != null && pqchar.getMapId() == 926010000) {
-                                    i++;
-                                }
-                            }
-                            if (i < 2) {
-                                cm.sendOk("Make sure that 2 or more party members are in your map.");
-                                cm.dispose();
-                                return;
-                            }
-                        }
+                    }
+                    if (!cm.isLeader()) {
+                        cm.sendOk("Only the party leader may apply for the party challenge.");
+                        cm.dispose();
+                        return;
+                    }
+                    if (cm.partyMembersInMap() < 2) {
+                        cm.sendOk("Make sure that 2 or more party members are in your map.");
+                        cm.dispose();
+                        return;
                     }
                 }
 
@@ -151,7 +149,7 @@ function action(mode, type, selection) {
                     return;
                 }
                 if (selection < 3 && cm.getPlayer().getLevel() > 60) {
-                    cm.sendOk("Only Hell mode is avaible for players that are over Lv. 60.");
+                    cm.sendOk("Only Hell mode is available for players that are over Lv. 60.");
                     cm.dispose();
                     return;
                 }
@@ -164,45 +162,38 @@ function action(mode, type, selection) {
                 }
 
                 if (!cm.createPyramid(mode, party == 1)) {
-                    cm.sendOk("All rooms are full for this mode, please try it again later or on another channel ):");
+                    cm.sendOk("All rooms are full for this mode, please try it again later or on another channel.");
                 }
                 cm.dispose();
             }
         } else if (status == 3) {
             cm.dispose();
         }
-    } else if (cm.getMapId() == 926020001) {
+    } else if (cm.getMapId() == 926020001 || cm.getMapId() == 926010001) {
         if (status == 0) {
             if (selection == 0) {
+                cm.warp(926010010);
                 cm.dispose();
-            }//:(
-            else if (selection == 1) {
+            } else if (selection == 1) {
                 cm.sendNext("I will give you Pharaoh Yeti's Gem. You will be able to enter Pharaoh Yeti's Tomb anytime with this Gem. Check to see if you have at least 1 empty slot in your Etc window.");
             }
-
         } else if (status == 1) {
             var itemid = 4001325;
-            if (cm.getPlayer().getLevel() >= 60) {
-                itemid = 4001325;
-            }
             if (cm.canHold(itemid)) {
                 cm.gainItem(itemid);
                 cm.warp(926010000);
             } else {
                 cm.showInfoText("You must have at least 1 empty slot in your Etc window to receive the reward.");
             }
-
             cm.dispose();
         }
     } else {
-        cm.warp(926010000);
-        cm.getPlayer().setPartyQuest(null);
+        var pyramid = cm.getPyramid();
+        if (pyramid != null) {
+            pyramid.leave(926010000);
+        } else {
+            cm.warp(926010000);
+        }
         cm.dispose();
     }
-}/*Do you want to forfeit the challenge and leave?
-
-Your allotted time has passed. Do you want to leave now?
-
-
-
-*/
+}

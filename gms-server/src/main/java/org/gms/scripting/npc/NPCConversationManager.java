@@ -545,33 +545,41 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         Party partyz = getPlayer().getParty();
         MapManager mapManager = c.getChannelServer().getMapFactory();
 
-        MapleMap map = null;
         int mapid = MapId.NETTS_PYRAMID_SOLO_BASE;
         if (party) {
             mapid += 10000;
         }
         mapid += (mod.getMode() * 1000);
 
-        for (byte b = 0; b < 5; b++) {//They cannot warp to the next map before the timer ends (:
-            map = mapManager.getMap(mapid + b);
-            if (map.getCharacters().isEmpty()) {
-                return false;
+        MapleMap map = null;
+        for (byte room = 0; room < 5; room++) {
+            boolean roomAvailable = true;
+            for (byte stage = 0; stage < 5; stage++) {
+                if (!mapManager.getMap(mapid + room + (stage * 100)).getCharacters().isEmpty()) {
+                    roomAvailable = false;
+                    break;
+                }
             }
+            if (roomAvailable) {
+                mapid += room;
+                map = mapManager.getMap(mapid);
+                break;
+            }
+        }
+        if (map == null) {
+            return false;
         }
 
         if (!party) {
-            // 修复单人组队金字塔空指针的问题
             PartyCharacter single = new PartyCharacter(getPlayer());
             partyz = new Party(-1, single);
             partyz.addMember(single);
         }
         Pyramid py = new Pyramid(partyz, mod, map.getId());
-        getPlayer().setPartyQuest(py);
         py.warp(mapid);
         dispose();
         return true;
     }
-
     public boolean itemExists(int itemid) {
         return ItemInformationProvider.getInstance().getName(itemid) != null;
     }
