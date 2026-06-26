@@ -54,30 +54,40 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
 
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
-        for (RewardItem reward : rewards.getRight()) {
-            if (!InventoryManipulator.checkSpace(c, reward.itemid, reward.quantity, "")) {
-                c.sendPacket(PacketCreator.getShowInventoryFull());
-                break;
+        RewardItem selectedReward = null;
+        int totalProb = rewards.getLeft();
+        if (totalProb > 0) {
+            int rewardRoll = Randomizer.nextInt(totalProb);
+            int cumulativeProb = 0;
+            for (RewardItem reward : rewards.getRight()) {
+                cumulativeProb += reward.prob;
+                if (rewardRoll < cumulativeProb) {
+                    selectedReward = reward;
+                    break;
+                }
             }
-            if (Randomizer.nextInt(rewards.getLeft()) < reward.prob) {//Is it even possible to get an item with prob 1?
-                if (ItemConstants.getInventoryType(reward.itemid) == InventoryType.EQUIP) {
-                    final Item item = ii.getEquipById(reward.itemid);
-                    if (reward.period != -1) {
+        }
+        if (selectedReward != null) {
+            if (!InventoryManipulator.checkSpace(c, selectedReward.itemid, selectedReward.quantity, "")) {
+                c.sendPacket(PacketCreator.getShowInventoryFull());
+            } else {
+                if (ItemConstants.getInventoryType(selectedReward.itemid) == InventoryType.EQUIP) {
+                    final Item item = ii.getEquipById(selectedReward.itemid);
+                    if (selectedReward.period != -1) {
                         // TODO is this a bug, meant to be 60 * 60 * 1000?
-                        item.setExpiration(currentServerTime() + reward.period * 60 * 60 * 10);
+                        item.setExpiration(currentServerTime() + selectedReward.period * 60 * 60 * 10);
                     }
                     InventoryManipulator.addFromDrop(c, item, false);
                 } else {
-                    InventoryManipulator.addById(c, reward.itemid, reward.quantity, "", -1);
+                    InventoryManipulator.addById(c, selectedReward.itemid, selectedReward.quantity, "", -1);
                 }
                 InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, false, false);
-                if (reward.worldmsg != null) {
-                    String msg = reward.worldmsg;
+                if (selectedReward.worldmsg != null) {
+                    String msg = selectedReward.worldmsg;
                     msg = msg.replaceAll("/name", c.getPlayer().getName());
-                    msg = msg.replaceAll("/item", ii.getName(reward.itemid));
+                    msg = msg.replaceAll("/item", ii.getName(selectedReward.itemid));
                     Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, msg));
                 }
-                break;
             }
         }
         c.sendPacket(PacketCreator.enableActions());

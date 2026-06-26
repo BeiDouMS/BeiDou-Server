@@ -38,6 +38,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.server.StatEffect;
 import org.gms.server.life.Monster;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.awt.*;
@@ -73,7 +74,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             skillLevel = 1;
             chr.setDojoEnergy(0);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
-            c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
+            c.sendPacket(PacketCreator.serverNotice(5, I18nUtil.getMessage("Dojo.secretSkill.energyReset")));
         }
         if (skillLevel == 0 || skillLevel != __skillLevel) {
             return;
