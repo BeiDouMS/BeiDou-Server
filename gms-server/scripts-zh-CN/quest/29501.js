@@ -1,0 +1,54 @@
+var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
+
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("你已经获得过#b#t" + medalId + "##k，这项挑战已经记录在你的冒险履历里了。");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
+function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.HORNTAIL_SLAYER_MEDAL_ID)) {
+        return;
+    }
+    qm.forceStartQuest();
+    qm.sendOk("击败暗黑龙王 #b" + Medal.HORNTAIL_REQUIRED_KILLS + "#k 次后，再来领取#b#t" + Medal.HORNTAIL_SLAYER_MEDAL_ID + "##k。");
+    qm.dispose();
+}
+
+function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.HORNTAIL_SLAYER_MEDAL_ID)) {
+        return;
+    }
+    var kills = Medal.getProgress(qm.getPlayer(), Medal.HORNTAIL_SLAYER_QUEST_ID, Medal.PROGRESS_KILLS);
+    if (kills < Medal.HORNTAIL_REQUIRED_KILLS) {
+        qm.sendOk("请先击败暗黑龙王，再回来报告。\r\n进度：#r" + kills + "#k / " + Medal.HORNTAIL_REQUIRED_KILLS);
+        qm.dispose();
+        return;
+    }
+    awardMedal(Medal.HORNTAIL_SLAYER_MEDAL_ID);
+}
+
+function awardMedal(medalId) {
+    if (!qm.haveItem(medalId)) {
+        if (!qm.canHold(medalId)) {
+            qm.sendOk("请在装备栏空出 1 个位置。");
+            qm.dispose();
+            return;
+        }
+        qm.gainItem(medalId, 1);
+    }
+    qm.forceCompleteQuest();
+    qm.earnTitle(qm.getMedalName());
+    qm.sendOk("暗黑龙王的咆哮，终于在你的面前沉寂了。能够从那场战斗中归来并带回胜利的人，绝不会是普通冒险家。\r\n\r\n请收下#b#t" + medalId + "##k。暗黑龙王杀手的荣耀，属于你。");
+    qm.dispose();
+}
