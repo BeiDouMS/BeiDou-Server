@@ -12,7 +12,6 @@ Version 1.0 - Script Done.(2024-10-23)
 
 function start() {
     var MapId = cm.getMapId();
-    cm.setQuestProgress(2322,0);
     if(MapId == 106020300) {    //蘑菇森林深处
         if (cm.isQuestActive(2314) && cm.getQuestProgressInt(2314) == 0) level2314();
         else if (cm.haveItem(2430014)) level2430014();
