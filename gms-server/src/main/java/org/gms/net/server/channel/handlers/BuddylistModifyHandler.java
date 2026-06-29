@@ -28,6 +28,7 @@ import org.gms.client.BuddylistEntry;
 import org.gms.client.Character;
 import org.gms.client.CharacterNameAndId;
 import org.gms.client.Client;
+import org.gms.constants.game.GameConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.world.World;
@@ -147,9 +148,10 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
                                 notifyRemoteChannel(c, channel, otherCid, BuddyOperation.ADDED);
                             } else if (buddyAddResult != BuddyAddResult.ALREADY_ON_LIST && channel == -1) {
                                 try (Connection con = DatabaseConnection.getConnection();
-                                     PreparedStatement ps = con.prepareStatement("INSERT INTO buddies (characterid, `buddyid`, `pending`) VALUES (?, ?, 1)")) {
+                                     PreparedStatement ps = con.prepareStatement("INSERT INTO buddies (characterid, `buddyid`, `pending`, `group`) VALUES (?, ?, 1, ?)")) {
                                     ps.setInt(1, charWithId.getId());
                                     ps.setInt(2, player.getId());
+                                    ps.setString(3, GameConstants.DEFAULT_BUDDY_GROUP);
                                     ps.executeUpdate();
                                 }
                             }
@@ -188,7 +190,32 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
                         otherName = otherChar.getName();
                     }
                     if (otherName != null) {
-                        buddylist.put(new BuddylistEntry(otherName, "Default Group", otherCid, channel, true));
+                        // 落库：接受后双方关系都持久化。
+                        // ① 我（被加方）持有发起方：DELETE+INSERT pending=0（正式好友）。
+                        // ② 发起方持有我：将其 pending=1 置为 pending=0（对方那边转正）。
+                        // buddies 表无 (characterid,buddyid) 唯一约束，DELETE+INSERT 保证幂等。
+                        try (Connection con = DatabaseConnection.getConnection()) {
+                            try (PreparedStatement ps = con.prepareStatement(
+                                    "DELETE FROM buddies WHERE characterid = ? AND buddyid = ?")) {
+                                ps.setInt(1, player.getId());
+                                ps.setInt(2, otherCid);
+                                ps.executeUpdate();
+                            }
+                            try (PreparedStatement ps = con.prepareStatement(
+                                    "INSERT INTO buddies (characterid, `buddyid`, `pending`, `group`) VALUES (?, ?, 0, ?)")) {
+                                ps.setInt(1, player.getId());
+                                ps.setInt(2, otherCid);
+                                ps.setString(3, GameConstants.DEFAULT_BUDDY_GROUP);
+                                ps.executeUpdate();
+                            }
+                            try (PreparedStatement ps = con.prepareStatement(
+                                    "UPDATE buddies SET pending = 0 WHERE characterid = ? AND buddyid = ?")) {
+                                ps.setInt(1, otherCid);
+                                ps.setInt(2, player.getId());
+                                ps.executeUpdate();
+                            }
+                        }
+                        buddylist.put(new BuddylistEntry(otherName, GameConstants.DEFAULT_BUDDY_GROUP, otherCid, channel, true));
                         c.sendPacket(PacketCreator.updateBuddylist(buddylist.getBuddies()));
                         notifyRemoteChannel(c, channel, otherCid, BuddyOperation.ADDED);
                     }

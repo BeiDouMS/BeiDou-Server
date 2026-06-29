@@ -23,6 +23,13 @@ import java.util.*;
 public class GameConstants {
     public static String[] WORLD_NAMES = {"Scania", "Bera", "Broa", "Windia", "Khaini", "Bellocan", "Mardia", "Kradia", "Yellonde", "Demethos", "Galicia", "El Nido", "Zenith", "Arcenia", "Kastia", "Judis", "Plana", "Kalluna", "Stius", "Croa", "Medere"};
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};
+    /**
+     * 好友默认分组名。
+     * <p>BeiDou 客户端未本地化该 C++ 字面量，加好友时发来的默认分组即为此值 {@code "Default Group"}，
+     * 而非可翻译的 UI 文案。服务端内存项与 buddies 表落库需统一引用本常量，避免与客户端发来的分组名
+     * 不一致时落入 {@code changeGroup} 静默分支，导致"加别人不行"。</p>
+     */
+    public static final String DEFAULT_BUDDY_GROUP = "Default Group";
     public static final int[] CASH_DATA = new int[]{50200004, 50200069, 50200117, 50100008, 50000047};
 
     // Ronan's rates upgrade system
