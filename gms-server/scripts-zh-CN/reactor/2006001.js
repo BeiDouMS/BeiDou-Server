@@ -25,6 +25,8 @@
  */
 
 function act() {
+    var eim = rm.getEventInstance();
+
     rm.spawnNpc(2013002);
     rm.getEventInstance().clearPQ();
 
@@ -32,5 +34,6 @@ function act() {
     eim.giveEventPlayersExp(3500);
     eim.showClearEffect(true);
 
-    rm.getEventInstance().startEventTimer(5 * 60000); //bonus time
+    // 10min
+    rm.getEventInstance().startEventTimer(10 * 60000); //bonus time
 }

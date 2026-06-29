@@ -23,8 +23,44 @@
 /*@author Ronan
  *Reactor : Orbis PQ LP Player - 2008006.js
  * Makes Chamberlain Eak spawn box.
+
+ @update dwang
+ 周一	Beachway	可爱的音乐
+ 周二	WelcomeToTheHell	恐怖的音乐
+ 周三	Aquarium	有趣的音乐
+ 周四	CaveOfHontale	忧郁的音乐
+ 周五	EvilEyes	冰冷的音乐
+ 周六	MoonlightShadow	晴朗的音乐
+ 周日	ForTheGlory	雄壮的音乐
+
  */
 
 function act() {
-    rm.getEventInstance().setProperty("statusStg3", "0");
+    //
+    var eim = rm.getEventInstance();
+    var day = eim.getInstanceMap(920010400).getReactorByName("music").getEventState();
+    switch(day) {
+        case 0:
+             rm.changeMusic("Bgm08.img/ForTheGlory");
+            break;
+        case 1:
+             rm.changeMusic("Bgm03.img/Beachway");
+            break;
+        case 2:
+             rm.changeMusic("Bgm06.img/WelcomeToTheHell");
+            break;
+        case 3:
+             rm.changeMusic("Bgm11.img/Aquarium");
+            break;
+        case 4:
+             rm.changeMusic("Bgm14.img/CaveOfHontale");
+            break;
+        case 5:
+             rm.changeMusic("Bgm02.img/EvilEyes");
+            break;
+        case 6:
+             rm.changeMusic("Bgm01.img/MoonlightShadow");
+            break;
+    }
+    eim.setProperty("statusStg3", "0");
 }

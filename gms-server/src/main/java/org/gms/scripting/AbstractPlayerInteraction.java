@@ -1023,6 +1023,11 @@ public class AbstractPlayerInteraction {
         c.sendPacket(PacketCreator.dojoWarpUp());
     }
 
+    public void goTeleport(boolean exclRequest, int portalId) {
+        c.sendPacket(PacketCreator.teleport(exclRequest, portalId));
+    }
+
+
     public void resetDojoEnergy() {
         c.getPlayer().setDojoEnergy(0);
     }
