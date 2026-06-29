@@ -6726,10 +6726,17 @@ public class PacketCreator {
     }
 
     public static Packet dojoWarpUp() {
-        final OutPacket p = OutPacket.create(SendOpcode.DOJO_WARP_UP);
+        final OutPacket p = OutPacket.create(SendOpcode.LP_UserTeleport);
         p.writeByte(0);
         p.writeByte(6);
         return p;
+    }
+
+    public static Packet teleport(boolean exclRequest, int portalId) {
+        final OutPacket outPacket = OutPacket.create(SendOpcode.LP_UserTeleport);
+        outPacket.writeBool(exclRequest); // bool -> bExclRequestSent = 0
+        outPacket.writeByte(portalId);
+        return outPacket;
     }
 
     public static Packet itemExpired(int itemid) {

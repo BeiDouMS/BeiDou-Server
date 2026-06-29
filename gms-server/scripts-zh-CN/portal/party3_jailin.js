@@ -1,4 +1,6 @@
-var leverSequenceExit = false;
+// dwang:
+// 感觉这一关有问题，好像可以控制操作杆让怪物死掉。也可以通过控制操控杆开门过关
+var leverSequenceExit = true;
 
 function enterLeverSequence(pi) {
     var map = pi.getMap();
@@ -65,11 +67,16 @@ function enterNoMobs(pi) {
 
 function enter(pi) {
     var ret;
-    if (leverSequenceExit) {
-        ret = enterLeverSequence(pi);
-    } else {
-        ret = enterNoMobs(pi);
+    // 兼容两种过关方式
+    // 如果可以通过打开关杀死所有怪物，直接进
+    var map = pi.getMap();
+    var mobcount = map.countMonster(9300044);
+    if (mobcount == 0) {
+        pi.playPortalSound();
+        pi.warp(pi.getMapId() + 2, 0);
+        return true;
     }
-
+    // 打开关过关
+    ret = enterLeverSequence(pi);
     return ret;
 }

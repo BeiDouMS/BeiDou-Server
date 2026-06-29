@@ -234,7 +234,7 @@ public enum SendOpcode implements Opcode {
     THROW_GRENADE(0xCC), // 抛掷手榴弹
     CANCEL_CHAIR(0xCD), // 取消椅子
     SHOW_ITEM_GAIN_INCHAT(0xCE), // 在聊天中显示获得物品
-    DOJO_WARP_UP(0xCF), // 武道馆传送准备
+    LP_UserTeleport(0xCF), // 地图内瞬移
     LUCKSACK_PASS(0xD0), // 幸运袋成功
     LUCKSACK_FAIL(0xD1), // 幸运袋失败
     MESO_BAG_MESSAGE(0xD2), // 金币背包消息

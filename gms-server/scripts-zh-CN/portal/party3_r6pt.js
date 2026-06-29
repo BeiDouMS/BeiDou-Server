@@ -15,10 +15,16 @@
     GNU Affero General Public License for more details.
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    移动
 */
 /**
  *@author Ronan
  *party3_r4pt
+
+ * @update dwang
+ * @desc:use teleport replace warp
+ * @ 20260629
  */
 
 function enter(pi) {
@@ -36,7 +42,7 @@ function enter(pi) {
 
     var comb = eim.getProperty("stage6_comb");
 
-    var name = pi.getPortal().getName().substring(2, 5);
+    var name = pi.getPortal().getName().substring(2, 5); //获取名字 eg:rp013
     var portalId = parseInt(name, 10);
 
 
@@ -45,11 +51,22 @@ function enter(pi) {
 
     if (pCol == parseInt(comb.substring(pRow, pRow + 1), 10)) {    //climb
         pi.playPortalSound();
-        pi.warp(pi.getMapId(), (pRow % 4 != 0) ? pi.getPortal().getId() + 4 : (pRow / 4));
+        pi.goTeleport(false, pRow + 5);
+        return false;
+
     } else {    //fail
         pRow--;
         pi.playPortalSound();
-        pi.warp(pi.getMapId(), (pRow / 4) > 1 ? parseInt(pRow / 4) : 5);  // thanks Chloek3, seth1 for noticing next plaform issues
+        var level =  (pRow / 4) > 1 ? parseInt(pRow / 4) : 0;
+        // 最下面一层去22
+        if (level == 0) {
+           pi.goTeleport(false, 22);
+        } else {
+            // 9 13 17
+            pi.goTeleport(false,  9 + (level - 1)*4);
+        }
+        return false;
+
     }
 
     return true;
