@@ -309,7 +309,7 @@
   </imgdir>
   <imgdir name="3000000">
     <string name="name" value="The Blessing of Amazon"/>
-    <string name="desc" value="[Master Level : 16]\nIncreases accuracy."/>
+    <string name="desc" value="[Master Level : 16]\nIncreases Accuracy."/>
     <string name="h1" value="Accuracy +1"/>
     <string name="h2" value="Accuracy +2"/>
     <string name="h3" value="Accuracy +3"/>
@@ -329,7 +329,7 @@
   </imgdir>
   <imgdir name="3000001">
     <string name="name" value="Critical Shot"/>
-    <string name="desc" value="[Master Level : 20]\nLaunches a critical attack with a given success rate."/>
+    <string name="desc" value="[Master Level : 20]\nGrants a chance to inflict a critical hit, increasing damage."/>
     <string name="h1" value="12% success rate, critical damage 105%"/>
     <string name="h2" value="14% success rate, critical damage 110%"/>
     <string name="h3" value="16% success rate, critical damage 115%"/>
@@ -353,7 +353,7 @@
   </imgdir>
   <imgdir name="3000002">
     <string name="name" value="The Eye of Amazon"/>
-    <string name="desc" value="[Master Level : 8]\nIncreases the range of attack for bows and crossbows.\nRequired Skill : #cAt least Level 3 on The Blessing of Amazon#"/>
+    <string name="desc" value="[Master Level : 8]\nIncreases the attack range of bows and crossbows.\nRequired Skill : #cThe Blessing of Amazon Lv. 3 or higher#"/>
     <string name="h1" value="Range of attack for bows and crossbows: +15"/>
     <string name="h2" value="Range of attack for bows and crossbows: +30"/>
     <string name="h3" value="Range of attack for bows and crossbows: +45"/>
@@ -365,7 +365,7 @@
   </imgdir>
   <imgdir name="3001003">
     <string name="name" value="Focus"/>
-    <string name="desc" value="[Master Level : 20]\nFocusing to temporarily increase accuracy and avoidability.\nRequired Skill : #cAt least Level 3 on The Blessing of Amazon#"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily increases Accuracy and Avoidability.\nRequired Skill : #cThe Blessing of Amazon Lv. 3 or higher#"/>
     <string name="h1" value="MP -8; accuracy +1, avoidability +1 for 70 sec. "/>
     <string name="h2" value="MP -8; accuracy +2, avoidability +2 for 80 sec. "/>
     <string name="h3" value="MP -8; accuracy +3, avoidability +3 for 90 sec. "/>
@@ -389,7 +389,7 @@
   </imgdir>
   <imgdir name="3001004">
     <string name="name" value="Arrow Blow"/>
-    <string name="desc" value="[Master Level : 20]\nFires an arrow with authority. Applies more damage than usual."/>
+    <string name="desc" value="[Master Level : 20]\nFires a powerful arrow at 1 enemy for increased damage."/>
     <string name="h1" value="MP -7; damage 141%"/>
     <string name="h2" value="MP -7; damage 146%"/>
     <string name="h3" value="MP -7; damage 151%"/>
@@ -413,7 +413,7 @@
   </imgdir>
   <imgdir name="3001005">
     <string name="name" value="Double Shot"/>
-    <string name="desc" value="[Master Level : 20]\nFires two arrows at once to attack an enemy twice.\nRequired Skill : #cAt least Level 1 on Arrow Blow#"/>
+    <string name="desc" value="[Master Level : 20]\nFires 2 arrows at once, hitting 1 enemy twice.\nRequired Skill : #cArrow Blow Lv. 1 or higher#"/>
     <string name="h1" value="MP -10; damage 92%"/>
     <string name="h2" value="MP -10; damage 94%"/>
     <string name="h3" value="MP -10; damage 96%"/>
@@ -1751,7 +1751,7 @@
   </imgdir>
   <imgdir name="3100000">
     <string name="name" value="Bow Mastery"/>
-    <string name="desc" value="[Master Level : 20]\nIncreases the bow mastery and accuracy. It only applies when a bow is in hand."/>
+    <string name="desc" value="[Master Level : 20]\nIncreases Bow Mastery and Accuracy. Requires a bow."/>
     <string name="h1" value="+15% bow mastery, +1 accuracy"/>
     <string name="h2" value="+15% bow mastery, +2 accuracy"/>
     <string name="h3" value="+20% bow mastery, +3 accuracy"/>
@@ -1774,8 +1774,8 @@
     <string name="h20" value="+60% bow mastery, +20 accuracy"/>
   </imgdir>
   <imgdir name="3100001">
-    <string name="name" value="Final Attack : Bow"/>
-    <string name="desc" value="[Master Level : 30]\nStrikes an another, far deadlier blow following the initial attack with a given success rate. It works only when holding a bow.\nRequired Skill : #cAt least Level 3 on Bow Mastery#"/>
+    <string name="name" value="Final Attack: Bow"/>
+    <string name="desc" value="[Master Level : 30]\nAfter using a bow attack skill, there is a chance to trigger an additional Final Attack.\nRequires a bow.\nRequired Skill : #cBow Mastery Lv. 3 or higher#"/>
     <string name="h1" value="2% Success rate, final attack with bow damage 105% "/>
     <string name="h2" value="4% Success rate, final attack with bow damage 110% "/>
     <string name="h3" value="6% Success rate, final attack with bow damage 115% "/>
@@ -1809,7 +1809,7 @@
   </imgdir>
   <imgdir name="3101002">
     <string name="name" value="Bow Booster"/>
-    <string name="desc" value="[Master Level : 20]\nUses HP and MP to temporarily boost up the attacking speed of the bow. It only works with a bow in hand.\nRequired Skill : #cAt least Level 5 on Bow Mastery#"/>
+    <string name="desc" value="[Master Level : 20]\nConsumes HP and MP to increase Bow attack speed by 2 stages for a period of time.\nRequires a bow.\nRequired Skill : #cBow Mastery Lv. 5 or higher#"/>
     <string name="h1" value="HP -29, MP -29; increase in bow attacking speed for 10 sec."/>
     <string name="h2" value="HP -28, MP -28; increase in bow attacking speed for 20 sec."/>
     <string name="h3" value="HP -27, MP -27; increase in bow attacking speed for 30 sec."/>
@@ -1833,7 +1833,7 @@
   </imgdir>
   <imgdir name="3101003">
     <string name="name" value="Power Knock-Back"/>
-    <string name="desc" value="[Master Level : 20]\nIncreases the success rate for pushing off the monsters when swinging a bow.  As the level rises, the number of monsters that one can push off with one swing increases."/>
+    <string name="desc" value="[Master Level : 20]\nSwings the bow at close range to damage and knock back multiple enemies with a certain success rate."/>
     <string name="h1" value="MP -8; knock-back +2%, damage 105%, knock-back 2 enemies."/>
     <string name="h2" value="MP -8; knock-back +4%, damage 110%, knock-back 2 enemies."/>
     <string name="h3" value="MP -8; knock-back +6%, damage 115%, knock-back 2 enemies."/>
@@ -1856,8 +1856,8 @@
     <string name="h20" value="MP -15; knock-back +40%, damage 200%, knock-back 6 enemies."/>
   </imgdir>
   <imgdir name="3101004">
-    <string name="name" value="Soul Arrow : Bow"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily allows the character to fire bow arrows without using up the arrows. Only works with a bow in hand.\nRequired Skill : #cAt least Level 5 on Bow Booster#"/>
+    <string name="name" value="Soul Arrow: Bow"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily allows bow attacks without consuming arrows.\nRequires a bow.\nRequired Skill : #cBow Booster Lv. 5 or higher#"/>
     <string name="h1" value="MP -15; attack for 30 sec without using up an arrow."/>
     <string name="h2" value="MP -15, attack for 60 sec without using up an arrow."/>
     <string name="h3" value="MP -15, attack for 90 sec without using up an arrow."/>
@@ -1880,8 +1880,8 @@
     <string name="h20" value="MP -20, attack for 600 sec without using up an arrow."/>
   </imgdir>
   <imgdir name="3101005">
-    <string name="name" value="Arrow Bomb : Bow"/>
-    <string name="desc" value="[Master Level : 30]\nFires arrows with bombs attached to it. If struck cleanly, the bomb explodes on the enemy, knocking out some of the enemies around with a certain success rate. Can&apos;t attack more than 6 at once, and it only works with a bow in hand."/>
+    <string name="name" value="Arrow Bomb: Bow"/>
+    <string name="desc" value="[Master Level : 30]\nFires an explosive arrow at 1 enemy, damaging up to 6 nearby enemies and possibly stunning them.\nRequires a bow."/>
     <string name="h1" value="MP -14, stunner 31%, damage 72%"/>
     <string name="h2" value="MP -14, stunner 32%, damage 74%"/>
     <string name="h3" value="MP -14, stunner 33%, damage 76%"/>
@@ -1918,7 +1918,7 @@
   </imgdir>
   <imgdir name="3200000">
     <string name="name" value="Crossbow Mastery"/>
-    <string name="desc" value="[Master Level : 20]\nIncreases the crossbow mastery and accuracy. It only applies when a crossbow is in hand."/>
+    <string name="desc" value="[Master Level : 20]\nIncreases Crossbow Mastery and Accuracy. Requires a crossbow."/>
     <string name="h1" value="Crossbow mastery +15%, accuracy +1"/>
     <string name="h2" value="Crossbow mastery +15%, accuracy +2"/>
     <string name="h3" value="Crossbow mastery +20%, accuracy +3"/>
@@ -1941,8 +1941,8 @@
     <string name="h20" value="Crossbow mastery +60%, accuracy +20"/>
   </imgdir>
   <imgdir name="3200001">
-    <string name="name" value="Final Attack : Crossbow"/>
-    <string name="desc" value="[Master Level : 30]\nStrikes an another, far deadlier blow following the initial attack with a given success rate. It works only when holding a crossbow.\nRequired Skill : #cAt least Level 3 on Crossbow Mastery#"/>
+    <string name="name" value="Final Attack: Crossbow"/>
+    <string name="desc" value="[Master Level : 30]\nAfter using a crossbow attack skill, there is a chance to trigger an additional Final Attack.\nRequires a crossbow.\nRequired Skill : #cCrossbow Mastery Lv. 3 or higher#"/>
     <string name="h1" value="2% Success rate,\r\nfinal attack with crossbow damage 105% "/>
     <string name="h2" value="4% Success rate,\r\nfinal attack with crossbow damage 110% "/>
     <string name="h3" value="6% Success rate,\r\nfinal attack with crossbow damage 115% "/>
@@ -1976,7 +1976,7 @@
   </imgdir>
   <imgdir name="3201002">
     <string name="name" value="Crossbow Booster"/>
-    <string name="desc" value="[Master Level : 20]\nUses HP and MP to temporarily boost up the attacking speed of the crossbow. It only works with a crossbow in hand.\nRequired Skill : #cAt least Level 5 on Crossbow Mastery#"/>
+    <string name="desc" value="[Master Level : 20]\nConsumes HP and MP to increase Crossbow attack speed by 2 stages for a period of time.\nRequires a crossbow.\nRequired Skill : #cCrossbow Mastery Lv. 5 or higher#"/>
     <string name="h1" value="HP -29, MP -29; improves crossbow speed for 10 sec."/>
     <string name="h2" value="HP -28, MP -28; improves crossbow speed for 20 sec."/>
     <string name="h3" value="HP -27, MP -27; improves crossbow speed for 30 sec."/>
@@ -2000,7 +2000,7 @@
   </imgdir>
   <imgdir name="3201003">
     <string name="name" value="Power Knock-Back"/>
-    <string name="desc" value="[Master Level : 20]\nIncreases the success rate for pushing off the monsters when swinging a crossbow.  As the level rises, the number of monsters that one can push off with one swing increases."/>
+    <string name="desc" value="[Master Level : 20]\nSwings the crossbow at close range to damage and knock back multiple enemies with a certain success rate."/>
     <string name="h1" value="MP -8; knock-back +2%, damage 105%, knock-back 2 enemies."/>
     <string name="h2" value="MP -8; knock-back +4%, damage 110%, knock-back 2 enemies."/>
     <string name="h3" value="MP -8; knock-back +6%, damage 115%, knock-back 2 enemies."/>
@@ -2023,8 +2023,8 @@
     <string name="h20" value="MP -15; knock-back +40%, damage 200%, knock-back 6 enemies."/>
   </imgdir>
   <imgdir name="3201004">
-    <string name="name" value="Soul Arrow : Crossbow"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily allows the character to fire crossbow arrows without using up the arrows. Only works with a crossbow in hand.\nRequired Skill : #cAt least Level 5 on Bow Booster#"/>
+    <string name="name" value="Soul Arrow: Crossbow"/>
+    <string name="desc" value="[Master Level : 20]\nTemporarily allows crossbow attacks without consuming arrows.\nRequires a crossbow.\nRequired Skill : #cCrossbow Booster Lv. 5 or higher#"/>
     <string name="h1" value="MP -15; attack for 30 sec without using up an arrow."/>
     <string name="h2" value="MP -15; attack for 60 sec without using up an arrow."/>
     <string name="h3" value="MP -15; attack for 90 sec without using up an arrow."/>
@@ -2047,8 +2047,8 @@
     <string name="h20" value="MP -20; attack for 600 sec without using up an arrow."/>
   </imgdir>
   <imgdir name="3201005">
-    <string name="name" value="Iron Arrow : Crossbow"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks up to 6 monsters at once with a powerful arrow, which penetrates through them. Damage decreases as the arrow flies through."/>
+    <string name="name" value="Iron Arrow: Crossbow"/>
+    <string name="desc" value="[Master Level : 30]\nFires a powerful piercing arrow that can hit up to 6 enemies; damage decreases as it pierces through targets."/>
     <string name="h1" value="MP -25, damage 64%"/>
     <string name="h2" value="MP -25, damage 68%"/>
     <string name="h3" value="MP -25, damage 72%"/>
@@ -3923,7 +3923,7 @@
   </imgdir>
   <imgdir name="3110000">
     <string name="name" value="Thrust"/>
-    <string name="desc" value="[Master Level : 20]\nBoosts up the moving speed."/>
+    <string name="desc" value="[Master Level : 20]\nIncreases movement speed."/>
     <string name="h1" value="Speed + 2"/>
     <string name="h2" value="Speed + 4"/>
     <string name="h3" value="Speed + 6"/>
@@ -3947,7 +3947,7 @@
   </imgdir>
   <imgdir name="3110001">
     <string name="name" value="Mortal Blow"/>
-    <string name="desc" value="[Master Level : 20]\nEnables to shoot monsters within a very close range with a given success rate. Even kills a monster with a single shot every once in a while."/>
+    <string name="desc" value="[Master Level : 20]\nAllows attacks at very close range and grants a chance to inflict a deadly blow."/>
     <string name="h1" value="32% success rate, Damage 110%; Kills the monster with HP at 20% or lower at 1% success rate"/>
     <string name="h2" value="34% success rate, Damage 120%; Kills the monster with HP at 23% or lower at 1% success rate"/>
     <string name="h3" value="36% success rate, Damage 130%; Kills the monster with HP at 23% or lower at 2% success rate"/>
@@ -3971,7 +3971,7 @@
   </imgdir>
   <imgdir name="3111002">
     <string name="name" value="Puppet"/>
-    <string name="desc" value="[Master Level : 20]\nTemporarily summons a puppet, which takes all the attacks from the monsters instead. "/>
+    <string name="desc" value="[Master Level : 20]\nSummons a puppet that attracts monster attacks for a period of time."/>
     <string name="h1" value="MP - 23; For 5 sec., summons HP 500 puppet"/>
     <string name="h2" value="MP - 23; For 5 sec., summons HP 600 puppet"/>
     <string name="h3" value="MP - 23; For 10 sec., summons HP 700 puppet"/>
@@ -3995,7 +3995,7 @@
   </imgdir>
   <imgdir name="3111003">
     <string name="name" value="Inferno"/>
-    <string name="desc" value="[Master Level : 30]\nUses fire-based arrows to attack up to 6 monsters at once. Only works when equipped with a bow."/>
+    <string name="desc" value="[Master Level : 30]\nAttacks up to 6 enemies with fire arrows, dealing fire-element damage.\nRequires a bow."/>
     <string name="h1" value="MP - 20, Damage 50%"/>
     <string name="h2" value="MP - 20, Damage 55%"/>
     <string name="h3" value="MP - 20, Damage 60%"/>
@@ -4029,7 +4029,7 @@
   </imgdir>
   <imgdir name="3111004">
     <string name="name" value="Arrow Rain"/>
-    <string name="desc" value="[Master Level : 30]\nFires a number of arrows into the sky, attacking upto 6 monsters at once on its way down. Only available when equipped with a bow.\nRequired Skill : #cAt least Level 5 on Mortal Blow#"/>
+    <string name="desc" value="[Master Level : 30]\nRains arrows from above to attack up to 6 enemies.\nRequires a bow.\nRequired Skill : #cMortal Blow Lv. 5 or higher#"/>
     <string name="h1" value="MP - 18, Damage 60%"/>
     <string name="h2" value="MP - 18, Damage 65%"/>
     <string name="h3" value="MP - 18, Damage 70%"/>
@@ -4063,7 +4063,7 @@
   </imgdir>
   <imgdir name="3111005">
     <string name="name" value="Silver Hawk"/>
-    <string name="desc" value="[Master Level : 30]\nSummons a silver hawk. The hawk will be hovering around you, attacking monsters nearby.\nRequired Skill : #cAt least Level 5 on Puppet#"/>
+    <string name="desc" value="[Master Level : 30]\nSummons Silver Hawk to attack nearby enemies for a period of time, with a chance to stun.\nRequired Skill : #cPuppet Lv. 5 or higher#"/>
     <string name="h1" value="MP - 32, use 1 Summoning Rock; summons a hawk for 103 sec.; attack +23 ; 50% chance of stunning"/>
     <string name="h2" value="MP - 34, use 1 Summoning Rock; summons a hawk for 106 sec.; attack +26 ; 53% chance of stunning"/>
     <string name="h3" value="MP - 36, use 1 Summoning Rock; summons a hawk for 109 sec.; attack +29 ; 56% chance of stunning"/>
@@ -4097,7 +4097,7 @@
   </imgdir>
   <imgdir name="3111006">
     <string name="name" value="Strafe"/>
-    <string name="desc" value="[Master Level : 30]\nFires 4 arrows at an enemy."/>
+    <string name="desc" value="[Master Level : 30]\nRapidly fires 4 arrows at a single enemy."/>
     <string name="h1" value="MP - 26, Damage 71%, attack 4 times"/>
     <string name="h2" value="MP - 26, Damage 72%, attack 4 times"/>
     <string name="h3" value="MP - 26, Damage 73%, attack 4 times"/>
@@ -4134,7 +4134,7 @@
   </imgdir>
   <imgdir name="3210000">
     <string name="name" value="Thrust"/>
-    <string name="desc" value="[Master Level : 20]\nBoosts up the moving speed."/>
+    <string name="desc" value="[Master Level : 20]\nIncreases movement speed."/>
     <string name="h1" value="Speed + 2"/>
     <string name="h2" value="Speed + 4"/>
     <string name="h3" value="Speed + 6"/>
@@ -4158,7 +4158,7 @@
   </imgdir>
   <imgdir name="3210001">
     <string name="name" value="Mortal Blow"/>
-    <string name="desc" value="[Master Level : 20]\nFor a certain rate, allows you to fire crossbow arrows even at a very close range. Even kills a monster with one shot every once in a while."/>
+    <string name="desc" value="[Master Level : 20]\nAllows crossbow attacks at very close range and grants a chance to inflict a deadly blow."/>
     <string name="h1" value="32% success rate, Damage 110%; Kills the monster with HP at 20% or lower at 1% success rate"/>
     <string name="h2" value="34% success rate, Damage 120%; Kills the monster with HP at 23% or lower at 1% success rate"/>
     <string name="h3" value="36% success rate, Damage 130%; Kills the monster with HP at 23% or lower at 2% success rate"/>
@@ -4182,7 +4182,7 @@
   </imgdir>
   <imgdir name="3211002">
     <string name="name" value="Puppet"/>
-    <string name="desc" value="[Master Level : 20]\nSummons a puppet (your other self) for a certain amount of time. While the puppet is around, the monsters will attack the puppet, not you."/>
+    <string name="desc" value="[Master Level : 20]\nSummons a puppet that attracts monster attacks for a period of time."/>
     <string name="h1" value="MP - 23; For 5 sec., summons HP 500 puppet"/>
     <string name="h2" value="MP - 23; For 5 sec., summons HP 600 puppet"/>
     <string name="h3" value="MP - 23; For 10 sec., summons HP 700 puppet"/>
@@ -4206,7 +4206,7 @@
   </imgdir>
   <imgdir name="3211003">
     <string name="name" value="Blizzard"/>
-    <string name="desc" value="[Master Level : 30]\nUses ice-based arrows to attack up to 6 monsters at once. Only works when equipped with a bow."/>
+    <string name="desc" value="[Master Level : 30]\nAttacks up to 6 enemies with ice arrows, dealing ice-element damage.\nRequires a crossbow."/>
     <string name="h1" value="MP - 20, Damage 100%, freezes enemies for 1 sec."/>
     <string name="h2" value="MP - 20, Damage 102%, freezes enemies for 1 sec."/>
     <string name="h3" value="MP - 20, Damage 104%, freezes enemies for 1 sec."/>
@@ -4240,7 +4240,7 @@
   </imgdir>
   <imgdir name="3211004">
     <string name="name" value="Arrow Eruption"/>
-    <string name="desc" value="[Master Level : 30]\nAttacks up to 6 monsters simultaneously by shooting multiple arrows.  Only works with a crossbow equipped."/>
+    <string name="desc" value="[Master Level : 30]\nTriggers an erupting arrow attack that hits up to 6 enemies.\nRequires a crossbow.\nRequired Skill : #cMortal Blow Lv. 5 or higher#"/>
     <string name="h1" value="MP - 18, Damage 60%"/>
     <string name="h2" value="MP - 18, Damage 65%"/>
     <string name="h3" value="MP - 18, Damage 70%"/>
@@ -4274,7 +4274,7 @@
   </imgdir>
   <imgdir name="3211005">
     <string name="name" value="Golden Eagle"/>
-    <string name="desc" value="[Master Level : 30]\nSummons a golden eagle. The eagle will be hovering around you, attacking monsters nearby.\nRequired Skill : #cAt least Level 5 on Puppet#"/>
+    <string name="desc" value="[Master Level : 30]\nSummons Golden Eagle to attack nearby enemies for a period of time, with a chance to stun.\nRequired Skill : #cPuppet Lv. 5 or higher#"/>
     <string name="h1" value="MP - 32, use 1 Summoning Rock; summons an eagle that attacks 13 times in 180 sec.; 50% chance of stunning"/>
     <string name="h2" value="MP - 34, use 1 Summoning Rock; summons an eagle that attacks 16 times in 180 sec.; 53% chance of stunning"/>
     <string name="h3" value="MP - 36, use 1 Summoning Rock; summons an eagle that attacks 19 times in 180 sec.; 56% chance of stunning"/>
@@ -4308,7 +4308,7 @@
   </imgdir>
   <imgdir name="3211006">
     <string name="name" value="Strafe"/>
-    <string name="desc" value="[Master Level : 30]\nFires 4 arrows at an enemy."/>
+    <string name="desc" value="[Master Level : 30]\nRapidly fires 4 arrows at a single enemy."/>
     <string name="h1" value="MP - 26, Damage 71%, attack 4 times"/>
     <string name="h2" value="MP - 26, Damage 72%, attack 4 times"/>
     <string name="h3" value="MP - 26, Damage 73%, attack 4 times"/>
@@ -4818,7 +4818,7 @@
   </imgdir>
   <imgdir name="1121000">
     <string name="name" value="Maple Warrior"/>
-    <string name="desc" value="Increase all players&apos; stats within a party by certain percentage "/>
+    <string name="desc" value="Temporarily increases all stats of yourself and party members by a percentage."/>
     <string name="h1" value="MP - 10 ,  For 30Secs, all stats + 1% "/>
     <string name="h2" value="MP - 10 ,  For 60Secs, all stats + 1% "/>
     <string name="h3" value="MP - 10 ,  For 90Secs, all stats + 2% "/>
@@ -6670,7 +6670,7 @@
   </imgdir>
   <imgdir name="3121002">
     <string name="name" value="Sharp Eyes"/>
-    <string name="desc" value="Grants party members the ability to locate enemy weaknesses, and in turn inflict more damage by exploiting them."/>
+    <string name="desc" value="Temporarily increases Critical Rate and Critical Damage for yourself and party members."/>
     <string name="h1" value="MP - 29 , for 10secs , Critical rate 1%, Damage + 11% ."/>
     <string name="h2" value="MP - 29 , for 20secs , Critical rate 1%, Damage + 12% ."/>
     <string name="h3" value="MP - 29 , for 30secs , Critical rate 2%, Damage + 13% ."/>
@@ -6704,7 +6704,7 @@
   </imgdir>
   <imgdir name="3121003">
     <string name="name" value="Dragon&apos;s Breath"/>
-    <string name="desc" value="Drawing upon the spirit of the dragon, fires a powerful arrow of tremendous force that will knock back the target a long distance."/>
+    <string name="desc" value="Unleashes a powerful dragon-infused arrow that attacks multiple enemies ahead and knocks them back."/>
     <string name="h1" value="MP - 24 , attack 42%, attacks up to 4 enemies"/>
     <string name="h2" value="MP - 24 , attack 44%, attacks up to 4 enemies"/>
     <string name="h3" value="MP - 24 , attack 46%, attacks up to 4 enemies"/>
@@ -6738,7 +6738,7 @@
   </imgdir>
   <imgdir name="3121004">
     <string name="name" value="Hurricane"/>
-    <string name="desc" value="Fires away arrows at a tremendous speed, as chaotic as a nasty rainstorm."/>
+    <string name="desc" value="Fires arrows continuously at tremendous speed while the skill key is held down."/>
     <string name="h1" value="MP - 6 , Damage 51%"/>
     <string name="h2" value="MP - 6 , Damage 52%"/>
     <string name="h3" value="MP - 6 , Damage 53%"/>
@@ -6772,7 +6772,7 @@
   </imgdir>
   <imgdir name="3120005">
     <string name="name" value="Bow Expert"/>
-    <string name="desc" value="Increases the bow mastery as well as weapon attack. Only applied with a bow equipped."/>
+    <string name="desc" value="Further increases Bow Mastery and Weapon Attack.\nRequires a bow."/>
     <string name="h1" value="Bow Mastery 65%"/>
     <string name="h2" value="Bow Mastery 65%"/>
     <string name="h3" value="Bow Mastery 65%, Weapon attack + 1 ."/>
@@ -6806,7 +6806,7 @@
   </imgdir>
   <imgdir name="3121006">
     <string name="name" value="Phoenix"/>
-    <string name="desc" value="Temporarily summons the Phoenix, who is a fire-based ally. Attacks up to 4 monsters."/>
+    <string name="desc" value="Summons Phoenix to attack up to 4 enemies for a period of time.\nRequired Skill : #cSilver Hawk Lv. 15 or higher#"/>
     <string name="h1" value="MP - 42 , Basic attack 305, for 113secs."/>
     <string name="h2" value="MP - 44 , Basic attack 310, for 116secs."/>
     <string name="h3" value="MP - 46 , Basic attack 315, for 119secs."/>
@@ -6840,7 +6840,7 @@
   </imgdir>
   <imgdir name="3121007">
     <string name="name" value="Hamstring"/>
-    <string name="desc" value="Attacks a monster&apos;s leg with a given success rate, slowing it down tremendously in the process"/>
+    <string name="desc" value="Has a chance to cripple an enemy&apos;s leg, slowing its movement speed for a period of time."/>
     <string name="h1" value="MP - 12 , within 35secs , with success rate 11%, decreases enemy&apos;s speed by 2 for 5secs"/>
     <string name="h2" value="MP - 12 , within 40secs , with success rate 12%, decreases enemy&apos;s speed by 4 for 5secs"/>
     <string name="h3" value="MP - 12 , within 45secs , with success rate 13%, decreases enemy&apos;s speed by 6 for 5secs"/>
@@ -6874,7 +6874,7 @@
   </imgdir>
   <imgdir name="3121008">
     <string name="name" value="Concentrate"/>
-    <string name="desc" value="Temporarily increases weapon attack, while simultaneously decreases skill-based MP usage.\n#c Terms between skills : 6 Minutes#"/>
+    <string name="desc" value="Temporarily increases Weapon Attack and reduces skill MP cost.\n#cCooldown : 6 minutes#"/>
     <string name="h1" value="MP - 11 , Weapon Attack increases by 11, Mana spend -2%, for 120secs"/>
     <string name="h2" value="MP - 12 , Weapon Attack increases by 12, Mana spend -4%, for 120secs"/>
     <string name="h3" value="MP - 13 , Weapon Attack increases by 12, Mana spend -6%, for 120secs"/>
@@ -6908,7 +6908,7 @@
   </imgdir>
   <imgdir name="3121009">
     <string name="name" value="Hero&apos;s Will"/>
-    <string name="desc" value="Enables one to shrug off abnormal conditions. The higher the skill level, the more types of abnormal conditions one can nullify."/>
+    <string name="desc" value="Removes abnormal status effects. Cooldown decreases as the skill level increases."/>
     <string name="h1" value="MP - 30 escape from abnormal condition, Terms between skills 600secs"/>
     <string name="h2" value="MP - 30 escape from abnormal condition, Terms between skills 540secs"/>
     <string name="h3" value="MP - 30 escape from abnormal condition, Terms between skills 480secs"/>
@@ -6920,7 +6920,7 @@
   </imgdir>
   <imgdir name="3221000">
     <string name="name" value="Maple Warrior"/>
-    <string name="desc" value="Increase all players&apos; stats within a party by certain percentage "/>
+    <string name="desc" value="Temporarily increases all stats of yourself and party members by a percentage."/>
     <string name="h1" value="MP - 10 ,  For 30Secs, all stats + 1% "/>
     <string name="h2" value="MP - 10 ,  For 60Secs, all stats + 1% "/>
     <string name="h3" value="MP - 10 ,  For 90Secs, all stats + 2% "/>
@@ -6954,7 +6954,7 @@
   </imgdir>
   <imgdir name="3221001">
     <string name="name" value="Piercing Arrow"/>
-    <string name="desc" value="Fires a special arrow that penetrates through monsters. The arrow&apos;s power increases with each monster it pierces, inflicting more damage to each consecutive monster."/>
+    <string name="desc" value="Fires a chargeable piercing arrow that passes through multiple enemies; its power increases as it pierces more targets."/>
     <string name="h1" value="MP - 18 , Max Attacks 320%, Attacks up to 4 enemies"/>
     <string name="h2" value="MP - 18 , Max Attacks 340%, Attacks up to 4 enemies"/>
     <string name="h3" value="MP - 18 , Max Attacks 360%, Attacks up to 4 enemies"/>
@@ -6988,7 +6988,7 @@
   </imgdir>
   <imgdir name="3221002">
     <string name="name" value="Sharp Eyes"/>
-    <string name="desc" value="Grants party members the ability to locate enemy weaknesses, and in turn inflict more damage by exploiting them."/>
+    <string name="desc" value="Temporarily increases Critical Rate and Critical Damage for yourself and party members."/>
     <string name="h1" value="MP - 29 , for 10secs, critical rate 1%, Damage 11% ."/>
     <string name="h2" value="MP - 29 , for 20secs, critical rate 1%, Damage 12% ."/>
     <string name="h3" value="MP - 29 , for 30secs, critical rate 2%, Damage 13% ."/>
@@ -7022,7 +7022,7 @@
   </imgdir>
   <imgdir name="3221003">
     <string name="name" value="Dragon&apos;s Breath"/>
-    <string name="desc" value="Drawing upon the spirit of the dragon, fires a powerful arrow of tremendous force that will knock back the target a long distance."/>
+    <string name="desc" value="Unleashes a powerful dragon-infused arrow that attacks multiple enemies ahead and knocks them back."/>
     <string name="h1" value="MP - 24 , Attacks 42%, Attacks up to  4 enemies"/>
     <string name="h2" value="MP - 24 , Attacks 44%, Attacks up to  4 enemies"/>
     <string name="h3" value="MP - 24 , Attacks 46%, Attacks up to  4 enemies"/>
@@ -7056,7 +7056,7 @@
   </imgdir>
   <imgdir name="3220004">
     <string name="name" value="Marksman Boost"/>
-    <string name="desc" value="Increases the crossbow mastery as well as weapon attack.  Only applied with a crossbow equipped."/>
+    <string name="desc" value="Further increases Crossbow Mastery and Weapon Attack.\nRequires a crossbow."/>
     <string name="h1" value="Cross bow Mastery 65%"/>
     <string name="h2" value="Cross bow Mastery 65%"/>
     <string name="h3" value="Cross bow Mastery 65%, Weapon attack + 1 ."/>
@@ -7090,7 +7090,7 @@
   </imgdir>
   <imgdir name="3221005">
     <string name="name" value="Frostprey"/>
-    <string name="desc" value="Temporarily summons the Frostprey, an ice-based hawk. Attacks up to 4 monsters."/>
+    <string name="desc" value="Summons Frostprey to attack up to 4 enemies for a period of time.\nRequired Skill : #cGolden Eagle Lv. 15 or higher#"/>
     <string name="h1" value="MP - 42 , Attack 255%, for 113secs"/>
     <string name="h2" value="MP - 44 , Attack 260%, for 116secs"/>
     <string name="h3" value="MP - 46 , Attack 265%, for 119secs"/>
@@ -7124,7 +7124,7 @@
   </imgdir>
   <imgdir name="3221006">
     <string name="name" value="Blind"/>
-    <string name="desc" value="Delivers a blinding strike that impairs a monster&apos;s vision with a certain success rate, decreasing its accuracy."/>
+    <string name="desc" value="Has a chance to impair an enemy&apos;s sight, reducing its Accuracy for a period of time."/>
     <string name="h1" value="MP - 12 , For 35secs, with success rate  11%, enemy&apos;s accuracy decreases by 1% for 5secs"/>
     <string name="h2" value="MP - 12 , For 40secs, with success rate 12%, enemy&apos;s accuracy decreases by 2% for 5secs"/>
     <string name="h3" value="MP - 12 , For 45secs, with success rate 13%, enemy&apos;s accuracy decreases by 3% for 5secs"/>
@@ -7158,7 +7158,7 @@
   </imgdir>
   <imgdir name="3221007">
     <string name="name" value="Snipe"/>
-    <string name="desc" value="Delivers a lethal blow to a monster by aiming for its weak spot."/>
+    <string name="desc" value="Aims for the enemy&apos;s weak point to deliver a near-unerring lethal strike with very high fixed damage."/>
     <string name="h1" value="MP - 40 , Terms between skills 250secs"/>
     <string name="h2" value="MP - 39 , Terms between skills 240secs"/>
     <string name="h3" value="MP - 38 , Terms between skills 230secs"/>
@@ -7192,7 +7192,7 @@
   </imgdir>
   <imgdir name="3221008">
     <string name="name" value="Hero&apos;s Will"/>
-    <string name="desc" value="Enables one to shrug off abnormal conditions. The higher the skill level, the more types of abnormal conditions one can nullify."/>
+    <string name="desc" value="Removes abnormal status effects. Cooldown decreases as the skill level increases."/>
     <string name="h1" value="MP - 30 escape from abnormal condition, Terms between skills 600secs"/>
     <string name="h2" value="MP - 30 escape from abnormal condition, Terms between skills 540secs"/>
     <string name="h3" value="MP - 30 escape from abnormal condition, Terms between skills 480secs"/>
