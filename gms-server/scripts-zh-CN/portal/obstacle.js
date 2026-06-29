@@ -12,6 +12,6 @@ function enter(pi) {
     }
 
     pi.showInfo("Effect/OnUserEff/normalEffect/mushroomcastle/chatBalloon1");
-    pi.message("\u4f3c\u4e4e\u6709\u4e00\u4e2a\u9b54\u529b\u5f3a\u5927\u7684\u7ed3\u754c\u963b\u6b62\u4f60\u8fdb\u5165\u3002");
+    pi.message("似乎有一个魔力强大的结界阻止你进入。");
     return false;
 }
