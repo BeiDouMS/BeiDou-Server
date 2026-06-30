@@ -83,6 +83,8 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  */
 public class NPCConversationManager extends AbstractPlayerInteraction {
     private static final Logger log = LoggerFactory.getLogger(NPCConversationManager.class);
+    private static final int DYNAMIC_HAIR_QUEST = 29020;
+    private static final int DYNAMIC_HAIR_REQUIRED_CHANGES = 50;
 
     private final int npc;
     private int npcOid;
@@ -327,9 +329,22 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void setHair(int hair) {
+        int oldHair = getPlayer().getHair();
         getPlayer().setHair(hair);
         getPlayer().updateSingleStat(Stat.HAIR, hair);
         getPlayer().equipChanged();
+        updateDynamicHairProgress(oldHair, hair);
+    }
+
+    private void updateDynamicHairProgress(int oldHair, int newHair) {
+        if (oldHair / 10 == newHair / 10 || !isQuestStarted(DYNAMIC_HAIR_QUEST)) {
+            return;
+        }
+
+        int progress = getQuestProgressInt(DYNAMIC_HAIR_QUEST);
+        if (progress < DYNAMIC_HAIR_REQUIRED_CHANGES) {
+            setQuestProgress(DYNAMIC_HAIR_QUEST, Math.min(progress + 1, DYNAMIC_HAIR_REQUIRED_CHANGES));
+        }
     }
 
     public void setFace(int face) {
