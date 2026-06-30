@@ -267,6 +267,9 @@ public class ItemInformationProvider {
         } else {
             return null;
         }
+        if (theData == null) {
+            return null;
+        }
         if (cat.equalsIgnoreCase("null")) {
             return theData.getChildByPath(String.valueOf(itemId));
         } else {

@@ -98,7 +98,11 @@ public class SkillFactory {
         final DataDirectoryEntry root = datasource.getRoot();
         for (DataFileEntry topDir : root.getFiles()) { // Loop thru jobs
             if (topDir.getName().length() <= 8) {
-                for (Data data : datasource.getData(topDir.getName())) { // Loop thru each jobs
+                Data jobData = datasource.getData(topDir.getName());
+                if (jobData == null) {
+                    continue;
+                }
+                for (Data data : jobData) { // Loop thru each jobs
                     if (data.getName().equals("skill")) {
                         for (Data data2 : data) { // Loop thru each jobs
                             if (data2 != null) {
