@@ -31,6 +31,7 @@ import org.gms.client.SkillFactory;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.GameConfig;
+import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
 import org.gms.constants.skills.Crusader;
 import org.gms.constants.skills.FPMage;
@@ -63,6 +64,7 @@ import org.gms.server.maps.AbstractAnimatedMapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Summon;
+import org.gms.server.partyquest.Pyramid;
 import org.gms.server.quest.medal.VeteranHunterMedal;
 
 import java.awt.*;
@@ -415,34 +417,26 @@ public class Monster extends AbstractLoadedLife {
                 return false;
             }
 
-            /* pyramid not implemented
-            Pair<Integer, Integer> cool = this.getStats().getCool();
-            if (cool != null) {
-                Pyramid pq = (Pyramid) chr.getPartyQuest();
-                if (pq != null) {
-                    if (damage > 0) {
-                        if (damage >= cool.getLeft()) {
-                            if ((Math.random() * 100) < cool.getRight()) {
-                                pq.cool();
-                            } else {
-                                pq.kill();
-                            }
-                        } else {
-                            pq.kill();
-                        }
-                    } else {
-                        pq.miss();
-                    }
-                    killed = true;
-                }
+            Pyramid pyramid = null;
+            if (attacker.getPartyQuest() instanceof Pyramid && MapId.isNettsPyramid(attacker.getMapId())) {
+                pyramid = (Pyramid) attacker.getPartyQuest();
             }
-            */
 
             if (damage > 0) {
                 this.applyDamage(attacker, damage, stayAlive, false);
                 if (!this.isAlive()) {  // monster just died
                     lastHit = true;
+                    if (pyramid != null) {
+                        Pair<Integer, Integer> cool = this.getStats().getCool();
+                        if (cool != null && damage >= cool.getLeft() && Randomizer.nextInt(100) < cool.getRight()) {
+                            pyramid.cool();
+                        } else {
+                            pyramid.kill();
+                        }
+                    }
                 }
+            } else if (pyramid != null) {
+                pyramid.miss();
             }
         } finally {
             this.unlockMonster();
