@@ -34,7 +34,7 @@ import java.awt.Point;
  * @author BubblesDev
  */
 public final class InnerPortalHandler extends AbstractPacketHandler {
-    // 玩家需要处在内传送门附近，才认为这是一次有效“树洞/内传送”触发
+    // 玩家需要处在内传送门附近，才认为这是一次有效"树洞/内传送"触发
     private static final double INNER_PORTAL_TRIGGER_DISTANCE_SQ = 90000.0; // 约 300 像素
 
     @Override
@@ -59,7 +59,7 @@ public final class InnerPortalHandler extends AbstractPacketHandler {
             return;
         }
 
-        // 内传送仅处理“同图传送”；跨图传送交给常规换图流程，不记录本地传送上下文
+        // 内传送仅处理"同图传送"；跨图传送交给常规换图流程
         if (!isSameMapInnerTeleport(player, sourcePortal)) {
             return;
         }
@@ -69,11 +69,13 @@ public final class InnerPortalHandler extends AbstractPacketHandler {
             return;
         }
 
-        // 立即同步服务端坐标与可见对象状态，避免传送后首个攻击包仍使用旧坐标参与距离检测
-        Point beforePos = new Point(playerPos);
         Point afterPos = new Point(targetPortal.getPosition());
+
+        // 记录传送前玩家坐标，供宠物拾取反作弊旧位置物品补偿使用
+        player.setPetLootTeleportBeforePos(new Point(playerPos));
+
         movePlayerInMap(player, afterPos);
-        player.markTeleportLikeMove(beforePos, afterPos);
+        player.markTeleportLikeMove(new Point(playerPos), afterPos);
     }
 
     private static boolean isPlayerReady(Character player) {
@@ -81,8 +83,8 @@ public final class InnerPortalHandler extends AbstractPacketHandler {
     }
 
     private static String readPortalNameSafely(InPacket p) {
-        // 协议通常会携带“当前触发的内传送门名”
         try {
+            p.readByte(); // 跳过开头标志字节后再读门名
             return p.readString();
         } catch (Exception ignored) {
             return null;
