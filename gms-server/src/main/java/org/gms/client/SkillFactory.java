@@ -223,6 +223,7 @@ public class SkillFactory {
                 case DarkKnight.AURA_OF_BEHOLDER:
                 case DarkKnight.BEHOLDER:
                 case DarkKnight.HEROS_WILL:
+                case Corsair.HEROS_WILL:
                 case DarkKnight.HEX_OF_BEHOLDER:
                 case DarkKnight.MAPLE_WARRIOR:
                 case DarkKnight.STANCE:
