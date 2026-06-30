@@ -1,21 +1,6 @@
 /*
     This file is part of the HeavenMS MapleStory Server
     Copyleft (L) 2016 - 2019 RonanLana
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 var status = -1;
@@ -36,7 +21,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("很忙吗，英雄大人？前不久我使尽各种手段在金银岛上四处探查，终于找到了一个有意思的情报。是关于人偶师的......");
+            qm.sendNext("你好，战神。我们收到情报，黑色翅膀成员之一的人偶师，似乎藏身在#b林中之城深处的某个地方#k。你的任务是进入那里，彻底击退他。");
         } else {
             qm.forceStartQuest();
             qm.dispose();
@@ -60,11 +45,11 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("看样子，你应该已经打败人偶师了......怎么不高兴的样子？发生什么事了？");
+            qm.sendNext("你成功了，战神！人偶师暂时不会再威胁金银岛的和平了。这样一来，我们也能更清楚地调查黑色翅膀在金银岛的行动。");
         } else if (status == 1) {
-	qm.sendNextPrev("没发现任何有关金银岛封印石的情报。", 2);
+            qm.sendNext("他们盯上的是#b金银岛的封印石#k。封印石能够阻止黑魔法师一次性把各大陆纳入掌控。每片大陆都有一颗，而金银岛的封印石现在安全了。");
         } else if (status == 2) {
-            qm.sendNext("啊哈！原来事为这事。呵呵呵......完全不用担心。");
+            qm.sendNext("为了表彰你在这一连串任务中的英勇表现，我要给你合适的奖励。收下#r连环吸血#k技能吧。它可以让你在攻击怪物时恢复一部分造成的伤害。");
         } else if (status == 3) {
             qm.forceCompleteQuest();
 

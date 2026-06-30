@@ -1,11 +1,8 @@
 /* ===========================================================
-			Ronan Lana
-	NPC Name: 		Lita Lawless
-	Description: 	Quest - 赏金猎人 - 破布生财
-=============================================================
-Version 1.0 - Script Done.(11/7/2017)
-=============================================================
-*/
+            Ronan Lana
+    NPC Name:       Lita Lawless
+    Description:    Quest - Bounty Hunter
+============================================================= */
 
 var status = -1;
 
@@ -15,17 +12,17 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendOk("好吧，那就这样。回头见。");
+            qm.sendOk("好吧，等你准备好了再来找我。新叶城随时需要可靠的帮手。");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
         var target = "长者幽灵";
-        qm.sendAcceptDecline("嘿，旅行者！我需要你的帮助。新叶城的居民正面临新的威胁。我正在招募愿意出手的人，这次的目标是 #r" + target + "#k。你愿意加入吗？");
+        qm.sendAcceptDecline("嘿，旅行者！我需要你的帮助。新叶城附近又出现了新的威胁，这次的目标是#r" + target + "#k。愿意接下这份赏金任务吗？");
     } else if (status == 1) {
         var reqs = "#r30 #t4032011##k";
-        qm.sendOk("很好。请尽快把 " + reqs + " 带回来给我。新叶城就指望你了。");
+        qm.sendOk("很好。请尽快把" + reqs + "带回来给我。新叶城就指望你了。");
         qm.forceStartQuest();
     } else if (status == 2) {
         qm.dispose();
