@@ -276,7 +276,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 Skill highDef = SkillFactory.getSkill(Aran.HIGH_DEFENSE);
                 int hdLevel = chr.getSkillLevel(highDef);
                 if (highDef != null && hdLevel > 0) {
-                    damage *= Math.ceil(highDef.getEffect(hdLevel).getX() / 1000.0);
+                    damage *= (highDef.getEffect(hdLevel).getX() / 1000.0);
                 }
             }
             Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
