@@ -1272,13 +1272,13 @@ public class World {
             switch (operation) {
                 case ADDED:
                     if (buddylist.contains(cidFrom)) {
-                        buddylist.put(new BuddylistEntry(name, "Default Group", cidFrom, channel, true));
+                        buddylist.put(new BuddylistEntry(name, GameConstants.DEFAULT_BUDDY_GROUP, cidFrom, channel, true));
                         addChar.sendPacket(PacketCreator.updateBuddyChannel(cidFrom, (byte) (channel - 1)));
                     }
                     break;
                 case DELETED:
                     if (buddylist.contains(cidFrom)) {
-                        buddylist.put(new BuddylistEntry(name, "Default Group", cidFrom, (byte) -1, buddylist.get(cidFrom).isVisible()));
+                        buddylist.put(new BuddylistEntry(name, GameConstants.DEFAULT_BUDDY_GROUP, cidFrom, (byte) -1, buddylist.get(cidFrom).isVisible()));
                         addChar.sendPacket(PacketCreator.updateBuddyChannel(cidFrom, (byte) -1));
                     }
                     break;

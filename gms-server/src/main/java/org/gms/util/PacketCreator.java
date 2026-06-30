@@ -4129,7 +4129,7 @@ public class PacketCreator {
         p.writeByte(0xf0);
         p.writeByte(0x01);
         p.writeInt(0x0f);
-        p.writeFixedString("Default Group");
+        p.writeFixedString(GameConstants.DEFAULT_BUDDY_GROUP);
         p.writeByte(0);
         p.writeInt(chrId);
         return p;
