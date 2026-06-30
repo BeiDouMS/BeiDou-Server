@@ -10,6 +10,8 @@ public class ChannelServer extends AbstractServer {
     private final int world;
     private final int channel;
     private Channel nettyChannel;
+    private EventLoopGroup parentGroup;
+    private EventLoopGroup childGroup;
 
     public ChannelServer(int port, int world, int channel) {
         super(port);
@@ -19,8 +21,8 @@ public class ChannelServer extends AbstractServer {
 
     @Override
     public void start() {
-        EventLoopGroup parentGroup = new NioEventLoopGroup();
-        EventLoopGroup childGroup = new NioEventLoopGroup();
+        parentGroup = new NioEventLoopGroup();
+        childGroup = new NioEventLoopGroup();
         ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(parentGroup, childGroup)
                 .channel(NioServerSocketChannel.class)
@@ -36,5 +38,7 @@ public class ChannelServer extends AbstractServer {
         }
 
         nettyChannel.close().syncUninterruptibly();
+        parentGroup.shutdownGracefully();
+        childGroup.shutdownGracefully();
     }
 }
