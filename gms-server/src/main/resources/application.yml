@@ -15,7 +15,7 @@ mybatis-flex:
     mysql:
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://localhost:3306/beidou_002?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
       username: root
       password: root
   global-config:
@@ -48,6 +48,8 @@ gms:
   service:
     # zh-CN en-US
     language: zh-CN
+    # 服务端数据根目录（wz/、scripts/ 等）。为空则自动检测
+    data-home:
     rate-limit:
       # 是否开启限流
       enabled: false

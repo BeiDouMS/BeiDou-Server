@@ -3,6 +3,7 @@ package org.gms.service;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.exception.BizException;
 import org.gms.model.dto.FileTreeNodeDTO;
+import org.gms.provider.ServerResourceResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -20,8 +21,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Service
 public class FileTreeService {
 
-    private static final String FILE_TREE_BASE_DIR = System.getProperty("user.dir");
-    private static final Path FILE_TREE_BASE_DIR_PATH = Path.of(FILE_TREE_BASE_DIR);
     private static final String FILE_TREE_KEY_DELIMITER = "-";
     private static final Set<String> FILE_TREE_LIMITED_PATTERNS = new HashSet<>();
 
@@ -32,6 +31,14 @@ public class FileTreeService {
         FILE_TREE_LIMITED_PATTERNS.add("scripts-zh-CN");
         FILE_TREE_LIMITED_PATTERNS.add("wz");
         FILE_TREE_LIMITED_PATTERNS.add("wz-zh-CN");
+    }
+
+    private final String fileTreeBaseDir;
+    private final Path fileTreeBaseDirPath;
+
+    public FileTreeService(ServerResourceResolver resolver) {
+        this.fileTreeBaseDir = resolver.getDataHome().toAbsolutePath().normalize().toString();
+        this.fileTreeBaseDirPath = Path.of(fileTreeBaseDir);
     }
 
     public String readFile(String currentKey, String filename) {
@@ -68,7 +75,7 @@ public class FileTreeService {
     public List<FileTreeNodeDTO> tree(String currentKey) {
         // 入参为空表示在根目录
         boolean root = !StringUtils.hasText(currentKey);
-        File current = root ? new File(FILE_TREE_BASE_DIR) : resolveByTreeKey(currentKey);
+        File current = root ? new File(fileTreeBaseDir) : resolveByTreeKey(currentKey);
 
         if (!current.isDirectory()) throw new BizException("请输入文件夹");
 
@@ -92,7 +99,7 @@ public class FileTreeService {
 
     public File resolveByTreeKey(String currentKey) {
         @SuppressWarnings("UnnecessaryLocalVariable")
-        File base = FILE_TREE_BASE_DIR_PATH.toFile();
+        File base = fileTreeBaseDirPath.toFile();
         File current = base;
         String[] keyArray = currentKey.split(FILE_TREE_KEY_DELIMITER);
         try {
@@ -108,7 +115,7 @@ public class FileTreeService {
 
         if (FILE_TREE_PATH_STRICT_MODE) {
             Path userPath = current.toPath().toAbsolutePath().normalize();
-            if (!userPath.startsWith(FILE_TREE_BASE_DIR_PATH)) {
+            if (!userPath.startsWith(fileTreeBaseDirPath)) {
                 log.error("file escape base dir : {}", userPath);
                 throw new BizException("检测到路径逃逸尝试");
             }
@@ -124,10 +131,9 @@ public class FileTreeService {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean matchAnyLimitPattern(Path path) {
         if (FILE_TREE_PATH_STRICT_MODE) {
-            return FILE_TREE_LIMITED_PATTERNS.stream().anyMatch(it -> path.startsWith(FILE_TREE_BASE_DIR_PATH.resolve(it)));
+            return FILE_TREE_LIMITED_PATTERNS.stream().anyMatch(it -> path.startsWith(fileTreeBaseDirPath.resolve(it)));
         }
         return true;
     }
 
 }
-

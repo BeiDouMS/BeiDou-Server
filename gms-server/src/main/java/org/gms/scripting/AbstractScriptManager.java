@@ -25,13 +25,13 @@ import org.gms.client.Client;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
+import org.gms.provider.ServerResourceResolver;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.script.*;
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,40 +51,27 @@ public abstract class AbstractScriptManager {
     protected ScriptEngine getInvocableScriptEngine(String path) {
         // 读取当前服务端语言配置，用于拼出 scripts-语言 目录名，例如 scripts-zh-CN。
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        ServerResourceResolver resolver = getResolver();
 
-        // 默认脚本目录始终是 scripts，里面保留英文原版脚本。
-        Path scriptPath = Path.of(SCRIPT_DIRECTORY, path);
-        // 语言脚本目录只放已本地化的脚本文件，不要求复制完整 scripts 目录。
-        Path scriptLangPath = Path.of(SCRIPT_DIRECTORY + "-" + serviceProperty.getLanguage(), path);
+        // 1. 优先加载默认脚本（文件系统）
+        Path scriptPath = resolver.resolveDataPath(SCRIPT_DIRECTORY, path);
+        ScriptEngine engine = null;
+        if (Files.exists(scriptPath)) {
+            engine = evalScriptFromFile(scriptPath, path);
+        }
 
-        // 按文件级别选择脚本：先找语言文件，找不到再回退到英文原版文件。
-        Path actualPath;
+        // 2. 文件系统找不到时，尝试从 JAR 内置 classpath 加载默认脚本
+        if (engine == null) {
+            engine = evalScriptFromClasspath(SCRIPT_DIRECTORY + "/" + path, path);
+        }
+
+        // 3. 最后用语言目录脚本覆盖（只放已本地化的文件，不要求复制完整 scripts）
+        Path scriptLangPath = resolver.resolveDataPath(SCRIPT_DIRECTORY + "-" + serviceProperty.getLanguage(), path);
         if (Files.exists(scriptLangPath)) {
-            actualPath = scriptLangPath;
-        } else if (Files.exists(scriptPath)) {
-            actualPath = scriptPath;
-        } else {
-            return null;
+            engine = evalScriptFromFile(scriptLangPath, path);
         }
 
-        // 为本次实际命中的脚本文件创建独立 JS 引擎。
-        ScriptEngine engine = sef.getScriptEngine();
-        if (!(engine instanceof GraalJSScriptEngine graalScriptEngine)) {
-            throw new IllegalStateException(I18nUtil.getExceptionMessage("AbstractScriptManager.getInvocableScriptEngine.exception1"));
-        }
-
-        // 开启脚本访问 Java 类的能力，保持现有脚本里的 Java.type 调用可用。
-        enableScriptHostAccess(graalScriptEngine);
-
-        // 用 UTF-8 读取并执行脚本；执行失败时返回 null，让调用方按原逻辑处理缺失脚本。
-        try (BufferedReader br = Files.newBufferedReader(actualPath, StandardCharsets.UTF_8)) {
-            engine.eval(br);
-        } catch (final ScriptException | IOException t) {
-            log.warn(I18nUtil.getLogMessage("AbstractScriptManager.getInvocableScriptEngine.warn1"), path, t);
-            return null;
-        }
-
-        return graalScriptEngine;
+        return engine;
     }
 
     protected ScriptEngine getInvocableScriptEngine(String path, Client c) {
@@ -108,6 +95,54 @@ public abstract class AbstractScriptManager {
         Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
         bindings.put("polyglot.js.allowHostAccess", true);
         bindings.put("polyglot.js.allowHostClassLookup", true);
+    }
+
+    // ── Script I/O ──────────────────────────────────────────────────────
+
+    /** Evaluate a script from a filesystem path. Returns null on failure. */
+    private ScriptEngine evalScriptFromFile(Path filePath, String logPath) {
+        ScriptEngine engine = createEngine();
+        if (engine == null) return null;
+        try (BufferedReader br = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
+            engine.eval(br);
+        } catch (final ScriptException | IOException t) {
+            log.warn(I18nUtil.getLogMessage("AbstractScriptManager.getInvocableScriptEngine.warn1"), logPath, t);
+            return null;
+        }
+        return engine;
+    }
+
+    /** Evaluate a script from the classpath (JAR built-in). Returns null if not found. */
+    private ScriptEngine evalScriptFromClasspath(String classpathResource, String logPath) {
+        InputStream is = getClass().getClassLoader().getResourceAsStream(classpathResource);
+        if (is == null) {
+            return null;
+        }
+        ScriptEngine engine = createEngine();
+        if (engine == null) return null;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+            engine.eval(br);
+        } catch (final ScriptException | IOException t) {
+            log.warn(I18nUtil.getLogMessage("AbstractScriptManager.getInvocableScriptEngine.warn1"), logPath, t);
+            return null;
+        }
+        return engine;
+    }
+
+    /** Create and configure a {@link GraalJSScriptEngine}. */
+    private ScriptEngine createEngine() {
+        ScriptEngine engine = sef.getScriptEngine();
+        if (!(engine instanceof GraalJSScriptEngine graalScriptEngine)) {
+            throw new IllegalStateException(I18nUtil.getExceptionMessage("AbstractScriptManager.getInvocableScriptEngine.exception1"));
+        }
+        enableScriptHostAccess(graalScriptEngine);
+        return graalScriptEngine;
+    }
+
+    // ── Helpers ─────────────────────────────────────────────────────────
+
+    private static ServerResourceResolver getResolver() {
+        return ServerManager.getApplicationContext().getBean(ServerResourceResolver.class);
     }
 
     protected void resetContext(String path, Client c) {

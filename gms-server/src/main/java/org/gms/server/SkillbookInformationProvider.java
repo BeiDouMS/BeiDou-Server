@@ -27,6 +27,8 @@ import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
+import org.gms.manager.ServerManager;
+import org.gms.provider.ServerResourceResolver;
 import org.gms.util.DatabaseConnection;
 
 import java.io.IOException;
@@ -276,7 +278,8 @@ public class SkillbookInformationProvider {
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromScripts() {
         Map<Integer, SkillBookEntry> scriptSkillbooks = new HashMap<>();
 
-        for (Path file : listFilesFromDirectoryRecursively("./scripts")) {
+        Path scriptsDir = ServerManager.getApplicationContext().getBean(ServerResourceResolver.class).resolveDataPath("scripts");
+        for (Path file : listFilesFromDirectoryRecursively(scriptsDir.toString())) {
             if (file.getFileName().endsWith(".js")) {
                 scriptSkillbooks.putAll(fileSearchMatchingData(file));
             }
