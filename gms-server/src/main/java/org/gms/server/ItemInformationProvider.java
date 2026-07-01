@@ -1819,20 +1819,24 @@ public class ItemInformationProvider {
              Really hard check, and not really needed in this one
              Gm's should just be GM job, and players cannot change jobs.
              }*/
-            if (reqLevel > chr.getLevel()) {
-                continue;
-            } else if (getEquipStats(equip.getItemId()).get("reqDEX") > tdex) {
-                continue;
-            } else if (getEquipStats(equip.getItemId()).get("reqSTR") > tstr) {
-                continue;
-            } else if (getEquipStats(equip.getItemId()).get("reqLUK") > tluk) {
-                continue;
-            } else if (getEquipStats(equip.getItemId()).get("reqINT") > tint) {
+            Map<String, Integer> equipStats = getEquipStats(equip.getItemId());
+            if (equipStats == null) {
                 continue;
             }
-            int reqPOP = getEquipStats(equip.getItemId()).get("reqPOP");
+            if (reqLevel > chr.getLevel()) {
+                continue;
+            } else if (equipStats.get("reqDEX") > tdex) {
+                continue;
+            } else if (equipStats.get("reqSTR") > tstr) {
+                continue;
+            } else if (equipStats.get("reqLUK") > tluk) {
+                continue;
+            } else if (equipStats.get("reqINT") > tint) {
+                continue;
+            }
+            int reqPOP = equipStats.get("reqPOP");
             if (reqPOP > 0) {
-                if (getEquipStats(equip.getItemId()).get("reqPOP") > fame) {
+                if (equipStats.get("reqPOP") > fame) {
                     continue;
                 }
             }

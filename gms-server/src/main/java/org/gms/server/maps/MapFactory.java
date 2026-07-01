@@ -21,6 +21,7 @@
  */
 package org.gms.server.maps;
 
+import lombok.extern.slf4j.Slf4j;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.provider.*;
@@ -45,7 +46,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-
+@Slf4j
 public class MapFactory {
     private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
     private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
@@ -145,6 +146,10 @@ public class MapFactory {
 
         String mapName = getMapName(mapid);
         Data mapData = mapSource.getData(mapName);    // source.getData issue with giving nulls in rare ocasions found thanks to MedicOP
+        if (mapData == null) {
+            log.error("Map data not found for mapid {} (path: {})", mapid, mapName);
+            return null;
+        }
         Data infoData = mapData.getChildByPath("info");
 
         String link = DataTool.getString(infoData.getChildByPath("link"), "");

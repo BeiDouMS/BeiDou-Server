@@ -76,7 +76,7 @@ public class MapManager {
 
         map = MapFactory.loadMapFromWz(mapid, world, channel, event);
 
-        if (cache) {
+        if (cache && map != null) {
             mapsWLock.lock();
             try {
                 maps.put(mapid, map);
