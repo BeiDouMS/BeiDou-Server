@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01102699.img">
+    <imgdir name="info">
+        <canvas name="icon" width="32" height="32">
+            <vector name="origin" x="1" y="29" />
+        </canvas>
+        <canvas name="iconRaw" width="32" height="32">
+            <vector name="origin" x="1" y="29" />
+        </canvas>
+        <string name="islot" value="Sr" />
+        <string name="vslot" value="Sr" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="cape" width="146" height="82">
+                <vector name="origin" x="64" y="78" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="148" height="82">
+                <vector name="origin" x="60" y="71" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="149" height="78">
+                <vector name="origin" x="62" y="64" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="cape" width="150" height="82">
+                <vector name="origin" x="63" y="61" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="154" height="89">
+                <vector name="origin" x="64" y="56" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="cape" width="165" height="83">
+                <vector name="origin" x="82" y="55" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="163" height="89">
+                <vector name="origin" x="80" y="49" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="cape" value="../../proneStab/0/cape" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="cape" width="154" height="82">
+                <vector name="origin" x="74" y="71" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="154" height="79">
+                <vector name="origin" x="75" y="64" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="cape" width="163" height="83">
+                <vector name="origin" x="82" y="55" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="163" height="84">
+                <vector name="origin" x="80" y="50" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot1">
+        <imgdir name="0">
+            <canvas name="cape" width="151" height="82">
+                <vector name="origin" x="64" y="61" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="160" height="83">
+                <vector name="origin" x="66" y="55" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="160" height="88">
+                <vector name="origin" x="64" y="49" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot2">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="82">
+                <vector name="origin" x="57" y="60" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="151" height="76">
+                <vector name="origin" x="63" y="64" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="160" height="87">
+                <vector name="origin" x="67" y="48" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="cape" width="158" height="100">
+                <vector name="origin" x="58" y="54" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="cape" width="143" height="76">
+                <vector name="origin" x="55" y="54" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <imgdir name="0">
+            <canvas name="cape" width="158" height="90">
+                <vector name="origin" x="72" y="61" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="155" height="95">
+                <vector name="origin" x="64" y="56" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="cape" width="145" height="85">
+                <vector name="origin" x="59" y="61" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="150" height="96">
+                <vector name="origin" x="68" y="70" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="89">
+                <vector name="origin" x="55" y="60" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="151" height="99">
+                <vector name="origin" x="71" y="64" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="0">
+            <canvas name="cape" width="169" height="98">
+                <vector name="origin" x="93" y="74" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="161" height="115">
+                <vector name="origin" x="88" y="71" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="156" height="99">
+                <vector name="origin" x="55" y="65" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="cape" width="148" height="91">
+                <vector name="origin" x="90" y="63" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="160" height="91">
+                <vector name="origin" x="75" y="52" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="160" height="96">
+                <vector name="origin" x="70" y="57" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="cape" width="155" height="89">
+                <vector name="origin" x="91" y="62" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="145" height="102">
+                <vector name="origin" x="76" y="67" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="160" height="93">
+                <vector name="origin" x="78" y="56" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="0">
+            <canvas name="cape" width="154" height="96">
+                <vector name="origin" x="77" y="45" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="82">
+                <vector name="origin" x="54" y="58" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="147" height="84">
+                <vector name="origin" x="56" y="54" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="152" height="80">
+                <vector name="origin" x="59" y="46" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <uol name="cape" value="../../stand1/0/cape" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="cape" value="../../stand1/1/cape" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="cape" value="../../stand1/2/cape" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="95">
+                <vector name="origin" x="82" y="64" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="146" height="107">
+                <vector name="origin" x="57" y="64" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="172" height="114">
+                <vector name="origin" x="81" y="73" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="cape" width="140" height="83">
+                <vector name="origin" x="57" y="58" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="143" height="90">
+                <vector name="origin" x="57" y="58" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="172" height="114">
+                <vector name="origin" x="81" y="73" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="83">
+                <vector name="origin" x="63" y="57" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="151" height="107">
+                <vector name="origin" x="68" y="66" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="160" height="113">
+                <vector name="origin" x="78" y="64" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="cape" width="137" height="83">
+                <vector name="origin" x="59" y="62" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="140" height="94">
+                <vector name="origin" x="57" y="60" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="146" height="112">
+                <vector name="origin" x="60" y="66" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="cape" width="166" height="126">
+                <vector name="origin" x="84" y="72" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP1">
+        <imgdir name="0">
+            <canvas name="cape" width="155" height="82">
+                <vector name="origin" x="61" y="62" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="159" height="89">
+                <vector name="origin" x="70" y="60" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="156" height="111">
+                <vector name="origin" x="61" y="64" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="cape" width="155" height="82">
+                <vector name="origin" x="64" y="61" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="159" height="91">
+                <vector name="origin" x="72" y="54" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="162" height="113">
+                <vector name="origin" x="86" y="72" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="0">
+            <canvas name="cape" width="151" height="82">
+                <vector name="origin" x="64" y="59" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="152" height="88">
+                <vector name="origin" x="66" y="54" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="156" height="85">
+                <vector name="origin" x="63" y="45" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="cape" width="85" height="85">
+                <vector name="origin" x="6" y="63" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="84">
+                <vector name="origin" x="55" y="62" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="145" height="91">
+                <vector name="origin" x="64" y="62" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="143" height="99">
+                <vector name="origin" x="46" y="63" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="0">
+            <canvas name="cape" width="85" height="91">
+                <vector name="origin" x="-2" y="63" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="142" height="98">
+                <vector name="origin" x="54" y="65" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="160" height="114">
+                <vector name="origin" x="86" y="72" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT3">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="85">
+                <vector name="origin" x="58" y="63" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="152" height="108">
+                <vector name="origin" x="85" y="71" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="143" height="110">
+                <vector name="origin" x="42" y="61" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <canvas name="cape" width="163" height="83">
+                <vector name="origin" x="82" y="57" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="143" height="105">
+                <vector name="origin" x="63" y="65" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="154" height="119">
+                <vector name="origin" x="83" y="76" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="cape" width="85" height="85">
+                <vector name="origin" x="7" y="64" />
+                <string name="z" value="backWing" />
+                <int name="delay" value="150" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="82">
+                <vector name="origin" x="56" y="58" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="cape" width="143" height="76">
+                <vector name="origin" x="57" y="52" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="cape" width="149" height="74">
+                <vector name="origin" x="58" y="46" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="cape" width="148" height="80">
+                <vector name="origin" x="57" y="54" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <uol name="cape" value="../../walk1/0/cape" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="cape" value="../../walk1/1/cape" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="cape" value="../../walk1/2/cape" />
+        </imgdir>
+        <imgdir name="3">
+            <uol name="cape" value="../../walk1/3/cape" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="cape" width="141" height="82">
+                <vector name="origin" x="54" y="58" />
+                <string name="z" value="backWing" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

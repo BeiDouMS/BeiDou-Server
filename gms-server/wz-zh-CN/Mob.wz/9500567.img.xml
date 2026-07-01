@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9500567.img">
+    <imgdir name="info">
+        <int name="level" value="65" />
+        <int name="maxHP" value="700000" />
+        <int name="maxMP" value="2000" />
+        <int name="speed" value="0" />
+        <int name="PADamage" value="1" />
+        <int name="PDDamage" value="1" />
+        <int name="PDRate" value="1" />
+        <int name="MADamage" value="1" />
+        <int name="MDDamage" value="1" />
+        <int name="MDRate" value="1" />
+        <int name="acc" value="1" />
+        <int name="eva" value="1" />
+        <int name="pushed" value="9999999" />
+        <int name="boss" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="1N" />
+        <int name="changeableMob" value="1" />
+        <imgdir name="revive">
+            <int name="0" value="9500568" />
+        </imgdir>
+        <int name="summonType" value="1" />
+        <int name="noFlip" value="1" />
+        <string name="changeableMob_Type" value="Gilssam" />
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="438" height="273">
+            <vector name="origin" x="221" y="271" />
+            <int name="z" value="0" />
+            <int name="delay" value="120" />
+            <vector name="lt" x="-222" y="-257" />
+            <vector name="rb" x="214" y="3" />
+            <vector name="head" x="-15" y="-187" />
+            <string name="source" value="Mob/9500566.img/stand/0" />
+        </canvas>
+        <canvas name="1" width="438" height="273">
+            <vector name="origin" x="221" y="271" />
+            <int name="z" value="0" />
+            <int name="delay" value="120" />
+            <vector name="lt" x="-222" y="-257" />
+            <vector name="rb" x="214" y="3" />
+            <vector name="head" x="-15" y="-187" />
+            <string name="source" value="Mob/9500566.img/stand/1" />
+        </canvas>
+        <canvas name="2" width="438" height="242">
+            <vector name="origin" x="221" y="240" />
+            <int name="z" value="0" />
+            <int name="delay" value="120" />
+            <vector name="lt" x="-222" y="-257" />
+            <vector name="rb" x="214" y="3" />
+            <vector name="head" x="-15" y="-187" />
+            <string name="source" value="Mob/9500566.img/stand/2" />
+        </canvas>
+        <canvas name="3" width="438" height="261">
+            <vector name="origin" x="221" y="259" />
+            <int name="z" value="0" />
+            <int name="delay" value="120" />
+            <vector name="lt" x="-222" y="-257" />
+            <vector name="rb" x="214" y="3" />
+            <vector name="head" x="-15" y="-187" />
+            <string name="source" value="Mob/9500566.img/stand/3" />
+        </canvas>
+        <canvas name="4" width="438" height="271">
+            <vector name="origin" x="221" y="269" />
+            <int name="z" value="0" />
+            <int name="delay" value="120" />
+            <vector name="lt" x="-222" y="-257" />
+            <vector name="rb" x="214" y="3" />
+            <vector name="head" x="-15" y="-187" />
+            <string name="source" value="Mob/9500566.img/stand/4" />
+        </canvas>
+        <canvas name="5" width="438" height="274">
+            <vector name="origin" x="221" y="272" />
+            <int name="z" value="0" />
+            <int name="delay" value="120" />
+            <vector name="lt" x="-222" y="-257" />
+            <vector name="rb" x="214" y="3" />
+            <vector name="head" x="-15" y="-187" />
+            <string name="source" value="Mob/9500566.img/stand/5" />
+        </canvas>
+    </imgdir>
+    <imgdir name="hit1">
+        <uol name="0" value="../stand/0" />
+        <uol name="1" value="../stand/1" />
+        <uol name="2" value="../stand/2" />
+        <uol name="3" value="../stand/3" />
+        <uol name="4" value="../stand/4" />
+        <uol name="5" value="../stand/5" />
+    </imgdir>
+    <imgdir name="die1">
+        <canvas name="0" width="438" height="273">
+            <vector name="origin" x="221" y="271" />
+            <int name="z" value="0" />
+            <string name="source" value="Mob/9500566.img/stand/0" />
+        </canvas>
+    </imgdir>
+    <imgdir name="skill1">
+        <uol name="0" value="../stand/0" />
+        <uol name="1" value="../stand/1" />
+        <uol name="2" value="../stand/2" />
+        <uol name="3" value="../stand/3" />
+        <uol name="4" value="../stand/4" />
+        <uol name="5" value="../stand/5" />
+    </imgdir>
+</imgdir>

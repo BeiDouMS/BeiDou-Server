@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01006036.img">
+    <imgdir name="info">
+        <canvas name="icon" width="30" height="30">
+            <vector name="origin" x="-2" y="29" />
+            <string name="_hash" value="e8b82ace492133b8bac9cb8df909c59fc9dd8c35f177961ba2346f5626346c56" />
+        </canvas>
+        <canvas name="iconRaw" width="22" height="27">
+            <vector name="origin" x="-5" y="29" />
+            <string name="_hash" value="f836ca1d7b504053c5e60f365a35e08a07af4388bd8ded786c4341d7c33720f4" />
+        </canvas>
+        <string name="islot" value="Cp" />
+        <string name="vslot" value="CpH5" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="default">
+        <canvas name="default" width="23" height="27">
+            <vector name="origin" x="-5" y="26" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="capOverHair" />
+            <string name="_hash" value="aac1ac0c8a0c6269f46b39a85da204cdd56988b8666a15b48005338a4bdc655f" />
+        </canvas>
+    </imgdir>
+    <imgdir name="backDefault">
+        <canvas name="default" width="22" height="27">
+            <vector name="origin" x="18" y="26" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="backCapOverHair" />
+            <string name="_hash" value="3828ba00031e39015f2b9a76c0371605250fbb4a4410afefa3b7d2cc29d055f7" />
+        </canvas>
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <uol name="default" value="../../default/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../default/default" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="default" value="../../default/default" />
+        </imgdir>
+        <imgdir name="3">
+            <uol name="default" value="../../default/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="stand1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="stand2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="alert">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingO1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingO2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingO3">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingOF">
+        <uol name="0" value="../walk1/0" />
+        <imgdir name="1">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="swingT1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingT2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingT3">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="swingP1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingP2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingPF">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="stabO1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+    </imgdir>
+    <imgdir name="stabO2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+    </imgdir>
+    <imgdir name="stabOF">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="stabT1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="stabT2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="stabTF">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="shoot1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="shoot2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+        <imgdir name="4">
+            <uol name="default" value="../../default/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="proneStab">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+    </imgdir>
+    <imgdir name="prone">
+        <uol name="0" value="../walk1/0" />
+    </imgdir>
+    <imgdir name="heal">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="fly">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+    </imgdir>
+    <imgdir name="jump">
+        <uol name="0" value="../walk1/0" />
+    </imgdir>
+    <imgdir name="sit">
+        <uol name="0" value="../walk1/0" />
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+    </imgdir>
+</imgdir>

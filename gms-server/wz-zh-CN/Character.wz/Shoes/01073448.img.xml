@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01073448.img">
+    <imgdir name="info">
+        <canvas name="icon" width="30" height="24">
+            <vector name="origin" x="-2" y="24" />
+            <string name="_hash" value="126deef4bd1c3992f8971f8b6a950ec00bf14037ca31bf74aed59d85fdc128ce" />
+        </canvas>
+        <canvas name="iconRaw" width="29" height="21">
+            <vector name="origin" x="-2" y="24" />
+            <string name="_hash" value="995836d91139b244b6766222c67aa3b2938f4d14b2b4b90c5d27f0990f5a8388" />
+        </canvas>
+        <string name="islot" value="So" />
+        <string name="vslot" value="So" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="shoes" width="10" height="11">
+                <vector name="origin" x="-4" y="-9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="b174b9f06bfd99379fb386694c3b5b589b17841e7f06f0271d93b1d68d0910ca" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="26" height="8">
+                <vector name="origin" x="10" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="e94625264a4f41a5ec165f9c646a8c2e65be59222a78e2bf70fe076434125250" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="13" height="6">
+                <vector name="origin" x="2" y="-14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="c0f2fd764d336d07f2ab220adbf8b1be7cde31054f11958b249d3d8cd953036a" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="shoes" width="23" height="11">
+                <vector name="origin" x="9" y="-7" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="70cdb46e6842dda9eb351f5217d346e2febfdf84d726457d9a76cccd2a0e7b21" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <uol name="shoes" value="../../walk1/0/shoes" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="shoes" value="../../walk1/1/shoes" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="shoes" value="../../walk1/2/shoes" />
+        </imgdir>
+        <imgdir name="3">
+            <uol name="shoes" value="../../walk1/3/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="shoes" width="20" height="5">
+                <vector name="origin" x="7" y="-16" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="f152d80488684c103dc6cbb1d1cb1eb23cc6c72434115a764f3ba40129c6b695" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="20" height="5">
+                <vector name="origin" x="8" y="-15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_inlink" value="stand1/0/shoes" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="20" height="5">
+                <vector name="origin" x="9" y="-16" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_inlink" value="stand1/0/shoes" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <uol name="shoes" value="../../stand1/0/shoes" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="shoes" value="../../stand1/1/shoes" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="shoes" value="../../stand1/2/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="shoes" width="24" height="5">
+                <vector name="origin" x="13" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="c11013a65ef3d2a6cfd57341d323d3e2b946d00907e8903db3aae09608e32947" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="24" height="5">
+                <vector name="origin" x="13" y="-14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_inlink" value="alert/0/shoes" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="24" height="5">
+                <vector name="origin" x="13" y="-15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="5741a21545ee20ac93e301cbc6afb5dd179cb6d23afb957c03f0536cfd59808a" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="0">
+            <canvas name="shoes" width="28" height="9">
+                <vector name="origin" x="10" y="-7" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="4ade9b2c78e7126fd79e414c1cb73965eeca4bd2374b6b0dccb738a9382efafa" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="15" height="6">
+                <vector name="origin" x="3" y="-14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="952dccf811d3ea6a998d1867484eb24724656520da0717f306ef168caa583b64" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="37" height="5">
+                <vector name="origin" x="8" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="de27fa1481c7628bbd1c34cbd98bedfa91175a067a0aea522a0fd9b8b3d9738e" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="shoes" width="23" height="5">
+                <vector name="origin" x="11" y="-15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="55a8e91f2bb869bdde4b4112c01a691de8035a1219a4096b6f62970266c0ee34" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="28" height="5">
+                <vector name="origin" x="13" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="96bb2d14ac5bcc783601a3855e2487f05bc7226f41ed93f82e3bfd785655cfb5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="29" height="5">
+                <vector name="origin" x="12" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="8340da0656d5caf226d2b96d94c05c8105aa90eb77f4dcd588b53c5f000d50e0" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="0">
+            <canvas name="shoes" width="27" height="6">
+                <vector name="origin" x="8" y="-10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="a02468303e41c6245650a7a069fe4e71778e90b0f64dbc8c22a8f3220267e0c1" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="18" height="6">
+                <vector name="origin" x="2" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="19ca611a0040bc8835d72e7c63a33c8d84c9f5a91d41d0d7b0ed4491db89e1b9" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="28" height="9">
+                <vector name="origin" x="6" y="-7" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_inlink" value="swingO1/0/shoes" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="shoes" width="29" height="5">
+                <vector name="origin" x="14" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="adafe03e432dd88d870f8369a75984c9d446ea1f2d3db7c167b06a2964bb4c15" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="25" height="10">
+                <vector name="origin" x="9" y="-15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backShoes" />
+                <string name="_hash" value="3b67bdaac096b64a0908f1647d962e7545f76cfbbd30475e4267be360e642878" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="6" height="18">
+                <vector name="origin" x="-6" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="f883366ca06cb28aeca6c06e970afb5cf9d29fdb4b7d080ff015a49af5d81d4e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="shoes" width="36" height="6">
+                <vector name="origin" x="16" y="-6" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="96b1ba8afb77094375a90a5a75594e628e1f4785cc2108f219da393dbcef4a1b" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="shoes" width="22" height="5">
+                <vector name="origin" x="11" y="-16" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="e9633d82368225f97d184a82e67d43b892370a0104202da14c0d51faa0a328b4" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="28" height="5">
+                <vector name="origin" x="12" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="10d23e0859b49a0d9e2293cb76e77e63ee7bf9d13c5435e410899b9d87f6a848" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="37" height="5">
+                <vector name="origin" x="10" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="625f5a2450d26bada0491224b1caa397518ad16b93cabe35e5903c9f69c5b9e2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="0">
+            <canvas name="shoes" width="28" height="10">
+                <vector name="origin" x="15" y="-8" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="1c0c721815b99b81666b1471a14348ba53f967f388c836fb4a20937edb04dfc5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="28" height="5">
+                <vector name="origin" x="11" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="cbc0d748c46f40efd8d4b072c2983e703630b70128efe832a0136eb3e9e85eef" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="37" height="5">
+                <vector name="origin" x="11" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="f105f6e12797032c9c74b0b0b800655ce4542b1910174a89013d38e44825e76a" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT3">
+        <imgdir name="0">
+            <canvas name="shoes" width="29" height="5">
+                <vector name="origin" x="13" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="a3ead540bf28442b39244d75ea7919751c11c65306b1985039285ceb0fdfed9d" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="24" height="5">
+                <vector name="origin" x="4" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="5a9c2293050f13e09dd7ae7a82834c0b45e2426cca1cc51232584350efbac529" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="37" height="5">
+                <vector name="origin" x="11" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="7467c5e0f5942879f081e86d8d77070d7e57972c492b6d2c3b45baf4fef2798b" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <canvas name="shoes" width="10" height="11">
+                <vector name="origin" x="2" y="-10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backShoes" />
+                <string name="_hash" value="c5171ceedf881e01aee9b00ea31622e55fe6580961c6775fea91210b50f86ade" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="19" height="11">
+                <vector name="origin" x="7" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="4f7c2b605df4f47d22694c02242a7c130834cc0d17b1844d2991d7090004f87c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="25" height="9">
+                <vector name="origin" x="6" y="-9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="6b39779c3b79491a3c2f97216c18d762f6611a90556e52a38f82b1a8f650e423" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="shoes" width="37" height="5">
+                <vector name="origin" x="12" y="-10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="76fc829ab5ea0328a45cf3730a7f6c521b1038891fdd385dcd76dbc4fa2ae864" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP1">
+        <imgdir name="0">
+            <canvas name="shoes" width="22" height="5">
+                <vector name="origin" x="12" y="-15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="d5a3dea3568939ca9af25b82900fc38e06dea5571b7eaae4a82365716be61c65" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="28" height="5">
+                <vector name="origin" x="12" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="99f1b49d637ab6c9dc5d118c500b43ce0862e2214ea1559e39386634530d5987" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="37" height="5">
+                <vector name="origin" x="10" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="fccca0549f4d7482156d6444117fb6ab4f13863e871117c15d93ac71614cf84b" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="shoes" width="25" height="6">
+                <vector name="origin" x="11" y="-14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="5489d5f355f42d3647aa9381d8663fde0c77dee45b60945ef4d889363cf77451" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="28" height="5">
+                <vector name="origin" x="12" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_inlink" value="swingP1/1/shoes" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="37" height="5">
+                <vector name="origin" x="11" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_inlink" value="swingP1/2/shoes" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="0">
+            <canvas name="shoes" width="39" height="9">
+                <vector name="origin" x="12" y="-6" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="cfa2804e5d8e5db93b8d8ddcb1b40eb651a82bc30c67bb7d6c090657bd0b26a3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="36" height="8">
+                <vector name="origin" x="11" y="-6" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="27dc6a4bc624688d034f4f511f3b6d7bb65e45403ca4043361ef64cf9442be2d" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="19" height="19">
+                <vector name="origin" x="10" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="84b17b74d6e6b96cf4c68313369a723b168fd20229fc670cbe80c6335a3ded28" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="shoes" width="18" height="7">
+                <vector name="origin" x="10" y="-9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="26df19ebad78d0f2300f623ba5105cef18327409743104749cb877e84dab45a0" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="shoes" width="34" height="5">
+                <vector name="origin" x="20" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="0fb38edf3765de306a6bba43ff77dd8626a75af64e199ea0c76daa9434f6eb06" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="34" height="5">
+                <vector name="origin" x="11" y="-10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="a6c35dba5325a41c873b3bfeeffe73dc005b7a27377b4f1f143499bf20952e52" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="shoes" width="26" height="5">
+                <vector name="origin" x="13" y="-15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="2a7e5605198b649bf01cbd1cac47ca993ff00ad464c02582cc9836bed02dfaf5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="36" height="5">
+                <vector name="origin" x="10" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="df31e717343ecb91d0bc205b4973edeca0f077ea896af5de55434952e1dc9840" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="0">
+            <canvas name="shoes" width="17" height="7">
+                <vector name="origin" x="10" y="-6" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="c1a03a33444a914bc87c10a2e4a607d686830f5876473b2d1de813d41abba655" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="37" height="10">
+                <vector name="origin" x="20" y="-9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="e374c8652a4f5319fcb982accf8cc0e92c5c2828c0b1e7551e51e7540dae3da7" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="37" height="5">
+                <vector name="origin" x="12" y="-10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="f4377aad50d852aab989752873de936ca4042db94b7a1c36f2c0337f2e69bae0" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="shoes" width="27" height="5">
+                <vector name="origin" x="16" y="-14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="dea9006bd0629e5aa593debce4c7cd89f1d8d4e2e1a3f2b6e3f946a9bd6caac6" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="31" height="6">
+                <vector name="origin" x="7" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="78db745a081797c59bbb439e910f0f1082c82934b8af5443746b59d9891ea224" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="41" height="5">
+                <vector name="origin" x="13" y="-9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="5334b303a9612a398babc1c880a0b5b3b3665cd9b59592112159a88cfde77be0" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="shoes" width="23" height="6">
+                <vector name="origin" x="10" y="-12" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="8a34c9000d86295f16abaa42e0a2648a789fa4f56fec753cb663aaa4bcf7feed" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="30" height="6">
+                <vector name="origin" x="10" y="-10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="dc8e25b12e5fd2fa1bd89b60ac2ba1c3e42584973a15e52930fac66437461ef3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="43" height="5">
+                <vector name="origin" x="15" y="-9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="b7c3a25e54dce363fdf36b7f55e600b44c9f3874864d34dd11804e851d30d595" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="0">
+            <uol name="shoes" value="../../swingPF/0/shoes" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="shoes" value="../../swingPF/1/shoes" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="shoes" width="19" height="19">
+                <vector name="origin" x="10" y="-11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="d04e7c428ce1db47a05b5618c840e6cbf230c75be621aec7e5e3f549d61aee4c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <uol name="shoes" value="../../stabT1/2/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot1">
+        <imgdir name="0">
+            <canvas name="shoes" width="23" height="5">
+                <vector name="origin" x="13" y="-14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="c4a33dd06b962dec84b9bdb2fd7a04102341681c768485d7ca295b2f35ab0730" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <uol name="shoes" value="../0/shoes" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="shoes" value="../0/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot2">
+        <imgdir name="0">
+            <canvas name="shoes" width="24" height="5">
+                <vector name="origin" x="11" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="6eaaea0b8ba86d087193129bc09a3edffdc43a2ce0293e9fe3c8acd032f10666" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <uol name="shoes" value="../0/shoes" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="shoes" value="../0/shoes" />
+        </imgdir>
+        <imgdir name="3">
+            <uol name="shoes" value="../0/shoes" />
+        </imgdir>
+        <imgdir name="4">
+            <uol name="shoes" value="../0/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <imgdir name="0">
+            <canvas name="shoes" width="24" height="5">
+                <vector name="origin" x="15" y="-14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="fcfd4c02fb08f8390d0b23f16068ab4b4cb9c4fe697fc77bd2412a27db8a895b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="28" height="5">
+                <vector name="origin" x="16" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="0e0f8eb95b2c76237a31fc34b6e125df268c19366fa9d3058d8dd95aedb51e8f" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="shoes" value="../1/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="shoes" width="12" height="6">
+                <vector name="origin" x="-11" y="3" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="a66d59e17acfd20ab5b2fa4565ee79b528dcbd5c8c4c328d0ccb487dcfa675fb" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <uol name="shoes" value="../0/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="shoes" value="../../proneStab/0/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal">
+        <imgdir name="0">
+            <uol name="shoes" value="../../alert/1/shoes" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="shoes" value="../../swingO2/1/shoes" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="shoes" value="../../swingO2/0/shoes" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="shoes" width="13" height="19">
+                <vector name="origin" x="-3" y="-5" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="299da4482048b655df69615e67647c26ca3017d328a4c85f066638f7846f5787" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="6" height="14">
+                <vector name="origin" x="-6" y="-10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="0e2a8ce7484b05651cdd01ce94f683b154fbc3986bc38c948b6103aecea6d53b" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="shoes" width="35" height="11">
+                <vector name="origin" x="17" y="-7" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_hash" value="59924a3eb49d9744ef58674cc7feea88134d24e23b00bb8157f67c6ba3f0f0c1" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="shoes" width="20" height="5">
+                <vector name="origin" x="17" y="-9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="shoesTop" />
+                <string name="_inlink" value="stand1/0/shoes" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="shoes" width="18" height="8">
+                <vector name="origin" x="9" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backShoes" />
+                <string name="_hash" value="a68067498af193dcb39736e28fea20502a001d5baa8f14482d12f1e8b2f7d22c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="18" height="8">
+                <vector name="origin" x="9" y="-13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backShoes" />
+                <string name="_hash" value="52be742d490945170d3b241dd2df92fbf399a3b46bcbc836b6b495b9127f1540" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="shoes" width="13" height="9">
+                <vector name="origin" x="7" y="-15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backShoes" />
+                <string name="_hash" value="d0aa35bbc52389fe112d7fe84ace9ac8754301f9dbebc8849cf9efab4f0e98d3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="shoes" width="13" height="9">
+                <vector name="origin" x="6" y="-9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backShoes" />
+                <string name="_inlink" value="rope/0/shoes" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

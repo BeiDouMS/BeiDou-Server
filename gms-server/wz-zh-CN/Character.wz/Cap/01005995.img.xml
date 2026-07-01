@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01005995.img">
+    <imgdir name="info">
+        <canvas name="icon" width="31" height="27">
+            <vector name="origin" x="-1" y="27" />
+            <string name="_hash" value="b435ea08501dbd298da665d89ea6c65a4339f2a7f37945a480dfd64e3870b2ab" />
+        </canvas>
+        <canvas name="iconRaw" width="30" height="23">
+            <vector name="origin" x="-1" y="27" />
+            <string name="_hash" value="e656c9a0363c66db5fde0968e9b3cdc06a0d92685d96f9ce40bfa1934c8d8e74" />
+        </canvas>
+        <string name="islot" value="Cp" />
+        <string name="vslot" value="CpH5" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="default">
+        <canvas name="default" width="45" height="28">
+            <vector name="origin" x="19" y="27" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="capOverHair" />
+            <string name="_hash" value="f899b7d23a769547bcb4f4d31305c6fffb7ff844d597fbdb9a725beef3981a2b" />
+        </canvas>
+    </imgdir>
+    <imgdir name="backDefault">
+        <canvas name="default" width="45" height="28">
+            <vector name="origin" x="18" y="28" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="backCapAccessory" />
+            <string name="_hash" value="8353ebcbe6ceb396c2f88756d3128ae76de5670718047e38342441d8f47641db" />
+        </canvas>
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="default" width="1" height="1">
+                <vector name="origin" x="19" y="27" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="default/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="45" height="28">
+                <vector name="origin" x="20" y="27" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="41385371b3ec227c6df5f8064186e32e5b90b8b0ec24611046fcfcf68a37cb93" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="46" height="28">
+                <vector name="origin" x="20" y="27" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="e31738f438998a18c8ec717fd1d81fa8840120363677b63cd20f8147bb5df9c4" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="48" height="28">
+                <vector name="origin" x="20" y="27" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="a5aaf804348a12fe3dbdb6525c71332089ed3cde739bbb2d20cca4152e87d224" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="stand1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="stand2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="alert">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingO1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingO2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingO3">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingOF">
+        <uol name="0" value="../walk1/0" />
+        <imgdir name="1">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="swingT1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingT2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingT3">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="swingP1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingP2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="swingPF">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="stabO1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+    </imgdir>
+    <imgdir name="stabO2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+    </imgdir>
+    <imgdir name="stabOF">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="stabT1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="stabT2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="stabTF">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+    </imgdir>
+    <imgdir name="shoot1">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="shoot2">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+        <uol name="3" value="../walk1/3" />
+        <imgdir name="4">
+            <uol name="default" value="../../default/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="proneStab">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+    </imgdir>
+    <imgdir name="prone">
+        <uol name="0" value="../walk1/0" />
+    </imgdir>
+    <imgdir name="heal">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+        <uol name="2" value="../walk1/2" />
+    </imgdir>
+    <imgdir name="fly">
+        <uol name="0" value="../walk1/0" />
+        <uol name="1" value="../walk1/1" />
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <uol name="default" value="../../default/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <uol name="default" value="../../default/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="45" height="28">
+                <vector name="origin" x="19" y="28" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCapAccessory" />
+                <string name="_hash" value="5d846208e6229e7fde4ea79eb26ed30d3ddc58fb7d160902b265df0ab6ddd18f" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="1" height="1">
+                <vector name="origin" x="19" y="28" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCapAccessory" />
+                <string name="_inlink" value="ladder/1/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

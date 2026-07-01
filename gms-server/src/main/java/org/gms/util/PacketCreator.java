@@ -896,7 +896,9 @@ public class PacketCreator {
         List<Character> chars = c.loadCharacters(serverId);
         p.writeByte((byte) chars.size());
         for (Character chr : chars) {
-            addCharEntry(p, chr, false);
+            if (chr != null) {
+                addCharEntry(p, chr, false);
+            }
         }
 
         p.writeByte(GameConfig.getServerBoolean("enable_pic") && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2);

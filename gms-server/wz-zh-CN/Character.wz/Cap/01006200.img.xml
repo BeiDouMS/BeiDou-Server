@@ -1,0 +1,984 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01006200.img">
+    <imgdir name="info">
+        <canvas name="icon" width="34" height="35">
+            <vector name="origin" x="0" y="34" />
+            <string name="_hash" value="2c02657c3897b50ebb8db766850b22cb671da3994a11511c83a0f219494db5dd" />
+        </canvas>
+        <canvas name="iconRaw" width="34" height="35">
+            <vector name="origin" x="0" y="34" />
+            <string name="_hash" value="324e6e9cdf980b1b19571da17f896d636c74b193aa7c0504b83099f333e2226b" />
+        </canvas>
+        <string name="islot" value="HrCp" />
+        <string name="vslot" value="CpH1H2H3H4H5H6HfHbHxHs" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+        <int name="tradeBlock" value="1" />
+        <int name="isDonor" value="1" />
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="46" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_hash" value="2b72db4de419dc5b6df3bc6e10f33ee743fbd48a90c6f55945ca5245b629a765" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="46" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_hash" value="12a6729bf606e173b1a7a1a322c65e1df630d7045b7f751497936f34f00a66f6" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="45" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_hash" value="34f28e0fbe9087dfc305d56361b8cfd53a9957e74bac6a23c1df9a467b8451d8" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="45" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_hash" value="308805304303c77711e77a7e0a4af1d9624a3e5ef1f8e774c1028250af7e33bd" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="46" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="46" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="45" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="45" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/3/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="43" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_hash" value="726f61e5738f88c0653a00f18840d8d9c3c356ef759ca46765fbb0c4f6256c88" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="45" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="45" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="43" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="45" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="45" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="48" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="49" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="48" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="55" y="103" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="50" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="55" y="101" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="45" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="53" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="53" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="50" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="55" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="51" y="103" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="55" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="54" height="112">
+                <vector name="origin" x="28" y="119" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="0c45fa310dd4fbcbddccf311b664537b252d5facb7b3926b05e10444e8beaa49" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="49" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="60" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/3/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="43" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="54" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="57" y="101" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="43" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="49" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="59" y="101" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT3">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="50" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="54" y="101" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="54" y="103" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <canvas name="default" width="54" height="112">
+                <vector name="origin" x="32" y="119" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="36d6b4b4f95665ef471a778feb8c8bead2af919f17d59debca5115fa0c9814dd" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="48" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="52" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="60" y="103" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/3/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP1">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="44" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="54" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="57" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="44" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="52" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="59" y="101" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="0">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="47" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="47" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="50" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="59" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/3/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="46" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="57" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="46" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="58" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="56" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="60" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="60" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="56" y="103" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="55" y="99" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="53" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="54" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="63" y="99" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="56" y="102" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="0">
+            <uol name="default" value="../../swingPF/0/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../swingPF/1/default" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="50" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <uol name="default" value="../../stabT1/2/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot1">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="47" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="48" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="47" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot2">
+        <imgdir name="0">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="47" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="47" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="47" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="46" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="45" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/3/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="48" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="48" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="default" value="../1/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="63" y="94" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="64" y="94" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="default" value="../../proneStab/0/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal">
+        <imgdir name="0">
+            <uol name="default" value="../../alert/1/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../swingO2/1/default" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="default" value="../../swingO2/0/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="default" width="70" height="97">
+                <vector name="origin" x="47" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="48" y="106" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="47" y="105" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="default" width="71" height="97">
+                <vector name="origin" x="47" y="104" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="cap" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="default" width="54" height="112">
+                <vector name="origin" x="33" y="117" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="swingTF/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="54" height="112">
+                <vector name="origin" x="32" y="117" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="swingTF/0/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="default" width="54" height="112">
+                <vector name="origin" x="33" y="117" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="swingTF/0/default" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="54" height="112">
+                <vector name="origin" x="32" y="118" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="swingTF/0/default" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

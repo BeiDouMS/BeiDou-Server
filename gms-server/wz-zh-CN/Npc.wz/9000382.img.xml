@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9000382.img">
+    <imgdir name="info">
+        <imgdir name="script">
+            <imgdir name="0">
+                <string name="script" value="npc_9000382" />
+            </imgdir>
+        </imgdir>
+        <int name="questIconPreStart" value="37" />
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="115" height="90">
+            <vector name="origin" x="63" y="81" />
+            <int name="delay" value="150" />
+        </canvas>
+        <canvas name="1" width="115" height="92">
+            <vector name="origin" x="63" y="84" />
+            <int name="delay" value="150" />
+        </canvas>
+        <canvas name="2" width="115" height="93">
+            <vector name="origin" x="63" y="85" />
+            <int name="delay" value="150" />
+        </canvas>
+        <canvas name="3" width="115" height="94">
+            <vector name="origin" x="63" y="86" />
+            <int name="delay" value="150" />
+        </canvas>
+        <canvas name="4" width="115" height="83">
+            <vector name="origin" x="63" y="75" />
+            <int name="delay" value="150" />
+        </canvas>
+        <canvas name="5" width="115" height="84">
+            <vector name="origin" x="63" y="76" />
+            <int name="delay" value="150" />
+        </canvas>
+    </imgdir>
+    <imgdir name="say">
+        <imgdir name="speak">
+            <string name="0" value="s0" />
+        </imgdir>
+        <uol name="0" value="../stand/0" />
+        <uol name="1" value="../stand/1" />
+        <uol name="2" value="../stand/2" />
+        <uol name="3" value="../stand/3" />
+        <uol name="4" value="../stand/4" />
+        <uol name="5" value="../stand/5" />
+    </imgdir>
+    <imgdir name="eye">
+        <uol name="0" value="../stand/0" />
+        <uol name="1" value="../stand/1" />
+        <uol name="2" value="../stand/2" />
+        <uol name="3" value="../stand/3" />
+        <uol name="4" value="../stand/4" />
+        <uol name="5" value="../stand/5" />
+    </imgdir>
+</imgdir>

@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="00023552.img">
+    <imgdir name="info">
+        <string name="islot" value="Fc" />
+        <string name="vslot" value="Fc" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="default">
+        <canvas name="face" width="26" height="15">
+            <vector name="origin" x="12" y="-5" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="face" />
+            <string name="_hash" value="39c93a86df15bf30447ff6677565e1bef1af0947bf22682ed85a1cba975a617b" />
+        </canvas>
+    </imgdir>
+    <imgdir name="blink">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="15">
+                <vector name="origin" x="12" y="-5" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_inlink" value="default/face" />
+            </canvas>
+            <int name="delay" value="60" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="26" height="14">
+                <vector name="origin" x="12" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="b15b8b959856d1f17755895d8fd81bd74d02b7ea561156bba0c5634fdbedc9a1" />
+            </canvas>
+            <int name="delay" value="60" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="face" width="27" height="13">
+                <vector name="origin" x="12" y="-7" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="4be8c4e8cebc1624b6092bbe20d893e0c5cd63bb8b99ccaf973449b4138b8643" />
+                <string name="_outlink" value="Character/Face/00020078.img/blink/2/face" />
+            </canvas>
+            <int name="delay" value="60" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hit">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="14">
+                <vector name="origin" x="12" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="5a16e994a04f96281c72952db1a7d85a8a7e0137e6a5a833a5b973b88db386e4" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="smile">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="15">
+                <vector name="origin" x="12" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="dfa94067977f5e7c3bebf2f87036fc989e3939d9baac1c227e239ed502c52143" />
+                <string name="_outlink" value="Character/Face/00020078.img/smile/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="troubled">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="14">
+                <vector name="origin" x="12" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="553a911458a1b494d9c2000512d96798085a3144bc329e6bc3bb53ebc60a541e" />
+                <string name="_outlink" value="Character/Face/00020073.img/troubled/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="cry">
+        <imgdir name="0">
+            <canvas name="face" width="25" height="13">
+                <vector name="origin" x="11" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="7b57ada3b56942ad0d7f4522729a1c683d452a50818552f63f733de5659ea5ca" />
+                <string name="_outlink" value="Character/Face/00020073.img/cry/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="angry">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="20">
+                <vector name="origin" x="12" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="298bb51199b4a244966b7d2eccb60e656c867089ee11d2e55d51c5d10645a93a" />
+                <string name="_outlink" value="Character/Face/00020078.img/angry/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="bewildered">
+        <imgdir name="0">
+            <canvas name="face" width="23" height="17">
+                <vector name="origin" x="11" y="-4" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="8f0e174152d9e31320f3a1be968d1e0af6a799b7eb217e68b2314097b78843c0" />
+                <string name="_outlink" value="Character/Face/00020073.img/bewildered/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stunned">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="15">
+                <vector name="origin" x="11" y="-5" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="29e000210cd5a879d9f6a8edf7db5421f08002ea7030448fb0492853c70eb208" />
+                <string name="_outlink" value="Character/Face/00020078.img/stunned/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="vomit">
+        <imgdir name="0">
+            <canvas name="face" width="27" height="46">
+                <vector name="origin" x="15" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="26b119438f5c91013d564da44696736709662c3bdd508a92fe3de77ebc9a6f9b" />
+                <string name="_outlink" value="Character/Face/00020073.img/vomit/0/face" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="27" height="46">
+                <vector name="origin" x="15" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="eaed7e6736544971df264b6ff4bced8efbf43ab2579044b12763f74dcc8f8967" />
+                <string name="_outlink" value="Character/Face/00020073.img/vomit/1/face" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="oops">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="15">
+                <vector name="origin" x="11" y="-5" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_outlink" value="Character/Face/00020078.img/stunned/0/face" />
+            </canvas>
+            <int name="delay" value="1640" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="cheers">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="19">
+                <vector name="origin" x="12" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="37e4e3fc4ea81136c78a74be9595b649e0a8cb8fef2173dbeecc57ec3fd2ce5d" />
+                <string name="_outlink" value="Character/Face/00020078.img/cheers/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="chu">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="15">
+                <vector name="origin" x="12" y="-6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="cac5cb5d380597e6cb7ca89e6dfc8806ded60e0328a3a32da7964d1510ce2014" />
+                <string name="_outlink" value="Character/Face/00020078.img/chu/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="wink">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="15">
+                <vector name="origin" x="12" y="-5" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="0f0204e89d012d57f73f8ff7ea6107f9df7368135ef8dddec16d5b1f6ab20e30" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="pain">
+        <imgdir name="0">
+            <canvas name="face" width="30" height="17">
+                <vector name="origin" x="14" y="-4" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="d7991ff272b557ef8eb9f05b8d2ec08d0392d907f11c8fae1d233f019fd8a7b4" />
+                <string name="_outlink" value="Character/Face/00020073.img/pain/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="glitter">
+        <imgdir name="0">
+            <canvas name="face" width="27" height="18">
+                <vector name="origin" x="13" y="-2" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="2cd57734be4f3a388c012e20f86ea0b8b97e219c29e3683a7f1dfe0eb226f1b4" />
+                <string name="_outlink" value="Character/Face/00020573.img/glitter/0/face" />
+            </canvas>
+            <int name="delay" value="150" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="27" height="18">
+                <vector name="origin" x="13" y="-2" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="1ee6711669f75fe43ac2d07164ea28d55ee4b234dc20c34665b16d548be66e1a" />
+                <string name="_outlink" value="Character/Face/00020573.img/glitter/1/face" />
+            </canvas>
+            <int name="delay" value="150" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="despair">
+        <imgdir name="0">
+            <canvas name="face" width="42" height="20">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="14" y="-12" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="1040fc8c3f5ec93d5e8651bfb00fb99716b45814dae7f0258661bd6936074840" />
+                <string name="_outlink" value="Character/Face/00020000.img/despair/0/face" />
+            </canvas>
+            <int name="delay" value="150" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="44" height="20">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="16" y="-12" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="e0c1c4bc4a5e1243fccb2a54fada894964bfc27b9397ced1b940ebceb063e4d2" />
+                <string name="_outlink" value="Character/Face/00020000.img/despair/1/face" />
+            </canvas>
+            <int name="delay" value="150" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="love">
+        <imgdir name="0">
+            <canvas name="face" width="27" height="22">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="-9" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="6d477d8c4d76b78c5946f1eb68c3d7a0fbd9d357d4b51fe52cd3a1789a7a935d" />
+                <string name="_outlink" value="Character/Face/00020000.img/love/0/face" />
+            </canvas>
+            <int name="delay" value="150" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="27" height="22">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="-9" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="9b9d7eb9531267d3e7156418e45532169d7187059618e714c1b4c0e239c8f1de" />
+                <string name="_outlink" value="Character/Face/00020000.img/love/1/face" />
+            </canvas>
+            <int name="delay" value="150" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shine">
+        <imgdir name="0">
+            <canvas name="face" width="26" height="16">
+                <vector name="origin" x="13" y="6" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="-8" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="f57363be641edf7c0f6d8e440c90e7f4c55e1a41351275e84c779368a7fda9cc" />
+                <string name="_outlink" value="Character/Face/00020000.img/shine/0/face" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="blaze">
+        <imgdir name="0">
+            <canvas name="face" width="30" height="21">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="-10" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="887614d1f3d2b5becf1b57751fbcd121fe3dfb91562909153fb6c8fab0519965" />
+                <string name="_outlink" value="Character/Face/00020000.img/blaze/0/face" />
+            </canvas>
+            <int name="delay" value="110" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="30" height="23">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="-8" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="9715ddd6e3594c8879f543f3617bbcc57f1984d445681920128de427bb18f1b1" />
+                <string name="_outlink" value="Character/Face/00020000.img/blaze/1/face" />
+            </canvas>
+            <int name="delay" value="110" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hum">
+        <imgdir name="0">
+            <canvas name="face" width="25" height="21">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="-2" y="-9" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="c5e905395f899c13d2e453a4dc23436f2a8e0302857395d7a46703bcf458d84e" />
+                <string name="_outlink" value="Character/Face/00020000.img/hum/0/face" />
+            </canvas>
+            <int name="delay" value="110" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="25" height="21">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="-2" y="-9" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="64c3916ec6913af551cd3e07ac45c479e7261e95ec86f9b7065a0cc60bade036" />
+                <string name="_outlink" value="Character/Face/00020000.img/hum/1/face" />
+            </canvas>
+            <int name="delay" value="110" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="bowing">
+        <imgdir name="0">
+            <canvas name="face" width="36" height="20">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="11" y="-11" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="a7e7aafb6e7d871640ab98d16cd88ab35442625ecad6135bf1d6e17eec1cf17d" />
+                <string name="_outlink" value="Character/Face/00020000.img/bowing/0/face" />
+            </canvas>
+            <int name="delay" value="110" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="37" height="20">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="12" y="-11" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="938e01c99c8cc7094ee1639be8d9d1590165dfa1580260e94e2c73b618b657ae" />
+                <string name="_outlink" value="Character/Face/00020000.img/bowing/1/face" />
+            </canvas>
+            <int name="delay" value="110" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="hot">
+        <imgdir name="0">
+            <canvas name="face" width="40" height="25">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="16" y="-10" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="5579bbaae3a2e125a462315b563aec92545c0a84420b6f7dd7205468db28a295" />
+                <string name="_outlink" value="Character/Face/00020000.img/hot/0/face" />
+            </canvas>
+            <int name="delay" value="110" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="46" height="26">
+                <vector name="origin" x="13" y="8" />
+                <imgdir name="map">
+                    <vector name="brow" x="21" y="-9" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="667860a8c6f8f96d066d2e459980cc5b7bcaa99beb15950076370636de3cdb47" />
+                <string name="_outlink" value="Character/Face/00020000.img/hot/1/face" />
+            </canvas>
+            <int name="delay" value="110" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="dam">
+        <imgdir name="0">
+            <canvas name="face" width="24" height="22">
+                <vector name="origin" x="11" y="-2" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="48c44d88f2aa6068a07d7233c29e74b0efe1f4c837e97fd906b0f37923a247c9" />
+                <string name="_outlink" value="Character/Face/00020000.img/dam/0/face" />
+            </canvas>
+            <int name="delay" value="240" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="face" width="24" height="23">
+                <vector name="origin" x="11" y="-1" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="face" />
+                <string name="_hash" value="0f79b168bbae0249b6794b9357b4b67c8a7b7d59bc69d689f1a7bcafb00889db" />
+                <string name="_outlink" value="Character/Face/00020000.img/dam/1/face" />
+            </canvas>
+            <int name="delay" value="240" />
+        </imgdir>
+    </imgdir>
+</imgdir>

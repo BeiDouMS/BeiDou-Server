@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="GWorldMap.img">
+    <imgdir name="info">
+        <string name="WorldMap" value="GWorldMap" />
+    </imgdir>
+    <imgdir name="BaseImg">
+        <canvas name="0" width="640" height="470">
+            <vector name="origin" x="320" y="235" />
+            <int name="z" value="0" />
+        </canvas>
+    </imgdir>
+    <imgdir name="MapList">
+        <imgdir name="0">
+            <vector name="spot" x="2" y="12" />
+            <int name="type" value="0" />
+            <string name="title" value="万神殿" />
+            <string name="desc" value="位于受到麦格纳斯保护的结界中央的神殿。" />
+            <canvas name="path" width="208" height="251">
+                <vector name="origin" x="9" y="229" />
+                <int name="z" value="0" />
+            </canvas>
+            <imgdir name="mapNo">
+                <int name="0" value="400000000" />
+                <int name="1" value="400000001" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <vector name="spot" x="-110" y="22" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400020100" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="2">
+            <vector name="spot" x="-67" y="78" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400030300" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="3">
+            <vector name="spot" x="29" y="79" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400030100" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="4">
+            <vector name="spot" x="134" y="10" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400010100" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="5">
+            <vector name="spot" x="105" y="-63" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400010300" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="6">
+            <vector name="spot" x="15" y="-96" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400040100" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="7">
+            <vector name="spot" x="-63" y="-114" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400040300" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="8">
+            <vector name="spot" x="-140" y="-81" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400020300" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="9">
+            <vector name="spot" x="-172" y="24" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400020000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="10">
+            <vector name="spot" x="-227" y="27" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400020200" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="11">
+            <vector name="spot" x="-120" y="121" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400030400" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="12">
+            <vector name="spot" x="0" y="144" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400030000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="13">
+            <vector name="spot" x="75" y="162" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400030200" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="14">
+            <vector name="spot" x="102" y="103" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400030500" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="15">
+            <vector name="spot" x="188" y="21" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400010000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="16">
+            <vector name="spot" x="238" y="-17" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400010200" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="17">
+            <vector name="spot" x="161" y="-95" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400010400" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="18">
+            <vector name="spot" x="12" y="-136" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400040000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="19">
+            <vector name="spot" x="-39" y="-160" />
+            <int name="type" value="1" />
+            <imgdir name="mapNo">
+                <int name="0" value="400040200" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="MapLink">
+        <imgdir name="0">
+            <imgdir name="link">
+                <string name="linkMap" value="WorldMap130" />
+                <canvas name="linkImg" width="241" height="201">
+                    <vector name="origin" x="110" y="116" />
+                    <int name="z" value="1" />
+                </canvas>
+            </imgdir>
+            <string name="toolTip" value="万神殿" />
+        </imgdir>
+    </imgdir>
+</imgdir>

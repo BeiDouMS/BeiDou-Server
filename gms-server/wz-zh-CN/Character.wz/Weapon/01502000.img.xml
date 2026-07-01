@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01502000.img">
+    <imgdir name="info">
+        <canvas name="icon" width="30" height="31">
+            <vector name="origin" x="-1" y="31" />
+        </canvas>
+        <canvas name="iconRaw" width="30" height="30">
+            <vector name="origin" x="-1" y="31" />
+        </canvas>
+        <int name="price" value="1" />
+        <string name="islot" value="Wp" />
+        <imgdir name="gatherTool">
+            <string name="action" value="gather0" />
+            <int name="reqSkillLevel" value="1" />
+            <string name="toolEffectPath" value="Effect/ItemEff.img/1502000" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="weapon" width="51" height="19">
+                <vector name="origin" x="7" y="14" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="19" height="51">
+                <vector name="origin" x="1" y="44" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="weapon" width="51" height="19">
+                <vector name="origin" x="39" y="7" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowBody" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="2">
+            <canvas name="weapon" width="51" height="19">
+                <vector name="origin" x="40" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverBody" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

@@ -2,6 +2,7 @@ package org.gms.provider.wz;
 
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
+import org.gms.provider.ServerResourceResolver;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,20 +32,25 @@ public enum WZFiles {
     public Path getFile() {
         Path langPath = getLanguageFile();
 
-        // 兼容旧调用：语言目录存在时优先使用，否则使用原始 WZ。
+        // 语言目录存在时优先使用，否则回退到原始 WZ
         return Files.exists(langPath) ? langPath : getBaseFile();
     }
 
     public Path getBaseFile() {
-        return Path.of(DIRECTORY, fileName);
+        return getResolver().resolveDataPath(DIRECTORY, fileName);
     }
 
     public Path getLanguageFile() {
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-        return Path.of(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
+        String langDir = DIRECTORY + "-" + serviceProperty.getLanguage();
+        return getResolver().resolveDataPath(langDir, fileName);
     }
 
     public String getFilePath() {
         return getFile().toString();
+    }
+
+    private static ServerResourceResolver getResolver() {
+        return ServerManager.getApplicationContext().getBean(ServerResourceResolver.class);
     }
 }

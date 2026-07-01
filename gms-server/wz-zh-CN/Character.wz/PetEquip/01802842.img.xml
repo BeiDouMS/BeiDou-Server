@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01802842.img">
+    <imgdir name="info">
+        <canvas name="icon" width="30" height="28">
+            <vector name="origin" x="-2" y="28" />
+            <string name="_hash" value="33b50647640191d109ea3d273e6098ea08ff2d6e09692326d3fa27b487a5b544" />
+        </canvas>
+        <canvas name="iconRaw" width="30" height="27">
+            <vector name="origin" x="-2" y="28" />
+            <string name="_hash" value="0ca975d661611c2608eb69a25609713849550ff2ec5916ab769dc8a0852c8bd8" />
+        </canvas>
+        <int name="tuc" value="10" />
+        <int name="reqLevel" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="5002287">
+        <imgdir name="stand0">
+            <canvas name="0" width="22" height="20">
+                <vector name="origin" x="3" y="28" />
+                <int name="z" value="0" />
+                <string name="_hash" value="7a6ea943293a348cc45972b0c9c1b50238dbda531b8dba6301e7c16de358b9f7" />
+            </canvas>
+        </imgdir>
+        <imgdir name="stand1">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="3" y="28" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002287/stand0/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="move">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="3" y="29" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002287/stand0/0" />
+            </canvas>
+            <canvas name="1" width="21" height="20">
+                <vector name="origin" x="3" y="28" />
+                <int name="z" value="0" />
+                <string name="_hash" value="c23a6fdd46e5957d4207df3390eb372bec51264d668584ad7e93320b748db099" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="3" y="29" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002287/stand0/0" />
+            </canvas>
+            <canvas name="3" width="23" height="20">
+                <vector name="origin" x="3" y="28" />
+                <int name="z" value="0" />
+                <string name="_hash" value="dedb156b426a2f0bb31e309646b576c2d99ab6167ed93254d47eb9050d688108" />
+            </canvas>
+        </imgdir>
+        <imgdir name="jump">
+            <canvas name="0" width="28" height="18">
+                <vector name="origin" x="3" y="35" />
+                <int name="z" value="0" />
+                <string name="_hash" value="3a643da1880df5bb772d426af42495cc19411172bc1dcce1e7fed1a42090fa63" />
+            </canvas>
+        </imgdir>
+        <imgdir name="hang">
+            <canvas name="0" width="23" height="19">
+                <vector name="origin" x="17" y="53" />
+                <int name="z" value="0" />
+                <string name="_hash" value="48cc9c158208fb96cab43152de396cc32bcd7e851648fb575cc6664d2598c358" />
+            </canvas>
+        </imgdir>
+        <imgdir name="hungry">
+            <canvas name="0" width="22" height="20">
+                <vector name="origin" x="3" y="28" />
+                <int name="z" value="0" />
+                <string name="_hash" value="23c6177ef7363d4b11db37d0e2c66e00fa06fb211782c92f2465767a65889e64" />
+            </canvas>
+        </imgdir>
+        <imgdir name="eat">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="3" y="28" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002287/stand0/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="chat">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="3" y="28" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002287/stand0/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="fly">
+            <uol name="0" value="../jump/0" />
+        </imgdir>
+    </imgdir>
+</imgdir>

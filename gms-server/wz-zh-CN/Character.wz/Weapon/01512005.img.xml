@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01512005.img">
+    <imgdir name="info">
+        <canvas name="icon" width="31" height="32">
+            <vector name="origin" x="-1" y="32" />
+        </canvas>
+        <canvas name="iconRaw" width="30" height="31">
+            <vector name="origin" x="-1" y="32" />
+        </canvas>
+        <int name="price" value="1" />
+        <string name="islot" value="Wp" />
+        <int name="cantRepair" value="1" />
+        <int name="durability" value="500" />
+        <imgdir name="gatherTool">
+            <string name="toolEffectPath" value="Effect/ItemEff.img/1512001" />
+            <string name="action" value="gather1" />
+            <int name="incNum" value="3" />
+            <int name="incNumProb" value="100" />
+            <int name="incSpeed" value="130" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="weapon" width="48" height="25">
+                <vector name="origin" x="5" y="19" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="23" height="49">
+                <vector name="origin" x="1" y="44" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="weapon" width="48" height="25">
+                <vector name="origin" x="39" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowBody" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

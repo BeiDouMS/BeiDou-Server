@@ -46,6 +46,8 @@ import org.gms.service.CashShopService;
 import org.gms.service.CharacterService;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -124,6 +126,7 @@ public class CashShop {
     }
 
     public static class CashItemFactory {
+        private static final Logger log = LoggerFactory.getLogger(CashItemFactory.class);
         @Getter
         private static volatile Map<Integer, ModifiedCashItemDO> items = new HashMap<>();
         private static volatile Map<Integer, List<Integer>> packages = new HashMap<>();
@@ -135,8 +138,15 @@ public class CashShop {
         public static void loadAllCashItems() {
             DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
+            Data commodityData = etc.getData("Commodity.img");
+            if (commodityData == null) {
+                log.warn("Commodity.img data not found, skipping cash item loading");
+                items = new HashMap<>();
+                packages = new HashMap<>();
+                return;
+            }
             Map<Integer, ModifiedCashItemDO> loadedItems = new HashMap<>();
-            for (Data item : etc.getData("Commodity.img").getChildren()) {
+            for (Data item : commodityData.getChildren()) {
                 int sn = DataTool.getIntConvert("SN", item);
                 int itemId = DataTool.getIntConvert("ItemId", item);
                 int price = DataTool.getIntConvert("Price", item, 0);
@@ -181,14 +191,17 @@ public class CashShop {
             CashItemFactory.items = loadedItems;
 
             Map<Integer, List<Integer>> loadedPackages = new HashMap<>();
-            for (Data cashPackage : etc.getData("CashPackage.img").getChildren()) {
-                List<Integer> cPackage = new ArrayList<>();
+            Data cashPackageData = etc.getData("CashPackage.img");
+            if (cashPackageData != null) {
+                for (Data cashPackage : cashPackageData.getChildren()) {
+                    List<Integer> cPackage = new ArrayList<>();
 
-                for (Data item : cashPackage.getChildByPath("SN").getChildren()) {
-                    cPackage.add(Integer.parseInt(item.getData().toString()));
+                    for (Data item : cashPackage.getChildByPath("SN").getChildren()) {
+                        cPackage.add(Integer.parseInt(item.getData().toString()));
+                    }
+
+                    loadedPackages.put(Integer.parseInt(cashPackage.getName()), cPackage);
                 }
-
-                loadedPackages.put(Integer.parseInt(cashPackage.getName()), cPackage);
             }
             CashItemFactory.packages = loadedPackages;
 

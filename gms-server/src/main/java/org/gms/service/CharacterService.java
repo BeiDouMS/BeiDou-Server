@@ -319,6 +319,18 @@ public class CharacterService {
         if (mapleMap == null) {
             mapleMap = mapManager.getMap(MapId.HENESYS);
         }
+        if (mapleMap == null) {
+            // 如果回退地图也加载失败，尝试一系列安全地图
+            int[] fallbackMaps = {MapId.LITH_HARBOUR, MapId.LEAFRE, 0};
+            for (int fid : fallbackMaps) {
+                mapleMap = mapManager.getMap(fid);
+                if (mapleMap != null) break;
+            }
+        }
+        if (mapleMap == null) {
+            log.error("无法加载角色 {} 的地图，所有回退地图均不可用", cid);
+            return null;
+        }
         chr.setMap(mapleMap);
         Portal portal = mapleMap.getPortal(chr.getInitialSpawnPoint());
         if (portal == null) {

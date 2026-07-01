@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9800082.img">
+    <imgdir name="info">
+        <int name="publicReward" value="1" />
+        <int name="noFlip" value="1" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="HPgaugeHide" value="1" />
+        <int name="firstAttack" value="1" />
+        <imgdir name="revive">
+            <int name="0" value="9800083" />
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="102" />
+                <int name="action" value="1" />
+                <int name="level" value="2" />
+                <int name="effectAfter" value="0" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="default">
+            <canvas name="0" width="200" height="94">
+                <vector name="origin" x="100" y="47" />
+                <int name="z" value="0" />
+                <string name="source" value="Mob/8220013.img/info/default/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="action" value="3" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="5" />
+                <int name="magic" value="1" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="action" value="4" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+            </imgdir>
+            <imgdir name="4">
+                <int name="action" value="5" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="5" />
+                <int name="magic" value="1" />
+            </imgdir>
+        </imgdir>
+        <string name="link" value="8220013" />
+        <int name="level" value="130" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="27000000" />
+        <int name="maxMP" value="400000" />
+        <int name="PADamage" value="1233" />
+        <int name="PDDamage" value="850" />
+        <int name="PDRate" value="30" />
+        <int name="MADamage" value="1332" />
+        <int name="MDDamage" value="820" />
+        <int name="MDRate" value="30" />
+        <int name="acc" value="423" />
+        <int name="eva" value="115" />
+        <int name="pushed" value="2000" />
+        <float name="fs" value="10" />
+        <int name="boss" value="1" />
+        <int name="summonType" value="1" />
+        <int name="category" value="8" />
+        <int name="hpRecovery" value="120000" />
+        <string name="mobType" value="7N" />
+    </imgdir>
+</imgdir>

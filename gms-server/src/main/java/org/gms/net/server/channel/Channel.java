@@ -52,6 +52,8 @@ import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
+import org.gms.provider.ServerResourceResolver;
+
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -179,8 +181,9 @@ public final class Channel {
             return;
         }
 
-        eventSM.cancel();
-        eventSM = null;
+        if (eventSM != null) {
+            eventSM.cancel();
+        }
         eventSM = new EventScriptManager(this, getEvents());
     }
 
@@ -455,20 +458,16 @@ public final class Channel {
 
     private static String[] getEvents() {
         // 事件脚本固定放在 scripts/event 以及对应的语言目录 scripts-语言/event。
-        String scriptName = "scripts";
-        String eventPath = "event";
-        // 读取当前服务端语言配置，用来定位语言事件脚本目录。
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-        String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
+        ServerResourceResolver resolver = ServerManager.getApplicationContext().getBean(ServerResourceResolver.class);
 
-        // 默认目录保留英文原版事件，语言目录只保留已本地化的事件。
-        Path scriptPath = Path.of(scriptName, eventPath);
-        Path scriptLangPath = Path.of(scriptLangName, eventPath);
+        // 先枚举默认事件（基础），再用语言事件覆盖/补充
+        Path scriptPath = resolver.resolveDataPath("scripts", "event");
+        Path scriptLangPath = resolver.resolveDataPath("scripts-" + serviceProperty.getLanguage(), "event");
 
-        // 先枚举默认事件，保证未翻译事件不会因为语言目录存在而丢失。
         List<String> events = new ArrayList<>();
         addEvents(scriptPath, events);
-        // 再枚举语言事件，补充中文专属事件；同名事件会在 addEvents 中去重。
+        // 语言事件补充中文专属事件；同名事件会在 addEvents 中去重。
         addEvents(scriptLangPath, events);
         // 这里只返回事件名，真正加载脚本时仍由 AbstractScriptManager 做文件级回退。
         return events.toArray(new String[0]);

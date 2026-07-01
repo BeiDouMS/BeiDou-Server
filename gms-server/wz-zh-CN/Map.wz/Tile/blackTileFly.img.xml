@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="blackTileFly.img">
+    <imgdir name="info" />
+    <imgdir name="bsc">
+        <canvas name="0" width="90" height="60">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="0" />
+        </canvas>
+    </imgdir>
+    <imgdir name="enH0">
+        <canvas name="0" width="90" height="3">
+            <vector name="origin" x="0" y="3" />
+            <imgdir name="map" />
+            <int name="z" value="-3" />
+            <convex name="foothold">
+                <vector name="foothold" x="0" y="-3" />
+                <vector name="foothold" x="90" y="-3" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="enH1">
+        <canvas name="0" width="90" height="3">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="-3" />
+            <convex name="foothold">
+                <vector name="foothold" x="90" y="3" />
+                <vector name="foothold" x="0" y="3" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="enV0">
+        <canvas name="0" width="3" height="60">
+            <vector name="origin" x="3" y="0" />
+            <int name="z" value="-2" />
+            <convex name="foothold">
+                <vector name="foothold" x="-3" y="60" />
+                <vector name="foothold" x="-3" y="0" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="enV1">
+        <canvas name="0" width="3" height="60">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="-2" />
+            <convex name="foothold">
+                <vector name="foothold" x="3" y="0" />
+                <vector name="foothold" x="3" y="60" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="edU">
+        <canvas name="0" width="6" height="3">
+            <vector name="origin" x="3" y="3" />
+            <int name="z" value="-4" />
+            <convex name="foothold">
+                <vector name="foothold" x="-3" y="0" />
+                <vector name="foothold" x="-3" y="-3" />
+                <vector name="foothold" x="3" y="-3" />
+                <vector name="foothold" x="3" y="0" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="edD">
+        <canvas name="0" width="6" height="3">
+            <vector name="origin" x="3" y="0" />
+            <int name="z" value="-4" />
+            <convex name="foothold">
+                <vector name="foothold" x="3" y="0" />
+                <vector name="foothold" x="3" y="3" />
+                <vector name="foothold" x="-3" y="3" />
+                <vector name="foothold" x="-3" y="0" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="slLU">
+        <canvas name="0" width="90" height="63">
+            <vector name="origin" x="90" y="63" />
+            <int name="z" value="-3" />
+            <convex name="foothold">
+                <vector name="foothold" x="-90" y="-1" />
+                <vector name="foothold" x="0" y="-64" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="slRU">
+        <canvas name="0" width="90" height="63">
+            <vector name="origin" x="0" y="63" />
+            <int name="z" value="-3" />
+            <convex name="foothold">
+                <vector name="foothold" x="0" y="-64" />
+                <vector name="foothold" x="90" y="0" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="slLD">
+        <canvas name="0" width="90" height="63">
+            <vector name="origin" x="90" y="0" />
+            <int name="z" value="-3" />
+            <convex name="foothold">
+                <vector name="foothold" x="-3" y="63" />
+                <vector name="foothold" x="-90" y="3" />
+            </convex>
+        </canvas>
+    </imgdir>
+    <imgdir name="slRD">
+        <canvas name="0" width="90" height="63">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="-3" />
+            <convex name="foothold">
+                <vector name="foothold" x="90" y="3" />
+                <vector name="foothold" x="3" y="63" />
+            </convex>
+        </canvas>
+    </imgdir>
+</imgdir>

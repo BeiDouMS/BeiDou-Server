@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01802852.img">
+    <imgdir name="info">
+        <canvas name="icon" width="30" height="30">
+            <vector name="origin" x="-2" y="30" />
+            <string name="_hash" value="f0a35f2086b744d032538dbeaa6d12dc4f7133b0ca83d123e4290c5bb6797f71" />
+        </canvas>
+        <canvas name="iconRaw" width="26" height="25">
+            <vector name="origin" x="-3" y="30" />
+            <string name="_hash" value="bcf0e290c4cf2494895988c9216a77138aa37f2cae479a4fbd8e509feb163b64" />
+        </canvas>
+        <int name="tuc" value="10" />
+        <int name="reqLevel" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="5002310">
+        <imgdir name="stand0">
+            <canvas name="0" width="32" height="13">
+                <vector name="origin" x="17" y="13" />
+                <int name="z" value="0" />
+                <string name="_hash" value="ddfa89a0a2272e58ea085bed3f51c40d09735096f4ce4b13fc7cbef170ba2e5a" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="17" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+            <canvas name="2" width="34" height="13">
+                <vector name="origin" x="18" y="13" />
+                <int name="z" value="0" />
+                <string name="_hash" value="b01c9a7f9b4511a341b481d8403b75c30faa19e2b951536233cf81f9f136a64c" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="18" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="stand1">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="rest0">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="move">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="17" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="18" y="14" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/2" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="17" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+            <canvas name="3" width="30" height="13">
+                <vector name="origin" x="16" y="14" />
+                <int name="z" value="0" />
+                <string name="_hash" value="4b818ae901274f9cbb87988e82566f0ad2401b253142cdad5f368e7264d6f031" />
+            </canvas>
+        </imgdir>
+        <imgdir name="jump">
+            <canvas name="0" width="33" height="17">
+                <vector name="origin" x="15" y="26" />
+                <int name="z" value="0" />
+                <string name="_hash" value="5c1ea8664f6177a78c80462ed659e19ba4018df26c21eb62e8e590e0304cdb35" />
+            </canvas>
+        </imgdir>
+        <imgdir name="hungry">
+            <uol name="0" value="../angry/0" />
+            <uol name="1" value="../angry/1" />
+            <uol name="2" value="../angry/2" />
+            <uol name="3" value="../angry/3" />
+        </imgdir>
+        <imgdir name="hang">
+            <canvas name="0" width="13" height="13">
+                <vector name="origin" x="6" y="45" />
+                <int name="z" value="0" />
+                <string name="_hash" value="bd1cf82f739eff89aedcf6744e5ce2f75d52674ef387c15f81993fe69dc8119f" />
+            </canvas>
+        </imgdir>
+        <imgdir name="eat">
+            <uol name="0" value="../chat/0" />
+            <uol name="1" value="../chat/1" />
+            <uol name="2" value="../chat/2" />
+            <uol name="3" value="../chat/3" />
+        </imgdir>
+        <imgdir name="chat">
+            <canvas name="0" width="30" height="17">
+                <vector name="origin" x="15" y="17" />
+                <int name="z" value="0" />
+                <string name="_hash" value="1914015ba9c364c51e3faadf3bab03258087559ef825b5475a1176c0f82a86e5" />
+            </canvas>
+            <canvas name="1" width="30" height="18">
+                <vector name="origin" x="15" y="19" />
+                <int name="z" value="0" />
+                <string name="_hash" value="2a4691495e8f080b13f8def0f81536136abebb62cfc49986a57121affc9dd746" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="15" y="17" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/chat/0" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="15" y="19" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/chat/1" />
+            </canvas>
+        </imgdir>
+        <imgdir name="love">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="17" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="17" y="12" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+            <canvas name="2" width="34" height="16">
+                <vector name="origin" x="16" y="23" />
+                <int name="z" value="0" />
+                <string name="_hash" value="3b2363a33aa803d76a41a68ef90453effae7eccc76bf41fa8c66e5159daf095a" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="16" y="24" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/love/2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="cry">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="17" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="18" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="17" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="16" y="13" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002310/stand0/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="dung">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="sleep">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="angry">
+            <canvas name="0" width="32" height="18">
+                <vector name="origin" x="17" y="19" />
+                <int name="z" value="0" />
+                <string name="_hash" value="9be7a1efa344d8e6e13b85f463a98bae0672f051f32a0a7154386e9ec95b3f78" />
+            </canvas>
+            <canvas name="1" width="17" height="14">
+                <vector name="origin" x="2" y="13" />
+                <int name="z" value="0" />
+                <string name="_hash" value="92baed12e6e56cdd1671f9588504f83974269502e159c8faac86c5a2449a0308" />
+            </canvas>
+            <canvas name="2" width="13" height="18">
+                <vector name="origin" x="-2" y="19" />
+                <int name="z" value="0" />
+                <string name="_hash" value="b7f81c065a0dd39b7d1f2d26d150215014a193f2627178b708367d1845def48f" />
+            </canvas>
+            <canvas name="3" width="31" height="14">
+                <vector name="origin" x="16" y="13" />
+                <int name="z" value="0" />
+                <string name="_hash" value="a92f76cca8bd4b0e022aa45f560a05b95c1e25e408b07358482f016b5f1e5188" />
+            </canvas>
+        </imgdir>
+        <imgdir name="no">
+            <uol name="0" value="../angry/0" />
+            <uol name="1" value="../angry/1" />
+            <uol name="2" value="../angry/2" />
+            <uol name="3" value="../angry/3" />
+        </imgdir>
+        <imgdir name="fly">
+            <uol name="0" value="../jump/0" />
+        </imgdir>
+        <imgdir name="sit">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+    </imgdir>
+</imgdir>

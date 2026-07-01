@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01802905.img">
+    <imgdir name="info">
+        <canvas name="icon" width="30" height="29">
+            <vector name="origin" x="-2" y="29" />
+            <int name="z" value="0" />
+            <string name="_hash" value="ef37fcabb4088f8c2154f534cad0b5c45df888f96d226ea5dc56868c7590a94e" />
+        </canvas>
+        <canvas name="iconRaw" width="23" height="25">
+            <vector name="origin" x="-5" y="29" />
+            <int name="z" value="0" />
+            <string name="_hash" value="688f50253212dc6ea84bfba9bd1c0ad545c8b10c06d5e11ce90d7f23b07e1cdd" />
+        </canvas>
+        <int name="tuc" value="10" />
+        <int name="reqLevel" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="5002375">
+        <imgdir name="stand0">
+            <canvas name="0" width="45" height="24">
+                <vector name="origin" x="22" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_hash" value="e905d44a303566ad06e362169396730fd90e605b3a28fcb62f2c82c557801c9b" />
+            </canvas>
+            <canvas name="1" width="46" height="23">
+                <vector name="origin" x="23" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_hash" value="e5d4feabe11eb819ef29e98b0eabb8c26f3c7fe6dc2f2c3917c1f8d99b9f7c1a" />
+            </canvas>
+            <canvas name="2" width="46" height="24">
+                <vector name="origin" x="23" y="29" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_hash" value="443334e557e4ed8b0b4d2e2a14f7779258312a04702b7a68b271aa1a3a4b9370" />
+            </canvas>
+            <canvas name="3" width="46" height="19">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_hash" value="f50fc0fb64db8490c36f521e3c3c931efa4293cda32a2ee310516b68e38ac92c" />
+            </canvas>
+            <canvas name="4" width="46" height="21">
+                <vector name="origin" x="23" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_hash" value="32a93a84218753bfda63c9931cd1f9f3d19e90d7f8e9783ae4ae10a7481eedd8" />
+            </canvas>
+            <canvas name="5" width="45" height="22">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_hash" value="3dbfdf26e7faec1e734e979c59129b835cb10daf7970abd28717529c7cf28776" />
+            </canvas>
+        </imgdir>
+        <imgdir name="stand1">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+            <uol name="4" value="../stand0/4" />
+            <uol name="5" value="../stand0/5" />
+        </imgdir>
+        <imgdir name="rest0">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+            <uol name="4" value="../stand0/4" />
+            <uol name="5" value="../stand0/5" />
+        </imgdir>
+        <imgdir name="move">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="22" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="23" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/1" />
+            </canvas>
+            <canvas name="2" width="46" height="26">
+                <vector name="origin" x="23" y="31" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_hash" value="d98649480a976764df8e5c9747ff20b8bd41c5f307548727a0637aafaa003f7f" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="jump">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="22" y="37" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002375/stand0/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="hungry">
+            <uol name="0" value="../angry/0" />
+            <uol name="1" value="../angry/1" />
+            <uol name="2" value="../angry/2" />
+            <uol name="3" value="../angry/3" />
+        </imgdir>
+        <imgdir name="hang">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="22" y="37" />
+                <int name="z" value="0" />
+                <string name="_inlink" value="5002375/stand0/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="eat">
+            <uol name="0" value="../chat/0" />
+            <uol name="1" value="../chat/1" />
+            <uol name="2" value="../chat/2" />
+            <uol name="3" value="../chat/3" />
+        </imgdir>
+        <imgdir name="chat">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="22" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="23" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/1" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="31" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/move/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="love">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="22" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="23" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/1" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="31" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/move/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="cry">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="22" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="23" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/1" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="31" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/move/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="dung">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+            <uol name="4" value="../stand0/4" />
+            <uol name="5" value="../stand0/5" />
+        </imgdir>
+        <imgdir name="sleep">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+            <uol name="4" value="../stand0/4" />
+            <uol name="5" value="../stand0/5" />
+        </imgdir>
+        <imgdir name="angry">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="22" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="23" y="27" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/1" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="31" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/move/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="300" />
+                <string name="_inlink" value="5002375/stand0/5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="no">
+            <uol name="0" value="../angry/0" />
+            <uol name="1" value="../angry/1" />
+            <uol name="2" value="../angry/2" />
+            <uol name="3" value="../angry/3" />
+        </imgdir>
+        <imgdir name="sit">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+            <uol name="4" value="../stand0/4" />
+            <uol name="5" value="../stand0/5" />
+        </imgdir>
+        <imgdir name="fly">
+            <uol name="0" value="../jump/0" />
+        </imgdir>
+    </imgdir>
+</imgdir>

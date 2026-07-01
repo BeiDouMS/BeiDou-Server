@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9601020.img">
+    <imgdir name="info">
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="70" />
+                <int name="type" value="0" />
+                <int name="fixDamR" value="15" />
+                <int name="cooltime" value="4500" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="70" />
+                <int name="knockback" value="1" />
+                <int name="ignoreStance" value="1" />
+                <int name="type" value="0" />
+                <int name="fixDamR" value="20" />
+                <int name="cooltime" value="6000" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="action" value="3" />
+                <int name="attackRatio" value="70" />
+                <int name="type" value="0" />
+                <int name="knockback" value="1" />
+                <int name="ignoreStance" value="1" />
+                <int name="fixDamR" value="100" />
+                <int name="fixDamRType" value="3" />
+                <int name="fixDamage" value="99999" />
+                <int name="cooltime" value="12000" />
+                <int name="tremble" value="1" />
+            </imgdir>
+            <imgdir name="3">
+                <int name="action" value="4" />
+                <int name="attackRatio" value="70" />
+                <int name="type" value="0" />
+                <int name="knockback" value="1" />
+                <int name="ignoreStance" value="1" />
+                <int name="fixDamR" value="100" />
+                <int name="fixDamRType" value="3" />
+                <int name="fixDamage" value="99999" />
+                <int name="jumpAttack" value="1" />
+                <int name="cooltime" value="12000" />
+                <int name="tremble" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="170" />
+                <int name="action" value="1" />
+                <int name="level" value="28" />
+                <int name="effectAfter" value="0" />
+                <int name="skillForbid" value="3180" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="123" />
+                <int name="action" value="2" />
+                <string name="level" value="60" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="1320" />
+            </imgdir>
+        </imgdir>
+        <string name="link" value="9601013" />
+        <int name="maxMP" value="1000" />
+        <int name="speed" value="5" />
+        <int name="PDRate" value="30" />
+        <int name="MDRate" value="30" />
+        <int name="pushed" value="1000000000" />
+        <int name="hpRecovery" value="50000" />
+        <int name="mpRecovery" value="50000" />
+        <int name="boss" value="1" />
+        <int name="summonType" value="1" />
+        <int name="firstAttack" value="1" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="HPgaugeHide" value="1" />
+        <int name="category" value="1" />
+        <string name="mobType" value="7N" />
+        <int name="level" value="140" />
+        <int name="maxHP" value="180000000" />
+        <int name="acc" value="200" />
+        <int name="exp" value="10000000" />
+        <int name="eva" value="1" />
+        <int name="MDDamage" value="6000" />
+        <int name="PDDamage" value="6000" />
+        <int name="PADamage" value="2800" />
+        <int name="MADamage" value="2800" />
+    </imgdir>
+</imgdir>

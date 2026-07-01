@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class ServiceProperty {
     private String language;
+    private String dataHome;
     private RateLimitProperty rateLimit;
     private String wanHost;
     private String lanHost;

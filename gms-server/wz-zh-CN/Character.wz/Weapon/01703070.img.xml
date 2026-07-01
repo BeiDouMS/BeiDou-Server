@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01703070.img">
+    <imgdir name="info">
+        <canvas name="icon" width="1" height="1">
+            <vector name="origin" x="1" y="34" />
+            <string name="_hash" value="fad6b4b86c1cb33b0154971f94f8934edae7d95ffd041d0c382506ce28cce68b" />
+            <string name="_outlink" value="Character/Weapon/01702852.img/info/icon" />
+        </canvas>
+        <canvas name="iconRaw" width="1" height="1">
+            <vector name="origin" x="1" y="34" />
+            <string name="_hash" value="94808eea06c0159ab67b0c1f6092f1e020521fb72a8392fab732691df30eabbe" />
+            <string name="_outlink" value="Character/Weapon/01702852.img/info/iconRaw" />
+        </canvas>
+        <string name="islot" value="Wp" />
+        <string name="vslot" value="Wp" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="incPAD" value="0" />
+        <int name="incMAD" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="30">
+        <imgdir name="stabOF">
+            <imgdir name="0">
+                <canvas name="effect" width="87" height="87">
+                    <vector name="origin" x="27" y="63" />
+                    <imgdir name="map">
+                        <vector name="navel" x="-40" y="15" />
+                    </imgdir>
+                    <string name="z" value="characterEnd" />
+                    <string name="_hash" value="18a7040d52a83d86f5142655ff477fe03b90844057ff732df61d454164e38ff8" />
+                </canvas>
+            </imgdir>
+            <imgdir name="1">
+                <canvas name="effect" width="141" height="98">
+                    <vector name="origin" x="-43" y="66" />
+                    <imgdir name="map">
+                        <vector name="navel" x="70" y="18" />
+                    </imgdir>
+                    <string name="z" value="characterEnd" />
+                    <string name="_hash" value="8f4030c9849c4ccfec0d91747113b3e889bbc33df01bd18db6bc168d58fb4def" />
+                </canvas>
+            </imgdir>
+            <imgdir name="2">
+                <canvas name="effect" width="256" height="141">
+                    <vector name="origin" x="125" y="88" />
+                    <imgdir name="map">
+                        <vector name="navel" x="0" y="10" />
+                    </imgdir>
+                    <string name="z" value="characterEnd" />
+                    <string name="_hash" value="3f83d2e6c7d5d39dc572110b63616c5a46fb7def7bab05c26de0c2af0e612279" />
+                </canvas>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="49">
+        <imgdir name="stabOF">
+            <imgdir name="0">
+                <canvas name="effect" width="1" height="1">
+                    <vector name="origin" x="27" y="63" />
+                    <imgdir name="map">
+                        <vector name="navel" x="-40" y="15" />
+                    </imgdir>
+                    <string name="z" value="characterEnd" />
+                    <string name="_inlink" value="30/stabOF/0/effect" />
+                </canvas>
+            </imgdir>
+            <imgdir name="1">
+                <canvas name="effect" width="1" height="1">
+                    <vector name="origin" x="-43" y="66" />
+                    <imgdir name="map">
+                        <vector name="navel" x="70" y="18" />
+                    </imgdir>
+                    <string name="z" value="characterEnd" />
+                    <string name="_inlink" value="30/stabOF/1/effect" />
+                </canvas>
+            </imgdir>
+            <imgdir name="2">
+                <canvas name="effect" width="1" height="1">
+                    <vector name="origin" x="125" y="88" />
+                    <imgdir name="map">
+                        <vector name="navel" x="0" y="10" />
+                    </imgdir>
+                    <string name="z" value="characterEnd" />
+                    <string name="_inlink" value="30/stabOF/2/effect" />
+                </canvas>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+</imgdir>

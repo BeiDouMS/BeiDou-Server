@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9305410.img">
+    <imgdir name="info">
+        <int name="lifePoint" value="1" />
+        <int name="partyBonusMob" value="1" />
+        <int name="defenseMob" value="1" />
+        <int name="level" value="30" />
+        <int name="maxHP" value="2000" />
+        <int name="maxMP" value="200" />
+        <int name="speed" value="-40" />
+        <int name="pushed" value="9999999" />
+        <float name="fs" value="10" />
+        <int name="boss" value="1" />
+        <int name="exp" value="20" />
+        <int name="summonType" value="1" />
+        <int name="category" value="7" />
+        <int name="undead" value="1" />
+        <string name="mobType" value="7N" />
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="pyramidMob8" />
+    </imgdir>
+    <imgdir name="move">
+        <canvas name="0" width="125" height="113">
+            <vector name="origin" x="74" y="118" />
+            <int name="z" value="0" />
+            <vector name="lt" x="-74" y="-118" />
+            <vector name="rb" x="50" y="-6" />
+            <vector name="head" x="-22" y="-110" />
+            <int name="delay" value="210" />
+        </canvas>
+        <canvas name="1" width="118" height="117">
+            <vector name="origin" x="74" y="116" />
+            <int name="z" value="0" />
+            <vector name="lt" x="-74" y="-118" />
+            <vector name="rb" x="50" y="-6" />
+            <vector name="head" x="-22" y="-110" />
+            <int name="delay" value="210" />
+        </canvas>
+        <canvas name="2" width="125" height="113">
+            <vector name="origin" x="74" y="119" />
+            <int name="z" value="0" />
+            <vector name="lt" x="-74" y="-118" />
+            <vector name="rb" x="50" y="-6" />
+            <vector name="head" x="-22" y="-110" />
+            <int name="delay" value="210" />
+        </canvas>
+        <canvas name="3" width="118" height="117">
+            <vector name="origin" x="74" y="116" />
+            <int name="z" value="0" />
+            <vector name="lt" x="-74" y="-118" />
+            <vector name="rb" x="50" y="-6" />
+            <vector name="head" x="-22" y="-110" />
+            <int name="delay" value="210" />
+        </canvas>
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="118" height="117">
+            <vector name="origin" x="74" y="116" />
+            <int name="z" value="0" />
+            <vector name="lt" x="-74" y="-118" />
+            <vector name="rb" x="50" y="-6" />
+            <vector name="head" x="-22" y="-110" />
+            <string name="source" value="Mob/9305410.img/move/1" />
+        </canvas>
+    </imgdir>
+    <imgdir name="die1">
+        <canvas name="0" width="118" height="117">
+            <vector name="origin" x="74" y="116" />
+            <int name="z" value="0" />
+            <vector name="head" x="-22" y="-110" />
+            <string name="source" value="Mob/9305410.img/move/3" />
+        </canvas>
+        <canvas name="1" width="123" height="130">
+            <vector name="origin" x="19" y="129" />
+            <int name="z" value="0" />
+            <vector name="head" x="55" y="-115" />
+        </canvas>
+        <canvas name="2" width="137" height="111">
+            <vector name="origin" x="0" y="110" />
+            <int name="z" value="0" />
+            <vector name="head" x="125" y="-101" />
+        </canvas>
+        <canvas name="3" width="161" height="75">
+            <vector name="origin" x="-9" y="74" />
+            <int name="z" value="0" />
+            <vector name="head" x="155" y="-27" />
+        </canvas>
+        <canvas name="4" width="170" height="81">
+            <vector name="origin" x="-15" y="69" />
+            <int name="z" value="0" />
+            <vector name="head" x="142" y="-12" />
+        </canvas>
+        <canvas name="5" width="208" height="76">
+            <vector name="origin" x="-18" y="74" />
+            <int name="z" value="0" />
+            <vector name="head" x="182" y="-65" />
+        </canvas>
+        <canvas name="6" width="220" height="50">
+            <vector name="origin" x="-23" y="45" />
+            <int name="z" value="0" />
+            <vector name="head" x="233" y="-36" />
+        </canvas>
+        <canvas name="7" width="225" height="58">
+            <vector name="origin" x="-23" y="53" />
+            <int name="z" value="0" />
+            <vector name="head" x="238" y="-7" />
+        </canvas>
+        <canvas name="8" width="241" height="48">
+            <vector name="origin" x="-32" y="45" />
+            <int name="z" value="0" />
+            <vector name="head" x="264" y="-10" />
+        </canvas>
+        <canvas name="9" width="123" height="22">
+            <vector name="origin" x="-31" y="26" />
+            <int name="z" value="0" />
+            <vector name="head" x="139" y="-14" />
+            <string name="source" value="Mob/7130103.img/die1/10" />
+        </canvas>
+    </imgdir>
+    <imgdir name="die2">
+        <canvas name="0" width="118" height="117">
+            <vector name="origin" x="74" y="116" />
+            <int name="z" value="0" />
+            <vector name="head" x="-22" y="-110" />
+            <string name="source" value="Mob/9305410.img/move/3" />
+        </canvas>
+        <canvas name="1" width="123" height="140">
+            <vector name="origin" x="19" y="139" />
+            <int name="z" value="0" />
+            <vector name="head" x="35" y="-126" />
+        </canvas>
+        <canvas name="2" width="123" height="164">
+            <vector name="origin" x="0" y="163" />
+            <int name="z" value="0" />
+            <vector name="head" x="113" y="-154" />
+        </canvas>
+        <canvas name="3" width="146" height="192">
+            <vector name="origin" x="-9" y="191" />
+            <int name="z" value="0" />
+            <vector name="head" x="144" y="-145" />
+        </canvas>
+        <canvas name="4" width="176" height="205">
+            <vector name="origin" x="-15" y="204" />
+            <int name="z" value="0" />
+            <vector name="head" x="145" y="-165" />
+        </canvas>
+        <canvas name="5" width="189" height="218">
+            <vector name="origin" x="-18" y="216" />
+            <int name="z" value="0" />
+            <vector name="head" x="170" y="-208" />
+        </canvas>
+        <canvas name="6" width="202" height="225">
+            <vector name="origin" x="-23" y="220" />
+            <int name="z" value="0" />
+            <vector name="head" x="217" y="-211" />
+        </canvas>
+        <canvas name="7" width="213" height="241">
+            <vector name="origin" x="-23" y="236" />
+            <int name="z" value="0" />
+            <vector name="head" x="221" y="-188" />
+        </canvas>
+        <canvas name="8" width="221" height="239">
+            <vector name="origin" x="-32" y="237" />
+            <int name="z" value="0" />
+            <vector name="head" x="202" y="-201" />
+        </canvas>
+        <canvas name="9" width="123" height="22">
+            <vector name="origin" x="-31" y="26" />
+            <int name="z" value="0" />
+            <vector name="head" x="147" y="-16" />
+            <string name="source" value="Mob/7130103.img/die1/10" />
+        </canvas>
+    </imgdir>
+    <imgdir name="dieF">
+        <canvas name="0" width="118" height="117">
+            <vector name="origin" x="74" y="116" />
+            <int name="z" value="0" />
+            <vector name="head" x="-22" y="-110" />
+        </canvas>
+        <canvas name="1" width="124" height="169">
+            <vector name="origin" x="20" y="168" />
+            <int name="z" value="0" />
+            <vector name="head" x="-6" y="-160" />
+        </canvas>
+        <canvas name="2" width="131" height="221">
+            <vector name="origin" x="11" y="220" />
+            <int name="z" value="0" />
+            <vector name="head" x="42" y="-211" />
+        </canvas>
+        <canvas name="3" width="137" height="273">
+            <vector name="origin" x="8" y="272" />
+            <int name="z" value="0" />
+            <vector name="head" x="52" y="-224" />
+        </canvas>
+        <canvas name="4" width="151" height="295">
+            <vector name="origin" x="16" y="294" />
+            <int name="z" value="0" />
+            <vector name="head" x="29" y="-257" />
+        </canvas>
+        <canvas name="5" width="149" height="315">
+            <vector name="origin" x="11" y="313" />
+            <int name="z" value="0" />
+            <vector name="head" x="41" y="-306" />
+        </canvas>
+        <canvas name="6" width="165" height="327">
+            <vector name="origin" x="19" y="322" />
+            <int name="z" value="0" />
+            <vector name="head" x="80" y="-315" />
+        </canvas>
+        <canvas name="7" width="126" height="356">
+            <vector name="origin" x="-23" y="351" />
+            <int name="z" value="0" />
+            <vector name="head" x="78" y="-300" />
+        </canvas>
+        <canvas name="8" width="125" height="361">
+            <vector name="origin" x="-32" y="359" />
+            <int name="z" value="0" />
+            <vector name="head" x="59" y="-321" />
+        </canvas>
+        <canvas name="9" width="123" height="22">
+            <vector name="origin" x="-31" y="26" />
+            <int name="z" value="0" />
+            <vector name="head" x="143" y="-15" />
+            <string name="source" value="Mob/7130103.img/die1/10" />
+        </canvas>
+    </imgdir>
+</imgdir>

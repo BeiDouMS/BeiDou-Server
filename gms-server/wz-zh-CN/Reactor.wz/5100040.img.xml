@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="5100040.img">
+    <imgdir name="info">
+        <int name="resetTime" value="30" />
+    </imgdir>
+    <imgdir name="0">
+        <canvas name="0" width="55" height="67">
+            <vector name="origin" x="31" y="33" />
+            <int name="z" value="0" />
+        </canvas>
+        <imgdir name="SkillHit">
+            <canvas name="0" width="55" height="67">
+                <vector name="origin" x="31" y="33" />
+                <int name="z" value="0" />
+                <int name="delay" value="80" />
+            </canvas>
+            <canvas name="1" width="55" height="62">
+                <vector name="origin" x="31" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="80" />
+            </canvas>
+            <vector name="lt" x="-282" y="-271" />
+            <vector name="rb" x="308" y="286" />
+            <imgdir name="SkillHitID">
+                <int name="0" value="80001176" />
+                <int name="1" value="80001177" />
+                <int name="2" value="80001178" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="event">
+            <imgdir name="0">
+                <int name="type" value="0" />
+                <int name="state" value="1" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="1">
+        <canvas name="0" width="55" height="62">
+            <vector name="origin" x="31" y="26" />
+            <int name="z" value="0" />
+        </canvas>
+        <imgdir name="SkillHit">
+            <canvas name="0" width="55" height="62">
+                <vector name="origin" x="31" y="26" />
+                <int name="z" value="0" />
+                <int name="delay" value="80" />
+            </canvas>
+            <canvas name="1" width="55" height="67">
+                <vector name="origin" x="31" y="33" />
+                <int name="z" value="0" />
+                <int name="delay" value="80" />
+            </canvas>
+            <vector name="lt" x="-282" y="-271" />
+            <vector name="rb" x="308" y="286" />
+            <imgdir name="SkillHitID">
+                <int name="0" value="80001176" />
+                <int name="1" value="80001177" />
+                <int name="2" value="80001178" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="event">
+            <imgdir name="0">
+                <int name="type" value="101" />
+                <int name="state" value="0" />
+            </imgdir>
+            <int name="timeOut" value="3000" />
+        </imgdir>
+    </imgdir>
+    <string name="action" value="Vampire2" />
+</imgdir>

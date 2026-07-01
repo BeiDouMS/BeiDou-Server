@@ -341,7 +341,10 @@ public class Client extends ChannelInboundHandlerAdapter {
         List<Character> chars = new ArrayList<>(15);
         try {
             for (CharNameAndId cni : loadCharactersInternal(serverId)) {
-                chars.add(Character.loadCharFromDB(cni.id, this, false));
+                Character chr = Character.loadCharFromDB(cni.id, this, false);
+                if (chr != null) {
+                    chars.add(chr);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,0 +1,1624 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01005634.img">
+    <imgdir name="info">
+        <canvas name="icon" width="31" height="29">
+            <vector name="origin" x="-1" y="29" />
+            <string name="_hash" value="a515471a69917111e6cbc3f73ae104d8f7fa4f9ac5f61d82148dead2d3b31e97" />
+        </canvas>
+        <canvas name="iconRaw" width="31" height="26">
+            <vector name="origin" x="-1" y="29" />
+            <string name="_hash" value="da2fb7e9996c64244442c41acd671d70803ea7be05770b04cf89f1edaa70499b" />
+        </canvas>
+        <string name="islot" value="Cp" />
+        <string name="vslot" value="CpH1H3H4H5H6HfHsHbAe" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="default">
+        <canvas name="default" width="52" height="44">
+            <vector name="origin" x="20" y="18" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="capOverHair" />
+            <string name="_hash" value="7cc2024575333570691242b3838c11257b4809e1896d9a9883c5fd321bdb8209" />
+        </canvas>
+        <canvas name="default2" width="52" height="43">
+            <vector name="origin" x="20" y="18" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="backCap" />
+            <string name="_hash" value="1944fad4ad7e19ccbc544f1251e8451833f5406998ec5323835ce906883811aa" />
+        </canvas>
+    </imgdir>
+    <imgdir name="backDefault">
+        <canvas name="default" width="49" height="43">
+            <vector name="origin" x="20" y="18" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="capOverHair" />
+            <string name="_hash" value="c7777489ba8743daee987141a54295bf35a37dc79def2ce81d351ef886c2e736" />
+        </canvas>
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="fdd7537f74277892915a2f952540b30fd2d1b4e3ac41f7bc609f931e1248efb6" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="6c555404f5a068ed0ef5373849fdc9892bc2b52402b25eb699e25e654e1c73de" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="0a887306fca945394c0332585ca180e22a87bdd4c606df519faba4b888786e93" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="539c9d714afa4ea355eba9daae427e3c07c54c2689583b1d9a46fe4393bb485e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="09d1317ce774309fa9aebd07ca0b8caa074123fdf420ac4c098d4a0f9b811a92" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="b354a5f7ddf7a3c44b34f3f7a8f1d9ffabfc9d0e641929e185acd116bda4aece" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="walk1/2/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/2/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="walk1/1/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="089565cd54876f6121d9bc42d6c13a28f30c4f35c4f6f81d10d930efa6163207" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="c01f140e4b5d082104a53d904d1d46ae3cbe7d662a6f68dce0d54cb85f592892" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="01a1915d86d99bdb8c56c9011fc14f181a0564259819fd4dacef88f6ac972c52" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="6711d23b2f169a4394dfa77be1eb20865142dce5f1876a09231024ac2f784469" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="f07cb7eb2a22c93c4eb3c6f2b4fb7dc5d1d44654a209486a36dd104b4bac8633" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="stand1/0/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="stand1/0/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="f7e8f34dee74fb0694156e11da8e367809ff5beeab6dada0a36f47b25403e8b0" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="f798331f53e1ed7332bad4f62f9ee7afe794f86525bdb88732bc8ccfd153afca" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="adb6523eeb7271563bd29985fec66e6c7f23bc4f41d22f426cdab9865e8d54ad" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="walk2/1/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="2b88f7f48ff8377c0409010fed5e60ac37a18effa7a82dfc61b84ec4af6bd465" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="stand1/0/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="019e8ff9b8642c57c8b0f64db74db2d5aa825514bf1fe48278c281d5b98c0354" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="78ce787348616f7977d4f4cba5458290b49a5fcc99cfce9892772ab88ef306c3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="e55770b5ccc59b63a75dc2529acf9d0f4538e185a6f2e20beeab2274197d1521" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="a5c9bb662e532ff946a819c31a0596c361db4a60242e5cc977495ee2d23effaa" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="072c1763106e8e1fc484411ebfaafd633f001264c9d912daf4afc4053ba23432" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="e189047bfbdef97346f4e31d5d967a9845f45b6162407097e562e121d53df6d1" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="63a039f11b86b4ca009ef06715877b17193b6c6786844e1e66c5c974c53559c7" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="ba7aeb8598755f9c53a098077d59d0a5e192e4ee8f0cf056806526db31bb031d" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="07e65bb43cad66050fb41f4057385604965957c28239b2abfbad85b3365a51d5" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="ecf922023e7331f154694beb25fa34c8042ab558790ff210b532934c784d049b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="b819ee2a5fc4a08f4a9be2a84f165e89c1fe15a40852877b953ae80b08a8ed92" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="70f512e43878f67442d88754329fcf7f6a208ebaa1df71e87478616591f15586" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="42">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="88de6a7eb766f5d492e09f4a54ea44ffade92d8635d7c59a8f381d3d53348224" />
+            </canvas>
+            <canvas name="default2" width="52" height="42">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="7c4a31d0a0b7866b74ccb4045856d1eb78d18db072752deb0056011a3e548138" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="42">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="7db6e16208027de65ba14a907e503b7cd9fc4d09f3d21747464bcb4f8762879a" />
+            </canvas>
+            <canvas name="default2" width="52" height="42">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="13a436e543f5f0b5bacb027cfe6ed56cecdc872c57222460312a394ed7245122" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="bb7d52c02e7c56a9516264fa3f4c136b74d46fb1a23d986cd7fc4d765fef456e" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="10a526893903caeb3eb5e2614b2a7d359559c2c2aac2dfd221be90111f6e184f" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="13c77ee810dbfadade470fbfb0b7b5b576c02bef4b4b64f38a2340002585569d" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="eda9a85fdb705f554f5480cb653dfb73c37292b12dbdaa2cf4f0bcf081596833" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="73885cabf5a820bc61becd967d7401cd067d4430ce126552c629587cb8b61942" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="acb55ca43b29a65025a233e7b5b3d27d063cb19a09cc88a2b7d0cae544cad65e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="9e092366c82b13ec244e57a68bb31bb9e2a1bad61f67331d640a089f2c68ed10" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="440c275f78cbe56d102b589d251c0202877a1bcde31ab1a442104897f248d9c1" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="d010bddb9e568367699c75d5f097686e1248721f069e5b7477d5699ad953130c" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="dc783bce0d7c4cc23fb5e319133565547a9cf51f9a561e125f9fe39f3d1b9c8e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="41">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="a48f0090e63a2ee4ff5c878c22617e21d78c99cca5a096fda9cbbe969a4576a2" />
+            </canvas>
+            <canvas name="default2" width="52" height="41">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="11a4b7a052865a7c7cf540d9b13ffaa7a35c65cb838188328d8e377e7076c3a0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="40ab1d41c71e5abab52da86d681a2c128bf4e7b6adddc73623b6b622a15a39c4" />
+            </canvas>
+            <canvas name="default2" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="2a3da56350ae0ad6a3459d4364f1031076a5805cf3ab63d7730a60d22def5649" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="90b29d34dca04395f8577b05186e5e2aa3635d969d81dea274c18675c9d2807e" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="305cc07bed24ec07a500ad5c5ca80f9b9b030b3b50c094be9ea4c56ef8fb1d8c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="59e7ed37d730218306cec5052e399acc54d959d34a1a123f3eb659249b8537e0" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="99c6a394368f13c181de347b637bd4e086210901fe80c1c00e3b8e47b21bbe54" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="59fd62c2c89e431fee30cb71e26ac13e69e135aa02b5801e6950c07bf1b39171" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="49a56254237e06e4333561971983a73058d2e87d81064acd5c51141830cd9f12" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="42">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="77089d9adf8fe8765450d9ace7ea02ff98b51a7d0566b0b64bffd898362b777f" />
+            </canvas>
+            <canvas name="default2" width="52" height="42">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="edc44b36da014a08a0cef63506c49bcbe08cb3dc9359cc5487754bd1ec133e89" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="a918a63adfeb9f883016ead3fa9e329505787d568e6b00b5221037108d3c2057" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="64d429e0cb2190aec6b6154733653cc4212f199b67ce71fdbe906d95d7fd16ac" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="747b894f0562936111ea87de2c687e173fe901f9ed57a32d1d93fa2f033eecfc" />
+            </canvas>
+            <canvas name="default2" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="cca6703554c572036b7d41b57d32703d8b07a288d8ea19d65afac7f020256b88" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT3">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="e57f9e84a89a75b0a6f5eaa8f0549240e39748aeeacddf509a87fa216bb36ea2" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="18fdf538e2a68fd1df8a7175a577c26a25b942f97869c0cecffe079df70d0295" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="9e1a866c9fa48a7de4ffe7a6ea3a04a9416676d5c10f30aa08a15632b4079263" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="d3d40637ca0397e22985f07ef6d079e00818e936466219792d45f74cce1f26fb" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="41">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="fd553da4f5eb87b1309b05b82fd8c2fa32a7fb010d8aa4640c53c46fccc46191" />
+            </canvas>
+            <canvas name="default2" width="52" height="41">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="3523e5d039ac6032bb50177eb2e23cfd5a537104b658cf50e459736a85876bc2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="54bfe7ecdbffd26de174dda628e33ba0226fed43ea3749a572f6cdfa95546a99" />
+            </canvas>
+            <canvas name="default2" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="02f2a8f62b80d0c4a509c1ef2c54314323dba90bfc25eca121d8eafef2cd7521" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="1f8f81173c71b7ef50f30c0e1611d219318d194bc1281b6198b9a6fe2e9d8e10" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="16f56ff01eb62fd59488aa0f1d8d93e4f5c8377e0ed6a59b454b5fed8b77148e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="89e5f7279c59c001b0dd3c8ed66078b9d197775480f1c08689d831e45b98f9ae" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="0fe75e9ac793201427e4abf0e8ebd98cde69c4b10d10275d8c6b6c05fbc881a5" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP1">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="78cb9a6cf533ad41847e1fe15233e40146c024c6bc90e3d20c4119588aa79c92" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="804f00c3eaa488d871d7956d000683c41d15f104dc853f4c19b3d3e99a94a04e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="6d72d049249f898165dc781d5ec439e0f13ae23262fe666b5468be9e44b7e8d8" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="18bf524c4340048445fde2ff12a564d1d59653598f1ce3ad84e58122b3bb6585" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="swingT1/2/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="109eef64d4d2f4bd0e1d84a08d75e6bf69d0b73b5c43279531e93bdefd5eb592" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="07b23d89c5dd6ae266b58ea31a1f5a225443fae217b0821d91615095768a2f61" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="9091ffaca1c173dbd4521816979f741e8167e0a9131bf272eb5f447de6a78628" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="default/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="swingT2/2/default" />
+            </canvas>
+            <canvas name="default2" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="swingT2/2/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="13cac6cdf1fba58b7d998e54610d8aea086c2aeba618b39d2e9757ab7c90d927" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="4feb418b416ba0d00bbfb972263c54b7b0d0bcb1821ca06206c546024daacfaf" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="swingPF/0/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="swingPF/0/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="83c6567ff3c54900e0d934efb92200b6e5933f70423b3299b2529685948d5ee2" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="6784b480d8458cb14482ed38f50055470e155e37eca2471d964a7fe41c3ec3a7" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="d73ceacefb5a46ab382686b9710bf7dc234e246cafea9173d2243a6acf16a2a3" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="fdf76949d1790650f21ce037c9c7b4e213cc48c239e565d5a3f3909e7a0fa50d" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="957a071b605cf221e9937a8f8074c5c3aeb2e8a2631a3d7c68954b997da993a6" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="00e945feb616fe2c4d2228ac1b6fa423d178b7efa693803ffae72cc2eaed0a46" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="41">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="5db1320509fcc52f2d05d6930fe938aec710508ec60ddb4193eeec4fb6e1c489" />
+            </canvas>
+            <canvas name="default2" width="52" height="41">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="ed79ed9f3db59a35eb64d93da3c5f91c3075c1d6d2a338d3961431402d6edbda" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="c142192a017f3dde051f4949592a0c5c35b8e157bef36da26e18c5cbddf240d0" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="2a1ef7c40c6b99c4970d08e6ed695d71a73e5aca7860e3ff764a000ccbad7b9a" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="41">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="1539f489011d775a560280f0849ae5626d4708bd6e35908343a39771428d6307" />
+            </canvas>
+            <canvas name="default2" width="52" height="41">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="ed6a9c4d9128ffda913e53efc22ba0358d7b023fdda2eade7d23f8eed2dd66af" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="2100c597fe2f6b071c926d9d29570749ae4188e70ea04267455e86995dfddb6f" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="6dbec2135d4e516e25a86cccac30313aee096863e4c3aaac3b016d0b44410e41" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="e46107cb3848495791f6ac4ed6d59a8b1019f6ee311165c0d4ae10f082f94801" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="2b2e42df7b8e25e2cd5355cbbede6f1c418b30ce51e57c912d9a239c2146423f" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="aeec2a899b8b8d75fb04736561810f805f1055af96d1281c84f0f14b5ffc7566" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="123d619235063e0efa749dcb13a4241fdb95e02ac9deaa8a7765a4a815da7966" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="54b7c244f0a53a42320d64e515a31213c578d7c921648f267c443481f8b600ed" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="93ed25efe2bf043de1f5206f496e672cf7e5369d28e8605344e91ba24075aad1" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="a041cd6659c2da362a7c3b3b449d527e43ecbe70f30651f060998cb61058dfda" />
+            </canvas>
+            <canvas name="default2" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="6fbcdfd56ae6eeba4b543f3d53c3ff02550f78f6ea2c8bec5673f4dde51a2a76" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="1c3bd4eb5cb1c3a752a41c4642ad036e6cdf6498aca09325a20f3434b9a47248" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="68e795e480d922a393a8c1662843c93c2f34df2002bc199b28bec22d6da6f3e0" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="4140571962d564ddc21a0e45b630db1e8195a465a67d148ef1b706b65f1bd1a0" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="2f646b43c48d6bfdd982137456a1c6dd683f3baea05a19dfceae513fdfb975a4" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="798f579d903397ed6b78057ec14d6a4c064204b11075b0a85efe38807827dc28" />
+            </canvas>
+            <canvas name="default2" width="51" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="7799e4f9e526b87971447c706b3f3774c4f10f138452695de57320f0adca91db" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="6b759ad34377dc31e6194f146cacb6029f757041a3cd655791afb409483c1f0d" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="99216ddd27660b206c724fd2cd4e91980dac4acb687c1a4f073bc1e56885b016" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="0">
+            <uol name="default" value="../../swingPF/0/default" />
+            <uol name="default2" value="../../swingPF/0/default2" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../swingPF/1/default" />
+            <uol name="default2" value="../../swingPF/1/default2" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="3da13f645b0f781614e12d008afe6e9c496a430c922d8c8e0b2b5387a3620e75" />
+            </canvas>
+            <canvas name="default2" width="52" height="43">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="dbf2b99fed79f8a3c8c66734ecfac3d32fa8b3fbce0775cbb6ea2a0f242fc04e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <uol name="default" value="../../stabT1/2/default" />
+            <uol name="default2" value="../../stabT1/2/default2" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot1">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="d601e00aa11878c796e0bc6cdf1a195b1cef9cb88d298465063c716bc2b97163" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="e0628f0a98344b09f134142cb69576c83f8fe45f5952962a3040dc9d10b9234a" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="6a3f95831ba8d23104ddb07b5d41a6fff37bf6d544de5ee845061042982fb710" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="47f16a6b2772dbd50f073c5c86ca044298b6865ef602f2c7f49c0ddf0352a4df" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="shoot1/1/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="shoot1/1/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot2">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="75e88c0af045c02ead6dabc6816c4288419e2c86e310b4bb5d9d8cad8fc9874a" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="7bbaa72aa7085f17084213e5c483986b520db42fd94f5c4784faeeaf161bc8c4" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="481695c0e72399798bcf3bc595aa7c04187bcd081aee57a0c9d58729d51a6edc" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="a1fc54988c6bf2de633e913a0559818f84cb5e426cc5f3e296582cbfcbe4d22c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="0ec957e94beff15fc3cedea39e50fe72d05a67a2e65576cae52412db9956061f" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="039b738759942d8a17553b9ed39e5ea8812ffa0d2f5174078506448efe416788" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="shoot2/0/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="shoot2/0/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="shoot2/0/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="shoot2/0/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="27d332473143dfbbfb10d855d82c7ca21b749a7a4cefcfd1a880909e93bb94e2" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="31a74931421d4b049d64fb963b6c34994caa87eef1161f92258c59b7e2769c0b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="715a102eecd99f1cfca887ee3c38af7275466c4d8bec4f46b24d2a57e8105215" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="6c35fbd16eea46ffc3a62beed0ced75ef9ea4802be387409632fdf61c7bb943f" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="default" value="../1/default" />
+            <uol name="default2" value="../1/default2" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="default" width="51" height="44">
+                <vector name="origin" x="19" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="6ee099281639f01891b65d30a24008c8a01787a81239d89f7a9609c44b3ab6fc" />
+            </canvas>
+            <canvas name="default2" width="51" height="44">
+                <vector name="origin" x="19" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="303e1530f291291a0ef669e859e04bc47af43e1f5df1939b56cd1fd457736608" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="51" height="44">
+                <vector name="origin" x="19" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="6006ecd3198f5938c5930419ebc0cae7450e5f270027030d3fc319c4b1484570" />
+            </canvas>
+            <canvas name="default2" width="51" height="44">
+                <vector name="origin" x="19" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="d3056b659d7cc0f8c8188fc974d0cc155da7345ccfc3171671269dd00ccc77f0" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="default" value="../../proneStab/0/default" />
+            <uol name="default2" value="../../proneStab/0/default2" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal">
+        <imgdir name="0">
+            <uol name="default" value="../../alert/1/default" />
+            <uol name="default2" value="../../alert/1/default2" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../swingO2/1/default" />
+            <uol name="default2" value="../../swingO2/1/default2" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="default" value="../../swingO2/0/default" />
+            <uol name="default2" value="../../swingO2/0/default2" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="default/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="default/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_inlink" value="default/default" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_inlink" value="walk1/1/default2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="default" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="capOverHair" />
+                <string name="_hash" value="d8807ec4b419a63c7638d4d8d9bc636fbbe68bdd4fd850c257ab3afd4f22180e" />
+            </canvas>
+            <canvas name="default2" width="52" height="44">
+                <vector name="origin" x="20" y="18" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backCap" />
+                <string name="_hash" value="523e05e80286631bc18a005abd1a037b4533921629127f78b9799718b5e1b506" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../backDefault/default" />
+        </imgdir>
+    </imgdir>
+</imgdir>

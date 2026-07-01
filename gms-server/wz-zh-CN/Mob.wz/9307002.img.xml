@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9307002.img">
+    <imgdir name="info">
+        <int name="level" value="150" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="12000000" />
+        <int name="maxMP" value="10000" />
+        <int name="speed" value="0" />
+        <int name="PADamage" value="2829" />
+        <int name="PDDamage" value="420" />
+        <int name="PDRate" value="25" />
+        <int name="MADamage" value="2640" />
+        <int name="MDDamage" value="450" />
+        <int name="MDRate" value="25" />
+        <int name="acc" value="423" />
+        <int name="eva" value="135" />
+        <int name="pushed" value="999999" />
+        <float name="fs" value="10" />
+        <int name="boss" value="1" />
+        <int name="exp" value="0" />
+        <int name="category" value="6" />
+        <string name="elemAttr" value="S1H3D2" />
+        <int name="hpRecovery" value="20" />
+        <int name="mpRecovery" value="5" />
+        <string name="mobType" value="7N" />
+        <int name="hideHP" value="1" />
+        <int name="hideName" value="1" />
+        <int name="fixedMoveDir" value="11" />
+        <int name="straightMoveDir" value="1" />
+        <int name="flySpeed" value="240" />
+        <int name="firstAttack" value="1" />
+        <int name="summonType" value="1" />
+        <imgdir name="onlySelectedSkill">
+            <int name="0" value="1" />
+        </imgdir>
+        <int name="overSpeed" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="145" height="49">
+            <vector name="origin" x="69" y="49" />
+            <int name="z" value="0" />
+            <vector name="lt" x="-53" y="-48" />
+            <vector name="rb" x="73" y="2" />
+            <vector name="head" x="0" y="-50" />
+        </canvas>
+    </imgdir>
+    <imgdir name="fly">
+        <uol name="0" value="../stand/0" />
+    </imgdir>
+    <imgdir name="hit1">
+        <uol name="0" value="../stand/0" />
+    </imgdir>
+    <imgdir name="die1">
+        <uol name="0" value="../stand/0" />
+    </imgdir>
+</imgdir>

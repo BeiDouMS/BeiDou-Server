@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01512006.img">
+    <imgdir name="info">
+        <canvas name="icon" width="31" height="31">
+            <vector name="origin" x="-1" y="31" />
+        </canvas>
+        <canvas name="iconRaw" width="31" height="30">
+            <vector name="origin" x="-1" y="31" />
+        </canvas>
+        <int name="price" value="1" />
+        <string name="islot" value="Wp" />
+        <int name="expireOnLogout" value="1" />
+        <int name="tradeBlock" value="1" />
+        <int name="notSale" value="1" />
+        <imgdir name="gatherTool">
+            <string name="toolEffectPath" value="Effect/ItemEff.img/1512002" />
+            <int name="incSkillLevel" value="1" />
+            <string name="action" value="gather1" />
+            <int name="incNum" value="5" />
+            <int name="incNumProb" value="100" />
+            <int name="incSpeed" value="120" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="weapon" width="47" height="45">
+                <vector name="origin" x="5" y="28" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="45" height="47">
+                <vector name="origin" x="14" y="41" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="weapon" width="47" height="45">
+                <vector name="origin" x="35" y="18" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowBody" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

@@ -27,6 +27,8 @@ import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
+import org.gms.manager.ServerManager;
+import org.gms.provider.ServerResourceResolver;
 import org.gms.util.DatabaseConnection;
 
 import java.io.IOException;
@@ -85,7 +87,15 @@ public class SkillbookInformationProvider {
     }
 
     private static int fetchQuestbook(Data checkData, String quest) {
-        Data questStartData = checkData.getChildByPath(quest).getChildByPath("0");
+        Data questInfo = checkData.getChildByPath(quest);
+        if (questInfo == null) {
+            return -1;
+        }
+        Data questStartData = questInfo.getChildByPath("0");
+
+        if (questStartData == null) {
+            return -1;
+        }
 
         Data startReqItemData = questStartData.getChildByPath("item");
         if (startReqItemData != null) {
@@ -123,6 +133,11 @@ public class SkillbookInformationProvider {
         DataProvider questDataProvider = DataProviderFactory.getDataProvider(WZFiles.QUEST);
         Data actData = questDataProvider.getData("Act.img");
         Data checkData = questDataProvider.getData("Check.img");
+
+        if (actData == null) {
+            log.warn("Act.img quest data not found, skipping skillbook-from-quests loading");
+            return new HashMap<>();
+        }
 
         final Map<Integer, SkillBookEntry> loadedSkillbooks = new HashMap<>();
         for (Data questData : actData.getChildren()) {
@@ -189,6 +204,10 @@ public class SkillbookInformationProvider {
 
     private static void listFiles(String directoryName, ArrayList<Path> files) {
         Path directory = Path.of(directoryName);
+
+        if (!Files.exists(directory)) {
+            return;
+        }
 
         // get all the files from a directory
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
@@ -259,7 +278,8 @@ public class SkillbookInformationProvider {
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromScripts() {
         Map<Integer, SkillBookEntry> scriptSkillbooks = new HashMap<>();
 
-        for (Path file : listFilesFromDirectoryRecursively("./scripts")) {
+        Path scriptsDir = ServerManager.getApplicationContext().getBean(ServerResourceResolver.class).resolveDataPath("scripts");
+        for (Path file : listFilesFromDirectoryRecursively(scriptsDir.toString())) {
             if (file.getFileName().endsWith(".js")) {
                 scriptSkillbooks.putAll(fileSearchMatchingData(file));
             }

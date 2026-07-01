@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01933001.img">
+    <imgdir name="info">
+        <canvas name="icon" width="27" height="34">
+            <vector name="origin" x="-4" y="32" />
+            <string name="_hash" value="189c2a1a4972a3e1baed57ac634a229b5ba6110d0c5ea5a7c139a8a96ff74a97" />
+        </canvas>
+        <canvas name="iconRaw" width="27" height="34">
+            <vector name="origin" x="-4" y="32" />
+            <string name="_inlink" value="info/icon" />
+        </canvas>
+        <int name="tamingMob" value="1" />
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="0" width="4" height="4">
+                <vector name="origin" x="47" y="38" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-8" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="4" height="4">
+                <vector name="origin" x="47" y="38" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-8" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

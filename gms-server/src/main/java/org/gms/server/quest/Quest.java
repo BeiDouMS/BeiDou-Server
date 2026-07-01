@@ -121,6 +121,10 @@ public class Quest {
     private Quest(int id) {
         this.id = (short) id;
 
+        if (questReq == null) {
+            return;
+        }
+
         Data reqData = questReq.getChildByPath(String.valueOf(id));
         if (reqData == null) {//most likely infoEx
             return;
@@ -699,6 +703,11 @@ public class Quest {
     }
 
     public static void loadAllQuests() {
+        if (questInfo == null) {
+            log.warn("QuestInfo.img data not found, quests will not be loaded");
+            return;
+        }
+
         final Map<Integer, Quest> loadedQuests = new HashMap<>();
         final Map<Integer, Integer> loadedInfoNumberQuests = new HashMap<>();
 

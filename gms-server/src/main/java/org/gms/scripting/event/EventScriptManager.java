@@ -66,7 +66,10 @@ public class EventScriptManager extends AbstractScriptManager {
     public EventScriptManager(final Channel channel, String[] scripts) {
         for (String script : scripts) {
             if (!script.isEmpty()) {
-                events.put(script, initializeEventEntry(script, channel)); // 加载并存储每个脚本
+                EventEntry entry = initializeEventEntry(script, channel); // 加载脚本入口
+                if (entry != null) {
+                    events.put(script, entry);
+                }
             }
         }
 
@@ -82,7 +85,7 @@ public class EventScriptManager extends AbstractScriptManager {
     public EventManager getEventManager(String event) {
         EventEntry entry = events.get(event); // 查找事件
         if (entry == null) {
-            return fallback.em; // 返回后备事件
+            return fallback != null ? fallback.em : null; // 返回后备事件，无后备则返回null
         }
         return entry.em; // 返回找到的事件
     }
@@ -122,7 +125,10 @@ public class EventScriptManager extends AbstractScriptManager {
         Channel channel = eventEntries.iterator().next().getValue().em.getChannelServer(); // 获取频道上下文
         for (Entry<String, EventEntry> entry : eventEntries) {
             String script = entry.getKey();
-            events.put(script, initializeEventEntry(script, channel)); // 重新加载每个脚本
+            EventEntry newEntry = initializeEventEntry(script, channel); // 重新加载每个脚本
+            if (newEntry != null) {
+                events.put(script, newEntry);
+            }
         }
     }
 
@@ -134,6 +140,10 @@ public class EventScriptManager extends AbstractScriptManager {
      */
     private EventEntry initializeEventEntry(String script, Channel channel) {
         ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js"); // 获取 JS 引擎
+        if (engine == null) {
+            log.warn("事件脚本未找到: event/{}.js，跳过加载", script);
+            return null;
+        }
         Invocable iv = SynchronizedInvocable.of((Invocable) engine); // 包装为线程安全的调用接口
         EventManager eventManager = new EventManager(channel, iv, script); // 创建事件管理器
         engine.put(INJECTED_VARIABLE_NAME, eventManager); // 向 JS 引擎注入变量 "em"
