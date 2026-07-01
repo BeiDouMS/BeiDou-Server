@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9090004.img">
+    <imgdir name="info">
+        <imgdir name="adDisplay">
+            <int name="width" value="200" />
+            <int name="height" value="220" />
+            <imgdir name="adImage">
+                <canvas name="0" width="257" height="201" />
+            </imgdir>
+            <imgdir name="adBackgrnd">
+                <canvas name="0" width="258" height="201" />
+                <canvas name="ladderRope0" width="57" height="131" />
+                <canvas name="1" width="258" height="201" />
+                <canvas name="ladderRope1" width="57" height="131" />
+            </imgdir>
+            <imgdir name="button">
+                <imgdir name="0">
+                    <imgdir name="normal">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-100" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <imgdir name="pressed">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-100" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <imgdir name="disabled">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-100" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <imgdir name="keyFocused">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-100" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <imgdir name="mouseOver">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-100" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <int name="action" value="1" />
+                    <vector name="origin" x="-100" y="-220" />
+                </imgdir>
+                <imgdir name="1">
+                    <imgdir name="normal">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-25" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <imgdir name="pressed">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-25" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <imgdir name="disabled">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-25" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <imgdir name="keyFocused">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-25" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <imgdir name="mouseOver">
+                        <canvas name="0" width="68" height="25">
+                            <vector name="origin" x="-25" y="-220" />
+                        </canvas>
+                    </imgdir>
+                    <vector name="origin" x="-25" y="-220" />
+                    <int name="action" value="2" />
+                </imgdir>
+            </imgdir>
+            <vector name="rel_aware" x="-243" y="-32" />
+            <vector name="rel_view" x="-29" y="-282" />
+            <vector name="rel_rolling" x="68" y="-482" />
+            <vector name="rel_ladderRope" x="43" y="-304" />
+            <int name="rollingWidth" value="300" />
+            <int name="rollingHeight" value="33" />
+        </imgdir>
+        <int name="hide" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="1" height="121">
+            <vector name="origin" x="403" y="628" />
+            <int name="delay" value="3000" />
+        </canvas>
+    </imgdir>
+</imgdir>

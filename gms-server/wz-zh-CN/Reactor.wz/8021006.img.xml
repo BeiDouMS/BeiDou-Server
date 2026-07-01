@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="8021006.img">
+    <imgdir name="info">
+        <string name="info" value="샤프트스위치조작" />
+    </imgdir>
+    <imgdir name="0">
+        <canvas name="0" width="84" height="81">
+            <vector name="origin" x="36" y="78" />
+        </canvas>
+        <imgdir name="event">
+            <imgdir name="0">
+                <int name="type" value="0" />
+                <int name="state" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="hit">
+            <uol name="0" value="../../1/0" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="1">
+        <uol name="0" value="../0/0" />
+        <imgdir name="event">
+            <imgdir name="0">
+                <int name="type" value="101" />
+                <int name="state" value="2" />
+            </imgdir>
+            <int name="timeOut" value="3000" />
+        </imgdir>
+        <imgdir name="hit">
+            <uol name="0" value="../../2/0" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="2">
+        <canvas name="0" width="84" height="81">
+            <vector name="origin" x="36" y="78" />
+        </canvas>
+        <imgdir name="event">
+            <imgdir name="0">
+                <int name="type" value="101" />
+                <int name="state" value="0" />
+            </imgdir>
+            <int name="timeOut" value="5000" />
+        </imgdir>
+        <imgdir name="hit">
+            <uol name="0" value="../../0/0" />
+        </imgdir>
+    </imgdir>
+    <string name="action" value="2ndTok_BossMob2" />
+</imgdir>

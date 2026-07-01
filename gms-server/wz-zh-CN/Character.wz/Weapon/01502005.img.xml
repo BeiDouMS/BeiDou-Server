@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01502005.img">
+    <imgdir name="info">
+        <canvas name="icon" width="32" height="32">
+            <vector name="origin" x="0" y="32" />
+        </canvas>
+        <canvas name="iconRaw" width="32" height="31">
+            <vector name="origin" x="0" y="32" />
+        </canvas>
+        <int name="price" value="1" />
+        <string name="islot" value="Wp" />
+        <int name="cantRepair" value="1" />
+        <int name="durability" value="500" />
+        <imgdir name="gatherTool">
+            <string name="toolEffectPath" value="Effect/ItemEff.img/1512001" />
+            <string name="action" value="gather1" />
+            <int name="incNum" value="5" />
+            <int name="incNumProb" value="100" />
+            <int name="incSpeed" value="150" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="weapon" width="54" height="24">
+                <vector name="origin" x="6" y="20" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="20" height="53">
+                <vector name="origin" x="1" y="48" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="weapon" width="53" height="24">
+                <vector name="origin" x="41" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowBody" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

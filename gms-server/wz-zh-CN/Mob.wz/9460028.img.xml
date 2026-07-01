@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9460028.img">
+    <imgdir name="info">
+        <int name="level" value="250" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="500000" />
+        <int name="maxMP" value="450" />
+        <int name="PADamage" value="1" />
+        <int name="MADamage" value="1" />
+        <int name="acc" value="63" />
+        <int name="eva" value="999999999" />
+        <int name="pushed" value="300" />
+        <float name="fs" value="10" />
+        <int name="exp" value="0" />
+        <int name="category" value="0" />
+        <string name="mobType" value="1N" />
+        <int name="summonType" value="1" />
+        <int name="speed" value="1" />
+        <int name="firstAttack" value="1" />
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="115" />
+                <int name="action" value="2" />
+                <int name="level" value="6" />
+                <int name="skillAfter" value="1200" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="156" />
+                <int name="action" value="1" />
+                <int name="level" value="4" />
+                <int name="skillAfter" value="720" />
+            </imgdir>
+        </imgdir>
+        <int name="fixedBodyAttackDamageR" value="1" />
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="2" height="1">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="0" />
+            <int name="delay" value="200" />
+        </canvas>
+    </imgdir>
+    <imgdir name="move">
+        <canvas name="0" width="2" height="1">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="0" />
+            <int name="delay" value="200" />
+        </canvas>
+    </imgdir>
+    <imgdir name="hit">
+        <uol name="../stand/0" value="../stand/0" />
+    </imgdir>
+    <imgdir name="die1">
+        <uol name="../stand/0" value="../stand/0" />
+    </imgdir>
+    <imgdir name="skill1">
+        <canvas name="0" width="2" height="1">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="0" />
+            <int name="delay" value="200" />
+        </canvas>
+    </imgdir>
+    <imgdir name="skill2">
+        <canvas name="0" width="2" height="1">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="0" />
+            <int name="delay" value="200" />
+        </canvas>
+    </imgdir>
+    <imgdir name="hit1">
+        <uol name="../stand/0" value="../stand/0" />
+    </imgdir>
+    <imgdir name="attack1">
+        <imgdir name="info">
+            <imgdir name="range">
+                <vector name="lt" x="47" y="-370" />
+                <vector name="rb" x="399" y="-246" />
+            </imgdir>
+            <imgdir name="hit">
+                <canvas name="0" width="110" height="72">
+                    <vector name="origin" x="91" y="51" />
+                    <int name="z" value="0" />
+                </canvas>
+            </imgdir>
+            <int name="attackAfter" value="800" />
+        </imgdir>
+        <canvas name="0" width="2" height="1">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="0" />
+            <int name="delay" value="200" />
+        </canvas>
+    </imgdir>
+</imgdir>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9500398.img">
+    <imgdir name="info">
+        <int name="fixedDamage" value="1" />
+        <int name="invincible" value="1" />
+        <int name="level" value="13" />
+        <int name="maxHP" value="200" />
+        <int name="maxMP" value="20" />
+        <int name="speed" value="-60" />
+        <int name="PADamage" value="53" />
+        <int name="PDDamage" value="50" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="48" />
+        <int name="MDDamage" value="50" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="9" />
+        <int name="eva" value="1" />
+        <int name="pushed" value="20" />
+        <float name="fs" value="10" />
+        <int name="exp" value="23" />
+        <int name="summonType" value="1" />
+        <int name="category" value="1" />
+        <string name="mobType" value="1N" />
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="77" height="76">
+            <vector name="origin" x="32" y="76" />
+            <int name="delay" value="1000" />
+            <vector name="lt" x="-26" y="-53" />
+            <vector name="rb" x="20" y="0" />
+            <vector name="head" x="-13" y="-40" />
+        </canvas>
+        <canvas name="1" width="77" height="76">
+            <vector name="origin" x="32" y="76" />
+            <int name="delay" value="70" />
+            <vector name="lt" x="-26" y="-53" />
+            <vector name="rb" x="20" y="0" />
+            <vector name="head" x="-13" y="-40" />
+        </canvas>
+        <canvas name="2" width="77" height="76">
+            <vector name="origin" x="32" y="76" />
+            <int name="delay" value="70" />
+            <vector name="lt" x="-26" y="-53" />
+            <vector name="rb" x="20" y="0" />
+            <vector name="head" x="-13" y="-40" />
+        </canvas>
+        <uol name="3" value="0" />
+        <uol name="4" value="0" />
+        <uol name="5" value="1" />
+        <uol name="6" value="2" />
+        <uol name="7" value="0" />
+    </imgdir>
+    <imgdir name="hit1">
+        <canvas name="1" width="77" height="76">
+            <vector name="origin" x="32" y="76" />
+            <int name="delay" value="600" />
+            <vector name="lt" x="-26" y="-53" />
+            <vector name="rb" x="20" y="0" />
+            <vector name="head" x="-13" y="-40" />
+            <string name="source" value="Mob/9500398.img/stand/1" />
+        </canvas>
+    </imgdir>
+    <imgdir name="die1">
+        <canvas name="0" width="77" height="76">
+            <vector name="origin" x="32" y="76" />
+            <int name="delay" value="200" />
+            <vector name="lt" x="-26" y="-53" />
+            <vector name="rb" x="20" y="0" />
+            <vector name="head" x="-13" y="-40" />
+            <string name="source" value="Mob/9500398.img/stand/0" />
+        </canvas>
+        <canvas name="1" width="77" height="76">
+            <vector name="origin" x="32" y="76" />
+            <int name="delay" value="300" />
+            <vector name="lt" x="-26" y="-53" />
+            <vector name="rb" x="20" y="0" />
+            <vector name="head" x="-13" y="-40" />
+        </canvas>
+        <uol name="2" value="0" />
+        <uol name="3" value="1" />
+        <uol name="4" value="0" />
+        <uol name="5" value="0" />
+        <uol name="6" value="1" />
+        <uol name="7" value="0" />
+        <uol name="8" value="1" />
+    </imgdir>
+</imgdir>

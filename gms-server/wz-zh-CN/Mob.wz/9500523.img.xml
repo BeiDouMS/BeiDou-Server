@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9500523.img">
+    <imgdir name="info">
+        <int name="level" value="10" />
+        <int name="maxHP" value="10000" />
+        <int name="maxMP" value="1" />
+        <int name="speed" value="0" />
+        <int name="PADamage" value="41" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="34" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="4" />
+        <int name="pushed" value="10" />
+        <float name="fs" value="10" />
+        <int name="summonType" value="1" />
+        <int name="category" value="1" />
+        <string name="mobType" value="8N" />
+        <int name="removeAfter" value="3" />
+        <int name="hideHP" value="1" />
+        <imgdir name="revive">
+            <int name="0" value="9500519" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="1" height="1">
+            <vector name="origin" x="21" y="40" />
+            <vector name="head" x="-12" y="-13" />
+            <int name="delay" value="100" />
+            <string name="source" value="Mob/2230104.img/regen/0" />
+        </canvas>
+    </imgdir>
+</imgdir>

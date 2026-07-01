@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01992007.img">
+    <imgdir name="info">
+        <canvas name="icon" width="32" height="32">
+            <vector name="origin" x="0" y="32" />
+        </canvas>
+        <canvas name="iconRaw" width="32" height="32">
+            <vector name="origin" x="0" y="32" />
+        </canvas>
+        <string name="islot" value="Tm" />
+        <string name="vslot" value="Tm" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="tuc" value="0" />
+        <int name="tamingMob" value="1" />
+        <int name="tradeBlock" value="1" />
+        <int name="notSale" value="1" />
+        <int name="only" value="1" />
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="0" width="173" height="50">
+                <vector name="origin" x="53" y="64" />
+                <vector name="lt" x="-92" y="-160" />
+                <vector name="rb" x="33" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-60" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="191" height="62">
+                <vector name="origin" x="57" y="72" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-60" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="0" width="169" height="50">
+                <vector name="origin" x="50" y="62" />
+                <vector name="lt" x="-92" y="-160" />
+                <vector name="rb" x="33" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-58" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="199" height="62">
+                <vector name="origin" x="57" y="73" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-61" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="0" width="173" height="50">
+                <vector name="origin" x="53" y="66" />
+                <vector name="lt" x="-92" y="-160" />
+                <vector name="rb" x="33" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-62" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="191" height="62">
+                <vector name="origin" x="57" y="74" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-62" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="0" width="172" height="50">
+                <vector name="origin" x="53" y="65" />
+                <vector name="lt" x="-102" y="-160" />
+                <vector name="rb" x="25" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-61" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="199" height="62">
+                <vector name="origin" x="57" y="73" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-61" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <uol name="0" value="../../walk1/0/0" />
+            <uol name="1" value="../../walk1/0/1" />
+            <uol name="delay" value="../../walk1/0/delay" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="0" value="../../walk1/1/0" />
+            <uol name="1" value="../../walk1/1/1" />
+            <uol name="delay" value="../../walk1/1/delay" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="0" value="../../walk1/2/0" />
+            <uol name="1" value="../../walk1/2/1" />
+            <uol name="delay" value="../../walk1/2/delay" />
+        </imgdir>
+        <imgdir name="3">
+            <uol name="0" value="../../walk1/3/0" />
+            <uol name="1" value="../../walk1/3/1" />
+            <uol name="delay" value="../../walk1/3/delay" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="0" width="140" height="50">
+                <vector name="origin" x="48" y="63" />
+                <vector name="lt" x="-71" y="-160" />
+                <vector name="rb" x="52" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-58" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="125" height="61">
+                <vector name="origin" x="52" y="70" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-58" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="180" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="0" width="139" height="52">
+                <vector name="origin" x="48" y="64" />
+                <vector name="lt" x="-71" y="-160" />
+                <vector name="rb" x="52" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-59" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="126" height="61">
+                <vector name="origin" x="50" y="61" />
+                <imgdir name="map">
+                    <vector name="navel" x="2" y="-49" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="180" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="0" width="138" height="54">
+                <vector name="origin" x="48" y="65" />
+                <vector name="lt" x="-71" y="-160" />
+                <vector name="rb" x="52" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-60" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="125" height="61">
+                <vector name="origin" x="52" y="72" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-60" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="180" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="0" width="138" height="56">
+                <vector name="origin" x="48" y="66" />
+                <vector name="lt" x="-71" y="-160" />
+                <vector name="rb" x="52" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-61" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="125" height="61">
+                <vector name="origin" x="52" y="73" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-61" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="180" />
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="0" width="138" height="54">
+                <vector name="origin" x="48" y="65" />
+                <vector name="lt" x="-71" y="-160" />
+                <vector name="rb" x="52" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-60" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="125" height="60">
+                <vector name="origin" x="52" y="71" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-60" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="180" />
+        </imgdir>
+        <imgdir name="5">
+            <canvas name="0" width="139" height="52">
+                <vector name="origin" x="48" y="64" />
+                <vector name="lt" x="-71" y="-160" />
+                <vector name="rb" x="52" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-59" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="126" height="61">
+                <vector name="origin" x="52" y="71" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-59" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="180" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <uol name="0" value="../../stand1/0/0" />
+            <uol name="1" value="../../stand1/0/1" />
+            <uol name="delay" value="../../stand1/0/delay" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="0" value="../../stand1/1/0" />
+            <uol name="1" value="../../stand1/1/1" />
+            <uol name="delay" value="../../stand1/1/delay" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="0" value="../../stand1/2/0" />
+            <uol name="1" value="../../stand1/2/1" />
+            <uol name="delay" value="../../stand1/2/delay" />
+        </imgdir>
+        <imgdir name="3">
+            <uol name="0" value="../../stand1/3/0" />
+            <uol name="1" value="../../stand1/3/1" />
+            <uol name="delay" value="../../stand1/3/delay" />
+        </imgdir>
+        <imgdir name="4">
+            <uol name="0" value="../../stand1/4/0" />
+            <uol name="1" value="../../stand1/4/1" />
+            <uol name="delay" value="../../stand1/4/delay" />
+        </imgdir>
+        <imgdir name="5">
+            <uol name="0" value="../../stand1/5/0" />
+            <uol name="1" value="../../stand1/5/1" />
+            <uol name="delay" value="../../stand1/5/delay" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="tired">
+        <imgdir name="0">
+            <canvas name="0" width="145" height="51">
+                <vector name="origin" x="45" y="61" />
+                <vector name="lt" x="-66" y="-132" />
+                <vector name="rb" x="64" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-58" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="110" height="63">
+                <vector name="origin" x="49" y="70" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-58" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="480" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="0" width="149" height="53">
+                <vector name="origin" x="45" y="60" />
+                <vector name="lt" x="-66" y="-132" />
+                <vector name="rb" x="64" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-57" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="110" height="64">
+                <vector name="origin" x="45" y="68" />
+                <imgdir name="map">
+                    <vector name="navel" x="4" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="360" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="0" width="145" height="55">
+                <vector name="origin" x="45" y="59" />
+                <vector name="lt" x="-66" y="-132" />
+                <vector name="rb" x="64" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="110" height="66">
+                <vector name="origin" x="49" y="68" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="300" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="0" width="145" height="57">
+                <vector name="origin" x="45" y="58" />
+                <vector name="lt" x="-66" y="-132" />
+                <vector name="rb" x="64" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-55" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="109" height="68">
+                <vector name="origin" x="49" y="66" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-54" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="720" />
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="0" width="145" height="55">
+                <vector name="origin" x="45" y="59" />
+                <vector name="lt" x="-66" y="-132" />
+                <vector name="rb" x="64" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="110" height="66">
+                <vector name="origin" x="49" y="68" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="300" />
+        </imgdir>
+        <imgdir name="5">
+            <canvas name="0" width="145" height="52">
+                <vector name="origin" x="45" y="60" />
+                <vector name="lt" x="-66" y="-132" />
+                <vector name="rb" x="64" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-57" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="110" height="63">
+                <vector name="origin" x="49" y="69" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-57" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="360" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="0" width="117" height="79">
+                <vector name="origin" x="48" y="61" />
+                <vector name="lt" x="-92" y="-180" />
+                <vector name="rb" x="33" y="-23" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="116" height="60">
+                <vector name="origin" x="52" y="67" />
+                <vector name="lt" x="-92" y="-180" />
+                <vector name="rb" x="33" y="-23" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="200" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <canvas name="0" width="139" height="52">
+                <vector name="origin" x="48" y="64" />
+                <vector name="lt" x="-78" y="-144" />
+                <vector name="rb" x="43" y="-1" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-59" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="126" height="61">
+                <vector name="origin" x="52" y="71" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-59" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="0" width="134" height="55">
+                <vector name="origin" x="46" y="63" />
+                <vector name="lt" x="-78" y="-144" />
+                <vector name="rb" x="43" y="-1" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="120" height="60">
+                <vector name="origin" x="50" y="67" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-56" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="100" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="0" width="131" height="57">
+                <vector name="origin" x="46" y="62" />
+                <vector name="lt" x="-78" y="-144" />
+                <vector name="rb" x="43" y="-1" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-54" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="120" height="61">
+                <vector name="origin" x="50" y="66" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-54" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="144" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="0" width="124" height="59">
+                <vector name="origin" x="46" y="58" />
+                <vector name="lt" x="-78" y="-144" />
+                <vector name="rb" x="43" y="-1" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-51" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="120" height="65">
+                <vector name="origin" x="50" y="67" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-51" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="0" width="123" height="61">
+                <vector name="origin" x="46" y="56" />
+                <vector name="lt" x="-78" y="-144" />
+                <vector name="rb" x="43" y="-1" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-48" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="120" height="69">
+                <vector name="origin" x="50" y="68" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-48" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="144" />
+        </imgdir>
+        <imgdir name="5">
+            <canvas name="0" width="126" height="53">
+                <vector name="origin" x="49" y="48" />
+                <vector name="lt" x="-78" y="-144" />
+                <vector name="rb" x="43" y="-1" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-43" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="123" height="60">
+                <vector name="origin" x="53" y="55" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="-43" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="100000000" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="0" width="99" height="61">
+                <vector name="origin" x="48" y="69" />
+                <vector name="lt" x="-37" y="-178" />
+                <vector name="rb" x="33" y="-34" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-69" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="107" height="71">
+                <vector name="origin" x="52" y="75" />
+                <vector name="lt" x="-37" y="-178" />
+                <vector name="rb" x="33" y="-34" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-69" />
+                </imgdir>
+                <string name="z" value="backTamingMobMid" />
+            </canvas>
+            <int name="delay" value="240" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="0" width="98" height="58">
+                <vector name="origin" x="47" y="69" />
+                <vector name="lt" x="-37" y="-178" />
+                <vector name="rb" x="33" y="-34" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-69" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="106" height="68">
+                <vector name="origin" x="51" y="75" />
+                <vector name="lt" x="-37" y="-178" />
+                <vector name="rb" x="33" y="-34" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-69" />
+                </imgdir>
+                <string name="z" value="backTamingMobFront" />
+            </canvas>
+            <int name="delay" value="240" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="0" width="99" height="61">
+                <vector name="origin" x="48" y="84" />
+                <vector name="lt" x="-37" y="-163" />
+                <vector name="rb" x="33" y="-19" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-84" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="107" height="71">
+                <vector name="origin" x="52" y="90" />
+                <vector name="lt" x="-37" y="-163" />
+                <vector name="rb" x="33" y="-19" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-84" />
+                </imgdir>
+                <string name="z" value="backTamingMobMid" />
+            </canvas>
+            <int name="delay" value="240" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="0" width="98" height="58">
+                <vector name="origin" x="47" y="84" />
+                <vector name="lt" x="-37" y="-163" />
+                <vector name="rb" x="33" y="-19" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-84" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="106" height="68">
+                <vector name="origin" x="51" y="90" />
+                <vector name="lt" x="-37" y="-163" />
+                <vector name="rb" x="33" y="-19" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-84" />
+                </imgdir>
+                <string name="z" value="backTamingMobFront" />
+            </canvas>
+            <int name="delay" value="240" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="0" width="173" height="50">
+                <vector name="origin" x="53" y="64" />
+                <vector name="lt" x="-92" y="-160" />
+                <vector name="rb" x="33" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-60" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="191" height="62">
+                <vector name="origin" x="57" y="72" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-60" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="0" width="169" height="50">
+                <vector name="origin" x="50" y="62" />
+                <vector name="lt" x="-92" y="-160" />
+                <vector name="rb" x="33" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="-58" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="199" height="62">
+                <vector name="origin" x="57" y="73" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-61" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="0" width="173" height="50">
+                <vector name="origin" x="53" y="66" />
+                <vector name="lt" x="-92" y="-160" />
+                <vector name="rb" x="33" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-62" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="191" height="62">
+                <vector name="origin" x="57" y="74" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-62" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="0" width="172" height="50">
+                <vector name="origin" x="53" y="65" />
+                <vector name="lt" x="-102" y="-160" />
+                <vector name="rb" x="25" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-61" />
+                </imgdir>
+                <string name="z" value="tamingMobFront" />
+            </canvas>
+            <canvas name="1" width="199" height="62">
+                <vector name="origin" x="57" y="73" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-61" />
+                </imgdir>
+                <string name="z" value="tamingMobRear" />
+            </canvas>
+            <int name="delay" value="120" />
+        </imgdir>
+    </imgdir>
+</imgdir>

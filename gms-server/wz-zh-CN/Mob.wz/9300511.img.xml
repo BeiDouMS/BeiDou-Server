@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9300511.img">
+    <imgdir name="info">
+        <int name="firstAttack" value="1" />
+        <int name="publicReward" value="1" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="HPgaugeHide" value="1" />
+        <int name="rareItemDropLevel" value="2" />
+        <imgdir name="default">
+            <canvas name="0" width="167" height="211">
+                <vector name="origin" x="83" y="105" />
+                <int name="z" value="0" />
+                <string name="source" value="Mob/8180000.img/info/default/0" />
+            </canvas>
+        </imgdir>
+        <int name="charismaEXP" value="40" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="1" />
+                <int name="magic" value="1" />
+                <string name="elemAttr" value="F" />
+                <int name="deadlyAttack" value="1" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="1" />
+                <int name="magic" value="1" />
+                <int name="disease" value="123" />
+                <int name="level" value="7" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="action" value="3" />
+                <int name="attackRatio" value="100" />
+                <int name="type" value="0" />
+                <int name="conMP" value="1" />
+                <int name="magic" value="1" />
+                <int name="disease" value="127" />
+                <int name="level" value="6" />
+            </imgdir>
+        </imgdir>
+        <string name="link" value="8180000" />
+        <int name="level" value="125" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="5750000" />
+        <int name="maxMP" value="200000" />
+        <int name="speed" value="-20" />
+        <int name="PADamage" value="3193" />
+        <int name="PDDamage" value="900" />
+        <int name="PDRate" value="30" />
+        <int name="MADamage" value="3223" />
+        <int name="MDDamage" value="850" />
+        <int name="MDRate" value="30" />
+        <int name="acc" value="423" />
+        <int name="eva" value="115" />
+        <int name="pushed" value="1800" />
+        <float name="fs" value="10" />
+        <int name="boss" value="1" />
+        <int name="exp" value="103900" />
+        <int name="summonType" value="1" />
+        <int name="category" value="4" />
+        <string name="elemAttr" value="F2I3" />
+        <int name="hpRecovery" value="300" />
+        <int name="mpRecovery" value="20" />
+        <int name="partyBonusR" value="30" />
+        <string name="mobType" value="6N" />
+        <imgdir name="revive">
+            <int name="0" value="9300520" />
+        </imgdir>
+    </imgdir>
+</imgdir>

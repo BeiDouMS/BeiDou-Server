@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01802870.img">
+    <imgdir name="info">
+        <canvas name="icon" width="30" height="28">
+            <vector name="origin" x="-2" y="28" />
+            <int name="z" value="0" />
+            <string name="_hash" value="7e1365393265fb3d2f6436b21753063e662da41a9403ee076140421665f20ba7" />
+        </canvas>
+        <canvas name="iconRaw" width="29" height="25">
+            <vector name="origin" x="-3" y="28" />
+            <int name="z" value="0" />
+            <string name="_hash" value="ddfff6cdf7ce3c9df3daa934c82a260509d674c84e2e076d138efc0fa6deaff7" />
+        </canvas>
+        <int name="tuc" value="10" />
+        <int name="reqLevel" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="5002328">
+        <imgdir name="stand0">
+            <canvas name="0" width="47" height="14">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_hash" value="fc892a40caa3585838e468f3eb347ed234e723f14763eb82c31aef7530e6fb2b" />
+            </canvas>
+            <canvas name="1" width="46" height="14">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_hash" value="3fbff75514870c9ee2fe74932fabd4fa7be9e394259c47b22d890a2410444eb9" />
+            </canvas>
+            <canvas name="2" width="47" height="15">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_hash" value="d7d7ff1fd046d7bf8f75aa0d1995d1febbd15c46933bfe645e6b77f01fc09128" />
+            </canvas>
+            <canvas name="3" width="48" height="14">
+                <vector name="origin" x="24" y="24" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_hash" value="cf6cf64f8ce490104425c1bfa734beb2eeedd445d3b5f26823ceda3a11763691" />
+            </canvas>
+        </imgdir>
+        <imgdir name="stand1">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="rest0">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="move">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/0" />
+            </canvas>
+            <canvas name="1" width="47" height="14">
+                <vector name="origin" x="22" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_hash" value="5fd01ab9517e2898ba5e20dfc28b0eca41817dc54b75c5dad80c61d46fc39b60" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="24" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="jump">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="22" y="29" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="hungry">
+            <uol name="0" value="../angry/0" />
+            <uol name="1" value="../angry/1" />
+            <uol name="2" value="../angry/2" />
+            <uol name="3" value="../angry/3" />
+        </imgdir>
+        <imgdir name="hang">
+            <canvas name="0" width="47" height="14">
+                <vector name="origin" x="23" y="36" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_hash" value="5d2c1fd9ac2a579528c8346c3ba3d9e6f6974e5f643226f31e479b194b8d442a" />
+            </canvas>
+        </imgdir>
+        <imgdir name="eat">
+            <uol name="0" value="../chat/0" />
+            <uol name="1" value="../chat/1" />
+            <uol name="2" value="../chat/2" />
+            <uol name="3" value="../chat/3" />
+        </imgdir>
+        <imgdir name="chat">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/1" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="24" y="24" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="love">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-42" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-42" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/1" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-42" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="24" y="24" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-42" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="cry">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/1" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="24" y="24" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="dung">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="sleep">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="angry">
+            <canvas name="0" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/0" />
+            </canvas>
+            <canvas name="1" width="1" height="1">
+                <vector name="origin" x="22" y="26" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/1" />
+            </canvas>
+            <canvas name="2" width="1" height="1">
+                <vector name="origin" x="23" y="25" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/2" />
+            </canvas>
+            <canvas name="3" width="1" height="1">
+                <vector name="origin" x="24" y="24" />
+                <int name="z" value="0" />
+                <vector name="lt" x="-24" y="-33" />
+                <vector name="rb" x="27" y="1" />
+                <string name="_inlink" value="5002328/stand0/3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="no">
+            <uol name="0" value="../angry/0" />
+            <uol name="1" value="../angry/1" />
+            <uol name="2" value="../angry/2" />
+            <uol name="3" value="../angry/3" />
+        </imgdir>
+        <imgdir name="sit">
+            <uol name="0" value="../stand0/0" />
+            <uol name="1" value="../stand0/1" />
+            <uol name="2" value="../stand0/2" />
+            <uol name="3" value="../stand0/3" />
+        </imgdir>
+        <imgdir name="fly">
+            <uol name="0" value="../jump/0" />
+        </imgdir>
+    </imgdir>
+</imgdir>

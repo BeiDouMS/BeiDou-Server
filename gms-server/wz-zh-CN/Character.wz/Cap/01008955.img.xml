@@ -1,0 +1,1077 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01008955.img">
+    <imgdir name="info">
+        <canvas name="icon" width="36" height="36">
+            <vector name="origin" x="2" y="36" />
+        </canvas>
+        <canvas name="iconRaw" width="36" height="36">
+            <vector name="origin" x="3" y="36" />
+            <int name="z" value="0" />
+        </canvas>
+        <int name="cash" value="1" />
+        <string name="islot" value="HrCp" />
+        <string name="vslot" value="CpH1H2H3H4H5H6HfHbHxHs" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="body" width="125" height="102">
+                <vector name="origin" x="56" y="49" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="129" height="114">
+                <vector name="origin" x="45" y="55" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="126" height="109">
+                <vector name="origin" x="45" y="52" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="body" width="140" height="130">
+                <vector name="origin" x="27" y="65" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <uol name="body" value="../../walk1/0/body" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="body" value="../../walk1/1/body" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="body" value="../../walk1/2/body" />
+        </imgdir>
+        <imgdir name="3">
+            <uol name="body" value="../../walk1/3/body" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="body" width="96" height="92">
+                <vector name="origin" x="55" y="42" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="89" height="87">
+                <vector name="origin" x="47" y="40" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="89" height="87">
+                <vector name="origin" x="46" y="41" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <uol name="body" value="../../stand1/0/body" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="body" value="../../stand1/1/body" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="body" value="../../stand1/2/body" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="body" width="114" height="131">
+                <vector name="origin" x="57" y="77" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="136" height="170">
+                <vector name="origin" x="66" y="107" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="169" height="168">
+                <vector name="origin" x="73" y="102" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="0">
+            <canvas name="body" width="100" height="96">
+                <vector name="origin" x="33" y="52" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="124" height="108">
+                <vector name="origin" x="43" y="56" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="191" height="229">
+                <vector name="origin" x="113" y="108" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="body" width="113" height="100">
+                <vector name="origin" x="40" y="49" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="233" height="141">
+                <vector name="origin" x="129" y="65" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="268" height="205">
+                <vector name="origin" x="188" y="88" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="0">
+            <canvas name="body" width="130" height="117">
+                <vector name="origin" x="49" y="65" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="182" height="149">
+                <vector name="origin" x="119" y="71" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="250" height="193">
+                <vector name="origin" x="169" y="81" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="body" width="143" height="107">
+                <vector name="origin" x="71" y="53" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="197" height="265">
+                <vector name="origin" x="109" y="169" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="258" height="210">
+                <vector name="origin" x="122" y="102" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="body" width="249" height="244">
+                <vector name="origin" x="141" y="112" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="body" width="118" height="95">
+                <vector name="origin" x="30" y="47" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="106" height="121">
+                <vector name="origin" x="33" y="68" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="227" height="193">
+                <vector name="origin" x="115" y="110" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="0">
+            <canvas name="body" width="110" height="93">
+                <vector name="origin" x="38" y="49" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="210" height="141">
+                <vector name="origin" x="104" y="65" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="264" height="205">
+                <vector name="origin" x="184" y="87" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT3">
+        <imgdir name="0">
+            <canvas name="body" width="130" height="117">
+                <vector name="origin" x="50" y="64" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="210" height="141">
+                <vector name="origin" x="105" y="64" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="264" height="205">
+                <vector name="origin" x="184" y="87" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <canvas name="body" width="152" height="107">
+                <vector name="origin" x="79" y="54" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="197" height="180">
+                <vector name="origin" x="109" y="83" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="244" height="242">
+                <vector name="origin" x="122" y="133" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="body" width="255" height="244">
+                <vector name="origin" x="146" y="111" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP1">
+        <imgdir name="0">
+            <canvas name="body" width="118" height="95">
+                <vector name="origin" x="31" y="46" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="106" height="121">
+                <vector name="origin" x="32" y="69" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="227" height="193">
+                <vector name="origin" x="114" y="110" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="body" width="122" height="102">
+                <vector name="origin" x="43" y="49" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="211" height="131">
+                <vector name="origin" x="104" y="54" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="240" height="163">
+                <vector name="origin" x="146" y="87" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="0">
+            <canvas name="body" width="143" height="107">
+                <vector name="origin" x="71" y="54" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="197" height="180">
+                <vector name="origin" x="109" y="84" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="240" height="203">
+                <vector name="origin" x="122" y="94" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="body" width="247" height="244">
+                <vector name="origin" x="138" y="112" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="body" width="143" height="107">
+                <vector name="origin" x="70" y="54" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="197" height="265">
+                <vector name="origin" x="108" y="168" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="249" height="244">
+                <vector name="origin" x="140" y="111" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="body" width="86" height="94">
+                <vector name="origin" x="37" y="49" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="226" height="152">
+                <vector name="origin" x="130" y="69" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="248" height="162">
+                <vector name="origin" x="152" y="75" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="0">
+            <uol name="body" value="../../swingPF/0/body" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="body" value="../../swingPF/1/body" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="258" height="210">
+                <vector name="origin" x="122" y="102" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <uol name="body" value="../../stabT1/2/body" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="body" width="110" height="93">
+                <vector name="origin" x="37" y="49" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="210" height="141">
+                <vector name="origin" x="104" y="64" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="body" width="130" height="117">
+                <vector name="origin" x="50" y="63" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="250" height="244">
+                <vector name="origin" x="139" y="112" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="0">
+            <canvas name="body" width="130" height="117">
+                <vector name="origin" x="50" y="64" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="204" height="131">
+                <vector name="origin" x="104" y="56" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="258" height="203">
+                <vector name="origin" x="174" y="87" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot1">
+        <imgdir name="0">
+            <canvas name="body" width="130" height="117">
+                <vector name="origin" x="49" y="63" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="182" height="149">
+                <vector name="origin" x="120" y="70" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="body" value="../../shoot2/2/body" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot2">
+        <imgdir name="0">
+            <canvas name="body" width="122" height="102">
+                <vector name="origin" x="42" y="49" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="130" height="117">
+                <vector name="origin" x="50" y="63" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="body" width="197" height="180">
+                <vector name="origin" x="109" y="84" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="body" width="240" height="203">
+                <vector name="origin" x="122" y="95" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="body" width="266" height="247">
+                <vector name="origin" x="154" y="112" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <imgdir name="0">
+            <canvas name="body" width="130" height="117">
+                <vector name="origin" x="51" y="65" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="204" height="131">
+                <vector name="origin" x="104" y="55" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="body" value="../1/body" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="body" width="200" height="174">
+                <vector name="origin" x="85" y="115" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="237" height="255">
+                <vector name="origin" x="103" y="183" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="body" value="../../proneStab/0/body" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal">
+        <imgdir name="0">
+            <uol name="body" value="../../alert/1/body" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="body" width="131" height="132">
+                <vector name="origin" x="45" y="58" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="133" height="137">
+                <vector name="origin" x="44" y="57" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="body" width="131" height="132">
+                <vector name="origin" x="59" y="58" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="body" width="206" height="205">
+                <vector name="origin" x="107" y="102" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="body" width="62" height="111">
+                <vector name="origin" x="36" y="54" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="69" height="101">
+                <vector name="origin" x="42" y="39" />
+                <string name="z" value="characterStart" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="body" width="65" height="94">
+                <vector name="origin" x="38" y="39" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="body" width="76" height="105">
+                <vector name="origin" x="49" y="50" />
+                <imgdir name="map">
+                    <vector name="neck" x="0" y="15" />
+                    <vector name="earOverHead" x="15" y="10" />
+                    <vector name="earBelowHead" x="-17" y="9" />
+                    <vector name="brow" x="-4" y="-5" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

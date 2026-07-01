@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="WorldMap150.img">
+    <imgdir name="info">
+        <string name="parentMap" value="WorldMap" />
+        <string name="WorldMap" value="WorldMap150" />
+    </imgdir>
+    <imgdir name="BaseImg">
+        <canvas name="0" width="640" height="470">
+            <vector name="origin" x="320" y="235" />
+            <int name="z" value="0" />
+        </canvas>
+    </imgdir>
+    <imgdir name="MapList">
+        <imgdir name="0">
+            <vector name="spot" x="-140" y="-140" />
+            <int name="type" value="0" />
+            <imgdir name="mapNo">
+                <int name="0" value="863100000" />
+                <int name="1" value="863100001" />
+                <int name="2" value="863100002" />
+                <int name="3" value="863100003" />
+                <int name="4" value="863100004" />
+                <int name="5" value="863100005" />
+                <int name="6" value="863100006" />
+                <int name="7" value="863100007" />
+                <int name="8" value="863100008" />
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="MapLink">
+        <imgdir name="0">
+            <imgdir name="link">
+                <string name="linkMap" value="WorldMap151" />
+                <canvas name="linkImg" width="250" height="137">
+                    <vector name="origin" x="280" y="225" />
+                    <int name="z" value="1" />
+                </canvas>
+            </imgdir>
+            <string name="toolTip" value="Masteria" />
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="link">
+                <string name="linkMap" value="WorldMap" />
+                <canvas name="linkImg" width="32" height="42">
+                    <vector name="origin" x="-271" y="220" />
+                    <int name="z" value="1" />
+                </canvas>
+            </imgdir>
+            <string name="toolTip" value="MWorldArrow" />
+        </imgdir>
+    </imgdir>
+</imgdir>

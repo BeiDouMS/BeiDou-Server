@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9305408.img">
+    <imgdir name="info">
+        <int name="lifePoint" value="2" />
+        <int name="partyBonusMob" value="1" />
+        <int name="defenseMob" value="1" />
+        <int name="level" value="30" />
+        <int name="maxHP" value="15000" />
+        <int name="maxMP" value="200" />
+        <int name="speed" value="-60" />
+        <int name="pushed" value="9999999" />
+        <float name="fs" value="10" />
+        <int name="boss" value="1" />
+        <int name="exp" value="110" />
+        <int name="summonType" value="1" />
+        <int name="category" value="7" />
+        <int name="undead" value="1" />
+        <string name="mobType" value="7N" />
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="pyramidBoss1" />
+    </imgdir>
+    <imgdir name="move">
+        <canvas name="0" width="63" height="57">
+            <vector name="origin" x="35" y="57" />
+            <int name="z" value="0" />
+            <vector name="lt" x="-33" y="-57" />
+            <vector name="rb" x="30" y="0" />
+            <vector name="head" x="-19" y="-39" />
+            <int name="delay" value="280" />
+        </canvas>
+        <canvas name="1" width="65" height="56">
+            <vector name="origin" x="35" y="56" />
+            <int name="z" value="0" />
+            <int name="delay" value="280" />
+            <vector name="lt" x="-33" y="-57" />
+            <vector name="rb" x="30" y="0" />
+            <vector name="head" x="-19" y="-39" />
+        </canvas>
+        <canvas name="2" width="56" height="57">
+            <vector name="origin" x="35" y="57" />
+            <int name="z" value="0" />
+            <int name="delay" value="280" />
+            <vector name="lt" x="-33" y="-57" />
+            <vector name="rb" x="30" y="0" />
+            <vector name="head" x="-19" y="-39" />
+        </canvas>
+        <canvas name="3" width="68" height="56">
+            <vector name="origin" x="35" y="56" />
+            <int name="z" value="0" />
+            <int name="delay" value="280" />
+            <vector name="lt" x="-33" y="-57" />
+            <vector name="rb" x="30" y="0" />
+            <vector name="head" x="-19" y="-39" />
+        </canvas>
+    </imgdir>
+    <imgdir name="die1">
+        <canvas name="0" width="56" height="58">
+            <vector name="origin" x="35" y="58" />
+            <int name="z" value="0" />
+            <vector name="head" x="-22" y="-46" />
+        </canvas>
+        <canvas name="1" width="173" height="67">
+            <vector name="origin" x="23" y="69" />
+            <int name="z" value="0" />
+            <vector name="head" x="94" y="-48" />
+        </canvas>
+        <canvas name="2" width="215" height="60">
+            <vector name="origin" x="29" y="60" />
+            <int name="z" value="0" />
+            <vector name="head" x="126" y="-45" />
+        </canvas>
+        <canvas name="3" width="246" height="44">
+            <vector name="origin" x="32" y="44" />
+            <int name="z" value="0" />
+            <vector name="head" x="150" y="-28" />
+        </canvas>
+        <canvas name="4" width="72" height="39">
+            <vector name="origin" x="-156" y="42" />
+            <int name="z" value="0" />
+            <vector name="head" x="163" y="-34" />
+        </canvas>
+        <canvas name="5" width="72" height="39">
+            <vector name="origin" x="-166" y="39" />
+            <int name="z" value="0" />
+            <vector name="head" x="174" y="-29" />
+        </canvas>
+        <canvas name="6" width="72" height="39">
+            <vector name="origin" x="-172" y="39" />
+            <int name="z" value="0" />
+            <vector name="head" x="179" y="-32" />
+        </canvas>
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="56" height="58">
+            <vector name="origin" x="33" y="58" />
+            <int name="z" value="0" />
+            <vector name="lt" x="-33" y="-57" />
+            <vector name="rb" x="30" y="0" />
+            <vector name="head" x="-19" y="-39" />
+            <string name="source" value="Mob/9305408.img/die1/0" />
+        </canvas>
+    </imgdir>
+</imgdir>

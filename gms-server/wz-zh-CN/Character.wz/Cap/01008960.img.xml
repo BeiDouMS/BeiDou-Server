@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01008960.img">
+    <imgdir name="info">
+        <canvas name="icon" width="32" height="32">
+            <vector name="origin" x="0" y="32" />
+        </canvas>
+        <string name="islot" value="Cp" />
+        <string name="vslot" value="CpH5" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+        <int name="collabo" value="1" />
+        <uol name="iconRaw" value="icon" />
+    </imgdir>
+    <imgdir name="default">
+        <canvas name="default" width="1" height="1">
+            <vector name="origin" x="29" y="46" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="capOverHair" />
+        </canvas>
+    </imgdir>
+    <imgdir name="backDefault">
+        <canvas name="default" width="1" height="1">
+            <vector name="origin" x="33" y="45" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="capOverHair" />
+        </canvas>
+        <canvas name="defaultAc" width="1" height="1">
+            <vector name="origin" x="30" y="8" />
+            <imgdir name="map">
+                <vector name="brow" x="0" y="0" />
+            </imgdir>
+            <string name="z" value="backCap" />
+        </canvas>
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="101" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="92e29fe4c42dba1c28419d76cb3890126aa6343cc1bc115befdde544186d6dc5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="6d54d3b39a655242e01e1a93a923fc36069bf8a2f8bc7c1b0e276e88f26c00fc" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="b37d9dda55390a9f5c697219bd9cd2bc772fd26a20bee1464f0a1e7807107951" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="130" y="93" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="b93d68887a374c1ad6c309d60fb5392117911798656f3510c47e8a574cbf6a2a" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="94" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="8908ffb619bd1a19ff362f06a4f81bbdfe6a9549bb0ef63ceb8b6462f1d1640d" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal">
+        <imgdir name="0">
+            <uol name="default" value="../../alert/1/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../swingO2/1/default" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="default" value="../../swingO2/0/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="129" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="fcce208fa5ecd736581852af7cfec3e88cc3c48657b23e9a707fdb08240c0739" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="125" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="8ca5a72dcea2270b4f6fff0136c5bb212420e25ea6753197c11255c1ab32cba6" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="125" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="2193ba135a58ecd9013a75699588e7b2eb407e18392f28a34b8a9091e7d96552" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="default" value="../../proneStab/0/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="126" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="7f2b1d0607971e841d64d093798e6686f5342ab26d620be35367dee1e74918e1" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="126" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="7f2b1d0607971e841d64d093798e6686f5342ab26d620be35367dee1e74918e1" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="125" y="97" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="8ca5a72dcea2270b4f6fff0136c5bb212420e25ea6753197c11255c1ab32cba6" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="125" y="102" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="2193ba135a58ecd9013a75699588e7b2eb407e18392f28a34b8a9091e7d96552" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot1">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="136" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="136" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="136" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot2">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="135" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="136" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="139" y="105" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="d9ddb423dafe840f32ef658a511727269fe6263e1035a70f64f0aeff6605b5ae" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="133" y="101" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="104" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="4f12826ee84b91c5226f9968456b80ec89678f2b0fc0877beb0d11b905f661d5" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="105" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="4f12826ee84b91c5226f9968456b80ec89678f2b0fc0877beb0d11b905f661d5" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="130" y="105" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="117" y="102" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="108" y="106" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="0e9bc725dcf820c04716a55029c046b34aeb86a769dc63f470879b9d0d101a81" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="102" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="115" y="106" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="3495fdff3a81295be3a1d5aa0bc8edccc7185d56b322730576ccded7bb80a8a9" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="107" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="b9ce46b59b09c5b8ae9929ff0caa0389083dd3e6c24bcff68bde6a37186183dd" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="101" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="111" y="108" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="3495fdff3a81295be3a1d5aa0bc8edccc7185d56b322730576ccded7bb80a8a9" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="107" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="b9ce46b59b09c5b8ae9929ff0caa0389083dd3e6c24bcff68bde6a37186183dd" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="0">
+            <uol name="default" value="../../swingPF/0/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../swingPF/1/default" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="88" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="1ef3b00209665c89d8ecf86150d62e5408dbfc334f730bccb147ff7adbbd4f4b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <uol name="default" value="../../stabT1/2/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="92e29fe4c42dba1c28419d76cb3890126aa6343cc1bc115befdde544186d6dc5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="92e29fe4c42dba1c28419d76cb3890126aa6343cc1bc115befdde544186d6dc5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="92e29fe4c42dba1c28419d76cb3890126aa6343cc1bc115befdde544186d6dc5" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <uol name="default" value="../../stand1/0/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../stand1/1/default" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="default" value="../../stand1/2/default" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="120" y="104" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="d20a168c62270e5c42d268f5a4e80c8e21454a2931a8aca2c0c0ff219795602c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="128" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="dae3a2938a84d17ad291a0a2815f503be667f64f9c3ce119e21959bd691a8e8b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="109" y="105" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="ef2110877f044bd69670c325ec1a4750d9105de3549e4173f6f335fa894fb54c" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="136" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="d20a168c62270e5c42d268f5a4e80c8e21454a2931a8aca2c0c0ff219795602c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="dae3a2938a84d17ad291a0a2815f503be667f64f9c3ce119e21959bd691a8e8b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="123" y="103" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="ef2110877f044bd69670c325ec1a4750d9105de3549e4173f6f335fa894fb54c" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="124" y="103" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="03af137084e39c68fbd4b6ec9b4ec05d07d85d0c7ea42caf24c7e5886147d29f" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="123" y="102" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="d97f52a819112970d0f5888e23dcc9352822349e88c5dabdafe9890fa70675d1" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="120" y="104" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="4f285bce88c35018d07f6c57a749d2dede45b9447aaa02c33c9cf93b0a403c26" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="124" y="104" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="76f613693573cbf22e6976908ab7e2a35a272b120f7160b84fce47a5df028c7c" />
+                <vector name="head" x="0" y="0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="94" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="17d8cad1e07b5e364bcb64d01ef73088efc8a469b3dd50d3bdc786d287b87b14" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="132" y="96" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="05f4fc6aae1106c1e3ecf8fdbdb3b74a4d321dacd728fdcbfa4abce9bb0d6cfc" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="112" y="109" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="7abc1895f747edeb9b7fd761d525bbee6b14deb7e65788906e4499f7c9c62b1d" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP1">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="124" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="109" y="105" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="1df2d9b119e36623c4d3001444f47ab16f1f8176f7decb810086325ccc8380a0" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="135" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="108" y="106" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="239b493ec3f723412b256945dd46f48f0f6fd55404eaa9ab3e6ea953ff17bb85" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="120" y="103" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="122" y="104" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="88" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="105" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="8ba1c0f53d369601a80736b69715c448c82488ccca4fc18150ab8e673386f403" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="124" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="441fe307ab2aebdfba8cad8aa651748d9bda35713f8ea76cf36d8eae6c3fdf72" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="109" y="105" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="069fcf6bff74c640fb7b2d8d49545db5754676d3695021d0d15ed1b95ea21681" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="137" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="128" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="9dc231c41df7cdffbe8b1fa7acf58bf350613e5a590b0ba65aa7a843664dad84" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="108" y="106" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="dbd2bafe63978c0bd8e0138a5edd9f29d9ecab7dbca69790cb4fa04ed0ce8b4a" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT3">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="127" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="120" y="106" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="14098fec29b81e240f26e759cf13c10005298a299fc683ef785c22f22ce91e37" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="113" y="103" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="ed6714088d205bef78022a0bb2a1745b790c337aaa77ac028089f0fd374dee91" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="138" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="134" y="97" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="122" y="100" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="108" y="106" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="8bcffc362f245d0ddc9ede445856ee2488778a056aa0cf7abd04809fe590f3bc" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="6d54d3b39a655242e01e1a93a923fc36069bf8a2f8bc7c1b0e276e88f26c00fc" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="92e29fe4c42dba1c28419d76cb3890126aa6343cc1bc115befdde544186d6dc5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="98" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="b37d9dda55390a9f5c697219bd9cd2bc772fd26a20bee1464f0a1e7807107951" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="default" width="250" height="250">
+                <vector name="origin" x="126" y="99" />
+                <imgdir name="map">
+                    <vector name="brow" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="characterStart" />
+                <string name="_hash" value="6d54d3b39a655242e01e1a93a923fc36069bf8a2f8bc7c1b0e276e88f26c00fc" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <uol name="default" value="../../walk1/0/default" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="default" value="../../walk1/1/default" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="default" value="../../walk1/2/default" />
+        </imgdir>
+        <imgdir name="3">
+            <uol name="default" value="../../walk1/3/default" />
+        </imgdir>
+    </imgdir>
+</imgdir>

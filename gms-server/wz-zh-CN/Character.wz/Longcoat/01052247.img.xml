@@ -1,0 +1,1619 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01052247.img">
+    <imgdir name="info">
+        <canvas name="icon" width="29" height="31">
+            <vector name="origin" x="-1" y="31" />
+            <string name="_hash" value="c45b0fb9ff7b8975b76728ca3b560bddccb8e117e92257acf601f79dc41b9724" />
+        </canvas>
+        <canvas name="iconRaw" width="29" height="30">
+            <vector name="origin" x="-1" y="31" />
+            <string name="_hash" value="c9c2de3ef6f501f8d9d685b0bbe1b8371d4782075cc2e38c42b515b58b2c2ce9" />
+        </canvas>
+        <string name="islot" value="MaPn" />
+        <string name="vslot" value="MaPn" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="mail" width="21" height="27">
+                <vector name="origin" x="14" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-5" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="85a9dc2bec37df923c5687f681e77ee17626aff0b614e84ee4c0494151aec7f1" />
+            </canvas>
+            <canvas name="mailArm" width="14" height="23">
+                <vector name="origin" x="4" y="3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-10" y="7" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="6c126d6ddf1d9e370e5a0df855705cf941309be9bf26540399493bc2b049fd95" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="21" height="26">
+                <vector name="origin" x="12" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="2953d98fac46bd94d135e68767a61cc552303cd038dad194365eb764ea89a9f2" />
+            </canvas>
+            <canvas name="mailArm" width="13" height="22">
+                <vector name="origin" x="3" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="3" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="9738d289990c810bdaaaa4629f059ffc9d4f086b3136e01d8135fc6691784dfe" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="21" height="27">
+                <vector name="origin" x="15" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-6" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="walk1/0/mail" />
+            </canvas>
+            <uol name="mailArm" value="../0/mailArm" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="mail" width="25" height="27">
+                <vector name="origin" x="14" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="497e6d900f802859f66b8b0cf8fc57f3b57ff05bae9026049a188270fdde9b65" />
+            </canvas>
+            <canvas name="mailArm" width="15" height="22">
+                <vector name="origin" x="4" y="2" />
+                <imgdir name="map">
+                    <vector name="navel" x="-10" y="10" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="73a31dd2446840be4935187b2950f87023d47703aa716d8cf761aa6f8a3153a5" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <canvas name="mail" width="20" height="27">
+                <vector name="origin" x="12" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="279854855532f5d286ef6901273eae8767e47443ff0d72ac604c7eec8abc7974" />
+            </canvas>
+            <canvas name="mailArm" width="8" height="21">
+                <vector name="origin" x="3" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="97f4cd5b3a33df0ad7c35f96996bc8e0989165236dea0a0f9a7218789f3c1a95" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="20" height="26">
+                <vector name="origin" x="11" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="e04b2f66d280f3618ff5ecf6ac19454539f20303bc6080b42aca920472755754" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="21">
+                <vector name="origin" x="3" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-8" y="3" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="f332550ebb8213d2553c8401233dea5ceabeefb3656086b7f98d14752bac40b0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="20" height="27">
+                <vector name="origin" x="12" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="walk2/0/mail" />
+            </canvas>
+            <uol name="mailArm" value="../0/mailArm" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="mail" width="22" height="27">
+                <vector name="origin" x="13" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="3a30c5a9ad6e862b31221c9fea816022f949a7dd932b52dcd042deba15ad6c2a" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="20">
+                <vector name="origin" x="4" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="-10" y="6" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="15aa477c1c43ca1ae3ff69026e3833f5e2fb9b0ee00d8f18c1bc6ba9d0cefdac" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="mail" width="22" height="27">
+                <vector name="origin" x="15" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-6" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="9531fd5b79402a40ffe9d8e997882004dc0b697dae45e4e75d5d23770a29cad3" />
+            </canvas>
+            <canvas name="mailArm" width="11" height="25">
+                <vector name="origin" x="5" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-12" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="07738d0cf037dfa60e833f52f044ec1fc3ea2e52c6eac42b39fe53098d85a33e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="23" height="27">
+                <vector name="origin" x="14" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="68e546f70d2cd228ba6edfba031fa5daeada3370fe15b741f67395c351cf50f8" />
+            </canvas>
+            <canvas name="mailArm" width="11" height="25">
+                <vector name="origin" x="4" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-11" y="5" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="acbbf924ae1d417bb0e815ad5c9ddb53b8dca126315188759f1a1fa1851c6956" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="24" height="27">
+                <vector name="origin" x="15" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="c869bdd70a60ec9fc55dde40f1abc69c5c30129faca5b8c3192aba9a11d67649" />
+            </canvas>
+            <canvas name="mailArm" width="11" height="25">
+                <vector name="origin" x="4" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-11" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="fe9fa1b6d124cc365b5740f9ef5611be23fa0232f9056f736ef3a3bdbe3fc54c" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <canvas name="mail" width="22" height="27">
+                <vector name="origin" x="15" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-6" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="7882f6817bc04b71890695e8dd626bb279b88ca1968da6bf1078e25925580d5e" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="21">
+                <vector name="origin" x="3" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="3" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="c9e78f55f463ff158317ed59422d07b81144d2bf0eebea96643c1ad569631b20" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="21" height="27">
+                <vector name="origin" x="12" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="9531e8750b664b5fc29863b344676e0d02d431a91420ddf2641a19ee07d813fc" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="20">
+                <vector name="origin" x="3" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="ae18e04be10cf7a042fa23de3d489f9f0ec8c60f58518cbc8c15b2900abac89b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="21" height="27">
+                <vector name="origin" x="12" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="2b0e0680c6fd8629ae4ae3cc7f66b8f14ab9b86d65e2aa1a26d478fc73ab0894" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="20">
+                <vector name="origin" x="4" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="e0330b3af5639bbd319cf3324d2f9d20467ea96449f8e66438a955e6f5c76ff4" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="mail" width="20" height="27">
+                <vector name="origin" x="11" y="12" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="0" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="059ab5d0db3a355c909ad96a7b22931c766e35533d9998fe4059a8ba0efbe455" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="21">
+                <vector name="origin" x="4" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="5" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="2ad6063e7c2f763dc276a81a192556a3a25780d019f70c4cc1ec955aa0f3eba1" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="20" height="27">
+                <vector name="origin" x="12" y="12" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="0" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="0224a503478a62fe793302d756ad117962182d8c7d24b6906336a0d159a64871" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="21">
+                <vector name="origin" x="3" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-8" y="4" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="15cfbce265702b37e113bac88d581dbec6ff68b5140d1094242e69a82ca3811c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="20" height="27">
+                <vector name="origin" x="13" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="36a0a88e0ed9ca3049b982b825a1315689d0158f94fcd7a9221089e90b0bc009" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="22">
+                <vector name="origin" x="3" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-8" y="4" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="d992ed41655f4bc333d9e3871ca2c2fe78442fe8c666dfdcb2f9357a80f52dc4" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="0">
+            <canvas name="mail" width="21" height="24">
+                <vector name="origin" x="12" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="d00411abbe97efce261ca5bda68b4c68be9c98054767e48b99d042ae06ed853a" />
+            </canvas>
+            <canvas name="mailArm" width="8" height="18">
+                <vector name="origin" x="3" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="9" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="49ad2b9d6965133bacb4af13f84d791753eb4a441af160db7e74b4222b0a0ad5" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="21" height="26">
+                <vector name="origin" x="13" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-7" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="5f4d03d5e66fc1cfff12d053f77d5f38fed29139bbb9fd3afdeace3682f0983d" />
+            </canvas>
+            <canvas name="mailArm" width="13" height="18">
+                <vector name="origin" x="-1" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="13" y="6" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="285d39077816ab77bf5aa057b2f10d2617564e07b3aa806eca1a1b595b68f848" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="9" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="544e957d861b7a2867651cb09da1b277e98438d3220d514afb238a3abe085a13" />
+            </canvas>
+            <canvas name="mailArm" width="23" height="22">
+                <vector name="origin" x="3" y="-5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-5" y="23" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="45206750a1ea81e707d0b36d414f1cb12672bcc7307c3f558c5144c6bb2d7f3d" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="mail" width="19" height="26">
+                <vector name="origin" x="11" y="12" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="0" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="3cff0ab467e3d973afd7fc015a40068f6e799f416d63375cffa414b6bd19933e" />
+            </canvas>
+            <canvas name="mailArm" width="17" height="21">
+                <vector name="origin" x="4" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="11" y="9" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_hash" value="4a3328676dd066873c2b513d001888aa76bd51465ed4af591421291009fba8c4" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="22" height="27">
+                <vector name="origin" x="8" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="e7a1a2d3403dcff7864a3f061ddf4e8f45dae22b567ac3eef2abed61080d74e5" />
+            </canvas>
+            <canvas name="mailArm" width="16" height="21">
+                <vector name="origin" x="4" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="13" y="5" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="9e16263fde5ef78cb692e39592fd0bc08de0601ba23d3c31db376dc48505d514" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="29" height="27">
+                <vector name="origin" x="13" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="8efde77dc02a31e3576f2204f7a44247d7d4c8e6a58c0d8912767eee413cd81a" />
+            </canvas>
+            <canvas name="mailArm" width="13" height="23">
+                <vector name="origin" x="3" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-7" y="6" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="dd3472aa7756d6179f93efb9131abb367fa99ba95e3eb67ef73a37143c471bc4" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="0">
+            <canvas name="mail" width="35" height="26">
+                <vector name="origin" x="12" y="13" />
+                <imgdir name="map">
+                    <vector name="navel" x="10" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="f16c9d95f953c0cb6eeba2f95ad74420df6f20d64f7d879579cc5699bc70e809" />
+            </canvas>
+            <canvas name="mailArm" width="14" height="21">
+                <vector name="origin" x="4" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-7" y="8" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="4c1e1874c46640466828da33f1046c39c8b824c0a560e97d418d653354a32d71" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="18" height="25">
+                <vector name="origin" x="12" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-6" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="7eae8c45d60d9cb8055057709908a116e89b715c80e1ef64263c11d2ac9e6cfc" />
+            </canvas>
+            <canvas name="mailArm" width="14" height="22">
+                <vector name="origin" x="3" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="12" y="6" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="a5ca6b095bac8d560f2e937050986d0f4727634e13e6aa1d47f872e595ffab0e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="21" height="24">
+                <vector name="origin" x="12" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-8" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="swingO1/0/mail" />
+            </canvas>
+            <canvas name="mailArm" width="8" height="20">
+                <vector name="origin" x="3" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="5" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="af519b16260ef7d855d39f9031ca28ab68e8a1eaeecacd157a0c8a840a21ba16" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="mail" width="33" height="27">
+                <vector name="origin" x="10" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="4" y="4" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="ae048823bd815e57390baa00f3f0d0ce675d35ea216a0e67aa63b2de15b12d52" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="39" height="32">
+                <vector name="origin" x="10" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="3" y="6" />
+                </imgdir>
+                <string name="z" value="backMailChest" />
+                <string name="_hash" value="bbd70c695642c25d8ca9a90d2a07c5845b57b6d0f2a2477ee8b1438acc2b568d" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="39" height="27">
+                <vector name="origin" x="11" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="6" y="4" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="47669f6deb1e99ed5cd02ee5f227b57d282a3a0bc94c44e0f1ec434b6da740b9" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="mail" width="28" height="31">
+                <vector name="origin" x="10" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="4" y="7" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="c4bd4e0184ac85bff50707ed06c22694a9d7bc04022ce77f4958a7be41d3d1da" />
+            </canvas>
+            <canvas name="mailArm" width="19" height="20">
+                <vector name="origin" x="17" y="3" />
+                <imgdir name="map">
+                    <vector name="navel" x="11" y="4" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHeadOverMailChest" />
+                <string name="_hash" value="e48556ad8c10591372a758b756918f0022781443044ee96427b4ae56fbf36939" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="mail" width="20" height="26">
+                <vector name="origin" x="11" y="12" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="-1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="c2e5e79edaf72280163cbe7dac1afe866c6260b3e298e24d84cd77298218c678" />
+            </canvas>
+            <canvas name="mailArm" width="8" height="27">
+                <vector name="origin" x="-2" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="5" y="15" />
+                </imgdir>
+                <string name="z" value="mailArmOverHairBelowWeapon" />
+                <string name="_hash" value="4f663003c718f802acb5b2d373e8b304afd46010378792872f9116c472f0995a" />
+            </canvas>
+            <canvas name="mailArmOverHair" width="10" height="27">
+                <vector name="origin" x="4" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="-10" y="17" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="fa22e667a311411366a1abf1bcb86f16441c6cb80c0b43907ea678dea8ba551e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="22" height="27">
+                <vector name="origin" x="12" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="eb9e36f76fa25b99e343d1912bbb9b70865cff8b42315808344439f8944e0c86" />
+            </canvas>
+            <canvas name="mailArm" width="10" height="21">
+                <vector name="origin" x="4" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="11" y="3" />
+                </imgdir>
+                <string name="z" value="mailArmOverHairBelowWeapon" />
+                <string name="_hash" value="3c74b586d950f7ab2d79878f12acfae46cec86fedf40455c7bf03dea5f889ef8" />
+            </canvas>
+            <canvas name="mailArmOverHair" width="11" height="22">
+                <vector name="origin" x="0" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="9" y="10" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="07c267d0375a93d174f4886b8564eb45292ce9275fd786b9905a4f15dcb533e4" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="29" height="26">
+                <vector name="origin" x="12" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="82971be000b9d80c042f64235003faba7a33c03873f27617fd1802e7c2325d83" />
+            </canvas>
+            <canvas name="mailArm" width="21" height="22">
+                <vector name="origin" x="5" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="10" y="1" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="2f4b5b318e5e3091f5411687ff9b4d305d63a0886f6489dd0f2e2f507e093de1" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="0">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="10" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="4" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="c77b690665bc04292f1128521b3eeca7fa302836d2722477c693a220f89f04ef" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="31" height="24">
+                <vector name="origin" x="11" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="5" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="a2eaee3a40c3d6c57e9ac9c29de57e0c73d7a1444a604d6021a0b85a24261e3a" />
+            </canvas>
+            <canvas name="mailArm" width="19" height="21">
+                <vector name="origin" x="8" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="6" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="e9faeac82d80d6229e5f8238a6aeaebfa69b9fa27628b347ad93549d1810ba62" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="11" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="23f55e3f8860995b4ac47943932f1737cb25c6546779f9be2c2760bf87e6f3f6" />
+            </canvas>
+            <canvas name="mailArm" width="32" height="21">
+                <vector name="origin" x="14" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="6" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHeadOverMailChest" />
+                <string name="_hash" value="b66181709b726e3118b18b02d839da49a076fbd5070fa15c0d66cd934aec1e86" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT3">
+        <imgdir name="0">
+            <canvas name="mail" width="22" height="27">
+                <vector name="origin" x="11" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="cae75803b9d7944647a03f27e9b54a81d7d2ca2b57ca8591be5b15605c96357c" />
+            </canvas>
+            <canvas name="mailArm" width="12" height="21">
+                <vector name="origin" x="-1" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="6" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="4ce71ae48e379225758746c11f1c870653975a8567fbce4e17cc45e8d26449f2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="24" height="22">
+                <vector name="origin" x="10" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="-1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="1a72a8a6484c65c603ce27739fc41b510f2a53b68c957da9a6860a5e9c832756" />
+            </canvas>
+            <canvas name="mailArm" width="20" height="22">
+                <vector name="origin" x="3" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="5" y="3" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHeadOverMailChest" />
+                <string name="_hash" value="2f4cf5c16d2cdd0846bdadcce1a4181981385b4f8968fcf812f58e5486e76464" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="7" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="3" y="6" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="4789db5fc66cc9b05b7d15c1b72b799ed4bdfe945f1693f3589f57fb6fdc9f19" />
+            </canvas>
+            <canvas name="mailArm" width="17" height="19">
+                <vector name="origin" x="-6" y="1" />
+                <imgdir name="map">
+                    <vector name="navel" x="22" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_hash" value="0df6f4d7a62568604131c933af87f1dc8d632e20202a0295b98445aa68b99bf3" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="0">
+            <canvas name="mail" width="23" height="28">
+                <vector name="origin" x="7" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="4" y="9" />
+                </imgdir>
+                <string name="z" value="backMailChest" />
+                <string name="_hash" value="0519a0ae2449f77777b4e4a8aef8b1de9dff040aacbd63e7a783947b7e95deca" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="24" height="26">
+                <vector name="origin" x="14" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="e467bdcf73e494273a9d96e28de4cdfdd60054ee32ce81edf93348f0736db111" />
+            </canvas>
+            <canvas name="mailArm" width="21" height="17">
+                <vector name="origin" x="3" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-5" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHeadOverMailChest" />
+                <string name="_hash" value="a7ded3e7d39ff9853e8a0cbd83886ebe6747e0fc787f08bbd5bc16d6a76912e3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="22" height="26">
+                <vector name="origin" x="12" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="bff7fa4f627d42409c7e4a13de0654a712d32b24d6a4426800a64417b999ab7e" />
+            </canvas>
+            <canvas name="mailArm" width="27" height="22">
+                <vector name="origin" x="-9" y="-4" />
+                <imgdir name="map">
+                    <vector name="navel" x="18" y="17" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="f5e310c703b478c834a12b854f7fb5697acc6e3b4e207fec0c8430ba2b2d0fe9" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="mail" width="30" height="26">
+                <vector name="origin" x="13" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="4" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="4dc90d976466c5286d9ac04f687c6b2aa491f8d126176ec42cfbf7db29139b48" />
+            </canvas>
+            <canvas name="mailArm" width="21" height="22">
+                <vector name="origin" x="5" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="12" y="3" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_inlink" value="swingT1/2/mailArm" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP1">
+        <imgdir name="0">
+            <canvas name="mail" width="20" height="26">
+                <vector name="origin" x="11" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="a4f6a78b84772a9662bd5808a577bce2f1aee047181935ef48d07f403bc63afe" />
+            </canvas>
+            <canvas name="mailArm" width="8" height="21">
+                <vector name="origin" x="-5" y="-1" />
+                <imgdir name="map">
+                    <vector name="navel" x="11" y="15" />
+                </imgdir>
+                <string name="z" value="mailArmOverHairBelowWeapon" />
+                <string name="_hash" value="ee772f3cb878db017a1e583265d2865b0df8a6719d4b18f1d78ac91add19f343" />
+            </canvas>
+            <canvas name="mailArmOverHair" width="10" height="27">
+                <vector name="origin" x="-1" y="13" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="12" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_inlink" value="swingT1/0/mailArmOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="28" height="27">
+                <vector name="origin" x="10" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="4" y="4" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="431626d560e502669a843efddbd204f1323d4245b9da13a7d318b15488b01029" />
+            </canvas>
+            <canvas name="mailArm" width="11" height="22">
+                <vector name="origin" x="-5" y="3" />
+                <imgdir name="map">
+                    <vector name="navel" x="13" y="12" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="affde12d2d6caa54c04a955128e722998be13d18acfe3e5753530896a600de13" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="29" height="26">
+                <vector name="origin" x="12" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="swingT1/2/mail" />
+            </canvas>
+            <canvas name="mailArm" width="21" height="22">
+                <vector name="origin" x="5" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="10" y="2" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_inlink" value="swingT1/2/mailArm" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="mail" width="23" height="29">
+                <vector name="origin" x="5" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="5" y="8" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="fd322f1cdd8b6a0bc5edf1dfdbac347759b16023a63420cea5aab3a5a2f7ef50" />
+            </canvas>
+            <canvas name="mailArm" width="18" height="20">
+                <vector name="origin" x="8" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="9" y="4" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="e1ff65a0b8c200c04362cbe51bea8cb88e0963515bbc5463b7d7d9e7ad6fdede" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="8" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="5" y="5" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="036def1dd12c40ee99bca607cc5c1c1fd360d604f03bf16fee277684c1b5f3d5" />
+            </canvas>
+            <canvas name="mailArm" width="17" height="20">
+                <vector name="origin" x="4" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="9" y="2" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="bc3ece75db4e192c9ac306e4d5c5285d6d66ce7dfe7fd81540cf2b3815c244ac" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="11" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="swingT2/2/mail" />
+            </canvas>
+            <canvas name="mailArm" width="32" height="21">
+                <vector name="origin" x="14" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="6" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_inlink" value="swingT2/2/mailArm" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="0">
+            <canvas name="mail" width="32" height="26">
+                <vector name="origin" x="6" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="9" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="863f7d0f65f364075f8da986031b94f48be1a73fbc564d7c464ccc48853268d7" />
+            </canvas>
+            <canvas name="mailArmOverHair" width="12" height="26">
+                <vector name="origin" x="4" y="-3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-11" y="21" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="86e92ddfc6a3f375257f3b842aa3e149edadbb469b3d8cdf96a0e69fe534df7b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="33" height="26">
+                <vector name="origin" x="9" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="7" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="83bdbc153656ae42378d970b7d3bbbf1cd78c6a7145019efc422e90b26f22a77" />
+            </canvas>
+            <canvas name="mailArmOverHair" width="13" height="25">
+                <vector name="origin" x="3" y="-1" />
+                <imgdir name="map">
+                    <vector name="navel" x="-10" y="18" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="84daa151a312a3fdd5b9e1adc36519db1829a4c699a4e476f30d59e1af49bf33" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="21" height="31">
+                <vector name="origin" x="12" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="4" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="c0685d49e0d5d432225c14087e2b978107580dea6664901d2d98bce9a87915fe" />
+            </canvas>
+            <canvas name="mailArm" width="8" height="21">
+                <vector name="origin" x="-5" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="17" y="14" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_inlink" value="swingP1/0/mailArm" />
+            </canvas>
+            <canvas name="mailArmOverHair" width="10" height="27">
+                <vector name="origin" x="2" y="12" />
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="13" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_inlink" value="swingT1/0/mailArmOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="mail" width="24" height="23">
+                <vector name="origin" x="10" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="2" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="97398b1f33369b88d1a2fdfa413d277b8c48d80fece76b8add995f69e3f9d3bd" />
+            </canvas>
+            <canvas name="mailArm" width="21" height="22">
+                <vector name="origin" x="5" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="12" y="2" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_inlink" value="swingT1/2/mailArm" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="mail" width="32" height="26">
+                <vector name="origin" x="12" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="7" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="c139b2921922cabd5caa38eeea724dea4825e26bfd959587e821a6ee3eb361ab" />
+            </canvas>
+            <canvas name="mailArm" width="13" height="23">
+                <vector name="origin" x="5" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="7" />
+                </imgdir>
+                <string name="z" value="mailArm" />
+                <string name="_hash" value="a85e0963905e636db6014620168545d7d25c269f95a98cc66df5e6f840bd1636" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="10" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="2934ae314e465e41ce8cffc12e6a8a9bc98e8f431dcf1630ab13a789102b366c" />
+            </canvas>
+            <canvas name="mailArm" width="22" height="21">
+                <vector name="origin" x="9" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="17" y="6" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="b1f4c540f3b6f5bae934b3fd49cf7041cf3c64498c0124dd26ba96bdc091ac4b" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="mail" width="33" height="26">
+                <vector name="origin" x="15" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="6" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="b3815c81260c6ad924e8d953beef40e0c98e519f2a3447de611395a138bfd6d6" />
+            </canvas>
+            <canvas name="mailArm" width="14" height="22">
+                <vector name="origin" x="5" y="8" />
+                <imgdir name="map">
+                    <vector name="navel" x="-12" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="d8e7c24d8b0ab95b6b2a6281859d5e3e2405f8589e6edf76e058f1475881b65c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="10" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="stabO1/1/mail" />
+            </canvas>
+            <canvas name="mailArm" width="21" height="21">
+                <vector name="origin" x="7" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="16" y="5" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="1054794c21bf7efe836a0a08ea8e3414cab53e51136406528e5e1307713ad51a" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="0">
+            <canvas name="mail" width="24" height="25">
+                <vector name="origin" x="14" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="2" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="d27a1087b37f41eed566c71bb55f3678aafdd1a2cde5baf03e9ccd4fa88d25e2" />
+            </canvas>
+            <canvas name="mailArm" width="14" height="19">
+                <vector name="origin" x="4" y="3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="10" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="3514d0efc1bae4e7f567341bbc25d1fa84fd54fc2ca6923969f56ac09856a8c8" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="40" height="27">
+                <vector name="origin" x="16" y="14" />
+                <imgdir name="map">
+                    <vector name="navel" x="14" y="-1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="181d352d6823bc580e3ca582b8410e1b48f5499b7f4e03935996fc41cd73812e" />
+            </canvas>
+            <canvas name="mailArm" width="24" height="22">
+                <vector name="origin" x="4" y="3" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="07bacbe08c98a20c9acfa41f7cadb212c82bf0a6e3c9c48509ca7b3537914fe7" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="31" height="26">
+                <vector name="origin" x="10" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="5" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="7948bafbfd7444c231907e85b423aeaae12610ec0addfd56dc417c1793adfab2" />
+            </canvas>
+            <canvas name="mailArm" width="22" height="21">
+                <vector name="origin" x="7" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="19" y="5" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="a136e83ab84a4a7c7bfc1adc5e8192c52d004d6d2d1f62176cd5ae3a2f7e10c8" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="mail" width="25" height="28">
+                <vector name="origin" x="11" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="c2e706cb02ee9c76b3188b2e31e01c8c3d46cdea80d2eba04261ea00ab9c1ae4" />
+            </canvas>
+            <canvas name="mailArm" width="20" height="23">
+                <vector name="origin" x="4" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="13" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_hash" value="ea155b937b92c63382f9144a98ad9f06d6fae56f16fa241d282cf03a490fc6c9" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="27" height="26">
+                <vector name="origin" x="10" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="94dc8a07be2f959d1307d1d0d12566d3620e23955b64be255940e4fd16f25c5d" />
+            </canvas>
+            <canvas name="mailArm" width="19" height="24">
+                <vector name="origin" x="3" y="2" />
+                <imgdir name="map">
+                    <vector name="navel" x="-5" y="11" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_hash" value="6552c2fbb12dfa7715a64f089aa1e6860eafeb343b0557977e4f573169a3a8cd" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="45" height="25">
+                <vector name="origin" x="15" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="11" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="5312a2b7947e57db0625420168d32cf851c12aa9204022f3abc62ab554a37e46" />
+            </canvas>
+            <canvas name="mailArm" width="14" height="21">
+                <vector name="origin" x="5" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-5" y="6" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_hash" value="4d20aec7066fcc422d25f4b16f9a1fcd3ced7f4a56db3e153469b28363430687" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="mail" width="30" height="30">
+                <vector name="origin" x="12" y="12" />
+                <imgdir name="map">
+                    <vector name="navel" x="3" y="4" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="8df3252bbea0dbe733236f67a25ddcfbccd49d36145eb6566e525858b0588722" />
+            </canvas>
+            <canvas name="mailArm" width="17" height="25">
+                <vector name="origin" x="4" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="-7" y="11" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_hash" value="a4b18aaa03bc768f90b9daf3e7a67be5476af049706d0f739f17eafb3d40f8f7" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="29" height="29">
+                <vector name="origin" x="11" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="3" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="8772f877c7715df2d400df92b9a45643b5caef8effeeb2830e4a619b2f458d73" />
+            </canvas>
+            <canvas name="mailArm" width="20" height="25">
+                <vector name="origin" x="3" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="12" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_hash" value="d5113d814d457549b41fa45005a264ed930027f40571aba0facb2444fe34865b" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="42" height="25">
+                <vector name="origin" x="13" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="12" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="738958b9586d9d93404496569439fa3801e7ccdea797a1902a5dda72332c5ee7" />
+            </canvas>
+            <canvas name="mailArm" width="13" height="25">
+                <vector name="origin" x="3" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-4" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmBelowHead" />
+                <string name="_hash" value="d619f4ced246a52e908ea67b78d414e9061f04bd50bcabb6402579178e2acc7e" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="0">
+            <uol name="mail" value="../../swingPF/0/mail" />
+            <uol name="mailArm" value="../../swingPF/0/mailArmOverHair" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="mail" value="../../swingPF/1/mail" />
+            <uol name="mailArm" value="../../swingPF/1/mailArmOverHair" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="21" height="31">
+                <vector name="origin" x="11" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="2" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="swingPF/2/mail" />
+            </canvas>
+            <canvas name="mailArmOverHairBelowWeapon" width="18" height="26">
+                <vector name="origin" x="11" y="-2" />
+                <imgdir name="map">
+                    <vector name="navel" x="-5" y="11" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="a45bdee195e73ad41fc05177952aa3fffc248f4fb92e4478ae02e6178a077c6b" />
+            </canvas>
+            <canvas name="mailArmOverHair" width="22" height="21">
+                <vector name="origin" x="-3" y="15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="1" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="e6f28cdb50ea1b5f2d02b120fdc0a12c317c37729106346fc6fc811111070760" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <uol name="mail" value="../../stabT1/2/mail" />
+            <uol name="mailArm" value="../../stabT1/2/mailArm" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot1">
+        <imgdir name="0">
+            <canvas name="mail" width="32" height="26">
+                <vector name="origin" x="14" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="8" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="68895cda1e019aae26aa5703397573e1bcea21a5a1002abce1833c63e6251846" />
+            </canvas>
+            <canvas name="mailArm" width="18" height="21">
+                <vector name="origin" x="7" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="10" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="8c692519fd2004cfe1f1c538b552cebe04dbe37f0a1bf408f49b54157a821168" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="32" height="26">
+                <vector name="origin" x="14" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="8" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="36d6be7dc05fca48274ab66385fc3c0c9142a34b6aec4a4d0b87e49e638d0642" />
+            </canvas>
+            <canvas name="mailArm" width="11" height="22">
+                <vector name="origin" x="3" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="9" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="576f0635f0715a089525d3d18fe594e72a2fb837719fa3b49371250f9d927899" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="mail" value="../1/mail" />
+            <uol name="mailArm" value="../1/mailArm" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot2">
+        <imgdir name="0">
+            <canvas name="mail" width="26" height="26">
+                <vector name="origin" x="15" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="908786102475f2c84880e583ffe2a02eea7fb9c44564013a55635e3bbd318837" />
+            </canvas>
+            <canvas name="mailArm" width="10" height="20">
+                <vector name="origin" x="4" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="8" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="885d26aed7ed5d35226edb07bc9347543d8c6277bbc6d48f15c14c8623c5b89f" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="26" height="26">
+                <vector name="origin" x="15" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="shoot2/0/mail" />
+            </canvas>
+            <canvas name="mailArm" width="16" height="22">
+                <vector name="origin" x="5" y="8" />
+                <imgdir name="map">
+                    <vector name="navel" x="2" y="8" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="ded0a2602ec037362aad958d86f0a9d8da43fdcdad71805c9d3c3abd681ddee2" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="mail" width="26" height="26">
+                <vector name="origin" x="16" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="shoot2/0/mail" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="19">
+                <vector name="origin" x="4" y="7" />
+                <imgdir name="map">
+                    <vector name="navel" x="-10" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="91d7e19f18692a8b8a90d05ec0d80fd188b667b8af9d47cc7c78cf265438355a" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="mail" width="26" height="26">
+                <vector name="origin" x="16" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_inlink" value="shoot2/0/mail" />
+            </canvas>
+            <canvas name="mailArm" width="10" height="20">
+                <vector name="origin" x="3" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-8" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_inlink" value="shoot2/0/mailArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="mail" width="25" height="26">
+                <vector name="origin" x="15" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="272130d2ce655ea59aadf9020a103490d0ba6d73f69bdafb9de78b9bc0969d9f" />
+            </canvas>
+            <canvas name="mailArm" width="11" height="19">
+                <vector name="origin" x="3" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="7" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="934ff8a3acaa65f1d08fc8699b734bd83c5c0a3a4d069ce2a69597843e555ea2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <imgdir name="0">
+            <canvas name="mail" width="27" height="27">
+                <vector name="origin" x="9" y="12" />
+                <imgdir name="map">
+                    <vector name="navel" x="10" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="dbeda49482bb72725357b6fc07f78ba36b53b3057682e9fb0e2a954f40e06a65" />
+            </canvas>
+            <canvas name="mailArm" width="14" height="23">
+                <vector name="origin" x="5" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="-1" y="12" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="e2163a4d03bb155b614a77606b4a6d8d87ef30ebcf5eab5811f9e5214f0fb3e7" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="30" height="27">
+                <vector name="origin" x="11" y="12" />
+                <imgdir name="map">
+                    <vector name="navel" x="10" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="af1600b9c0d1a22aaa2349d4fa6299539d4a0987e94782cf2c3d70018a9f4585" />
+            </canvas>
+            <canvas name="mailArm" width="12" height="22">
+                <vector name="origin" x="6" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="-11" y="5" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="4da65fb6d49dc5719de5f7cee8c88e9731330fbf7cd73398f76105003d10a932" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="mail" value="../1/mail" />
+            <uol name="mailArm" value="../1/mailArm" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="mail" width="62" height="17">
+                <vector name="origin" x="25" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="22" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="0af1b57b9ea03e3d640a44c102c07f1b30285997d43b0a8d6a7f3e60bc263d06" />
+            </canvas>
+            <canvas name="mailArm" width="27" height="13">
+                <vector name="origin" x="14" y="8" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="2bc6a4673768d3af5f0c29e9e52e0a1a3ae52ea354617b165063ae8e1bb42deb" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <uol name="mail" value="../0/mail" />
+            <canvas name="mailArm" width="27" height="13">
+                <vector name="origin" x="6" y="8" />
+                <imgdir name="map">
+                    <vector name="navel" x="16" y="0" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="a1d4b51d2d322cc7fae1325464d1161afe5be142dc79a48b51bfa0871bb5e841" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="mail" value="../../proneStab/0/mail" />
+            <uol name="mailArm" value="../../proneStab/0/mailArm" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal">
+        <imgdir name="0">
+            <uol name="mail" value="../../alert/1/mail" />
+            <uol name="mailArm" value="../../alert/1/mailArm" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="mail" value="../../swingO2/1/mail" />
+            <uol name="mailArm" value="../../swingO2/1/mailArm" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="mail" value="../../swingO2/0/mail" />
+            <uol name="mailArm" value="../../swingO2/0/mailArm" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="mail" width="23" height="29">
+                <vector name="origin" x="11" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="b37b563a04483fc062a6d8973ee0ea35bf78330efe9b2e6642897576178abcd2" />
+            </canvas>
+            <canvas name="mailArm" width="9" height="20">
+                <vector name="origin" x="5" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="-11" y="6" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="d72c8ca43265f13e516ec8964f08281af300a39e1b7d613f9212e34d46e32403" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="23" height="29">
+                <vector name="origin" x="11" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="-2" y="3" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="73866901f355d87236b8208a1f21a19a7bad03eec77e13b0832cf4174e834764" />
+            </canvas>
+            <canvas name="mailArm" width="7" height="20">
+                <vector name="origin" x="-6" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="ce23f234d0646698c5ab37a5bfe64adae238d8cda631c9da5995b7aa84a3b4d6" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="mail" width="22" height="26">
+                <vector name="origin" x="11" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="2" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="6c99c97957380d39636b458b55dc3c4fca6a6b6801eafc0b278b1a4307f7b9b7" />
+            </canvas>
+            <canvas name="mailArm" width="6" height="15">
+                <vector name="origin" x="5" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="-13" y="5" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="b449ade631eadcf809ce8f54f6c36c0a8a857efc1a6691ca7c5d02e688734cf7" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="mail" width="21" height="19">
+                <vector name="origin" x="9" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="2" y="1" />
+                </imgdir>
+                <string name="z" value="mailChestOverHighest" />
+                <string name="_hash" value="c0744afdac8f2555d86e898916dd94e2051781382802cb0a540890b2d3ff9c9a" />
+            </canvas>
+            <canvas name="mailArm" width="6" height="17">
+                <vector name="origin" x="4" y="4" />
+                <imgdir name="map">
+                    <vector name="navel" x="-9" y="5" />
+                </imgdir>
+                <string name="z" value="mailArmOverHair" />
+                <string name="_hash" value="c5331bd7a2c6b2115b2647070f86d2debc069d8e0b8e9779f68eaf72db01e983" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="mail" width="22" height="25">
+                <vector name="origin" x="7" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="5" y="4" />
+                </imgdir>
+                <string name="z" value="backMailChest" />
+                <string name="_hash" value="f569599df71b3a0e813423be25516a459864481dc445a3b4c8df0327593c732d" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="22" height="25">
+                <vector name="origin" x="9" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="1" y="4" />
+                </imgdir>
+                <string name="z" value="backMailChest" />
+                <string name="_hash" value="048d20fb0654ccb054eed449f8447e75b67c306f755495d3df67467e4907507c" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="mail" width="21" height="26">
+                <vector name="origin" x="5" y="8" />
+                <imgdir name="map">
+                    <vector name="navel" x="6" y="2" />
+                </imgdir>
+                <string name="z" value="backMailChest" />
+                <string name="_hash" value="74589b0fa4b1a45d474c2acc952e6573e2fb96ac0b0a1baee1e02bdaedd02eeb" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="mail" width="25" height="23">
+                <vector name="origin" x="10" y="10" />
+                <imgdir name="map">
+                    <vector name="navel" x="2" y="0" />
+                </imgdir>
+                <string name="z" value="backMailChest" />
+                <string name="_hash" value="5370f6c4267bff99215a9d1846632de6e86f873c2b60e0b485aba163ca76ccc9" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

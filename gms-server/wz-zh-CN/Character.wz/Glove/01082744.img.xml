@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01082744.img">
+    <imgdir name="info">
+        <canvas name="icon" width="35" height="34">
+            <vector name="origin" x="1" y="32" />
+            <string name="_hash" value="a815edd59a88ecfb51ba3e796ca857e6ebd13e68385849c65c10017dc1d5d4f7" />
+        </canvas>
+        <canvas name="iconRaw" width="35" height="34">
+            <vector name="origin" x="1" y="32" />
+            <string name="_hash" value="d447ab8e64394c15c548a1bbf475b950e05d426299bf40dfd7b018e030146e64" />
+        </canvas>
+        <string name="islot" value="Gv" />
+        <string name="vslot" value="GlGw" />
+        <int name="reqJob" value="0" />
+        <int name="reqLevel" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="cash" value="1" />
+        <int name="setItemID" value="757" />
+        <int name="royalSpecial" value="1" />
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="1" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="-1" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="6" height="6">
+                <vector name="origin" x="-1" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="rWrist" value="../0/rWrist" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="rWrist" width="7" height="6">
+                <vector name="origin" x="1" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_hash" value="449098a876c594b0762787c3adbbb2cf1614507ad00bf145e420480740374b45" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="walk2">
+        <imgdir name="0">
+            <canvas name="rWrist" width="6" height="7">
+                <vector name="origin" x="-1" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="babcee5b6c654da0e166c26ebfd91323cfcbe85227b827eaab963ea153ff4f1f" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="walk2/0/rWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="rWrist" value="../0/rWrist" />
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="-1" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="walk2/0/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="0" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="0" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="0" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand2">
+        <imgdir name="0">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="walk2/0/rWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="walk2/0/rWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="walk2/0/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="rWrist" width="6" height="6">
+                <vector name="origin" x="2" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="6" height="6">
+                <vector name="origin" x="1" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="6" height="6">
+                <vector name="origin" x="1" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="5" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="6" height="7">
+                <vector name="origin" x="8" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="4b0ffdb011ca6ca69793d607ad617a03f9f69da6c3d325f804ec0f8e892c2c9e" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="rWrist" width="7" height="6">
+                <vector name="origin" x="2" y="-1" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowHead" />
+                <string name="_hash" value="7085280918f7a70135cca289838f08d00007c5836d49eb1e88e8e21d84338f07" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="11" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowHead" />
+                <string name="_inlink" value="walk2/0/rWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="8" height="8">
+                <vector name="origin" x="6" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_hash" value="1f71e227ca84f3fb6337f9e5f23709ba8994f8fe56313a24923bdcc56f892ec2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="0">
+            <canvas name="rWrist" width="6" height="7">
+                <vector name="origin" x="7" y="1" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_hash" value="dc54c4cc0ffd9b5c4d9161f31d155a756c5d7311b463260e648343295ce5dcda" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="7">
+                <vector name="origin" x="-1" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowHead" />
+                <string name="_hash" value="f6d375cfd4268f666615500b414f104fff6830bd1452aa8d14c81a9389162160" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="6" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="swingO2/2/rWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="rWrist" width="6" height="7">
+                <vector name="origin" x="9" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="-1" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_hash" value="64fdf8d9f45a76e86903144de5738d18b96fd3bc50e9fb86f69b9df7a7e8684d" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT1">
+        <imgdir name="0">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="-5" y="1" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowWeapon" />
+                <string name="_inlink" value="swingO1/2/rWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="7">
+                <vector name="origin" x="-5" y="7" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="12cbaf654c2e164475b057d0a0b69b9d0754087e9986d9dc8905b513fecd4bda" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="8" height="8">
+                <vector name="origin" x="1" y="7" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="6af633ee84c7d2d64fcc78c5cbfe67859b6f78a33d2205db861d09816a24e440" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="1">
+            <canvas name="rWrist" width="6" height="7">
+                <vector name="origin" x="-1" y="3" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="7605604527989682c4b61111d8ecbb3d3caf463d7b62196ea7e95ec5d403dfac" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="8" height="8">
+                <vector name="origin" x="-1" y="10" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_hash" value="628e1aa18c1478cb771c1ee0e83f789e4f497348d287d4a6eeb470c9ceebdce2" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingT3">
+        <imgdir name="0">
+            <canvas name="lGlove" width="5" height="5">
+                <vector name="origin" x="-1" y="7" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="6" height="8">
+                <vector name="origin" x="5" y="8" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowHead" />
+                <string name="_hash" value="aac83e7a09ceea16ada1f0275bc748bd5f8436dc1bf68947bb15c8cdc5203099" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingTF">
+        <imgdir name="1">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="0" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowHead" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="6" height="7">
+                <vector name="origin" x="3" y="-2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="4cd4ae44a766c8722c5fed5155f9d3b6d99d5559732382d9f76c9d7f021fa809" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="rWrist" width="8" height="8">
+                <vector name="origin" x="1" y="7" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="8dd3cf06e5aaf6ab3513dff7459a4291357d6ba72d22ac3ddcc9e8f630b35945" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP1">
+        <imgdir name="0">
+            <canvas name="rWrist" width="7" height="7">
+                <vector name="origin" x="-10" y="-1" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="bd3944c3bf803e8e11fff248a053532cb2e6dafa4c802cc70a5dabad6c9d1365" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="7">
+                <vector name="origin" x="-1" y="-2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="c8b4a593b7913627989bfe6bcce7c8456450de42273a6a28acf1a12799032276" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="1" y="7" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_inlink" value="swingT1/2/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="rWrist" width="7" height="7">
+                <vector name="origin" x="1" y="-2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_hash" value="277d397b0c26215fa20cb9ccd7ef1acac117f3336b1afeb6eb264edc630831fc" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="5" height="7">
+                <vector name="origin" x="-3" y="3" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="11" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_inlink" value="swingO2/2/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="0">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="0" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="0" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="7" height="7">
+                <vector name="origin" x="5" y="-4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="75e82d720378fb54b70170559bfab6ffb6ff0f17adf233520de4c1f68ddfe6c3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="-4" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="swingT1/2/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="1" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="6">
+                <vector name="origin" x="0" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="591fc6a50c4d21ffb44acf2e1d8e314161e0a914d77157764d2b8b384bc6edc7" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="rWrist" width="2" height="4">
+                <vector name="origin" x="-6" y="0" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="stabO1/1/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="0">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="1" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowMailArm" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="8" height="7">
+                <vector name="origin" x="-30" y="12" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowMailArm" />
+                <string name="_hash" value="8aeceb4707a422c1c7a2894393d84ed404dcd7245c84af6c077b5f0242f8c0f1" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="7" height="6">
+                <vector name="origin" x="-1" y="16" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="b829cd420a195813698ca418550f4546c9658bf75520daa49ca4d73b5f90ff1f" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="rWrist" width="6" height="6">
+                <vector name="origin" x="4" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="2" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="7" height="7">
+                <vector name="origin" x="-1" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_hash" value="7bdf32630de5f59ccdbd5c5e9e86890e01937586a21b6a6e27dcd48684e84108" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="rWrist" width="6" height="6">
+                <vector name="origin" x="2" y="8" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="5">
+                <vector name="origin" x="3" y="7" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="8" height="8">
+                <vector name="origin" x="1" y="7" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_hash" value="eecf948d89cd55e9f7d98761142de5b1020d16b789bffd1d0da7c074f653bbcb" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="0">
+            <uol name="rWrist" value="../../swingPF/0/rWrist" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="rWrist" value="../../swingPF/1/rWrist" />
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="-1" y="-13" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_inlink" value="swingTF/2/rWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <uol name="rWrist" value="../../stabT1/2/rWrist" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot1">
+        <imgdir name="0">
+            <canvas name="rWrist" width="5" height="7">
+                <vector name="origin" x="-2" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="7" height="8">
+                <vector name="origin" x="-1" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="8ee6fa3182be2ad89cca00316fb705723709c809b445147b53107d7ae65d8711" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="rWrist" value="../1/rWrist" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="shoot2">
+        <imgdir name="0">
+            <canvas name="rWrist" width="6" height="7">
+                <vector name="origin" x="0" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="33a230cf5c8042defd779c7121b52a394726055ad3d6a7425c888fb8d465d833" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="5" height="7">
+                <vector name="origin" x="13" y="11" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="rWrist" width="5" height="7">
+                <vector name="origin" x="5" y="4" />
+                <imgdir name="map">
+                    <vector name="hand" x="-20" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="rWrist" width="5" height="7">
+                <vector name="origin" x="-3" y="-4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="4">
+            <canvas name="rWrist" width="5" height="7">
+                <vector name="origin" x="-6" y="-4" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="shootF">
+        <imgdir name="0">
+            <canvas name="rWrist" width="5" height="7">
+                <vector name="origin" x="-3" y="5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="6" height="8">
+                <vector name="origin" x="-2" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristBelowMailArm" />
+                <string name="_hash" value="75fc8ac219e29b6b39ad5a26b7b86106cca09e9dc81a180374f58775afe2d927" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <uol name="rWrist" value="../1/rWrist" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="rWrist" width="5" height="7">
+                <vector name="origin" x="-3" y="3" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="-1" y="6" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="stabOF/2/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="rWrist" value="../../proneStab/0/rWrist" />
+            <uol name="lGlove" value="../../proneStab/0/rWrist" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal">
+        <imgdir name="0">
+            <uol name="rWrist" value="../../alert/1/rWrist" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="rWrist" value="../../swingO2/1/rWrist" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="rWrist" value="../../swingO2/0/rWrist" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="-1" y="1" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="walk2/0/rWrist" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="6" height="7">
+                <vector name="origin" x="-2" y="2" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_hash" value="4cd2bfa17372b928330456393139f621686fe30935db1e30da9974871a27c09c" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="-1" y="1" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWristOverHair" />
+                <string name="_inlink" value="fly/1/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="1" y="-5" />
+                <imgdir name="map">
+                    <vector name="hand" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="gloveWrist" />
+                <string name="_inlink" value="swingT1/2/rWrist" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backGlove" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backGlove" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backGlove" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="rWrist" width="1" height="1">
+                <vector name="origin" x="0" y="0" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backGlove" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="01582051.img">
+    <imgdir name="info">
+        <canvas name="icon" width="31" height="32">
+            <vector name="origin" x="-1" y="32" />
+            <string name="_hash" value="20d1e9d30c28eb9e8122eb4c24cff144b8bc0bb22f75abb46b3dfb1bd38c5797" />
+        </canvas>
+        <canvas name="iconRaw" width="30" height="32">
+            <vector name="origin" x="-1" y="32" />
+            <string name="_hash" value="bcddbd7b352fd80ea887e91b188128bfef8b177141b2644076d2c7cb7c9bb31f" />
+        </canvas>
+        <string name="islot" value="Wp" />
+        <string name="vslot" value="Wp" />
+        <int name="walk" value="1" />
+        <int name="stand" value="1" />
+        <short name="attack" value="8" />
+        <string name="afterImage" value="knuckle" />
+        <string name="sfx" value="knuckle" />
+        <int name="reqJob" value="1" />
+        <int name="reqSpecJob" value="37" />
+        <int name="reqLevel" value="135" />
+        <int name="attackSpeed" value="5" />
+        <int name="price" value="1" />
+        <int name="cash" value="0" />
+        <int name="reqSTR" value="0" />
+        <int name="reqDEX" value="0" />
+        <int name="reqINT" value="0" />
+        <int name="reqLUK" value="0" />
+        <int name="incPAD" value="115" />
+        <int name="tuc" value="8" />
+        <int name="incSTR" value="40" />
+        <int name="incDEX" value="25" />
+        <int name="incACC" value="100" />
+        <int name="limitBreak" value="4999999" />
+    </imgdir>
+    <imgdir name="walk1">
+        <imgdir name="0">
+            <canvas name="weapon" width="41" height="46">
+                <vector name="origin" x="14" y="27" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="5224e2af90566b617544bf760182e7a6d1599f978590a8926e8ff204b561ab62" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="42" height="35">
+                <vector name="origin" x="11" y="14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="dcfbc9dec2652363a8dccf9c40ab8ed3f7a3761a0c7060da8f2ad736e094d6f6" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="weapon" width="1" height="1">
+                <vector name="origin" x="14" y="27" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_inlink" value="walk1/0/weapon" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="weapon" width="44" height="46">
+                <vector name="origin" x="15" y="29" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="1e6d5122e7948dee5391309dd31395e79c819f1fe85d50dfd4b95d5925b10671" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stand1">
+        <imgdir name="0">
+            <canvas name="weapon" width="34" height="46">
+                <vector name="origin" x="8" y="23" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="63b0b1c6424b6b60cf42ca92167b3b8fdd8cc7d1bec51445f9396fb80637804a" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="36" height="46">
+                <vector name="origin" x="10" y="24" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="c4e47e3ca38d5a00f1b9c6573855fbf297ed5d789c95f58f257150714454637d" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="weapon" width="38" height="46">
+                <vector name="origin" x="12" y="23" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="06b56d39f7a24317b9d2d560d35aa12020f10bb365b2ede3fd6382b4d27236f9" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="alert">
+        <imgdir name="0">
+            <canvas name="weapon" width="45" height="35">
+                <vector name="origin" x="14" y="16" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="6c5d55d357bc1bb8ea1c0e9237a71cd06263abf45ef68a166fd0ad061a896d53" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="45" height="35">
+                <vector name="origin" x="14" y="15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="95f148f870e4aebb794ec5973a9e5c70d25680187dc71d4ff18cdcaf6d7a3e50" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="weapon" width="1" height="1">
+                <vector name="origin" x="14" y="13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_inlink" value="alert/1/weapon" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO1">
+        <imgdir name="2">
+            <canvas name="weapon" width="35" height="35">
+                <vector name="origin" x="7" y="35" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="6f637fb46b5f6558e1ee4ccb5d6ad8a04fd2003b4c46ab7405b291f3478e4d41" />
+            </canvas>
+            <canvas name="weaponOverArm" width="5" height="7">
+                <vector name="origin" x="10" y="8" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverArm" />
+            </canvas>
+        </imgdir>
+        <uol name="0" value="2" />
+        <uol name="1" value="2" />
+    </imgdir>
+    <imgdir name="swingO2">
+        <imgdir name="0">
+            <canvas name="weapon" width="37" height="33">
+                <vector name="origin" x="24" y="25" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="3ae5fdf0893df149ebaf5ad40e938538543dc6e2048ed1a3698575ff2387aac9" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="44" height="30">
+                <vector name="origin" x="34" y="16" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="958abf8b851992d5be0849ed1f38bceee475d7329ce9c7af7af7d8726f3ef485" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingO3">
+        <imgdir name="2">
+            <canvas name="weapon" width="8" height="9">
+                <vector name="origin" x="-10" y="11" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="b024c0694d27c122344394d2d10308041a217334a0e5a58d4b699ea3b1eb8ef8" />
+            </canvas>
+            <canvas name="weaponBelowHead" width="46" height="19">
+                <vector name="origin" x="20" y="14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowHead" />
+                <string name="_hash" value="1b838fd61cb00fcc0b650cd52084d4ef832e270bd3da16b70cf7834a5d81e08b" />
+            </canvas>
+        </imgdir>
+        <uol name="0" value="2" />
+        <uol name="1" value="2" />
+    </imgdir>
+    <imgdir name="swingOF">
+        <imgdir name="0">
+            <canvas name="weapon" width="44" height="30">
+                <vector name="origin" x="12" y="31" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="0bd448945555d7a8c9d4eacf117ec463b02605ebef0cdc3eaa0aa7f084494dfb" />
+            </canvas>
+            <canvas name="weaponOverArm" width="10" height="12">
+                <vector name="origin" x="16" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverArm" />
+                <string name="_hash" value="5265fdd7417cf89990e9c2d2478d99bb9aa41e1d1b88630bd18304d3b05c1579" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weaponBelowHead" width="35" height="35">
+                <vector name="origin" x="22" y="39" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponBelowHead" />
+                <string name="_hash" value="d123308ad3e2468e949b16dd5b4072797a6e663e20033db7db6cee1c2e63aea1" />
+            </canvas>
+            <canvas name="backWeaponOverGlove" width="12" height="11">
+                <vector name="origin" x="-9" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backWeaponOverGlove" />
+                <string name="_hash" value="a7138bc68b8c05d11ef7557c6db20aeeb35797d1f2990052ddfa73c531ce423d" />
+            </canvas>
+        </imgdir>
+        <imgdir name="3">
+            <canvas name="weapon" width="55" height="42">
+                <vector name="origin" x="22" y="27" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="4717bce1a6c9f617b5fe4d0eb23f91d3ed6d74ac64b3d84034b695f67ef4924b" />
+            </canvas>
+        </imgdir>
+        <uol name="2" value="1" />
+    </imgdir>
+    <imgdir name="swingT2">
+        <imgdir name="2">
+            <canvas name="weapon" width="35" height="36">
+                <vector name="origin" x="7" y="24" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="4c99925229f31096a50c146e61c9116dd65bab6efdabd70bc27d5926c57be0b1" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingP2">
+        <imgdir name="0">
+            <canvas name="weapon" width="35" height="35">
+                <vector name="origin" x="34" y="23" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="0e2bbc3a046f5bd635004dd9bdc2c7c7fbd7bac40c368d2fdce22212261389e3" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="46" height="19">
+                <vector name="origin" x="35" y="14" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="c2ba47f76382a74d79a9e0522d562a6307fb423bc50fd9b7d847085f8c0b8884" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="swingPF">
+        <imgdir name="1">
+            <canvas name="weapon" width="55" height="48">
+                <vector name="origin" x="22" y="42" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="24aa81c0596dfd7dec2fe6d1a1e0bac5edd0660671093a12263e6ec8e00bd4e4" />
+            </canvas>
+        </imgdir>
+        <uol name="0" value="1" />
+    </imgdir>
+    <imgdir name="stabO1">
+        <imgdir name="0">
+            <canvas name="weapon" width="53" height="46">
+                <vector name="origin" x="26" y="33" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="009b83163dcb046ff590eda8f4970bbcf07c4b0526b08636daaa0e7b2edf0386" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="1" height="1">
+                <vector name="origin" x="42" y="20" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_inlink" value="swingP2/1/weapon" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabO2">
+        <imgdir name="0">
+            <canvas name="weapon" width="50" height="23">
+                <vector name="origin" x="27" y="23" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="5621aeaa45993ab5b25480be1af4e9334e921ebd595588d792581a431955bcd0" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="1" height="1">
+                <vector name="origin" x="39" y="18" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_inlink" value="swingP2/1/weapon" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabOF">
+        <imgdir name="1">
+            <canvas name="weapon" width="44" height="27">
+                <vector name="origin" x="9" y="17" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="64aa18c95d984b8f88c91c57a10c035c6950b702c82ddbe7b02b99f01bc27761" />
+            </canvas>
+            <canvas name="weaponBelowHead" width="21" height="11">
+                <vector name="origin" x="37" y="13" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverArmBelowHead" />
+                <string name="_hash" value="8b2f9e6d37d54c49923e813ae820af4ddaa77b8200d10e3efb1214ee3b3f5487" />
+            </canvas>
+        </imgdir>
+        <uol name="0" value="1" />
+    </imgdir>
+    <imgdir name="stabT1">
+        <imgdir name="0">
+            <canvas name="weapon" width="46" height="35">
+                <vector name="origin" x="10" y="28" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="2b0beec759fbb7ee26ef6c2705cc30f8cfd58b337e21f3943cfbd4c7c641e61e" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="38" height="44">
+                <vector name="origin" x="9" y="30" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="ec04a4d3509a38301e3eba156bd343fdfe9307a0ad82ad1065fde8afd7816c25" />
+            </canvas>
+        </imgdir>
+        <imgdir name="2">
+            <canvas name="weapon" width="57" height="19">
+                <vector name="origin" x="30" y="17" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="894c26b7a2abff20e26b30643a3f67c13ca29134936cb4613a17b5155a9b8b26" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabT2">
+        <imgdir name="0">
+            <canvas name="weapon" width="56" height="35">
+                <vector name="origin" x="18" y="22" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="7440271952da1e3705edbe8e66e88c323a79b27adbe98192ddf939d7f38e524c" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="47" height="38">
+                <vector name="origin" x="19" y="30" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="3e1846c1fbab2b5154c3a7f4bea8757f3dcb9bef5fb8d0a2d77f9e36d2f72575" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="stabTF">
+        <imgdir name="2">
+            <canvas name="weapon" width="41" height="39">
+                <vector name="origin" x="1" y="36" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="c56e585f5cff50e065dcf687d12c3e644ad81e3deec757bf400dd62ea12c421d" />
+            </canvas>
+        </imgdir>
+        <uol name="0" value="2" />
+        <uol name="1" value="2" />
+    </imgdir>
+    <imgdir name="proneStab">
+        <imgdir name="0">
+            <canvas name="weapon" width="1" height="1">
+                <vector name="origin" x="23" y="9" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_inlink" value="swingP2/1/weapon" />
+            </canvas>
+            <canvas name="weaponOverArm" width="11" height="11">
+                <vector name="origin" x="40" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverArm" />
+                <string name="_hash" value="97ecae60b76623ca887dadce38f0696df4819f95647bc05720d2f9d5c4ee77df" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="1" height="1">
+                <vector name="origin" x="42" y="15" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_inlink" value="swingP2/1/weapon" />
+            </canvas>
+            <canvas name="weaponOverArm" width="1" height="1">
+                <vector name="origin" x="40" y="6" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverArm" />
+                <string name="_inlink" value="proneStab/0/weaponOverArm" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="prone">
+        <imgdir name="0">
+            <uol name="weapon" value="../../proneStab/0/weapon" />
+            <uol name="weaponOverArm" value="../../proneStab/0/weaponOverArm" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="heal">
+        <imgdir name="0">
+            <uol name="weapon" value="../../alert/1/weapon" />
+        </imgdir>
+        <imgdir name="1">
+            <uol name="weapon" value="../../swingO2/1/weapon" />
+        </imgdir>
+        <imgdir name="2">
+            <uol name="weapon" value="../../swingO2/0/weapon" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="fly">
+        <imgdir name="0">
+            <canvas name="weapon" width="47" height="33">
+                <vector name="origin" x="13" y="20" />
+                <imgdir name="map">
+                    <vector name="muzzle" x="-18" y="-30" />
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="1be2eb023b7a4f4c171683f71c2d36599cdfae36f49f22a72e3f90e3d28da182" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="weapon" width="1" height="1">
+                <vector name="origin" x="13" y="20" />
+                <imgdir name="map">
+                    <vector name="muzzle" x="-18" y="-30" />
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_inlink" value="fly/0/weapon" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="jump">
+        <imgdir name="0">
+            <canvas name="weapon" width="1" height="1">
+                <vector name="origin" x="12" y="18" />
+                <imgdir name="map">
+                    <vector name="muzzle" x="-18" y="-30" />
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_inlink" value="fly/0/weapon" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="weapon" width="44" height="27">
+                <vector name="origin" x="14" y="17" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverGlove" />
+                <string name="_hash" value="368f056936430463fcfa976da23f4ccc3361278a106b488134e2546536dac520" />
+            </canvas>
+            <canvas name="weaponOverArm" width="8" height="8">
+                <vector name="origin" x="9" y="5" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="weaponOverArm" />
+                <string name="_hash" value="e0ed99548318ced2e0079270349eababe38bc261dd2bc0b0f02247def8252928" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="ladder">
+        <imgdir name="0">
+            <canvas name="backWeaponOverGlove" width="40" height="44">
+                <vector name="origin" x="11" y="29" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backWeaponOverGlove" />
+                <string name="_hash" value="fbfc0c11f63898dc99cf76d75e946c9b122a67650ea9948ebc5938047524e604" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="backWeaponOverGlove" width="43" height="35">
+                <vector name="origin" x="13" y="34" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backWeaponOverGlove" />
+                <string name="_hash" value="a37ceff837209647fe39037ed0b40d2489e2702f9cfcc6519f20ce5802955363" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+    <imgdir name="rope">
+        <imgdir name="0">
+            <canvas name="backWeaponOverGlove" width="40" height="35">
+                <vector name="origin" x="10" y="30" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backWeaponOverGlove" />
+                <string name="_hash" value="aa203ce7f57e14fa5f622270595353fa1a31673ab847ae03611ff4198a1c8ab8" />
+            </canvas>
+        </imgdir>
+        <imgdir name="1">
+            <canvas name="backWeaponOverGlove" width="24" height="14">
+                <vector name="origin" x="8" y="16" />
+                <imgdir name="map">
+                    <vector name="navel" x="0" y="0" />
+                </imgdir>
+                <string name="z" value="backWeaponOverGlove" />
+                <string name="_hash" value="d3a9a39245c5f39e313aef0a6f92817d046f43248ba8e2b1cba25f27816a5abc" />
+            </canvas>
+        </imgdir>
+    </imgdir>
+</imgdir>

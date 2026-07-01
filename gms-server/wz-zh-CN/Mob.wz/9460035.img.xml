@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9460035.img">
+    <imgdir name="info">
+        <int name="level" value="65" />
+        <int name="maxHP" value="700000" />
+        <int name="maxMP" value="2000" />
+        <int name="speed" value="0" />
+        <int name="PADamage" value="1" />
+        <int name="PDDamage" value="1" />
+        <int name="PDRate" value="1" />
+        <int name="MADamage" value="1" />
+        <int name="MDDamage" value="1" />
+        <int name="MDRate" value="1" />
+        <int name="acc" value="1" />
+        <int name="eva" value="1" />
+        <int name="pushed" value="9999999" />
+        <int name="boss" value="1" />
+        <int name="category" value="8" />
+        <string name="mobType" value="1N" />
+        <int name="changeableMob" value="1" />
+        <int name="summonType" value="1" />
+        <int name="noFlip" value="1" />
+        <string name="changeableMob_Type" value="JPTitanBoss" />
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="2" height="1">
+            <vector name="origin" x="0" y="0" />
+            <int name="z" value="0" />
+            <int name="delay" value="200" />
+        </canvas>
+    </imgdir>
+    <imgdir name="hit1">
+        <uol name="../stand/0" value="../stand/0" />
+    </imgdir>
+    <imgdir name="die1">
+        <uol name="../stand/0" value="../stand/0" />
+    </imgdir>
+    <imgdir name="skill1">
+        <uol name="../stand/0" value="../stand/0" />
+    </imgdir>
+</imgdir>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9300391.img">
+    <imgdir name="info">
+        <int name="noFlip" value="1" />
+        <int name="level" value="64" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="7700" />
+        <int name="maxMP" value="200" />
+        <int name="speed" value="-50" />
+        <int name="PADamage" value="538" />
+        <int name="PDDamage" value="190" />
+        <int name="PDRate" value="25" />
+        <int name="MADamage" value="532" />
+        <int name="MDDamage" value="230" />
+        <int name="MDRate" value="25" />
+        <int name="acc" value="49" />
+        <int name="eva" value="36" />
+        <int name="pushed" value="800" />
+        <float name="fs" value="10" />
+        <int name="boss" value="1" />
+        <int name="exp" value="250" />
+        <string name="mobType" value="7N" />
+    </imgdir>
+    <imgdir name="stand">
+        <canvas name="0" width="416" height="457">
+            <vector name="origin" x="168" y="454" />
+        </canvas>
+    </imgdir>
+    <imgdir name="hit">
+        <canvas name="0" width="416" height="457">
+            <vector name="origin" x="168" y="454" />
+            <string name="source" value="Mob/9300391.img/stand/0" />
+        </canvas>
+    </imgdir>
+    <imgdir name="die">
+        <canvas name="0" width="416" height="457">
+            <vector name="origin" x="168" y="454" />
+            <int name="delay" value="240" />
+            <string name="source" value="Mob/9300391.img/stand/0" />
+        </canvas>
+    </imgdir>
+</imgdir>

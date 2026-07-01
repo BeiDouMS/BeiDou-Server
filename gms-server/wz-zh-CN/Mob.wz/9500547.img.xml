@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9500547.img">
+    <imgdir name="info">
+        <int name="flySpeed" value="0" />
+        <int name="level" value="13" />
+        <int name="bodyAttack" value="1" />
+        <int name="maxHP" value="6000" />
+        <int name="maxMP" value="20" />
+        <int name="PADamage" value="55" />
+        <int name="PDDamage" value="10" />
+        <int name="PDRate" value="10" />
+        <int name="MADamage" value="50" />
+        <int name="MDDamage" value="10" />
+        <int name="MDRate" value="10" />
+        <int name="acc" value="9" />
+        <int name="eva" value="1" />
+        <int name="pushed" value="20" />
+        <float name="fs" value="10" />
+        <int name="exp" value="23" />
+        <int name="category" value="8" />
+        <string name="mobType" value="1N" />
+        <int name="changeableMob" value="1" />
+        <string name="changeableMob_Type" value="hauntedMob" />
+    </imgdir>
+    <imgdir name="fly">
+        <canvas name="0" width="41" height="30">
+            <vector name="origin" x="22" y="36" />
+            <int name="delay" value="100" />
+            <vector name="lt" x="-22" y="-37" />
+            <vector name="rb" x="19" y="-6" />
+            <vector name="head" x="-1" y="-41" />
+            <string name="source" value="Mob/9500184.img/fly/0" />
+        </canvas>
+        <canvas name="1" width="57" height="29">
+            <vector name="origin" x="32" y="33" />
+            <int name="delay" value="100" />
+            <vector name="lt" x="-32" y="-33" />
+            <vector name="rb" x="25" y="-4" />
+            <vector name="head" x="-1" y="-41" />
+            <string name="source" value="Mob/9500184.img/fly/1" />
+        </canvas>
+        <canvas name="2" width="69" height="29">
+            <vector name="origin" x="36" y="30" />
+            <int name="delay" value="100" />
+            <vector name="lt" x="-36" y="-30" />
+            <vector name="rb" x="33" y="0" />
+            <vector name="head" x="-1" y="-41" />
+            <string name="source" value="Mob/9500184.img/fly/2" />
+        </canvas>
+        <canvas name="3" width="75" height="27">
+            <vector name="origin" x="40" y="28" />
+            <int name="delay" value="100" />
+            <vector name="lt" x="-40" y="-28" />
+            <vector name="rb" x="35" y="-1" />
+            <vector name="head" x="-1" y="-41" />
+            <string name="source" value="Mob/9500184.img/fly/3" />
+        </canvas>
+        <canvas name="4" width="75" height="27">
+            <vector name="origin" x="40" y="27" />
+            <int name="delay" value="100" />
+            <vector name="lt" x="-40" y="-28" />
+            <vector name="rb" x="35" y="0" />
+            <vector name="head" x="-1" y="-41" />
+            <string name="source" value="Mob/9500184.img/fly/4" />
+        </canvas>
+        <int name="zigzag" value="1" />
+    </imgdir>
+    <imgdir name="hit1">
+        <canvas name="0" width="75" height="27">
+            <vector name="origin" x="40" y="27" />
+            <int name="delay" value="600" />
+            <vector name="lt" x="-40" y="-28" />
+            <vector name="rb" x="35" y="0" />
+            <vector name="head" x="-1" y="-41" />
+            <string name="source" value="Mob/9500184.img/fly/4" />
+        </canvas>
+    </imgdir>
+    <imgdir name="die1">
+        <canvas name="0" width="75" height="27">
+            <vector name="origin" x="40" y="27" />
+            <vector name="head" x="-1" y="-41" />
+            <int name="delay" value="800" />
+            <int name="a0" value="255" />
+            <int name="a1" value="20" />
+            <string name="source" value="Mob/9500184.img/fly/4" />
+        </canvas>
+    </imgdir>
+</imgdir>

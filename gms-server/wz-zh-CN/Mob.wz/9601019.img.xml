@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="9601019.img">
+    <imgdir name="info">
+        <int name="level" value="140" />
+        <int name="maxHP" value="74200000" />
+        <int name="maxMP" value="30000" />
+        <int name="speed" value="-20" />
+        <int name="PADamage" value="1800" />
+        <int name="PDDamage" value="1000" />
+        <int name="MADamage" value="1800" />
+        <int name="MDDamage" value="1000" />
+        <int name="exp" value="548000" />
+        <int name="pushed" value="1000000000" />
+        <int name="hpRecovery" value="20000" />
+        <int name="mpRecovery" value="20000" />
+        <int name="boss" value="1" />
+        <int name="summonType" value="1" />
+        <int name="firstAttack" value="1" />
+        <int name="hpTagColor" value="1" />
+        <int name="hpTagBgcolor" value="5" />
+        <int name="HPgaugeHide" value="1" />
+        <int name="category" value="1" />
+        <string name="mobType" value="7N" />
+        <imgdir name="attack">
+            <imgdir name="0">
+                <int name="action" value="1" />
+                <int name="attackRatio" value="60" />
+                <int name="type" value="0" />
+                <int name="knockback" value="1" />
+                <int name="rush" value="1" />
+                <int name="ignoreStance" value="1" />
+                <int name="fixDamR" value="12" />
+                <int name="cooltime" value="5200" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="action" value="2" />
+                <int name="attackRatio" value="30" />
+                <int name="type" value="2" />
+                <int name="bulletSpeed" value="200" />
+                <int name="fixDamR" value="8" />
+                <int name="cooltime" value="8000" />
+            </imgdir>
+            <imgdir name="2">
+                <int name="action" value="3" />
+                <int name="attackRatio" value="30" />
+                <int name="type" value="3" />
+                <int name="conMP" value="10" />
+                <int name="disease" value="123" />
+                <int name="level" value="3" />
+                <int name="fixDamR" value="18" />
+                <int name="cooltime" value="11000" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="skill">
+            <imgdir name="0">
+                <int name="skill" value="145" />
+                <int name="action" value="1" />
+                <string name="level" value="35" />
+                <int name="effectAfter" value="0" />
+                <int name="skillAfter" value="960" />
+            </imgdir>
+            <imgdir name="1">
+                <int name="skill" value="170" />
+                <int name="action" value="2" />
+                <int name="level" value="31" />
+                <int name="effectAfter" value="0" />
+                <int name="skillForbid" value="3180" />
+            </imgdir>
+        </imgdir>
+        <string name="link" value="9601008" />
+        <imgdir name="revive">
+            <int name="0" value="9601021" />
+        </imgdir>
+        <int name="eva" value="50" />
+        <int name="acc" value="200" />
+    </imgdir>
+</imgdir>

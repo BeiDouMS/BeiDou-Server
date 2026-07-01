@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<imgdir name="6511000.img">
+    <imgdir name="info">
+        <string name="info" value="파워엘릭서" />
+        <int name="resetTime" value="30" />
+    </imgdir>
+    <imgdir name="0">
+        <canvas name="0" width="75" height="101">
+            <vector name="origin" x="37" y="39" />
+            <int name="z" value="0" />
+        </canvas>
+        <imgdir name="event">
+            <imgdir name="0">
+                <int name="type" value="0" />
+                <int name="state" value="1" />
+            </imgdir>
+        </imgdir>
+        <imgdir name="SkillHit">
+            <canvas name="0" width="77" height="124">
+                <vector name="origin" x="38" y="62" />
+                <int name="z" value="0" />
+                <int name="delay" value="120" />
+            </canvas>
+            <canvas name="1" width="76" height="124">
+                <vector name="origin" x="37" y="62" />
+                <int name="z" value="0" />
+                <int name="delay" value="120" />
+            </canvas>
+            <imgdir name="SkillHitID">
+                <int name="0" value="80001176" />
+                <int name="1" value="80001177" />
+                <int name="2" value="80001178" />
+            </imgdir>
+            <vector name="lt" x="-207" y="-121" />
+            <vector name="rb" x="201" y="87" />
+        </imgdir>
+    </imgdir>
+    <imgdir name="1">
+        <canvas name="0" width="77" height="124">
+            <vector name="origin" x="38" y="62" />
+            <int name="z" value="0" />
+            <int name="delay" value="120" />
+        </canvas>
+        <canvas name="1" width="76" height="124">
+            <vector name="origin" x="37" y="62" />
+            <int name="z" value="0" />
+            <int name="delay" value="120" />
+        </canvas>
+    </imgdir>
+    <string name="action" value="Vampire1" />
+</imgdir>
