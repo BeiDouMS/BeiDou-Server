@@ -23,6 +23,7 @@ package org.gms.client;
 
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
+import org.gms.constants.game.GameConstants;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
 
@@ -172,7 +173,26 @@ public class BuddyList {
     }
 
     public void addBuddyRequest(Client c, int cidFrom, String nameFrom, int channelFrom) {
-        put(new BuddylistEntry(nameFrom, "Default Group", cidFrom, channelFrom, false));
+        // 落库：给被加方写一条 pending=1，使请求不因下线/重启丢失（与离线加好友分支对齐）。
+        // buddies 表无 (characterid,buddyid) 唯一约束，用 DELETE+INSERT 保证幂等。
+        try (Connection con = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement(
+                    "DELETE FROM buddies WHERE characterid = ? AND buddyid = ?")) {
+                ps.setInt(1, c.getPlayer().getId()); // 被加方
+                ps.setInt(2, cidFrom);                // 发起方
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO buddies (characterid, `buddyid`, `pending`, `group`) VALUES (?, ?, 1, ?)")) {
+                ps.setInt(1, c.getPlayer().getId());
+                ps.setInt(2, cidFrom);
+                ps.setString(3, GameConstants.DEFAULT_BUDDY_GROUP);
+                ps.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        put(new BuddylistEntry(nameFrom, GameConstants.DEFAULT_BUDDY_GROUP, cidFrom, channelFrom, false));
         if (pendingRequests.isEmpty()) {
             c.sendPacket(PacketCreator.requestBuddylistAdd(cidFrom, c.getPlayer().getId(), nameFrom));
         } else {
