@@ -1,11 +1,8 @@
 /* ===========================================================
-			Ronan Lana
-	NPC Name: 		Lukan
-	Description: 	Quest - Storming the Castle
-=============================================================
-Version 1.0 - Script Done.(10/7/2017)
-=============================================================
-*/
+            Ronan Lana
+    NPC Name:       Lukan
+    Description:    Quest - Storming the Castle
+============================================================= */
 
 var status = -1;
 
@@ -15,15 +12,15 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendOk("好的，那么。再见了。");
+            qm.sendOk("好吧，那就下次再说。");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
-        qm.sendAcceptDecline("现在是时候了，孩子。我们已经准备好进一步研究最近发生的所有这些奇怪事件的原因。我还必须介绍你认识我的兄弟，杰克。");
+        qm.sendAcceptDecline("时机到了，孩子。为了继续调查最近这些怪事的源头，我们已经做好准备了。我还必须介绍你认识我的兄弟，杰克。");
     } else if (status == 1) {
-        qm.sendOk("他目前正在绯红之林山脉漫游，经过邪恶的幻影森林，前往绯红要塞的道路。你的下一个目的地就在那里，祝你旅途平安。");
+        qm.sendOk("他现在正在绯红山脉一带探索，穿过阴森的幻影森林，就能前往绯红要塞。那里就是你的下一个目的地。愿你一路平安。");
         qm.forceStartQuest();
     } else if (status == 2) {
         qm.dispose();
@@ -36,15 +33,15 @@ function end(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendOk("好的，那么。再见了。");
+            qm.sendOk("好吧，那就下次再说。");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
-        qm.sendNext("你是谁？哦，你是替我兄弟约翰而来的？太好了。");
+        qm.sendNext("你是谁？哦，是约翰拜托你来找我的？太好了。");
     } else if (status == 1) {
-        qm.sendOk("看起来你帮助了城市里的一些人办事，对吧？我会好好评价你的。看看这个：这是我在足够的探索后自己制作的幻影森林地图。拿着它，你将获得其他时代未曾发现的路径通行权。记住要#r永远不要丢失它#k，否则你将再也得不到它！\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0# \r\n#i3992040# #t3992040#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 175000 经验值");
+        qm.sendOk("看来你已经帮城里的人处理了不少事情，对吧？我会好好评价你的。看看这个：这是我充分探索后亲手绘制的幻影森林地图。带上它以后，你就能通过一些平时无法发现的道路。记住，#r千万不要弄丢它#k，我不会再给第二份！\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0# \r\n#i3992040# #t3992040#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 175000 经验值");
     } else if (status == 2) {
         if (qm.canHold(3992040, 1)) {
             qm.forceCompleteQuest();
@@ -52,7 +49,7 @@ function end(mode, type, selection) {
             qm.gainExp(175000);
             qm.dispose();
         } else {
-            qm.sendOk("嘿，你的消耗栏没有足够的空间来存放我要给你的物品。解决这个小问题然后再和我交谈。");
+            qm.sendOk("你的设置栏没有足够空间放下我要给你的东西。先整理一下背包，再和我谈谈吧。");
         }
     } else if (status == 3) {
         qm.dispose();
