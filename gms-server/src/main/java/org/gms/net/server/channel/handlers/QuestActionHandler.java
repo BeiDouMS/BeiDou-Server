@@ -30,6 +30,7 @@ import org.gms.scripting.quest.QuestScriptManager;
 import org.gms.server.life.NPC;
 import org.gms.server.quest.Quest;
 import org.gms.util.I18nUtil;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 
@@ -40,6 +41,10 @@ public final class QuestActionHandler extends AbstractPacketHandler {
     private static final short LOST_WHITE_ESSENCE_QUEST = 4522;
     private static final short CAPTAIN_LATANICA_RETURN_QUEST = 4523;
     private static final int WHITE_ESSENCE = 4000381;
+
+    private static void sendNpcOk(Client c, int npc, String message) {
+        c.sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, message, "00 00", (byte) 0));
+    }
 
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, Character player, Quest quest, int npcId) {
@@ -101,9 +106,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                         quest.start(player, npc);
                     }
                 } else if (questid == LOST_WHITE_ESSENCE_QUEST && player.haveItem(WHITE_ESSENCE)) {
-                    player.dropMessage(5, I18nUtil.getMessage("QuestActionHandler.hasWhiteEssence.message1"));
+                    sendNpcOk(c, npc, I18nUtil.getMessage("QuestActionHandler.hasWhiteEssence.message1"));
                 } else if (questid == CAPTAIN_LATANICA_RETURN_QUEST && player.haveItem(WHITE_ESSENCE)) {
-                    player.dropMessage(5, I18nUtil.getMessage("QuestActionHandler.hasWhiteEssenceForLatanica.message1"));
+                    sendNpcOk(c, npc, I18nUtil.getMessage("QuestActionHandler.hasWhiteEssenceForLatanica.message1"));
                 }
                 break;
             }
