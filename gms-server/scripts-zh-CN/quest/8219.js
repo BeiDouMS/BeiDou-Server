@@ -23,7 +23,7 @@ function start(mode, type, selection) {
     if (status == 0) {
         qm.sendAcceptDecline("现在是时候了，孩子。我们已经准备好进一步研究最近发生的所有这些奇怪事件的原因。我还必须介绍你认识我的兄弟，杰克。");
     } else if (status == 1) {
-        qm.sendOk("他目前正在深红之林山脉漫游，经过邪恶的幻影森林，前往深红之城堡的道路。你的下一个目的地就在那里，祝你旅途平安。");
+        qm.sendOk("他目前正在绯红之林山脉漫游，经过邪恶的幻影森林，前往绯红要塞的道路。你的下一个目的地就在那里，祝你旅途平安。");
         qm.forceStartQuest();
     } else if (status == 2) {
         qm.dispose();

@@ -30,35 +30,11 @@
  ---------------------------------------------------------------------------------------------------
  **/
 
-var status;
-
 function start() {
-    status = -1;
-    action(1, 0, 0);
-}
-
-function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
+    if (cm.isQuestCompleted(8074)) {
+        cm.sendOk("??????????????????????????????");
     } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            if (cm.isQuestCompleted(8074)) {
-                cm.openNpc(9110002);
-            } else {
-                cm.sendOk("古代神社~~~");
-            }
-
-            cm.dispose();
-        }
+        cm.sendOk("???????????????????????????????????");
     }
+    cm.dispose();
 }
