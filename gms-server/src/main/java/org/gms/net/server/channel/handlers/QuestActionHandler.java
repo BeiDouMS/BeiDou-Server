@@ -37,6 +37,8 @@ import java.awt.*;
  * @author Matze
  */
 public final class QuestActionHandler extends AbstractPacketHandler {
+    private static final short LOST_WHITE_ESSENCE_QUEST = 4522;
+    private static final int WHITE_ESSENCE = 4000381;
 
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, Character player, Quest quest, int npcId) {
@@ -97,6 +99,8 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                     } else {
                         quest.start(player, npc);
                     }
+                } else if (questid == LOST_WHITE_ESSENCE_QUEST && player.haveItem(WHITE_ESSENCE)) {
+                    player.dropMessage(5, I18nUtil.getMessage("QuestActionHandler.hasWhiteEssence.message1"));
                 }
                 break;
             }
