@@ -583,9 +583,12 @@ public class CharacterService {
         Character online = findOnlineCharacter(cid);
         if (online != null) {
             int accountId = online.getAccountId();
-            // 在线：先下线（disconnect 异步执行，内部会保存并从 PlayerStorage 移除）
-            online.getClient().disconnect(false, online.getCashShop().isOpened());
-            waitCharacterOffline(online);
+            // 在线：先下线
+            online.getClient().forceDisconnect();
+            // 这里必须用online.getClient()重新获取一遍
+            if (online.getClient() != null) {
+                online.getClient().closeSession();
+            }
             return accountId;
         }
         CharactersDO cdo = findById(cid);
@@ -600,24 +603,6 @@ public class CharacterService {
             }
         }
         return null;
-    }
-
-    private void waitCharacterOffline(Character online) {
-        // logOff 在 saveCharToDB 之后，isLoggedIn=false 即表示下线流程已完成
-        for (int i = 0; i < 30; i++) {
-            if (!online.isLoggedIn()) {
-                return;
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return;
-            }
-        }
-        if (online.isLoggedIn() || online.getClient().isLoggedIn()) {
-            SessionCoordinator.getInstance().closeSession(online.getClient(), true);
-        }
     }
 
     private void checkName(ExtendValueDO data) {
