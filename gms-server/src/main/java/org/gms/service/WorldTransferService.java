@@ -127,7 +127,11 @@ public class WorldTransferService {
     }
 
     public void cancelPendingWorldTransfer(Character chr, boolean needFinish) {
-        QueryWrapper queryWrapper = QueryWrapper.create().where(WORLDTRANSFERS_D_O.CHARACTERID.eq(chr.getId()));
+        cancelPendingWorldTransfer(chr.getId(), needFinish);
+    }
+
+    public void cancelPendingWorldTransfer(int cid, boolean needFinish) {
+        QueryWrapper queryWrapper = QueryWrapper.create().where(WORLDTRANSFERS_D_O.CHARACTERID.eq(cid));
         if (needFinish) queryWrapper.and(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull());
         worldtransfersMapper.deleteByQuery(queryWrapper);
     }

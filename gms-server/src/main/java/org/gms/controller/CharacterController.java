@@ -6,12 +6,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
 import org.gms.dao.entity.ExtendValueDO;
+import org.gms.model.dto.CharacterListItemDTO;
 import org.gms.model.dto.ChrOnlineListReqDTO;
 import org.gms.model.dto.ChrOnlineListRtnDTO;
 import org.gms.model.dto.ResultBody;
 import org.gms.model.dto.SubmitBody;
 import org.gms.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -49,5 +52,20 @@ public class CharacterController {
     @PostMapping("/" + ApiConstant.LATEST + "/online/list")
     public ResultBody<Page<ChrOnlineListRtnDTO>> onlineList(@RequestBody SubmitBody<ChrOnlineListReqDTO> submitBody) {
         return ResultBody.success(characterService.getChrOnlineList(submitBody.getData()));
+    }
+
+    @Tag(name = "/character/" + ApiConstant.LATEST)
+    @Operation(summary = "获取账号下角色列表")
+    @GetMapping("/" + ApiConstant.LATEST + "/account/{accountId}")
+    public ResultBody<List<CharacterListItemDTO>> getAccountCharacters(@PathVariable("accountId") int accountId) {
+        return ResultBody.success(characterService.getCharacterListByAccountId(accountId));
+    }
+
+    @Tag(name = "/character/" + ApiConstant.LATEST)
+    @Operation(summary = "删除角色")
+    @DeleteMapping("/" + ApiConstant.LATEST + "/{cid}")
+    public ResultBody<Object> delete(@PathVariable("cid") int cid) {
+        characterService.deleteCharacterWithOnlineCheck(cid);
+        return ResultBody.success();
     }
 }
