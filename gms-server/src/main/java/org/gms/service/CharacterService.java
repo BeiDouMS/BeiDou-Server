@@ -8,15 +8,18 @@ import org.gms.client.*;
 import org.gms.client.Character;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.config.GameConfig;
+import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.*;
 import org.gms.dao.mapper.*;
+import org.gms.model.dto.CharacterListItemDTO;
 import org.gms.model.dto.ChrOnlineListReqDTO;
 import org.gms.model.dto.ChrOnlineListRtnDTO;
 import org.gms.exception.BizException;
 import org.gms.model.pojo.SkillEntry;
 import org.gms.net.server.Server;
+import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.net.server.guild.GuildCharacter;
 import org.gms.net.server.world.Messenger;
 import org.gms.net.server.world.Party;
@@ -28,11 +31,15 @@ import org.gms.server.life.MobSkillFactory;
 import org.gms.server.life.MobSkillType;
 import org.gms.server.maps.*;
 import org.gms.util.*;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 import static com.mybatisflex.core.query.QueryMethods.dateDiff;
@@ -89,6 +96,18 @@ public class CharacterService {
     private final ServerQueueMapper serverQueueMapper;
     private final NameChangeService nameChangeService;
     private final WorldTransferService worldTransferService;
+    private final BosslogDailyMapper bosslogDailyMapper;
+    private final BosslogWeeklyMapper bosslogWeeklyMapper;
+    private final FamilyEntitlementMapper familyEntitlementMapper;
+    private final InventorymerchantMapper inventorymerchantMapper;
+    private final ApplicationContext applicationContext;
+    private final AccountsMapper accountsMapper;
+    private final QuickslotkeymappedMapper quickslotkeymappedMapper;
+    private final StoragesMapper storagesMapper;
+    private final InventoryitemsMapper inventoryitemsMapper;
+    private final HwidaccountsMapper hwidaccountsMapper;
+    private final IpbansMapper ipbansMapper;
+    private final MacbansMapper macbansMapper;
 
     public CharactersDO findById(int id) {
         return charactersMapper.selectOneById(id);
@@ -221,19 +240,26 @@ public class CharacterService {
         if (!Server.getInstance().haveCharacterEntry(senderAccId, cid)) {    // thanks zera (EpiphanyMS) for pointing a critical exploit with non-authed character deletion request
             throw new BizException(I18nUtil.getExceptionMessage("UNKNOWN_CHARACTER"));
         }
-        int world;
+        deleteCharacterById(cid);
+    }
+
+    /**
+     * 按角色ID删除角色及其全部关联数据（GM后台/账号级联删除入口，无登录态鉴权）。
+     * 不依赖在线 Character 对象，guild 清理传 null character（仅 leave/disband，跳过 setGuildMemberOnline）。
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteCharacterById(int cid) {
         CharactersDO charactersDO = findById(cid);
-        if (charactersDO != null) {
-            world = charactersDO.getWorld();
-            // 删除guild
-            if (charactersDO.getGuildid() > 0 && Objects.equals(senderAccId, charactersDO.getAccountid())) {
-                Server.getInstance().deleteGuildCharacter(new GuildCharacter(player, cid, 0, charactersDO.getName(),
-                        (byte) -1, (byte) -1, 0, Optional.ofNullable(charactersDO.getGuildrank()).orElse(0),
-                        Optional.ofNullable(charactersDO.getGuildid()).orElse(0), false,
-                        Optional.ofNullable(charactersDO.getAllianceRank()).orElse(0)));
-            }
-        } else {
-            world = 0;
+        if (charactersDO == null) {
+            return;
+        }
+        int world = charactersDO.getWorld();
+        // 删除guild（传 null character：跳过 setGuildMemberOnline，仍执行 leaveGuild/disbandGuild）
+        if (Optional.ofNullable(charactersDO.getGuildid()).orElse(0) > 0) {
+            Server.getInstance().deleteGuildCharacter(new GuildCharacter(null, cid, 0, charactersDO.getName(),
+                    (byte) -1, (byte) -1, 0, Optional.ofNullable(charactersDO.getGuildrank()).orElse(0),
+                    Optional.ofNullable(charactersDO.getGuildid()).orElse(0), false,
+                    Optional.ofNullable(charactersDO.getAllianceRank()).orElse(0)));
         }
         // 删除buddies
         QueryWrapper buddiesQueryWrapper = QueryWrapper.create().where(BUDDIES_D_O.CHARACTERID.eq(cid));
@@ -290,9 +316,31 @@ public class CharacterService {
         eventstatsMapper.deleteByQuery(QueryWrapper.create().where(EVENTSTATS_D_O.CHARACTERID.eq(cid)));
         // 删除server_queue
         serverQueueMapper.deleteByQuery(QueryWrapper.create().where(SERVER_QUEUE_D_O.CHARACTERID.eq(cid)));
+        // 删除bosslog
+        bosslogDailyMapper.deleteByQuery(new QueryWrapper().eq("characterid", cid));
+        bosslogWeeklyMapper.deleteByQuery(new QueryWrapper().eq("characterid", cid));
+        // 删除family_entitlement
+        familyEntitlementMapper.deleteByQuery(new QueryWrapper().eq("charid", cid));
+        // 删除inventorymerchant
+        inventorymerchantMapper.deleteByQuery(new QueryWrapper().eq("characterid", cid));
+        // 删除character_extend系列（角色扩展值，复用统一扩展表）
+        extendValueMapper.deleteByQuery(QueryWrapper.create()
+                .where(EXTEND_VALUE_D_O.EXTEND_ID.eq(String.valueOf(cid)))
+                .and(EXTEND_VALUE_D_O.EXTEND_TYPE.in(
+                        ExtendType.CHARACTER_EXTEND.getType(),
+                        ExtendType.CHARACTER_EXTEND_DAILY.getType(),
+                        ExtendType.CHARACTER_EXTEND_WEEKLY.getType())));
+        // 删除characterexplogs（经验日志，服务端由ExpLogger写入，无Mapper用原生JDBC）
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM characterexplogs WHERE charid = ?")) {
+            ps.setInt(1, cid);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            log.error("删除 characterexplogs 失败, cid={}", cid, e);
+        }
         // 补充heaven没有删除的2张表
-        nameChangeService.cancelPendingNameChange(player, false);
-        worldTransferService.cancelPendingWorldTransfer(player, false);
+        nameChangeService.cancelPendingNameChange(cid, false);
+        worldTransferService.cancelPendingWorldTransfer(cid, false);
     }
 
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
@@ -442,6 +490,119 @@ public class CharacterService {
 
     public List<CharactersDO> getCharacterByAccountId(int accountId) {
         return charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.ACCOUNTID.eq(accountId)));
+    }
+
+    public List<CharacterListItemDTO> getCharacterListByAccountId(int accountId) {
+        List<CharactersDO> list = getCharacterByAccountId(accountId);
+        return list.stream().map(cdo -> {
+            int worldId = Optional.ofNullable(cdo.getWorld()).orElse(0);
+            String worldName = (worldId >= 0 && worldId < GameConstants.WORLD_NAMES.length)
+                    ? GameConstants.WORLD_NAMES[worldId] : String.valueOf(worldId);
+            Job job = Job.getById(cdo.getJob());
+            return CharacterListItemDTO.builder()
+                    .id(cdo.getId())
+                    .name(cdo.getName())
+                    .job(cdo.getJob())
+                    .jobName(job == null ? "" : job.getName())
+                    .level(cdo.getLevel())
+                    .world(worldId)
+                    .worldName(worldName)
+                    .gm(cdo.getGm())
+                    .meso(cdo.getMeso())
+                    .fame(cdo.getFame())
+                    .guildid(cdo.getGuildid())
+                    .createdate(cdo.getCreatedate())
+                    .lastLogoutTime(cdo.getLastLogoutTime())
+                    .online(findOnlineCharacter(cdo.getId()) != null)
+                    .build();
+        }).toList();
+    }
+
+    /**
+     * 删除角色：在线先下线再删，离线直接删。
+     */
+    public void deleteCharacterWithOnlineCheck(int cid) {
+        int accountId = prepareCharacterOffline(cid);
+        RequireUtil.requireTrue(accountId != 0, I18nUtil.getExceptionMessage("UNKNOWN_CHARACTER"));
+        // 通过代理调用，保证 @Transactional 事务生效
+        applicationContext.getBean(CharacterService.class).deleteCharacterById(cid);
+        safeDeleteCharacterEntry(accountId, cid);
+    }
+
+    /**
+     * 安全清理角色登录缓存：账号未登录时其 entry 未初始化，直接调用 deleteCharacterEntry 会 NPE，此处兜底忽略。
+     */
+    public void safeDeleteCharacterEntry(int accountId, int cid) {
+        try {
+            Server.getInstance().deleteCharacterEntry(accountId, cid);
+        } catch (NullPointerException e) {
+            // 账号未登录，无登录缓存可清
+        }
+    }
+
+    /**
+     * 删除账号：级联删除账号下所有角色及其关联数据 + 账号级关联表 + 账号本身。
+     * AccountService 作为基类不依赖业务 Service，故账号删除下放到此。
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAccount(int id) {
+        RequireUtil.requireNotNull(accountsMapper.selectOneById(id), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
+        // 通过代理调用，保证角色级联删除的 @Transactional 加入本事务
+        CharacterService self = applicationContext.getBean(CharacterService.class);
+        // 1. 遍历账号下所有角色：在线先下线，再删除角色及其关联数据
+        List<CharactersDO> charList = charactersMapper.selectIdAndWorldListByAccountId(id);
+        for (CharactersDO chr : charList) {
+            int cid = chr.getId();
+            self.prepareCharacterOffline(cid);
+            self.deleteCharacterById(cid);
+            self.safeDeleteCharacterEntry(id, cid);
+        }
+        // 2. 删除账号级关联表
+        quickslotkeymappedMapper.deleteByQuery(new QueryWrapper().eq("accountid", id));
+        storagesMapper.deleteByQuery(new QueryWrapper().eq("accountid", id));
+        inventoryitemsMapper.deleteByQuery(new QueryWrapper().eq("accountid", id));
+        ipbansMapper.deleteByQuery(new QueryWrapper().eq("aid", id));
+        macbansMapper.deleteByQuery(new QueryWrapper().eq("aid", id));
+        hwidaccountsMapper.deleteByQuery(new QueryWrapper().eq("accountid", id));
+        serverQueueMapper.deleteByQuery(new QueryWrapper().eq("accountid", id));
+        extendValueMapper.deleteByQuery(QueryWrapper.create()
+                .where(EXTEND_VALUE_D_O.EXTEND_ID.eq(String.valueOf(id)))
+                .and(EXTEND_VALUE_D_O.EXTEND_TYPE.in(
+                        ExtendType.ACCOUNT_EXTEND.getType(),
+                        ExtendType.ACCOUNT_EXTEND_DAILY.getType(),
+                        ExtendType.ACCOUNT_EXTEND_WEEKLY.getType())));
+        // 3. 删除账号
+        accountsMapper.deleteById(id);
+    }
+
+    /**
+     * 在线角色先下线，返回角色所属 accountId（在线从内存取，离线从 DB 取；角色不存在返回 0）。
+     * 供账号级联删除复用。
+     */
+    public int prepareCharacterOffline(int cid) {
+        Character online = findOnlineCharacter(cid);
+        if (online != null) {
+            int accountId = online.getAccountId();
+            // 在线：先下线
+            online.getClient().forceDisconnect();
+            // 这里必须用online.getClient()重新获取一遍
+            if (online.getClient() != null) {
+                online.getClient().closeSession();
+            }
+            return accountId;
+        }
+        CharactersDO cdo = findById(cid);
+        return cdo == null ? 0 : cdo.getAccountid();
+    }
+
+    private Character findOnlineCharacter(int cid) {
+        for (World world : Server.getInstance().getWorlds()) {
+            Character chr = world.getPlayerStorage().getCharacterById(cid);
+            if (chr != null) {
+                return chr;
+            }
+        }
+        return null;
     }
 
     private void checkName(ExtendValueDO data) {

@@ -22,6 +22,9 @@ export default {
   'account.list.column.operate.restLoggedIn': '解卡',
   'account.list.column.operate.delete': '删除',
   'account.list.column.operate.delete.confirm': '你确定要删除该账号吗？',
+  'account.list.column.operate.delete.confirmWithChars':
+    '确定删除该账号？将连带删除该账号下所有角色及关联数据，此操作不可恢复！',
+  'account.list.column.operate.viewCharacters': '查看角色',
 
   'account.list.filter.id': 'ID',
   'account.list.filter.name': '账户',
@@ -126,4 +129,20 @@ export default {
   'account.player.form.rate.type': '倍率只能是正整数',
 
   'account.player.give': '发放',
+
+  'account.list.charList.title': '角色列表',
+  'account.list.charList.column.id': 'ID',
+  'account.list.charList.column.name': '角色名',
+  'account.list.charList.column.job': '职业',
+  'account.list.charList.column.world': '世界',
+  'account.list.charList.column.level': '等级',
+  'account.list.charList.column.gm': 'GM',
+  'account.list.charList.column.meso': '金币',
+  'account.list.charList.column.fame': '人气',
+  'account.list.charList.column.status': '状态',
+  'account.list.charList.column.status.online': '在线',
+  'account.list.charList.column.status.offline': '离线',
+  'account.list.charList.column.createdate': '创建时间',
+  'account.list.charList.column.operate.delete.confirm':
+    '确定删除该角色？将清除角色所有关联数据，此操作不可恢复！',
 };

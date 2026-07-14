@@ -153,6 +153,9 @@
               >
                 {{ $t('button.edit') }}
               </a-button>
+              <a-button type="text" size="mini" @click="viewCharsClick(record)">
+                {{ $t('account.list.column.operate.viewCharacters') }}
+              </a-button>
               <a-button
                 type="text"
                 size="mini"
@@ -185,7 +188,9 @@
               </a-button>
               <a-popconfirm
                 type="error"
-                :content="$t('account.list.column.operate.delete.confirm')"
+                :content="
+                  $t('account.list.column.operate.delete.confirmWithChars')
+                "
                 @ok="deleteClick(record)"
               >
                 <a-button type="text" size="mini" status="danger">
@@ -211,6 +216,7 @@
     </a-card>
     <account-add-form ref="accountAddFormRef" @reload="loadData" />
     <account-update-form ref="accountUpdateFormRef" @reload="loadData" />
+    <account-char-list ref="accountCharListRef" />
     <a-modal
       v-model:visible="reasonVisible"
       :title="reasonTitle"
@@ -245,6 +251,7 @@
   } from '@/api/account';
   import AccountAddForm from '@/views/account/list/addForm.vue';
   import AccountUpdateForm from '@/views/account/list/updateForm.vue';
+  import AccountCharList from '@/views/account/list/charList.vue';
   import { Message } from '@arco-design/web-vue';
   import { useI18n } from 'vue-i18n';
 
@@ -320,6 +327,11 @@
   const accountAddFormRef = ref();
   const addClick = () => {
     accountAddFormRef.value.init();
+  };
+
+  const accountCharListRef = ref();
+  const viewCharsClick = (data: AccountState) => {
+    accountCharListRef.value.init(data.id, data.name ?? '');
   };
 
   const accountUpdateFormRef = ref();

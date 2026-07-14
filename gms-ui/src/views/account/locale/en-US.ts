@@ -24,6 +24,9 @@ export default {
   'account.list.column.operate.delete': 'delete',
   'account.list.column.operate.delete.confirm':
     'Are you really to delete this account?',
+  'account.list.column.operate.delete.confirmWithChars':
+    'Delete this account? All characters and related data under it will be cascade deleted. This cannot be undone!',
+  'account.list.column.operate.viewCharacters': 'Characters',
 
   'account.list.filter.id': 'ID',
   'account.list.filter.name': 'Name',
@@ -129,4 +132,20 @@ export default {
   'account.player.form.rate.type': 'The rate must be an integer.',
 
   'account.player.give': 'give',
+
+  'account.list.charList.title': 'Character List',
+  'account.list.charList.column.id': 'ID',
+  'account.list.charList.column.name': 'Name',
+  'account.list.charList.column.job': 'Job',
+  'account.list.charList.column.world': 'World',
+  'account.list.charList.column.level': 'Level',
+  'account.list.charList.column.gm': 'GM',
+  'account.list.charList.column.meso': 'Meso',
+  'account.list.charList.column.fame': 'Fame',
+  'account.list.charList.column.status': 'Status',
+  'account.list.charList.column.status.online': 'Online',
+  'account.list.charList.column.status.offline': 'Offline',
+  'account.list.charList.column.createdate': 'Created At',
+  'account.list.charList.column.operate.delete.confirm':
+    'Delete this character? All related data will be removed. This cannot be undone!',
 };

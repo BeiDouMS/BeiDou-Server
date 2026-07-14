@@ -145,11 +145,6 @@ public class AccountService {
         accountsMapper.update(account);
     }
 
-    public void deleteAccountByGM(int id) {
-        RequireUtil.requireNotNull(findById(id), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
-        accountsMapper.deleteById(id);
-    }
-
     public String encryptPassword(String password) throws NoSuchAlgorithmException {
         return GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(password, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(password);
     }
