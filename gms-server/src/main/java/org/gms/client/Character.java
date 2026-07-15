@@ -83,6 +83,7 @@ import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.Quest;
+import org.gms.server.quest.medal.DynamicHairMedal;
 import org.gms.service.*;
 import org.gms.util.*;
 import org.gms.util.packets.WeddingPackets;
@@ -138,7 +139,6 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int gender;
-    @Setter
     @Getter
     private int hair;
     @Setter
@@ -549,6 +549,12 @@ public class Character extends AbstractCharacterObject {
 
     public Job getJobStyle(byte opt) {
         return Job.getJobStyleInternal(this.getJob().getId(), opt);
+    }
+
+    public void setHair(int hair) {
+        int oldHair = this.hair;
+        this.hair = hair;
+        DynamicHairMedal.onHairChanged(this, oldHair, hair);
     }
 
     public Job getJobStyle() {
