@@ -33,11 +33,13 @@ import org.gms.constants.skills.Hero;
 import org.gms.constants.skills.Paladin;
 import org.gms.constants.skills.Priest;
 import org.gms.constants.skills.SuperGM;
+import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.server.StatEffect;
 import org.gms.server.life.Monster;
+import org.gms.server.partyquest.Pyramid;
 import org.gms.util.PacketCreator;
 
 import java.awt.*;
@@ -66,16 +68,25 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         int __skillLevel = p.readByte();
         Skill skill = SkillFactory.getSkill(skillid);
         int skillLevel = chr.getSkillLevel(skill);
+        boolean pyramidSkill = MapId.isNettsPyramid(chr.getMapId()) && (skillid % 10000000 == 1010 || skillid % 10000000 == 1011);
         if (skillid % 10000000 == 1010 || skillid % 10000000 == 1011) {
-            if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
+            if (pyramidSkill) {
+                if (!(chr.getPartyQuest() instanceof Pyramid)) {
+                    return;
+                }
+            } else if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
+            } else {
+                chr.setDojoEnergy(0);
+                c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
+                c.sendPacket(PacketCreator.serverNotice(5, "你使用了秘密技能，能量条已重置。"));
             }
             skillLevel = 1;
-            chr.setDojoEnergy(0);
-            c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
-            c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         }
-        if (skillLevel == 0 || skillLevel != __skillLevel) {
+        if (skillLevel == 0 || (!pyramidSkill && skillLevel != __skillLevel)) {
+            return;
+        }
+        if (pyramidSkill && !((Pyramid) chr.getPartyQuest()).useSkill()) {
             return;
         }
 

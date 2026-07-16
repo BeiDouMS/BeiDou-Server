@@ -26,8 +26,12 @@ import org.gms.client.QuestStatus;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.id.MapId;
 import org.gms.scripting.AbstractPlayerInteraction;
+import org.gms.server.TimerManager;
+import org.gms.server.maps.MapleMap;
 import org.gms.server.quest.Quest;
 import org.gms.util.PacketCreator;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MapScriptMethods extends AbstractPlayerInteraction {
 
@@ -35,6 +39,11 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
 
     public MapScriptMethods(Client c) {
         super(c);
+    }
+
+    public void scheduleWarpMap(int seconds, int mapId) {
+        MapleMap sourceMap = getMap();
+        TimerManager.getInstance().schedule(() -> sourceMap.warpEveryone(mapId), SECONDS.toMillis(seconds));
     }
 
     public void displayCygnusIntro() {
