@@ -64,7 +64,7 @@ function end(mode, type, selection) {
                 qm.gainItem(4031927, 1);
             }
 
-            qm.sendOk("现在，去见灰色外星人，使用这个卧底装备来阅读他们的计划。如果失败，我们将需要重新收集一些材料.");
+            qm.sendOk("现在去接近灰色外星人，使用这个翻译器读取他们的计划。如果翻译失败，我们就得重新收集材料。");
             qm.forceCompleteQuest();
         } else if (status == 1) {
             qm.dispose();

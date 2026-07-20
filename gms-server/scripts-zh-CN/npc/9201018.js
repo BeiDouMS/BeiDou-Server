@@ -66,7 +66,7 @@ function action(mode, type, selection) {
                         pushIfItemExists(facenew, fface_v[i] + cm.getPlayer().getFace() % 1000 - (cm.getPlayer().getFace() % 100));
                     }
                 }
-                cm.sendStyle("Let's see... I can totally transform your face into something new. Don't you want to try it? For #b#t5152022##k, you can get the face of your liking. Take your time in choosing the face of your preference.", facenew);
+                cm.sendStyle("让我看看……我可以帮你换成全新的面容。使用#b#t5152022##k，就能选择你喜欢的脸型。慢慢挑，选一个最适合你的吧。", facenew);
             }
         } else if (status == 2) {
             if (cm.haveItem(5152022) == true) {
