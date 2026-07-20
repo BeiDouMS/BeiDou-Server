@@ -1,0 +1,55 @@
+var Medal = Java.type('org.gms.server.quest.medal.SpecialChallengeMedal');
+
+function finishIfAlreadyAwarded(medalId) {
+    if (qm.isQuestCompleted(qm.getQuest())) {
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    if (qm.haveItemWithId(medalId, true)) {
+        qm.forceCompleteQuest();
+        qm.earnTitle(qm.getMedalName());
+        qm.sendOk("You have already received the #b#t" + medalId + "##k. This challenge is already recorded in your adventure history.");
+        qm.dispose();
+        return true;
+    }
+    return false;
+}
+
+function start(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.CHALLENGER_MEDAL_ID)) {
+        return;
+    }
+    qm.forceStartQuest();
+    qm.sendOk("Complete the three Dangerous Dungeon quests in Sleepywood, then return to receive the #b#t" + Medal.CHALLENGER_MEDAL_ID + "##k.");
+    qm.dispose();
+}
+
+function end(mode, type, selection) {
+    if (finishIfAlreadyAwarded(Medal.CHALLENGER_MEDAL_ID)) {
+        return;
+    }
+    if (!qm.isQuestCompleted(2111) || !qm.isQuestCompleted(2112) || !qm.isQuestCompleted(2113)) {
+        qm.sendOk("Complete #b#y2111##k, #b#y2112##k, and #b#y2113##k before reporting back.");
+        qm.dispose();
+        return;
+    }
+
+    awardMedal(Medal.CHALLENGER_MEDAL_ID);
+}
+
+function awardMedal(medalId) {
+    if (!qm.haveItem(medalId)) {
+        if (!qm.canHold(medalId)) {
+            qm.sendOk("Please make room in your equip inventory.");
+            qm.dispose();
+            return;
+        }
+        qm.gainItem(medalId, 1);
+    }
+
+    qm.forceCompleteQuest();
+    qm.earnTitle(qm.getMedalName());
+    qm.sendOk("Dangerous roads, dark dungeons, and endless monsters could not make you turn back. You kept challenging the impossible until the path opened.\r\n\r\nPlease accept the #b#t" + medalId + "##k. The title of Persevering Challenger is now yours.");
+    qm.dispose();
+}
