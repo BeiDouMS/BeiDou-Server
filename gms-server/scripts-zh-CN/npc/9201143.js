@@ -6,6 +6,6 @@
 */
 
 function start() {
-    cm.sendNext("我愿为您效劳，我的朋友。");
+    cm.sendNext("欢迎来到宅邸大厅。若有需要，请尽管吩咐，冒险家。");
     cm.dispose();
 }
