@@ -60,9 +60,9 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("啊......没想到还会碰上这种事情。怎么都没想到人偶师还会潜伏到这里来。平时大概是疏于修炼了，完全被对方给算计了。不过，这也暴露出了他们的弱点。");
+            qm.sendNext("英雄，真的非常感谢你！没想到人偶师竟然能绕过明珠港的警备潜伏到这里来。他大概是因为之前的事情想要报复我们。幸好你及时赶到，做得很好！");
         } else if (status == 1) {
-	qm.sendNextPrev("弱点？", 2);
+            qm.sendNextPrev("作为这次行动的奖励，我会把#r精准矛#k技能传授给你。学会之后，你使用矛时的熟练度和命中率都会提高。", 2);
         } else if (status == 2) {
             qm.gainExp(8000);
             qm.teachSkill(21100000, 0, 20, -1); // polearm mastery
