@@ -500,27 +500,28 @@ public class Character extends AbstractCharacterObject {
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
     private static final InventoryService inventoryService = ServerManager.getApplicationContext().getBean(InventoryService.class);
 
-    /**
-     * 最后攻击时间
-     * 用来校验攻击速度是否过快
-     */
-    private final ConcurrentHashMap<Integer, Long> lastAttackTimes = new ConcurrentHashMap<>();
+    /** 各技能原始时间戳，仅被 >= MIN_INTERVAL 的正常包更新，暴发包透明通过 */
+    private final ConcurrentHashMap<Integer, Long> normalAttackTimes = new ConcurrentHashMap<>();
 
     /**
-     * 原子更新指定技能的最后攻击时间，并返回与上次记录的时间间隔（毫秒）。
-     * 若是首次记录或出现时钟回退，返回 Long.MAX_VALUE 表示本次不参与间隔判定。
+     * 获取指定技能距上次攻击的间隔毫秒数，并更新最后攻击时间。
+     * 间隔 < MIN_INTERVAL 时不更新时间戳，视为网络抖动透明跳过。
+     * 首次调用或时钟回退时返回 Long.MAX_VALUE，本次不参与间隔判定。
      */
-    public long updateLastAttackTimeAndGetInterval(int skillId, long currentTimeMillis) {
-        AtomicLong intervalMillis = new AtomicLong(Long.MAX_VALUE);
-        lastAttackTimes.compute(skillId, (ignored, previousTime) -> {
-            long previous = previousTime == null ? 0L : previousTime;
-            if (previous > 0L && currentTimeMillis > previous) {
-                intervalMillis.set(currentTimeMillis - previous);
+    public long getAttackInterval(int skillId, long now) {
+        AtomicLong intervalRef = new AtomicLong(Long.MAX_VALUE);
+        normalAttackTimes.compute(skillId, (ignored, prevTime) -> {
+            long prev = prevTime != null ? prevTime : 0L;
+            if (prev > 0L && now > prev) {
+                intervalRef.set(now - prev);
             }
-            // 保证每个技能的时间记录单调不回退，避免并发写入覆盖新值。
-            return Math.max(previous, currentTimeMillis);
+            long interval = intervalRef.get();
+            if (interval != Long.MAX_VALUE && interval < MIN_INTERVAL) {
+                return prev;
+            }
+            return Math.max(prev, now);
         });
-        return intervalMillis.get();
+        return intervalRef.get();
     }
 
 
@@ -9996,5 +9997,107 @@ public class Character extends AbstractCharacterObject {
      */
     public void enableActions() {
         sendPacket(PacketCreator.enableActions());
+    }
+
+    // ==================== 攻击间隔滑动窗口（稳定度识别） ====================
+
+    /** 窗口大小：最近 N 次攻击间隔 */
+    public static final int WINDOW_SIZE = 10;
+    /** 变异系数阈值：CV < 此值判定为稳定高速 */
+    public static final double STABLE_CV = 0.3;
+    /** 网络抖动透明上限：< 此值的间隔不更新状态、不入窗口 */
+    public static final long MIN_INTERVAL = 50;
+    /** 平均阈值：窗口 avg >= 此值判定为正常频率 */
+    public static final long NORMAL_AVG = 250;
+    /** 窗口自动过期时间：60s 无写入自动重置 */
+    private static final long CLEANUP_MS = 60_000;
+
+    /** 各技能攻击间隔滑动窗口 */
+    private final ConcurrentHashMap<Integer, AttackWindow> skillWindows = new ConcurrentHashMap<>();
+
+    /** 全局最后攻击时间戳，只被正常主动技能更新 */
+    private volatile long globalAttackTime;
+
+    /** 滑动窗口判定结果 */
+    public enum SkillWindowResult {
+        PASS,          // 数据不足 / avg >= 250 → 正常
+        STABLE_HACK,   // avg < 250 且 CV < STABLE_CV → 稳定高速
+        BURST          // avg < 250 但 CV >= STABLE_CV → 网络暴发
+    }
+
+    /** 环形缓冲，保存最近 N 次攻击间隔，满后自动计算 avg + CV */
+    static final class AttackWindow {
+        private final long[] buf = new long[WINDOW_SIZE];
+        private int idx;
+        private int count;
+        private long lastPush;
+
+        AttackWindow() {
+            this.lastPush = System.currentTimeMillis();
+        }
+
+        synchronized void push(long interval) {
+            long now = System.currentTimeMillis();
+            if (now - lastPush > CLEANUP_MS) {
+                idx = 0;
+                count = 0;
+            }
+            buf[idx] = interval;
+            idx = (idx + 1) % WINDOW_SIZE;
+            if (count < WINDOW_SIZE) count++;
+            lastPush = now;
+        }
+
+        synchronized boolean isFull() {
+            return count == WINDOW_SIZE;
+        }
+
+        synchronized double avg() {
+            long sum = 0;
+            for (int i = 0; i < count; i++) sum += buf[i];
+            return (double) sum / count;
+        }
+
+        synchronized double stddev() {
+            double a = avg();
+            double sumSq = 0;
+            for (int i = 0; i < count; i++) {
+                double d = buf[i] - a;
+                sumSq += d * d;
+            }
+            return Math.sqrt(sumSq / count);
+        }
+    }
+
+    /**
+     * 推入间隔到滑动窗口，返回窗口判定结果。
+     * 窗口不满或 avg >= 250 返回 PASS；
+     * avg < 250 且 CV < STABLE_CV 返回 STABLE_HACK；
+     * avg < 250 但 CV >= STABLE_CV 返回 BURST。
+     */
+    public SkillWindowResult checkSkillWindow(int skillId, long interval) {
+        AttackWindow w = skillWindows.computeIfAbsent(skillId, k -> new AttackWindow());
+        w.push(interval);
+        if (!w.isFull()) return SkillWindowResult.PASS;
+        double avg = w.avg();
+        if (avg >= NORMAL_AVG) return SkillWindowResult.PASS;
+        double cv = w.stddev() / avg;
+        return cv < STABLE_CV ? SkillWindowResult.STABLE_HACK : SkillWindowResult.BURST;
+    }
+
+    /** 获取指定技能的滑动窗口（外部只读 avg / isFull），无则返回 null */
+    public AttackWindow getSkillWindow(int skillId) {
+        return skillWindows.get(skillId);
+    }
+
+    /** 获取全局攻击间隔。首次或未设时返回 Long.MAX_VALUE */
+    public long getGlobalInterval(long now) {
+        long last = globalAttackTime;
+        return last == 0 ? Long.MAX_VALUE : now - last;
+    }
+
+    /** 更新全局攻击时间戳，只被正常主动技能调用 */
+    public void updateGlobalTime(long now) {
+        globalAttackTime = now;
     }
 }
