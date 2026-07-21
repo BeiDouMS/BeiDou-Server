@@ -408,6 +408,10 @@ public class Character extends AbstractCharacterObject {
     private int teleportContextMapId = MapId.NONE; // 传送上下文所属地图，跨图后自动失效
     private long teleportContextExpireTime = 0L; // 传送上下文过期时间戳（单调时钟纳秒）
     private byte teleportContextRemainingChecks = 0; // 传送上下文剩余可用攻击校验次数
+    // 宠物拾取传送补偿：内传送门后记录传送前玩家坐标，用于宠物旧位置物品捡取防误判
+    private Point petLootTeleportBeforePos = null;
+    private long petLootTeleportBeforePosTime = 0;
+    private static final long PET_LOOT_TELEPORT_CONTEXT_EXPIRE_NS = MILLISECONDS.toNanos(1500L);
     // 普通移动距离误判修正上下文：只覆盖“移动包后紧跟攻击包”的极短时间窗
     private static final long MOVEMENT_DISTANCE_CONTEXT_EXPIRE_NS = MILLISECONDS.toNanos(350L);
     private static final byte MOVEMENT_DISTANCE_CONTEXT_MAX_ATTACK_CHECKS = 1;
@@ -9133,6 +9137,30 @@ public class Character extends AbstractCharacterObject {
             return null;
         }
         return copyPoint(movementBeforePos);
+    }
+
+    /**
+     * 记录传送前玩家坐标，供宠物拾取反作弊旧位置物品补偿使用。
+     * 每次内传送门触发时由 InnerPortalHandler 调用。
+     */
+    public void setPetLootTeleportBeforePos(Point pos) {
+        this.petLootTeleportBeforePos = pos;
+        this.petLootTeleportBeforePosTime = monotonicNow();
+    }
+
+    /**
+     * 获取宠物拾取补偿用的传送前坐标。
+     * 1.5s 内有效，超时自动失效，避免旧坐标残留下一次捡包误判。
+     */
+    public Point getPetLootTeleportBeforePos() {
+        if (petLootTeleportBeforePos == null) {
+            return null;
+        }
+        if (monotonicNow() - petLootTeleportBeforePosTime > PET_LOOT_TELEPORT_CONTEXT_EXPIRE_NS) {
+            petLootTeleportBeforePos = null;
+            return null;
+        }
+        return new Point(petLootTeleportBeforePos);
     }
 
     /**
