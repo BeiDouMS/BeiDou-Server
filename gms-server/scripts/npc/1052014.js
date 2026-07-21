@@ -243,11 +243,17 @@ function givePrize() {
         var rnd = Math.floor(Math.random() * lvTarget.length);
 
         for (var i = 0; i < tickets.length; i++) {
-            cm.gainItem(4001009 + i, -1 * tickets[i]);
+            if(tickets[i]&&tickets[i]>0){
+                cm.gainItem(4001009 + i, -1 * tickets[i]);
+            }
         }
-        cm.gainItem(coinId, -1 * coins);
+        if(coins > 0) {
+            cm.gainItem(coinId, -1 * coins);
+        }
 
         cm.gainItem(lvTarget[rnd], lvQty[rnd]);
+        
+        cm.sendOk("Congratulations! You received #b#t" + lvTarget[rnd] + "##k x" + lvQty[rnd] + "!");
     }
 }
 
