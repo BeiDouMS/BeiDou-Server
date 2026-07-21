@@ -45,9 +45,10 @@
         </Logger>
 
         <!-- 降低 flyway 的日志级别 -->
-        <Logger name="org.flywaydb" level="ERROR">
+        <Logger name="org.flywaydb.core.internal.command.DbMigrate" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
+        <Logger name="org.flywaydb" level="ERROR"/>
 
         <root level="${output_log_level}">
             <appender-ref ref="RollingFile"/>

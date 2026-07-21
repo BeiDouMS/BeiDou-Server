@@ -151,7 +151,7 @@
           </a-button>
         </a-space>
       </a-form>
-      <a-table :data="characterList" row-key="characterId" :pagination="false">
+      <a-table :data="characterList" row-key="id" :pagination="false">
         <template #columns>
           <a-table-column
             :title="$t('informationSearch.characterSelector.column.id')"
@@ -429,8 +429,8 @@
     currentItem.value = record;
     currentItemName.value = record.name;
     selectorCondition.value = {
-      characterId: undefined,
-      characterName: undefined,
+      id: undefined,
+      name: undefined,
       pageNo: 1,
       pageSize: 20,
     };
