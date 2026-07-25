@@ -85,7 +85,7 @@ public final class HealOvertimeHandler extends AbstractPacketHandler {
         }
 
         // Keep this as a server-side floor so clients that already include the bonus are not doubled.
-        int expectedRecovery = skillLevel * (chr.getLevel() / 10) + 3;
+        int expectedRecovery = (int) (skillLevel * (chr.getLevel() * 0.1) + 3);
         return Math.max(healMP, expectedRecovery);
     }
 }
