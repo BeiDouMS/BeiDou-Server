@@ -68,7 +68,9 @@ function action(mode, type, selection) {
             cm.sendNext("Alright I'll let you in! Defeat the monsters inside, collect 30 Dark Marbles, then strike up a conversation with a colleague of mine inside. He'll give you #bThe Proof of a Hero#k, the proof that you've passed the test. Best of luck to you.");
             cm.completeQuest(100003);
             cm.startQuest(100004);
-            cm.gainItem(4031008, -1);
+            if (cm.haveItem(4031008)) {
+                cm.gainItem(4031008, -1);
+            }
         } else if (status == 5) {
             cm.warp(108000300, 0);
             cm.dispose();

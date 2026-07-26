@@ -60,7 +60,10 @@ public class MapScriptManager extends AbstractScriptManager {
         Invocable iv = scripts.get(mapScriptPath);
         if (iv != null) {
             try {
-                iv.invokeFunction("start", new MapScriptMethods(c));
+                //map脚本全局共享GraalVM context，按iv实例串行化，避免多线程并发进入
+                synchronized (iv) {
+                    iv.invokeFunction("start", new MapScriptMethods(c));
+                }
                 return true;
             } catch (final ScriptException | NoSuchMethodException e) {
                 e.printStackTrace();
@@ -74,7 +77,9 @@ public class MapScriptManager extends AbstractScriptManager {
             }
 
             scripts.put(mapScriptPath, iv);
-            iv.invokeFunction("start", new MapScriptMethods(c));
+            synchronized (iv) {
+                iv.invokeFunction("start", new MapScriptMethods(c));
+            }
             return true;
         } catch (final Exception e) {
             log.error("Error running map script {}", mapScriptPath, e);

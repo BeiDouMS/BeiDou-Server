@@ -74,7 +74,10 @@ public class PortalScriptManager extends AbstractScriptManager {
             }
             PortalScript script = getPortalScript(strPortalName);
             if (script != null) {
-                return script.enter(new PortalPlayerInteraction(c, portal));
+                //portal脚本全局共享GraalVM context，按script实例串行化，避免多线程并发进入
+                synchronized (script) {
+                    return script.enter(new PortalPlayerInteraction(c, portal));
+                }
             }
         } catch (Exception e) {
 

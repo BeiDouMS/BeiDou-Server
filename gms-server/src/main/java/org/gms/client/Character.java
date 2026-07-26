@@ -4335,8 +4335,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public List<Ring> getCrushRings() {
-        Collections.sort(crushRings);
-        return crushRings;
+        synchronized (crushRings) {
+            Collections.sort(crushRings);
+            return new ArrayList<>(crushRings);
+        }
     }
 
     public Collection<Door> getDoors() {
@@ -4714,8 +4716,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public List<Ring> getFriendshipRings() {
-        Collections.sort(friendshipRings);
-        return friendshipRings;
+        synchronized (friendshipRings) {
+            Collections.sort(friendshipRings);
+            return new ArrayList<>(friendshipRings);
+        }
     }
 
     public boolean isMale() {
@@ -6248,9 +6252,13 @@ public class Character extends AbstractCharacterObject {
         if (ItemId.isWeddingRing(ringItemId)) {
             this.marriageRing = ring;
         } else if (ring.getItemId() > 1112012) {
-            this.friendshipRings.add(ring);
+            synchronized (friendshipRings) {
+                this.friendshipRings.add(ring);
+            }
         } else {
-            this.crushRings.add(ring);
+            synchronized (crushRings) {
+                this.crushRings.add(ring);
+            }
         }
     }
 
@@ -7824,17 +7832,17 @@ public class Character extends AbstractCharacterObject {
                 }
 
                 // Event stats
-                deleteWhereCharacterId(con, "DELETE FROM eventstats WHERE characterid = ?");
-                try (PreparedStatement psEvent = con.prepareStatement("INSERT INTO eventstats (characterid, name, info) VALUES (?, ?, ?)")) {
-                    psEvent.setInt(1, id);
-
-                    for (Map.Entry<String, Events> entry : events.entrySet()) {
-                        psEvent.setString(2, entry.getKey());
-                        psEvent.setInt(3, entry.getValue().getInfo());
-                        psEvent.addBatch();
+                if (events != null) {
+                    deleteWhereCharacterId(con, "DELETE FROM eventstats WHERE characterid = ?");
+                    try (PreparedStatement psEvent = con.prepareStatement("INSERT INTO eventstats (characterid, name, info) VALUES (?, ?, ?)")) {
+                        psEvent.setInt(1, id);
+                        for (Map.Entry<String, Events> entry : events.entrySet()) {
+                            psEvent.setString(2, entry.getKey());
+                            psEvent.setInt(3, entry.getValue().getInfo());
+                            psEvent.addBatch();
+                        }
+                        psEvent.executeBatch();
                     }
-
-                    psEvent.executeBatch();
                 }
 
                 deleteQuestProgressWhereCharacterId(con, id);

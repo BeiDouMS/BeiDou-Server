@@ -68,7 +68,9 @@ function action(mode, type, selection) {
             cm.sendNext("好的，我会让你进去！打败里面的怪物，收集30个黑暗弹珠，然后和我的一个同事交谈。他会给你#b英雄的证明#k，这是你通过测试的证明。祝你好运。");
             cm.completeQuest(100003);
             cm.startQuest(100004);
-            cm.gainItem(4031008, -1);
+            if (cm.haveItem(4031008)) {
+                cm.gainItem(4031008, -1);
+            }
         } else if (status == 5) {
             cm.warp(108000300, 0);
             cm.dispose();

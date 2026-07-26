@@ -67,12 +67,14 @@ function action(mode, type, selection) {
                 cm.gainItem(4001101, -10);
 
                 var eim = cm.getEventInstance();
-                clearStage(1, eim);
+                if (eim != null) {
+                    clearStage(1, eim);
 
-                var map = eim.getMapInstance(cm.getPlayer().getMapId());
-                map.killAllMonstersNotFriendly();
+                    var map = eim.getMapInstance(cm.getPlayer().getMapId());
+                    map.killAllMonstersNotFriendly();
 
-                eim.clearPQ();
+                    eim.clearPQ();
+                }
                 cm.dispose();
             } else {
                 if (mode == 1) {
