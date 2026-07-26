@@ -268,6 +268,12 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
     }
 
+    public void spawnMonster(int id, int x, int y) {
+        Monster monster = LifeFactory.getMonster(id);
+        monster.setPosition(new Point(x, y));
+        reactor.getMap().spawnMonster(monster);
+    }
+
     public void killMonster(int id) {
         killMonster(id, false);
     }
