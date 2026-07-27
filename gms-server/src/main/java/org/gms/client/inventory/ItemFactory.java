@@ -206,71 +206,100 @@ public enum ItemFactory {
         Lock lock = locks[id % lockCount];
         lock.lock();
         try {
-            StringBuilder query = new StringBuilder();
-            query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
-            query.append(account ? "accountid" : "characterid").append("` = ?");
-
-            try (PreparedStatement ps = con.prepareStatement(query.toString())) {
-                ps.setInt(1, value);
-                ps.setInt(2, id);
-                ps.executeUpdate();
+            // 仅在调用方未开事务时自己管事务，避免 DELETE 已提交但 INSERT 失败导致物品丢失。
+            // Character.saveCharToDB 已 setAutoCommit(false)，此处不接管；其他调用方
+            // （如 HiredMerchant.saveItems）默认 autoCommit=true，此处包裹事务保证原子性。
+            boolean ownTransaction = con.getAutoCommit();
+            if (ownTransaction) {
+                con.setAutoCommit(false);
             }
+            try {
+                StringBuilder query = new StringBuilder();
+                query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
+                query.append(account ? "accountid" : "characterid").append("` = ?");
 
-            try (PreparedStatement psItem = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-                if (!items.isEmpty()) {
-                    for (Pair<Item, InventoryType> pair : items) {
-                        Item item = pair.getLeft();
-                        InventoryType mit = pair.getRight();
-                        psItem.setInt(1, value);
-                        psItem.setString(2, account ? null : String.valueOf(id));
-                        psItem.setString(3, account ? String.valueOf(id) : null);
-                        psItem.setInt(4, item.getItemId());
-                        psItem.setInt(5, mit.getType());
-                        psItem.setInt(6, item.getPosition());
-                        psItem.setInt(7, item.getQuantity());
-                        psItem.setString(8, item.getOwner());
-                        psItem.setInt(9, item.getPetId());      // thanks Daddy Egg for alerting a case of unique petid constraint breach getting raised
-                        psItem.setInt(10, item.getFlag());
-                        psItem.setLong(11, item.getExpiration());
-                        psItem.setString(12, item.getGiftFrom());
-                        psItem.executeUpdate();
+                try (PreparedStatement ps = con.prepareStatement(query.toString())) {
+                    ps.setInt(1, value);
+                    ps.setInt(2, id);
+                    ps.executeUpdate();
+                }
 
-                        if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                            try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                                try (ResultSet rs = psItem.getGeneratedKeys()) {
-                                    if (!rs.next()) {
-                                        throw new RuntimeException("Inserting item failed.");
+                try (PreparedStatement psItem = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                    if (!items.isEmpty()) {
+                        for (Pair<Item, InventoryType> pair : items) {
+                            Item item = pair.getLeft();
+                            InventoryType mit = pair.getRight();
+                            psItem.setInt(1, value);
+                            psItem.setString(2, account ? null : String.valueOf(id));
+                            psItem.setString(3, account ? String.valueOf(id) : null);
+                            psItem.setInt(4, item.getItemId());
+                            psItem.setInt(5, mit.getType());
+                            psItem.setInt(6, item.getPosition());
+                            psItem.setInt(7, item.getQuantity());
+                            psItem.setString(8, item.getOwner());
+                            psItem.setInt(9, item.getPetId());      // thanks Daddy Egg for alerting a case of unique petid constraint breach getting raised
+                            psItem.setInt(10, item.getFlag());
+                            psItem.setLong(11, item.getExpiration());
+                            psItem.setString(12, item.getGiftFrom());
+                            psItem.executeUpdate();
+
+                            if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
+                                try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                                    try (ResultSet rs = psItem.getGeneratedKeys()) {
+                                        if (!rs.next()) {
+                                            throw new RuntimeException("Inserting item failed.");
+                                        }
+
+                                        psEquip.setInt(1, rs.getInt(1));
                                     }
 
-                                    psEquip.setInt(1, rs.getInt(1));
+                                    Equip equip = (Equip) item;
+                                    psEquip.setInt(2, equip.getUpgradeSlots());
+                                    psEquip.setInt(3, equip.getLevel());
+                                    psEquip.setInt(4, equip.getStr());
+                                    psEquip.setInt(5, equip.getDex());
+                                    psEquip.setInt(6, equip.getInt());
+                                    psEquip.setInt(7, equip.getLuk());
+                                    psEquip.setInt(8, equip.getHp());
+                                    psEquip.setInt(9, equip.getMp());
+                                    psEquip.setInt(10, equip.getWatk());
+                                    psEquip.setInt(11, equip.getMatk());
+                                    psEquip.setInt(12, equip.getWdef());
+                                    psEquip.setInt(13, equip.getMdef());
+                                    psEquip.setInt(14, equip.getAcc());
+                                    psEquip.setInt(15, equip.getAvoid());
+                                    psEquip.setInt(16, equip.getHands());
+                                    psEquip.setInt(17, equip.getSpeed());
+                                    psEquip.setInt(18, equip.getJump());
+                                    psEquip.setInt(19, 0);
+                                    psEquip.setInt(20, equip.getVicious());
+                                    psEquip.setInt(21, equip.getItemLevel());
+                                    psEquip.setInt(22, equip.getItemExp());
+                                    psEquip.setInt(23, equip.getRingId());
+                                    psEquip.executeUpdate();
                                 }
-
-                                Equip equip = (Equip) item;
-                                psEquip.setInt(2, equip.getUpgradeSlots());
-                                psEquip.setInt(3, equip.getLevel());
-                                psEquip.setInt(4, equip.getStr());
-                                psEquip.setInt(5, equip.getDex());
-                                psEquip.setInt(6, equip.getInt());
-                                psEquip.setInt(7, equip.getLuk());
-                                psEquip.setInt(8, equip.getHp());
-                                psEquip.setInt(9, equip.getMp());
-                                psEquip.setInt(10, equip.getWatk());
-                                psEquip.setInt(11, equip.getMatk());
-                                psEquip.setInt(12, equip.getWdef());
-                                psEquip.setInt(13, equip.getMdef());
-                                psEquip.setInt(14, equip.getAcc());
-                                psEquip.setInt(15, equip.getAvoid());
-                                psEquip.setInt(16, equip.getHands());
-                                psEquip.setInt(17, equip.getSpeed());
-                                psEquip.setInt(18, equip.getJump());
-                                psEquip.setInt(19, 0);
-                                psEquip.setInt(20, equip.getVicious());
-                                psEquip.setInt(21, equip.getItemLevel());
-                                psEquip.setInt(22, equip.getItemExp());
-                                psEquip.setInt(23, equip.getRingId());
-                                psEquip.executeUpdate();
                             }
                         }
+                    }
+                }
+                if (ownTransaction) {
+                    con.commit();
+                }
+            } catch (SQLException | RuntimeException e) {
+                if (ownTransaction) {
+                    try {
+                        con.rollback();
+                    } catch (SQLException re) {
+                        e.addSuppressed(re);
+                    }
+                }
+                throw e;
+            } finally {
+                if (ownTransaction) {
+                    try {
+                        con.setAutoCommit(true);
+                    } catch (SQLException se) {
+                        // ignore restore failure
                     }
                 }
             }
@@ -338,91 +367,120 @@ public enum ItemFactory {
         Lock lock = locks[id % lockCount];
         lock.lock();
         try {
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM `inventorymerchant` WHERE `characterid` = ?")) {
-                ps.setInt(1, id);
-                ps.executeUpdate();
+            // 仅在调用方未开事务时自己管事务，避免 DELETE 已提交但 INSERT 失败导致物品丢失。
+            // HiredMerchant.saveItems 默认 autoCommit=true，此处包裹事务保证
+            // inventorymerchant + inventoryitems + inventoryequipment 的 DELETE/INSERT 原子提交。
+            boolean ownTransaction = con.getAutoCommit();
+            if (ownTransaction) {
+                con.setAutoCommit(false);
             }
-
-            StringBuilder query = new StringBuilder();
-            query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
-            query.append(account ? "accountid" : "characterid").append("` = ?");
-
-            try (PreparedStatement ps = con.prepareStatement(query.toString())) {
-                ps.setInt(1, value);
-                ps.setInt(2, id);
-                ps.executeUpdate();
-            }
-
-            int i = 0;
-            for (Pair<Item, InventoryType> pair : items) {
-                final Item item = pair.getLeft();
-                final Short bundles = bundlesList.get(i);
-                final InventoryType mit = pair.getRight();
-                i++;
-
-                final int genKey;
-                // Item
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setInt(1, value);
-                    ps.setString(2, account ? null : String.valueOf(id));
-                    ps.setString(3, account ? String.valueOf(id) : null);
-                    ps.setInt(4, item.getItemId());
-                    ps.setInt(5, mit.getType());
-                    ps.setInt(6, item.getPosition());
-                    ps.setInt(7, item.getQuantity());
-                    ps.setString(8, item.getOwner());
-                    ps.setInt(9, item.getPetId());
-                    ps.setInt(10, item.getFlag());
-                    ps.setLong(11, item.getExpiration());
-                    ps.setString(12, item.getGiftFrom());
+            try {
+                try (PreparedStatement ps = con.prepareStatement("DELETE FROM `inventorymerchant` WHERE `characterid` = ?")) {
+                    ps.setInt(1, id);
                     ps.executeUpdate();
+                }
 
-                    try (ResultSet rs = ps.getGeneratedKeys()) {
-                        if (!rs.next()) {
-                            throw new RuntimeException("Inserting item failed.");
+                StringBuilder query = new StringBuilder();
+                query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
+                query.append(account ? "accountid" : "characterid").append("` = ?");
+
+                try (PreparedStatement ps = con.prepareStatement(query.toString())) {
+                    ps.setInt(1, value);
+                    ps.setInt(2, id);
+                    ps.executeUpdate();
+                }
+
+                int i = 0;
+                for (Pair<Item, InventoryType> pair : items) {
+                    final Item item = pair.getLeft();
+                    final Short bundles = bundlesList.get(i);
+                    final InventoryType mit = pair.getRight();
+                    i++;
+
+                    final int genKey;
+                    // Item
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryitems` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                        ps.setInt(1, value);
+                        ps.setString(2, account ? null : String.valueOf(id));
+                        ps.setString(3, account ? String.valueOf(id) : null);
+                        ps.setInt(4, item.getItemId());
+                        ps.setInt(5, mit.getType());
+                        ps.setInt(6, item.getPosition());
+                        ps.setInt(7, item.getQuantity());
+                        ps.setString(8, item.getOwner());
+                        ps.setInt(9, item.getPetId());
+                        ps.setInt(10, item.getFlag());
+                        ps.setLong(11, item.getExpiration());
+                        ps.setString(12, item.getGiftFrom());
+                        ps.executeUpdate();
+
+                        try (ResultSet rs = ps.getGeneratedKeys()) {
+                            if (!rs.next()) {
+                                throw new RuntimeException("Inserting item failed.");
+                            }
+
+                            genKey = rs.getInt(1);
                         }
+                    }
 
-                        genKey = rs.getInt(1);
+                    // Merchant
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventorymerchant` VALUES (DEFAULT, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                        ps.setInt(1, genKey);
+                        ps.setInt(2, id);
+                        ps.setInt(3, bundles);
+                        ps.executeUpdate();
+                    }
+
+                    // Equipment
+                    if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
+                        try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            ps.setInt(1, genKey);
+
+                            Equip equip = (Equip) item;
+                            ps.setInt(2, equip.getUpgradeSlots());
+                            ps.setInt(3, equip.getLevel());
+                            ps.setInt(4, equip.getStr());
+                            ps.setInt(5, equip.getDex());
+                            ps.setInt(6, equip.getInt());
+                            ps.setInt(7, equip.getLuk());
+                            ps.setInt(8, equip.getHp());
+                            ps.setInt(9, equip.getMp());
+                            ps.setInt(10, equip.getWatk());
+                            ps.setInt(11, equip.getMatk());
+                            ps.setInt(12, equip.getWdef());
+                            ps.setInt(13, equip.getMdef());
+                            ps.setInt(14, equip.getAcc());
+                            ps.setInt(15, equip.getAvoid());
+                            ps.setInt(16, equip.getHands());
+                            ps.setInt(17, equip.getSpeed());
+                            ps.setInt(18, equip.getJump());
+                            ps.setInt(19, 0);
+                            ps.setInt(20, equip.getVicious());
+                            ps.setInt(21, equip.getItemLevel());
+                            ps.setInt(22, equip.getItemExp());
+                            ps.setInt(23, equip.getRingId());
+                            ps.executeUpdate();
+                        }
                     }
                 }
-
-                // Merchant
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventorymerchant` VALUES (DEFAULT, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setInt(1, genKey);
-                    ps.setInt(2, id);
-                    ps.setInt(3, bundles);
-                    ps.executeUpdate();
+                if (ownTransaction) {
+                    con.commit();
                 }
-
-                // Equipment
-                if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                        ps.setInt(1, genKey);
-
-                        Equip equip = (Equip) item;
-                        ps.setInt(2, equip.getUpgradeSlots());
-                        ps.setInt(3, equip.getLevel());
-                        ps.setInt(4, equip.getStr());
-                        ps.setInt(5, equip.getDex());
-                        ps.setInt(6, equip.getInt());
-                        ps.setInt(7, equip.getLuk());
-                        ps.setInt(8, equip.getHp());
-                        ps.setInt(9, equip.getMp());
-                        ps.setInt(10, equip.getWatk());
-                        ps.setInt(11, equip.getMatk());
-                        ps.setInt(12, equip.getWdef());
-                        ps.setInt(13, equip.getMdef());
-                        ps.setInt(14, equip.getAcc());
-                        ps.setInt(15, equip.getAvoid());
-                        ps.setInt(16, equip.getHands());
-                        ps.setInt(17, equip.getSpeed());
-                        ps.setInt(18, equip.getJump());
-                        ps.setInt(19, 0);
-                        ps.setInt(20, equip.getVicious());
-                        ps.setInt(21, equip.getItemLevel());
-                        ps.setInt(22, equip.getItemExp());
-                        ps.setInt(23, equip.getRingId());
-                        ps.executeUpdate();
+            } catch (SQLException | RuntimeException e) {
+                if (ownTransaction) {
+                    try {
+                        con.rollback();
+                    } catch (SQLException re) {
+                        e.addSuppressed(re);
+                    }
+                }
+                throw e;
+            } finally {
+                if (ownTransaction) {
+                    try {
+                        con.setAutoCommit(true);
+                    } catch (SQLException se) {
+                        // ignore restore failure
                     }
                 }
             }

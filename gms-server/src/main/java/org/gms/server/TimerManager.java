@@ -96,6 +96,15 @@ public class TimerManager implements TimerManagerMBean {
         return ses.scheduleAtFixedRate(new TimerRunner(r), 0, repeatTime, MILLISECONDS);
     }
 
+    /**
+     * 固定延迟调度：上一轮执行结束到下一轮开始间隔固定时长。
+     * 适合保存类任务：单轮超周期不会追赶积压，避免保存任务在卡顿后
+     * 连续追赶触发多次 DB 写入。
+     */
+    public ScheduledFuture<?> registerWithFixedDelay(Runnable r, long repeatTime, long delay) {
+        return ses.scheduleWithFixedDelay(new TimerRunner(r), delay, repeatTime, MILLISECONDS);
+    }
+
     public ScheduledFuture<?> update(ScheduledFuture<?> sf, Runnable r, long repeatTime) {
        stop(sf);
         return ses.scheduleAtFixedRate(new TimerRunner(r), 0, repeatTime, MILLISECONDS);

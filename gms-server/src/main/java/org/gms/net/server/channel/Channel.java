@@ -235,22 +235,25 @@ public final class Channel {
     }
 
     private void closeAllMerchants() {
+        List<HiredMerchant> merchs;
+
+        merchWlock.lock();
         try {
-            List<HiredMerchant> merchs;
+            merchs = new ArrayList<>(hiredMerchants.values());
+            hiredMerchants.clear();
+        } finally {
+            merchWlock.unlock();
+        }
 
-            merchWlock.lock();
+        // 每个商店独立 try-catch：单店异常不中断后续商店保存，避免一个店挂掉导致
+        // 剩余店全部跳过 saveItems 而物品丢失。
+        for (HiredMerchant merch : merchs) {
             try {
-                merchs = new ArrayList<>(hiredMerchants.values());
-                hiredMerchants.clear();
-            } finally {
-                merchWlock.unlock();
-            }
-
-            for (HiredMerchant merch : merchs) {
                 merch.forceClose();
+            } catch (Exception e) {
+                log.error("Failed to forceClose HiredMerchant owner={}, world={}, channel={}",
+                        merch.getOwnerId(), world, channel, e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

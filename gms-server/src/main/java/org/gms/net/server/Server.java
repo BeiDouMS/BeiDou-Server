@@ -146,6 +146,20 @@ public class Server {
     public static long uptime = System.currentTimeMillis();
     private long nextTime;
 
+    /**
+     * 关停流程重入保护。
+     *
+     * shutdownInternal 可被多个路径并发调用：
+     *  - ShutdownCommand 走 TimerManager 延时调度
+     *  - ConfigService 用虚拟线程触发 restart
+     *  - ServerManager.destroy()（Spring 容器关闭钩子，等价于 addShutdownHook）
+     *  - ServerController.stopServer/restartServer
+     * synchronized 串行化调用方，但调用方仍会阻塞等锁——Spring 容器关闭钩子
+     * 在 System.exit 时若卡在等锁，会导致端口不释放、JVM 退出超时（"关了起不来"根因）。
+     * 用 volatile 标志让重入调用在 synchronized 外直接返回。
+     */
+    private volatile boolean shuttingDown = false;
+
     private static final NpcService npcService = ServerManager.getApplicationContext().getBean(NpcService.class);
     private static final NxCouponService nxCouponService = ServerManager.getApplicationContext().getBean(NxCouponService.class);
     private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
@@ -1614,7 +1628,31 @@ public class Server {
         return () -> shutdownInternal(restart);
     }
 
-    public synchronized void shutdownInternal(boolean restart) {
+    public void shutdownInternal(boolean restart) {
+        // 重入保护在 synchronized 外判断，避免 Spring 关闭钩子等调用方
+        // 在 System.exit 时卡在等锁导致 JVM 退出超时、端口不释放。
+        if (shuttingDown) {
+            log.warn("Server shutdownInternal skipped: already in progress (restart={})", restart);
+            return;
+        }
+        synchronized (this) {
+            if (shuttingDown) {
+                log.warn("Server shutdownInternal skipped: already in progress (restart={})", restart);
+                return;
+            }
+            shuttingDown = true;
+            try {
+                doShutdownInternal(restart);
+            } finally {
+                // restart 路径在 doShutdownInternal 末尾重置 shuttingDown=false，
+                // 以便 init() 启动后能再次响应关停调用；非 restart 路径同样重置，
+                // 让后续手动 startServer() 不被旧标志挡住。
+                shuttingDown = false;
+            }
+        }
+    }
+
+    private synchronized void doShutdownInternal(boolean restart) {
         log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info1"), restart ?
                 I18nUtil.getLogMessage("Server.shutdownInternal.info2") : I18nUtil.getLogMessage("Server.shutdownInternal.info3"));
         if (getWorlds() == null) {
@@ -1648,6 +1686,8 @@ public class Server {
         if (restart) {
             log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info5"));
             instance = null;
+            // 重置标志，让 init() 重新启动后能再次响应关停调用
+            shuttingDown = false;
             getInstance().init();
         }
     }
