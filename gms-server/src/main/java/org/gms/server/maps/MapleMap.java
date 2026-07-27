@@ -2388,6 +2388,8 @@ public class MapleMap {
     }
 
     public void addPlayer(final Character chr) {
+        cleanupGhostPlayers();   // 被动清理：进图前先清掉图上"已断线未正常移除"的幽灵玩家，避免其他人仍看到他
+
         int chrSize;
         Party party = chr.getParty();
         chrWLock.lock();
@@ -2703,7 +2705,15 @@ public class MapleMap {
     }
 
     public void removePlayer(Character chr) {
-        Channel cserv = chr.getClient().getChannelServer();
+        // 优先重分配该玩家控制的怪物 controller，防止后续步骤抛异常导致 leaveMap()->releaseControlledMonsters() 没执行，
+        // 怪物 controller 卡在已离线玩家身上（幽灵致怪物不动的根因之一）。
+        try {
+            chr.releaseControlledMonsters();
+        } catch (Throwable t) {
+            log.warn("removePlayer 重分配怪物 controller 异常 chr={}", chr.getName(), t);
+        }
+
+        Channel cserv = chr.getClient() != null ? chr.getClient().getChannelServer() : null;
         chr.unregisterChairBuff();
 
         Party party = chr.getParty();
@@ -2718,7 +2728,7 @@ public class MapleMap {
             chrWLock.unlock();
         }
 
-        if (MiniDungeonInfo.isDungeonMap(mapid)) {
+        if (cserv != null && MiniDungeonInfo.isDungeonMap(mapid)) {
             MiniDungeon mmd = cserv.getMiniDungeon(mapid);
             if (mmd != null) {
                 if (!mmd.unregisterPlayer(chr)) {
@@ -2750,6 +2760,36 @@ public class MapleMap {
                 this.broadcastGMPacket(chr, PacketCreator.removeDragon(chr.getId()));
             } else {
                 this.broadcastPacket(chr, PacketCreator.removeDragon(chr.getId()));
+            }
+        }
+    }
+
+    /**
+     * 被动清理本图上"已断线（isAwayFromWorld）却未被正常移除"的幽灵玩家。
+     * 在 addPlayer 时触发：新玩家进图前先清掉幽灵并广播 removePlayerFromMap，
+     * 使新玩家与图上原有玩家都不再看到这个已下线的角色。配合 Client.removePlayer 的 A 修复兜底漏网情况。
+     * awayFromWorld=true 涵盖已断开/商城/mts，这类玩家本就不该留在地图 characters，留在即幽灵，正常在线玩家 awayFromWorld=false 不受影响。
+     */
+    private void cleanupGhostPlayers() {
+        List<Character> ghosts = new ArrayList<>();
+        chrRLock.lock();
+        try {
+            for (Character c : characters) {
+                if (c != null && c.isAwayFromWorld()) {
+                    ghosts.add(c);
+                }
+            }
+        } finally {
+            chrRLock.unlock();
+        }
+
+        for (Character ghost : ghosts) {
+            log.warn("检测到幽灵玩家（已断线未正常移除），被动清理. mapId={} ghostChr={}", mapid, ghost.getName());
+            try {
+                removePlayer(ghost);
+            } catch (Throwable t) {
+                // 单个幽灵清理失败不应影响其他幽灵清理，也不应阻断 addPlayer 流程
+                log.error("清理幽灵玩家异常 mapId={} ghostChr={}", mapid, ghost.getName(), t);
             }
         }
     }
