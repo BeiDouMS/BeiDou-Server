@@ -1326,34 +1326,72 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     }
 
     /**
-     * 检测攻击间隔
+     * 检测攻击间隔是否异常。
      *
-     * @param chr
+     * 三层过滤：
+     *   ① SKIP_SET / PASSIVE_SET → 直接跳过
+     *   ② < MIN_INTERVAL 网络抖动 → 透明跳过
+     *   ③ Per-skill 滑动窗口 avg + CV → 稳定高速计分，暴发仅警告
+     *   ④ 全局间隔 → 跨技能轮换计分
      */
     private static void detectionAttackInterval(Character chr, AttackInfo ret) {
         int skill = ret.skill;
-        //需要跳过检测的技能 比如弓箭手的暴风箭雨 火枪手的金属风暴
-        if (!SKIP_SKILL_ID_SET.contains(skill)) {
-            long interval = chr.updateLastAttackTimeAndGetInterval(skill, System.currentTimeMillis());
-            if (interval < 250) {
-                // 检测攻击间隔 小于350mm封号
-                AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + interval + "技能ID：" + skill);
-                log.warn("玩家{}地图ID：{}攻击间隔: {}技能ID：{}", chr.getName(), chr.getMapId(), interval, skill);
-            } else if (interval < 350) {
-                // 检测攻击间隔 小于500mm警告
-                AutobanFactory.ATTACK_INTERVAL.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "攻击间隔: " + interval + "技能ID：" + skill);
-                log.warn("玩家{}地图ID：{}攻击间隔: {}技能ID：{}", chr.getName(), chr.getMapId(), interval, skill);
-            }
+        if (SKIP_SKILL_ID_SET.contains(skill)) return;
+        if (PASSIVE_SKILL_ID_SET.contains(skill)) return;
+
+        long now = System.currentTimeMillis();
+
+        long interval = chr.getAttackInterval(skill, now);
+        if (interval == Long.MAX_VALUE || interval < Character.MIN_INTERVAL) return;
+
+        String reason = "玩家" + chr.getName() + "地图ID：" + chr.getMapId()
+                + "攻击间隔: " + interval + "技能ID：" + skill;
+
+        switch (chr.checkSkillWindow(skill, interval)) {
+            case STABLE_HACK:
+                AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), reason);
+                return;
+            case BURST:
+                AutobanFactory.ATTACK_INTERVAL.alert(chr, reason);
+                break;
+            case PASS:
+                return;
+        }
+
+        long globalInterval = chr.getGlobalInterval(now);
+        if (globalInterval < Character.NORMAL_AVG) {
+            AutobanFactory.ATTACK_INTERVAL.addPoint(chr.getAutoBanManager(), reason);
+        } else {
+            chr.updateGlobalTime(now);
         }
     }
-    /**
-     * 跳过攻击速度检测的技能ID
-     */
+
+    /** 持续施法技能：按住时连续多包，全跳过 */
     private static final Set<Integer> SKIP_SKILL_ID_SET = Set.of(
-            // 弓箭 暴风箭雨
-            Bowmaster.HURRICANE,
-            // 火枪 金属风暴
-            Corsair.RAPID_FIRE
+            Bowmaster.HURRICANE,           // 弩弓 暴风箭雨
+            WindArcher.HURRICANE,          // 风灵 暴风箭雨
+            Corsair.RAPID_FIRE,            // 火枪 金属风暴
+            Evan.FIRE_BREATH,              // 龙 火焰喷射
+            Evan.ICE_BREATH,               // 龙 寒冰喷射
+            Hero.BRANDISH,                 // 英雄 轻舞飞扬（客户端已改为按住连发）
+            DawnWarrior.BRANDISH           // 魂骑士 轻舞飞扬（同上）
+    );
+
+    /** 被动触伤技能：频率不由玩家输入控制，全跳过 */
+    private static final Set<Integer> PASSIVE_SKILL_ID_SET = Set.of(
+            Aran.BODY_PRESSURE,            // 战神 身体压杀
+            Marauder.ENERGY_CHARGE,        // 船长 能量汇集
+            ThunderBreaker.ENERGY_CHARGE,  // 雷鸣 能量汇集
+            Fighter.FINAL_ATTACK_SWORD,    // 剑客 终极剑
+            Fighter.FINAL_ATTACK_AXE,      // 剑客 终极斧
+            Page.FINAL_ATTACK_SWORD,       // 勇士 终极剑
+            Page.FINAL_ATTACK_BW,          // 勇士 终极棍
+            Spearman.FINAL_ATTACK_SPEAR,   // 枪战士 终极枪
+            Spearman.FINAL_ATTACK_POLEARM, // 枪战士 终极矛
+            Hunter.FINAL_ATTACK,           // 猎人 终极弓
+            Crossbowman.FINAL_ATTACK,      // 弩弓手 终极弩
+            DawnWarrior.FINAL_ATTACK,      // 魂骑士 终极剑
+            WindArcher.FINAL_ATTACK        // 风灵使者 终极弓
     );
 
 
