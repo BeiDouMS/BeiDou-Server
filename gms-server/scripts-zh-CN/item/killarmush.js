@@ -27,12 +27,12 @@ function start(){
             }
             im.removeAll(2430014);
             im.showInfo("Effect/OnUserEff/normalEffect/mushroomcastle/chatBalloon2");
-            im.dropMessage(6,'好像有什么动静...嗯？是结界被消除了');
+            im.dropMessage(6, '蘑菇的毒孢子与结界产生了反应，结界消散了。');
         } else {
-            im.message('尽可能的接近魔法结界才能将其消除');
+            im.message('请靠近魔法结界后再使用这个道具。');
         }
     } else {
-        im.message('这里似乎没有需要消除的魔法结界');
+        im.message('这里没有会对这个道具产生反应的魔法结界。');
     }
 
     im.dispose();

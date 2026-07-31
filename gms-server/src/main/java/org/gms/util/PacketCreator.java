@@ -57,6 +57,7 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.NpcId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.constants.string.CharsetConstants;
 import org.gms.constants.skills.Buccaneer;
 import org.gms.constants.skills.Corsair;
 import org.gms.constants.skills.ThunderBreaker;
@@ -7437,7 +7438,13 @@ public class PacketCreator {
         scriptableNpcIds.forEach((id, name) -> {
             p.writeInt(id);
             // The client needs a name for the npc conversation, which is displayed under etc when the npc has a quest available.
-            p.writeString(name);
+            if (CharsetConstants.isZhCN()) {
+                byte[] bytes = name.getBytes(CharsetConstants.getCharset(3));
+                p.writeShort(bytes.length);
+                p.writeBytes(bytes);
+            } else {
+                p.writeString(name);
+            }
             p.writeInt(0); // start time
             p.writeInt(Integer.MAX_VALUE); // end time
         });
