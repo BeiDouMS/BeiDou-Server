@@ -30,35 +30,11 @@
  ---------------------------------------------------------------------------------------------------
  **/
 
-var status;
-
 function start() {
-    status = -1;
-    action(1, 0, 0);
-}
-
-function action(mode, type, selection) {
-    if (mode == -1) {
-        cm.dispose();
+    if (cm.isQuestCompleted(8074)) {
+        cm.sendOk("谢谢你之前帮了我。古代神社总是春意盎然，欢迎你随时回来走走。");
     } else {
-        if (mode == 0 && status == 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            if (cm.isQuestCompleted(8074)) {
-                cm.openNpc(9110002);
-            } else {
-                cm.sendOk("古代神殿~~~");
-            }
-
-            cm.dispose();
-        }
+        cm.sendOk("欢迎来到古代神社。这里四季如春，也有许多不可思议的传说。愿你旅途平安。");
     }
+    cm.dispose();
 }
