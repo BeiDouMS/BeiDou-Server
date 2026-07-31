@@ -39,6 +39,8 @@ import org.gms.constants.skills.Rogue;
 import org.gms.constants.skills.WindArcher;
 import org.gms.net.packet.InPacket;
 import org.gms.server.StatEffect;
+import org.gms.server.partyquest.Pyramid;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -69,8 +71,12 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             }
         }
 
-        if (chr.getDojoEnergy() < 10000 && (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009)) // PE hacking or maybe just lagging
-        {
+        boolean pyramidSkill = MapId.isNettsPyramid(chr.getMap().getId()) && isRageOfPharaoh(attack.skill);
+        if (pyramidSkill) {
+            if (!(chr.getPartyQuest() instanceof Pyramid pyramid) || !pyramid.useSkill()) {
+                return;
+            }
+        } else if (chr.getDojoEnergy() < 10000 && isBambooRain(attack.skill)) { // PE hacking or maybe just lagging
             return;
         }
         if (MapId.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
@@ -163,17 +169,17 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         if (numFinisherOrbs == 0 && GameConstants.isFinisherSkill(attack.skill)) {
             return;
         }
-        if (attack.skill % 10000000 == 1009) { // bamboo
+        if (isBambooRain(attack.skill)) { // bamboo
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
             }
-
             chr.setDojoEnergy(0);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
-            c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
+            c.sendPacket(PacketCreator.serverNotice(5, I18nUtil.getMessage("Dojo.secretSkill.energyReset")));
         } else if (attack.skill > 0) {
             Skill skill = SkillFactory.getSkill(attack.skill);
-            StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
+            int skillLevel = pyramidSkill ? 1 : chr.getSkillLevel(skill);
+            StatEffect effect_ = skill.getEffect(skillLevel);
             if (effect_.getCooldown() > 0) {
                 if (chr.skillIsCooling(attack.skill)) {
                     return;
@@ -192,5 +198,13 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         }
 
         applyAttack(attack, chr, attackCount);
+    }
+
+    private boolean isBambooRain(int skillId) {
+        return skillId % 10000000 == 1009;
+    }
+
+    private boolean isRageOfPharaoh(int skillId) {
+        return skillId % 10000000 == 1020;
     }
 }
