@@ -29,7 +29,17 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1 || !cm.isQuestStarted(2180)) {
+    if (mode == -1) {
+        cm.dispose();
+        return;
+    }
+
+    if (!cm.isQuestStarted(2180)) {
+        if (cm.isQuestCompleted(2180)) {
+            cm.sendOk("牛奶已经顺利送到了。多亏了你，厨房又能继续准备料理了。以后有需要的话，我还会再请你帮忙。");
+        } else {
+            cm.sendOk("欢迎来到诺特勒斯号餐厅。我正在准备料理，如果有需要帮忙的事情，会再来找你的。");
+        }
         cm.dispose();
 
     } else {

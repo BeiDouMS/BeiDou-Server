@@ -34,7 +34,7 @@ function start() {
 
         cm.setQuestProgress(2180, 1, 2);
     } else if (cm.canHold(4031849) && cm.haveItem(4031848)) {
-        cm.sendNext("现在用牛奶把瓶子装满。瓶子现在装了2/3 的牛奶。");
+        cm.sendNext("现在用牛奶把瓶子装满。瓶子现在装了三分之二的牛奶。");
         cm.gainItem(4031848, -1);
         cm.gainItem(4031849, 1);
 
