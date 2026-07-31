@@ -29,7 +29,7 @@ function start() {
     if (cm.haveItem(3992041, 1)) {
         cm.warp(610030020, "out00");
     } else {
-        cm.playerMessage(5, "The giant gate of iron will not budge no matter what, however there is a visible key-shaped socket.");
+        cm.playerMessage(5, "巨大的铁门纹丝不动，但可以看到一个明显的键石形凹槽。");
     }
 
     cm.dispose();
