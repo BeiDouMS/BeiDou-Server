@@ -6,7 +6,7 @@ function end(mode, type, selection) {
         qm.dispose();
     } else {
         if (status == 0) {
-            qm.sendNext("接受这些 #b法力灵丹#k 作为我的感激之情。");
+            qm.sendNext("请收下这些#b魔力药水#k，就当作我的一点谢礼。");
         } else if (status == 1) {
             const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
             if (qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
