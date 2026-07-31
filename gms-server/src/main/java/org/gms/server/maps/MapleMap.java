@@ -1505,17 +1505,17 @@ public class MapleMap {
     }
 
     public void killMonster(int mobId) {
-		     Character chr = null;
-		     List<MapObject> players = getPlayers();
-       if (!players.isEmpty()) {
- 			     chr = (Character) players.get(0);
-		     }
-       List<Monster> mobList = getAllMonsters();
-       for (Monster mob : mobList) {
+        Character chr = null;
+        List<MapObject> players = getPlayers();
+        if (!players.isEmpty()) {
+            chr = (Character) players.get(0);
+        }
+        List<Monster> mobList = getAllMonsters();
+        for (Monster mob : mobList) {
             if (mob.getId() == mobId) {
                 this.killMonster(mob, chr, false);
             }
-       }
+        }
     }
 
     public void killMonsterWithDrops(int mobId) {
