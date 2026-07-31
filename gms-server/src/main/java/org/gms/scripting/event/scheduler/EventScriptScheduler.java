@@ -23,6 +23,8 @@ import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.server.ThreadManager;
 import org.gms.server.TimerManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,6 +39,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Ronan
  */
 public class EventScriptScheduler {
+
+    private static final Logger log = LoggerFactory.getLogger(EventScriptScheduler.class);
 
     private boolean disposed = false;
     private int idleProcs = 0;
@@ -76,7 +80,11 @@ public class EventScriptScheduler {
             if (rmd.getValue() < timeNow) {
                 Runnable r = rmd.getKey();
 
-                r.run();  // runs the scheduled action
+                try {
+                    r.run();  // runs the scheduled action
+                } catch (Exception e) {
+                    log.error("Exception occurred while running scheduled event task", e);
+                }
                 toRemove.add(r);
             }
         }

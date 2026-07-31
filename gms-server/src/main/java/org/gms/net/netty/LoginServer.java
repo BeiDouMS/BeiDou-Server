@@ -10,6 +10,8 @@ public class LoginServer extends AbstractServer {
     public static final int WORLD_ID = -1;
     public static final int CHANNEL_ID = -1;
     private Channel channel;
+    private EventLoopGroup parentGroup;
+    private EventLoopGroup childGroup;
 
     public LoginServer(int port) {
         super(port);
@@ -17,8 +19,8 @@ public class LoginServer extends AbstractServer {
 
     @Override
     public void start() {
-        EventLoopGroup parentGroup = new NioEventLoopGroup();
-        EventLoopGroup childGroup = new NioEventLoopGroup();
+        parentGroup = new NioEventLoopGroup();
+        childGroup = new NioEventLoopGroup();
         ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(parentGroup, childGroup)
                 .channel(NioServerSocketChannel.class)
@@ -34,5 +36,7 @@ public class LoginServer extends AbstractServer {
         }
 
         channel.close().syncUninterruptibly();
+        parentGroup.shutdownGracefully();
+        childGroup.shutdownGracefully();
     }
 }
