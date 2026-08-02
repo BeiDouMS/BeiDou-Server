@@ -35,6 +35,7 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.net.server.channel.Channel;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -265,11 +266,28 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         c.getWorldServer().registerPlayerShop(shop);
                         //c.sendPacket(PacketCreator.getPlayerShopRemoveVisitor(1));
                     } else if (ItemConstants.isHiredMerchant(itemId)) {
+                        if (chr.hasMerchant() || c.getWorldServer().getHiredMerchant(chr.getId()) != null) {
+                            chr.dropMessage(1, "You already have a store open.");
+                            log.warn("Character {} attempted to create a duplicate HiredMerchant on channel {}",
+                                    chr.getName(), c.getChannel());
+                            return;
+                        }
+
                         HiredMerchant merchant = new HiredMerchant(chr, desc, itemId);
-                        chr.setHiredMerchant(merchant);
-                        c.getWorldServer().registerHiredMerchant(merchant);
-                        chr.getClient().getChannelServer().addHiredMerchant(chr.getId(), merchant);
-                        chr.sendPacket(PacketCreator.getHiredMerchant(chr, merchant, true));
+                        Channel channelServer = chr.getClient().getChannelServer();
+                        boolean channelAdded = channelServer.addHiredMerchant(chr.getId(), merchant);
+                        boolean worldAdded = channelAdded && c.getWorldServer().registerHiredMerchant(merchant);
+                        if (channelAdded && worldAdded) {
+                            chr.setHiredMerchant(merchant);
+                            chr.sendPacket(PacketCreator.getHiredMerchant(chr, merchant, true));
+                        } else {
+                            if (channelAdded) {
+                                channelServer.removeHiredMerchant(chr.getId(), merchant);
+                            }
+                            chr.dropMessage(1, "You already have a store open.");
+                            log.warn("Character {} could not create HiredMerchant because a channel or world instance already exists",
+                                    chr.getName());
+                        }
                     }
                 }
             } else if (mode == Action.INVITE.getCode()) {

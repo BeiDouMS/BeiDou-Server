@@ -5187,6 +5187,11 @@ public class Character extends AbstractCharacterObject {
             return;
         }
 
+        if (merchant.isOwner(this) && !merchant.isPublished()) {
+            merchant.closeOwnerMerchant(this);
+            return;
+        }
+
         if (closeMerchant) {
             if (merchant.isOwner(this) && merchant.getItems().isEmpty()) {
                 merchant.forceClose();
