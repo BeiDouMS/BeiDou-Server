@@ -290,14 +290,21 @@ public class HiredMerchant extends AbstractMapObject {
 
     public void buy(Client c, int item, short quantity) {
         synchronized (items) {
+            if (quantity < 1 || item < 0 || item >= items.size()) {   // thanks xiaokelvin for pointing out slot check missing
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
+
             PlayerShopItem pItem = items.get(item);
+            if (!pItem.isExist() || pItem.getBundles() < quantity) {
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
+
             Item newItem = pItem.getItem().copy();
 
             newItem.setQuantity((short) ((pItem.getItem().getQuantity() * quantity)));
-            if (quantity < 1 || !pItem.isExist() || pItem.getBundles() < quantity) {
-                c.sendPacket(PacketCreator.enableActions());
-                return;
-            } else if (newItem.getInventoryType().equals(InventoryType.EQUIP) && newItem.getQuantity() > 1) {
+            if (newItem.getInventoryType().equals(InventoryType.EQUIP) && newItem.getQuantity() > 1) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
