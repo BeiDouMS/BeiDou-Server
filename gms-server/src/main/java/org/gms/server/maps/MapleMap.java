@@ -1058,43 +1058,55 @@ public class MapleMap {
     public List<MapItem> updatePlayerItemDropsToParty(int partyid, int charid, List<Character> partyMembers, Character partyLeaver) {
         List<MapItem> partyDrops = new LinkedList<>();
 
-        for (MapItem mdrop : getDroppedItems()) {
-            if (mdrop.getOwnerId() == charid) {
-                mdrop.lockItem();
-                try {
-                    if (mdrop.isPickedUp()) {
-                        continue;
-                    }
+        // owner 字段(character_ownerid / party_ownerid)是实例字段,持 itemLock 的
+        // 路径会写它们,所以这里必须持同一把锁读,避免锁外读出撕裂值。
+        // 同时把对队员/leaver 的 sendPacket 收集到 packetHolder 中,
+        // 离开锁再发,避免 itemLock 持锁期间做网络 I/O。
+        Map<Character, List<Packet>> packetHolder = new HashMap<>();
 
-                    mdrop.setPartyOwnerId(partyid);
+        for (MapItem mdrop : getDroppedItems()) {
+            mdrop.lockItem();
+            try {
+                if (mdrop.isPickedUp()) {
+                    continue;
+                }
+
+                if (mdrop.getOwnerIdLocked() == charid) {
+                    mdrop.setPartyOwnerIdLocked(partyid);
 
                     Packet removePacket = PacketCreator.silentRemoveItemFromMap(mdrop.getObjectId());
                     Packet updatePacket = PacketCreator.updateMapItemObject(mdrop, partyLeaver == null);
 
                     for (Character mc : partyMembers) {
                         if (this.equals(mc.getMap())) {
-                            mc.sendPacket(removePacket);
+                            packetHolder.computeIfAbsent(mc, k -> new ArrayList<>()).add(removePacket);
 
                             if (mc.needQuestItem(mdrop.getQuest(), mdrop.getItemId())) {
-                                mc.sendPacket(updatePacket);
+                                packetHolder.get(mc).add(updatePacket);
                             }
                         }
                     }
 
                     if (partyLeaver != null) {
                         if (this.equals(partyLeaver.getMap())) {
-                            partyLeaver.sendPacket(removePacket);
+                            packetHolder.computeIfAbsent(partyLeaver, k -> new ArrayList<>()).add(removePacket);
 
                             if (partyLeaver.needQuestItem(mdrop.getQuest(), mdrop.getItemId())) {
-                                partyLeaver.sendPacket(PacketCreator.updateMapItemObject(mdrop, true));
+                                packetHolder.get(partyLeaver).add(PacketCreator.updateMapItemObject(mdrop, true));
                             }
                         }
                     }
-                } finally {
-                    mdrop.unlockItem();
+                } else if (partyid != -1 && mdrop.getPartyOwnerIdLocked() == partyid) {
+                    partyDrops.add(mdrop);
                 }
-            } else if (partyid != -1 && mdrop.getPartyOwnerId() == partyid) {
-                partyDrops.add(mdrop);
+            } finally {
+                mdrop.unlockItem();
+            }
+        }
+
+        for (Map.Entry<Character, List<Packet>> e : packetHolder.entrySet()) {
+            for (Packet p : e.getValue()) {
+                e.getKey().sendPacket(p);
             }
         }
 
@@ -1102,27 +1114,28 @@ public class MapleMap {
     }
 
     public void updatePartyItemDropsToNewcomer(Character newcomer, List<MapItem> partyItems) {
+        // 同样:itemLock 内只构造 packet,持锁期间不做 sendPacket。
         for (MapItem mdrop : partyItems) {
+            Packet removePacket;
+            Packet updatePacket;
+
             mdrop.lockItem();
             try {
                 if (mdrop.isPickedUp()) {
                     continue;
                 }
 
-                Packet removePacket = PacketCreator.silentRemoveItemFromMap(mdrop.getObjectId());
-                Packet updatePacket = PacketCreator.updateMapItemObject(mdrop, true);
-
-                if (newcomer != null) {
-                    if (this.equals(newcomer.getMap())) {
-                        newcomer.sendPacket(removePacket);
-
-                        if (newcomer.needQuestItem(mdrop.getQuest(), mdrop.getItemId())) {
-                            newcomer.sendPacket(updatePacket);
-                        }
-                    }
-                }
+                removePacket = PacketCreator.silentRemoveItemFromMap(mdrop.getObjectId());
+                updatePacket = PacketCreator.updateMapItemObject(mdrop, true);
             } finally {
                 mdrop.unlockItem();
+            }
+
+            if (newcomer != null && this.equals(newcomer.getMap())) {
+                newcomer.sendPacket(removePacket);
+                if (newcomer.needQuestItem(mdrop.getQuest(), mdrop.getItemId())) {
+                    newcomer.sendPacket(updatePacket);
+                }
             }
         }
     }

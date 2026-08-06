@@ -2010,9 +2010,20 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (ob instanceof MapItem mapitem) {
-            if (System.currentTimeMillis() - mapitem.getDropTime() < 400 || !mapitem.canBePickedBy(this)) {
+            if (System.currentTimeMillis() - mapitem.getDropTime() < 400) {
                 enableActions();
                 return;
+            }
+
+            // canBePickedBy 读/写 owner 字段,必须持 itemLock
+            mapitem.lockItem();
+            try {
+                if (!mapitem.canBePickedBy(this)) {
+                    enableActions();
+                    return;
+                }
+            } finally {
+                mapitem.unlockItem();
             }
 
             List<Character> mpcs = new LinkedList<>();
@@ -7143,15 +7154,12 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void receivePartyMemberHP() {
-        prtLock.lock();
-        try {
-            if (party != null) {
-                for (Character partychar : this.getPartyMembersOnSameMap()) {
-                    sendPacket(PacketCreator.updatePartyMemberHP(partychar.getId(), partychar.getHp(), partychar.getCurrentMaxHp()));
-                }
-            }
-        } finally {
-            prtLock.unlock();
+        // 不在此处包一层 prtLock:getPartyMembersOnSameMap 内部已持 prtLock 保护 party 引用。
+        // 若再包一层,会在持 prtLock 的同时对同图队友逐个取 getHp()(对方 statRlock),
+        // 与 updateLocalStats(本角色 statWlock 后再 updatePartyMemberHP 取 prtLock)形成
+        // 跨角色反向锁顺序,存在死锁窗口。
+        for (Character partychar : this.getPartyMembersOnSameMap()) {
+            sendPacket(PacketCreator.updatePartyMemberHP(partychar.getId(), partychar.getHp(), partychar.getCurrentMaxHp()));
         }
     }
 

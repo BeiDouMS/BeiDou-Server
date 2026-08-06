@@ -104,11 +104,44 @@ public class MapItem extends AbstractMapObject {
         return character_ownerid;
     }
 
+    /**
+     * 与 {@link #getOwnerId()} 语义相同,但要求调用方已持有 {@link #itemLock}。
+     * {@code character_ownerid} 在构造后即不可变,保留该锁定读是为了与
+     * {@link #getPartyOwnerIdLocked()} 在遍历/扫描代码里保持一致的锁纪律。
+     */
+    public final int getOwnerIdLocked() {
+        return character_ownerid;
+    }
+
+    /**
+     * {@code party_ownerid} 是运行时可变字段,调用方必须持有 {@link #itemLock}
+     * 再读取,否则与持锁写路径({@link #setPartyOwnerIdLocked(int)}、
+     * {@link #canBePickedBy(Character)})并发时可能读到撕裂值。
+     */
     public final int getPartyOwnerId() {
         return party_ownerid;
     }
 
+    /**
+     * 与 {@link #getPartyOwnerId()} 语义相同,但要求调用方已持有 {@link #itemLock}。
+     */
+    public final int getPartyOwnerIdLocked() {
+        return party_ownerid;
+    }
+
+    /**
+     * 与 {@link #setPartyOwnerId(int)} 语义相同,但要求调用方已持有 {@link #itemLock}。
+     */
     public final void setPartyOwnerId(int partyid) {
+        party_ownerid = partyid;
+    }
+
+    /**
+     * 与 {@link #setPartyOwnerId(int)} 语义相同,但要求调用方已持有 {@link #itemLock}。
+     * 配合 {@link #getOwnerIdLocked()}/{@link #getPartyOwnerIdLocked()} 在持锁
+     * 路径上完成 owner 字段的读+写,避免锁外读写撕裂。
+     */
+    public final void setPartyOwnerIdLocked(int partyid) {
         party_ownerid = partyid;
     }
 
@@ -132,6 +165,15 @@ public class MapItem extends AbstractMapObject {
         return System.currentTimeMillis() - dropTime >= SECONDS.toMillis(15);
     }
 
+    /**
+     * 判断 {@code chr} 是否可以拾取本掉落物。
+     *
+     * <p><b>并发约束:</b>本方法会在内部读取并可能改写 {@code character_ownerid} /
+     * {@code party_ownerid} 实例字段,调用方必须已持有 {@link #itemLock}
+     * (即先 {@code mdrop.lockItem()},再调用本方法),否则与其他持锁的
+     * 读/写路径(例如 {@code MapleMap.updatePlayerItemDropsToParty})并发时
+     * 会出现字段撕裂。所有调用方已调整为先加锁再调用。
+     */
     public final boolean canBePickedBy(Character chr) {
         if (character_ownerid <= 0 || isFFADrop()) {
             return true;
