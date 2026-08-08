@@ -44,6 +44,7 @@ public final class MultiChatHandler extends AbstractPacketHandler {
         }
 
         int type = p.readByte(); // 0 for buddies, 1 for parties, 2 for guilds, 3 for alliances
+        // 如果人数超过255仍会溢出，需要和客户端同步修改才能支持更多人数
         int numRecipients = Byte.toUnsignedInt(p.readByte());
         if (numRecipients > p.available() / Integer.BYTES) {
             return;
