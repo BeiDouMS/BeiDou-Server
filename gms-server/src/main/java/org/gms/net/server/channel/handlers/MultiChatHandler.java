@@ -43,8 +43,11 @@ public final class MultiChatHandler extends AbstractPacketHandler {
             return;
         }
 
-        int type = p.readByte(); // 0 for buddys, 1 for partys
-        int numRecipients = p.readByte();
+        int type = p.readByte(); // 0 for buddies, 1 for parties, 2 for guilds, 3 for alliances
+        int numRecipients = Byte.toUnsignedInt(p.readByte());
+        if (numRecipients > p.available() / Integer.BYTES) {
+            return;
+        }
         int[] recipients = new int[numRecipients];
         for (int i = 0; i < numRecipients; i++) {
             recipients[i] = p.readInt();
