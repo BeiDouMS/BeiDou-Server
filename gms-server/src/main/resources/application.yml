@@ -35,6 +35,8 @@ spring:
   flyway:
     # 禁用版本验证
     validate-on-migrate: false
+    # 允许乱序执行：补跑版本号小于已执行最大版本号的漏掉脚本
+    out-of-order: true
   servlet:
     # 默认文件大小就是这里设置的，按需修改
     multipart:
