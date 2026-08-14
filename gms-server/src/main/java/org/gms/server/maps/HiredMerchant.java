@@ -330,8 +330,9 @@ public class HiredMerchant extends AbstractMapObject {
                         announceItemSold(newItem, price, getQuantityLeft(pItem.getItem().getItemId()));
                     }
 
-                    Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterByName(ownerName);
+                    Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
                     if (owner != null) {
+                        ownerName = owner.getName();
                         owner.addMerchantMesos(price);
                     } else {
                         try (Connection con = DatabaseConnection.getConnection()) {
