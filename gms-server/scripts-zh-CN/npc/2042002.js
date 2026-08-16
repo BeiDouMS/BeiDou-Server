@@ -19,6 +19,13 @@ var cpqMinLvl = 30;
 var cpqMaxLvl = 50;
 var cpqMinAmt = 2;
 var cpqMaxAmt = 6;
+(function () {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {
+        cpqMinLvl = 1;
+        cpqMaxLvl = 999;
+    }
+})();
 
 // Ronan's custom ore refiner NPC
 var refineRocks = true;     // enables moon rock, star rock
@@ -245,17 +252,17 @@ function action(mode, type, selection) {
                 cm.sendSimple(talk);
             } else if (status == 1) {
                 if (selection == 0) {
-                    if ((cm.getLevel() > 29 && cm.getLevel() < 51) || cm.getPlayer().isGM()) {
+                    if ((cm.getLevel() >= cpqMinLvl && cm.getLevel() <= cpqMaxLvl) || cm.getPlayer().isGM()) {
                         cm.getChar().saveLocation("MONSTER_CARNIVAL");
                         cm.warp(980000000, 0);
                         cm.dispose();
 
-                    } else if (cm.getLevel() < 30) {
-                        cm.sendOk("你必须至少达到30级才能参加怪物嘉年华。当你足够强大时，和我交谈。");
+                    } else if (cm.getLevel() < cpqMinLvl) {
+                        cm.sendOk("你必须至少达到" + cpqMinLvl + "级才能参加怪物嘉年华。当你足够强大时，和我交谈。");
                         cm.dispose();
 
                     } else {
-                        cm.sendOk("很抱歉，只有等级在30到50级之间的玩家才能参加怪物嘉年华活动。");
+                        cm.sendOk("很抱歉，只有等级在" + cpqMinLvl + "到" + cpqMaxLvl + "级之间的玩家才能参加怪物嘉年华活动。");
                         cm.dispose();
 
                     }
