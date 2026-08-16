@@ -82,6 +82,7 @@ public class EventManager {
     private final Semaphore startSemaphore = new Semaphore(7);  // 启动信号量
 
     private static final int maxLobbys = 8;     // 一个事件管理器最多支持同时运行的大厅数量
+    private volatile Long nextScheduledTime;
 
     /**
      * 构造函数
@@ -214,7 +215,7 @@ public class EventManager {
             }
         };
 
-        ess.registerEntry(r, delay);
+        nextScheduledTime = ess.registerEntry(r, delay);
         return new EventScheduledFuture(r, ess);
     }
 
@@ -1325,5 +1326,9 @@ public class EventManager {
         public void run() {
             instantiateQueuedInstance();
         }
+    }
+
+    public Long getNextScheduledTime() {
+        return nextScheduledTime;
     }
 }

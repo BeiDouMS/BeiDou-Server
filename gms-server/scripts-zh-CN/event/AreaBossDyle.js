@@ -45,6 +45,8 @@ const methodName = "start";     //指定当前事件刷新Boss的函数，无需
  ThreeStep - based on xQuasar's King Clang spawner
  **/
 function init() {
+    em.setProperty("bossMobId", BossID);
+    em.setProperty("bossMapId", MapID);
     channel = em.getChannelServer().getId();
     log = LoggerFactory.getLogger(em.getName());
   

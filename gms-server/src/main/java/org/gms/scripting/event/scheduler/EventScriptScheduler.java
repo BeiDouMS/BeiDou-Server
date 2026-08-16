@@ -101,8 +101,8 @@ public class EventScriptScheduler {
         }
     }
 
-    public void registerEntry(final Runnable scheduledAction, final long duration) {
-
+    public long registerEntry(final Runnable scheduledAction, final long duration) {
+        long nextScheduledTime = Server.getInstance().getCurrentTime() + duration;
         ThreadManager.getInstance().newTask(() -> {
             schedulerLock.lock();
             try {
@@ -115,11 +115,12 @@ public class EventScriptScheduler {
                     schedulerTask = TimerManager.getInstance().register(this::runBaseSchedule, GameConfig.getServerLong("mob_status_monitor_proc"), GameConfig.getServerLong("mob_status_monitor_proc"));
                 }
 
-                registeredEntries.put(scheduledAction, Server.getInstance().getCurrentTime() + duration);
+                registeredEntries.put(scheduledAction, nextScheduledTime);
             } finally {
                 schedulerLock.unlock();
             }
         });
+        return nextScheduledTime;
     }
 
     public void cancelEntry(final Runnable scheduledAction) {

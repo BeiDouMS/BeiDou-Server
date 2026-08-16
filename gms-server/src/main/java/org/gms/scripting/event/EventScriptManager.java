@@ -29,6 +29,7 @@ import org.gms.scripting.SynchronizedInvocable;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -174,5 +175,9 @@ public class EventScriptManager extends AbstractScriptManager {
         for (EventEntry entry : eventEntries) {
             entry.em.cancel(); // 取消所有事件
         }
+    }
+
+    public List<EventManager> getEventManagers() {
+        return events.values().stream().map(entry -> entry.em).toList();
     }
 }
