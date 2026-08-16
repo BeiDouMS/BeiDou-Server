@@ -468,6 +468,104 @@ public class AbstractPlayerInteraction {
         }
     }
 
+    /**
+     * 返回当前进行中、且可通过「任务捷径」补齐进度的任务 ID 列表。
+     */
+    public List<Integer> getQuestShortcutEligibleIds() {
+        List<Integer> ids = new ArrayList<>();
+        for (QuestStatus qs : getPlayer().getStartedQuests()) {
+            if (qs.getQuest().isCompleteShortcutEligible()) {
+                ids.add((int) qs.getQuestID());
+            }
+        }
+        return ids;
+    }
+
+    public String getQuestName(int questId) {
+        return Quest.getInstance(questId).getName();
+    }
+
+    /**
+     * 杀怪/物品收集进度是否已满足（不含交任务 NPC 校验）。
+     */
+    public boolean isQuestShortcutProgressSatisfied(int questId) {
+        if (!isQuestStarted(questId)) {
+            return false;
+        }
+        Quest quest = Quest.getInstance(questId);
+        if (!quest.isCompleteShortcutEligible()) {
+            return false;
+        }
+        Character chr = getPlayer();
+        for (Map.Entry<Integer, Integer> entry : quest.getCompleteMobRequirements().entrySet()) {
+            int progress;
+            try {
+                progress = Integer.parseInt(chr.getQuest(quest).getProgress(entry.getKey()));
+            } catch (NumberFormatException e) {
+                return false;
+            }
+            if (progress < entry.getValue()) {
+                return false;
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : quest.getCompleteItemRequirements().entrySet()) {
+            if (chr.getItemQuantity(entry.getKey(), false) < entry.getValue()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 任务捷径：扣费并补齐杀怪计数与缺失的非任务物品。
+     *
+     * @return 0 成功；1 任务不可用；2 冒险币不足；3 背包空间不足；4 进度已齐（不扣费）
+     */
+    public int applyQuestShortcut(int questId, int mesoCost) {
+        if (!isQuestStarted(questId)) {
+            return 1;
+        }
+        Quest quest = Quest.getInstance(questId);
+        if (!quest.isCompleteShortcutEligible()) {
+            return 1;
+        }
+        if (isQuestShortcutProgressSatisfied(questId)) {
+            return 4;
+        }
+
+        Character chr = getPlayer();
+        if (chr.getMeso() < mesoCost) {
+            return 2;
+        }
+
+        List<Integer> giveItemIds = new ArrayList<>();
+        List<Integer> giveQuantities = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : quest.getCompleteItemRequirements().entrySet()) {
+            int itemId = entry.getKey();
+            int needed = entry.getValue();
+            int have = chr.getItemQuantity(itemId, false);
+            if (have < needed) {
+                giveItemIds.add(itemId);
+                giveQuantities.add(needed - have);
+            }
+        }
+        if (!giveItemIds.isEmpty() && !canHoldAll(giveItemIds, giveQuantities, true)) {
+            return 3;
+        }
+
+        chr.gainMeso(-mesoCost);
+
+        for (Map.Entry<Integer, Integer> entry : quest.getCompleteMobRequirements().entrySet()) {
+            String progress = StringUtil.getLeftPaddedStr(Integer.toString(entry.getValue()), '0', 3);
+            setQuestProgress(questId, entry.getKey(), progress);
+        }
+        for (int i = 0; i < giveItemIds.size(); i++) {
+            gainItem(giveItemIds.get(i), giveQuantities.get(i).shortValue());
+        }
+        chr.flushDelayedUpdateQuests();
+        return 0;
+    }
+
     public boolean forceStartQuest(int id) {
         return forceStartQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }

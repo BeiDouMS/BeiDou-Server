@@ -31,6 +31,7 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,5 +103,9 @@ public class ItemRequirement extends AbstractQuestRequirement {
         } else {
             return complete ? Integer.MAX_VALUE : Integer.MIN_VALUE;
         }
+    }
+
+    public Map<Integer, Integer> getAllItemRequirements() {
+        return Collections.unmodifiableMap(items);
     }
 }

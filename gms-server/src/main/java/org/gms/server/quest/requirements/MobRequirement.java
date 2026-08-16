@@ -30,6 +30,7 @@ import org.gms.provider.DataTool;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,5 +87,9 @@ public class MobRequirement extends AbstractQuestRequirement {
             return mobs.get(mobid);
         }
         return 0;
+    }
+
+    public Map<Integer, Integer> getAllMobRequirements() {
+        return Collections.unmodifiableMap(mobs);
     }
 }

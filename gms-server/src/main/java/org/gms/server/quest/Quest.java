@@ -33,6 +33,7 @@ import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
+import org.gms.server.ItemInformationProvider;
 import org.gms.server.quest.actions.AbstractQuestAction;
 import org.gms.server.quest.actions.BuffAction;
 import org.gms.server.quest.actions.ExpAction;
@@ -71,6 +72,7 @@ import org.gms.util.PacketCreator;
 import org.gms.util.StringUtil;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -664,6 +666,59 @@ public class Quest {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 任务捷径：完成条件仅允许 NPC + 杀怪 + 非任务物品收集。
+     */
+    public boolean isCompleteShortcutEligible() {
+        boolean hasMobOrItem = false;
+        for (QuestRequirementType type : completeReqs.keySet()) {
+            if (type == QuestRequirementType.NPC) {
+                continue;
+            }
+            if (type == QuestRequirementType.MOB || type == QuestRequirementType.ITEM) {
+                hasMobOrItem = true;
+                continue;
+            }
+            return false;
+        }
+        if (!hasMobOrItem) {
+            return false;
+        }
+
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        for (Map.Entry<Integer, Integer> entry : getCompleteItemRequirements().entrySet()) {
+            if (entry.getValue() <= 0) {
+                return false;
+            }
+            int itemId = entry.getKey();
+            if (ii.isQuestItem(itemId) || ii.isPartyQuestItem(itemId)) {
+                return false;
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : getCompleteMobRequirements().entrySet()) {
+            if (entry.getValue() <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Map<Integer, Integer> getCompleteItemRequirements() {
+        AbstractQuestRequirement req = completeReqs.get(QuestRequirementType.ITEM);
+        if (req == null) {
+            return Collections.emptyMap();
+        }
+        return ((ItemRequirement) req).getAllItemRequirements();
+    }
+
+    public Map<Integer, Integer> getCompleteMobRequirements() {
+        AbstractQuestRequirement req = completeReqs.get(QuestRequirementType.MOB);
+        if (req == null) {
+            return Collections.emptyMap();
+        }
+        return ((MobRequirement) req).getAllMobRequirements();
     }
 
     public boolean hasNextQuestAction() {
