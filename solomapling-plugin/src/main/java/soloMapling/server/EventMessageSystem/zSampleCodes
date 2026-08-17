@@ -1,0 +1,133 @@
+5. Bot EventSubscriber Implementation (for BotSM)
+
+// Add these to your BotSM class
+
+public class BotSM implements EventSubscriber { //[x]
+    private final BotEventBuffer eventBuffer;
+    private final Integer targetWorld;
+    private final Integer targetChannel;
+    private final Integer targetMapId;
+
+    public BotSM() { //[x]
+        this.eventBuffer = new BotEventBuffer(100); // Max 100 queued events
+        // Set these based on your bot's location
+        this.targetWorld = null; // null means accept all worlds
+        this.targetChannel = null;
+        this.targetMapId = null;
+    }
+
+    @Override
+    public void onEvent(GameEvent event) { //[x]
+        // Queue the event for processing later
+        eventBuffer.add(event);
+    }
+
+    @Override
+    public boolean matchesFilter(GameEvent event) { //[x]
+        // Check if this event is relevant to this bot
+        if (targetWorld != null && event.getWorld() != targetWorld) {
+            return false;
+        }
+        if (targetChannel != null && event.getChannel() != targetChannel) {
+            return false;
+        }
+        if (targetMapId != null && event.getMap().getId() != targetMapId) {
+            return false;
+        }
+        return true;
+    }
+
+    // Call this from your event processing state
+    public void processQueuedEvents() { //[x]
+        GameEvent event;
+        while ((event = eventBuffer.poll()) != null) {
+            handleEvent(event);
+        }
+    }
+
+    private void handleEvent(GameEvent event) { //[x]
+        // Process based on event type
+        switch (event.getType()) {
+            case GACHAPON_REWARD:
+                handleGachaponEvent(event);
+                break;
+            case UPGRADE_RESULT:
+                handleUpgradeEvent(event);
+                break;
+            // Add other cases as needed
+        }
+    }
+
+    public boolean hasQueuedEvents() { //[x]
+        return !eventBuffer.isEmpty();
+    }
+}
+
+/* ////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+*/ ////////////////////////////////////////////////////////////////////////////////////////
+
+7. EventProcessingState (for BotSM)
+
+// Add this state to your state machine
+
+public class EventProcessingState extends BotState {
+
+    @Override
+    public void execute(BotSM bot) { // [x]
+        // Process all queued events
+        bot.processQueuedEvents();
+
+        // Transition logic
+        if (bot.hasQueuedEvents()) {
+            // Stay in this state if more events to process
+            return;
+        } else {
+            // Move to next appropriate state
+            bot.setState(new IdleState()); // or whatever your next state is
+        }
+    }
+
+    @Override
+    public boolean shouldInterrupt(BotSM bot) { //[no need]
+        // Check if we should interrupt current state for event processing
+        return bot.hasQueuedEvents() && bot.getCurrentState() != this;
+    }
+}
+
+/* ////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+*/ ////////////////////////////////////////////////////////////////////////////////////////
+
+8. Example Subscription Code
+
+// Example: GachaBot subscribing to gachapon events
+public class GachaBot extends BotSM {
+
+    public void initialize() { //[x]
+        // Subscribe to gachapon events
+        EventBus.getInstance().subscribe(EventType.GACHAPON_REWARD, this);
+
+        // Could also subscribe to multiple types
+        EventBus.getInstance().subscribe(EventType.ITEM_MEGAPHONE, this);
+    }
+
+    public void shutdown() {
+        // Unsubscribe when shutting down
+        EventBus.getInstance().unsubscribe(EventType.GACHAPON_REWARD, this);
+        EventBus.getInstance().unsubscribe(EventType.ITEM_MEGAPHONE, this);
+    }
+}
+
+// Example: Publishing an event
+public void onGachaponRare(MapleCharacter player, Item item, MapleMap map) {
+    GameEvent event = EventFactory.createGachaponEvent(
+        player.getWorld(),
+        player.getChannel(),
+        map,
+        player.getName(),
+        player.getId(),
+        item
+    );
+    EventBus.getInstance().publish(event);
+}

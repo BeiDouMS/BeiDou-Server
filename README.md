@@ -71,3 +71,66 @@ web中所有的图片均需要联网获取，感谢 https://maplestory.io 提供
 # Wiki
 发现很多同学的问题基本在Wiki中都有答案，欢迎大家去看看。另外如果发现Wiki中没有的问题，欢迎提issue，或直接补充。已将Wiki开放为所有人都可以编辑。  
 [Wiki地址](https://github.com/BeiDouMS/BeiDou-Server/wiki)
+
+# 扩展运行时 / SoloMapling
+
+北斗支持通过 **SPI 插件**加载外部扩展，而不必把大框架永久打进主 jar。当前首个完整插件是 [SoloMapling](https://github.com/MadaraGameDev/SoloMapling)（冒险岛 v83 假人 / 城镇 / 自由市场 / 练级 bot 框架；上游源码在 SoloMapling 仓库，本仓库提供可构建的 `solomapling-plugin` 模块）。
+
+更细的模块说明见：`gms-server/src/main/java/org/gms/extension/README.md`。
+
+## 机制概览
+
+| 组件 | 作用 |
+|------|------|
+| `extension-api` | 宿主与插件共用的 SPI：`ServerExtension`、`HostRuntime`、配置 / 事件总线 / 命令注册 |
+| `org.gms.extension.runtime` | 北斗实现：`BeiDouHostRuntime`、`ExtensionLoader`（扫描 `plugins/*.jar` + `ServiceLoader`） |
+| `solomapling-plugin` | SoloMapling 完整框架，入口类 `SoloMaplingExtension` |
+| `gms-server/plugins/` | 插件 jar 放置目录（jar 本身不入库，保留 `.gitkeep`） |
+
+**启动顺序：** Spring Boot 就绪 → `ServerManager` 构建 `HostRuntime` 并 `load(plugins/)`（各插件 `onLoad`）→ `Server.init()` 拉起登录服与频道 → `notifyServerReady()`（各插件 `onServerReady`）→ SoloMapling 按配置延迟约 1s 执行 `EnvironmentManager` 多波刷图。
+
+插件只依赖 `extension-api`；游戏逻辑仍由北斗宿主提供。假人是真实的 `Character` 对象，因此 gms-server 内仍保留少量 hook（`BotClient`、地图 / 交易 / 雇佣商店、命令桥接等）。
+
+## 配置
+
+在 `gms-server/src/main/resources/application.yml`：
+
+```yaml
+solomapling:
+  plugins-enabled: true
+  plugins-dir: plugins              # 相对 gms-server 工作目录
+  spawn-bots-on-startup: true       # false 则只加载插件、不自动刷 bot
+```
+
+> 提示：大量 bot 会计入大区在线人数。若出现「大区人数已满」，请提高 `game_config` 中的 `channel_capacity`，或临时设 `spawn-bots-on-startup: false` 后重启。
+
+## 构建与加载 SoloMapling
+
+```bash
+# 在 BeiDou-Server 仓库根目录
+mvn -pl extension-api,gms-server,solomapling-plugin -am package -DskipTests
+cp solomapling-plugin/target/solomapling-plugin-*-SNAPSHOT.jar gms-server/plugins/
+
+# 工作目录必须是 gms-server（wz / scripts / SoloMapling 相对路径资源）
+cd gms-server
+java -Xmx4g \
+  -Dspring.config.location=src/main/resources/application.yml \
+  -jar target/BeiDou-boot.jar
+```
+
+说明：
+
+- 可运行产物是带 classifier 的 **`BeiDou-boot.jar`**；主产物 `BeiDou.jar` 为瘦 jar，供插件模块编译依赖。
+- 克隆假人模板角色名为 **`fmbot`**（Flyway `V1.9.3`）。
+- 游戏内 GM ≥ 4 可用：`!smping`、`!env`、`!bot`、`!move`、`!fmbot`、`!gcmove`。
+- Wave 数量与 TrainingBot 出生点目前主要在 `EnvironmentManager` 硬编码；城镇氛围人数见 `TownPresence.yaml`（可用 `!env townpresence reload` 热更）。
+
+## 与 Cosmic 版 SoloMapling 的关系
+
+| | Cosmic 集成 | BeiDou 集成 |
+|--|-------------|-------------|
+| 框架代码位置 | 编进 Cosmic 主工程 `soloMapling/` | 独立 jar：`solomapling-plugin` |
+| 加载方式 | 启动即内嵌 | `plugins/` + SPI |
+| 上游源码 | SoloMapling 仓库 | 同左；同步进本仓库 `solomapling-plugin` 后构建 |
+
+上游框架改动请先落在 SoloMapling 仓库，再同步到本仓库的 `solomapling-plugin` 模块。

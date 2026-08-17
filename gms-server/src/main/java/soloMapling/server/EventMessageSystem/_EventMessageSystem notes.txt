@@ -1,0 +1,41 @@
+Start to end Flow
+
+1. Event occurs in game
+    a. A player gets a rare item from gachapon/levels up/scrolls pass or fail
+    b. The game server creates a GachaponEvent with all relevant data (timestamp, player info, item, location)
+
+2. Event published to Event Bus
+    a. The event gets sent to the central EventBus
+    b. EventBus looks up all subscribers registered for GACHAPON event type
+
+3. Event Bus notifies each subscriber
+    For each of the GachaBots:
+        EventBus calls their onEvent() method with the event
+        This happens immediately, no waiting
+
+4. Each subscriber filters locally to see if the event matches their filter options
+
+5. Bot Personal Queue
+    a. The valid bots have local queues that contains the event
+    b. More events might arrive in FIFO order
+
+6. Bot State Machine
+    a. when the bot's state machine finally does an event processing state
+    b. will check queued events
+
+7. Bot Processes Event
+    a. Bot processess event in FIFO order from personal queue
+    b. pops event off queue
+    c. checks more events and processes those
+
+8. Once queue is empty, bot continues it's task
+
+Key Points
+    Immediate delivery: Events are pushed to bots instantly via pub-sub pattern
+    Deferred processing: Bots buffer events until they're ready
+    Local filtering: Each bot decides if an event is relevant
+    Ordered processing: Each bot processes its queued events in order
+    Event Bus: Bots don't check for new events - they're pushed to them
+
+
+

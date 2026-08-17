@@ -1,0 +1,304 @@
+medium:
+  # ~66% chance — general pool: scrolls, stars, consumables, chairs
+  items:
+    # --- Scrolls (10%) ---
+    - id: 2040301
+      weight: 8
+    - id: 2040501
+      weight: 8
+    - id: 2040804
+      weight: 6
+    - id: 2040704
+      weight: 6
+    - id: 2041013
+      weight: 6
+    - id: 2044701
+      weight: 5
+    - id: 2043301
+      weight: 5
+    - id: 2040302
+      weight: 4
+    - id: 2040805
+      weight: 3
+    - id: 2040502
+      weight: 3
+
+    # --- Dark Scrolls (70%) ---
+    - id: 2040304
+      weight: 5
+    - id: 2040811
+      weight: 4
+    - id: 2040509
+      weight: 4
+    - id: 2041035
+      weight: 4
+    - id: 2040715
+      weight: 3
+
+    # --- Throwing Stars ---
+    - id: 2070002
+      weight: 10
+    - id: 2070003
+      weight: 8
+    - id: 2070010
+      weight: 5
+    - id: 2070004
+      weight: 3
+
+    # --- Chairs ---
+    - id: 3010000
+      weight: 3
+    - id: 3010004
+      weight: 3
+    - id: 3010005
+      weight: 3
+    - id: 3010011
+      weight: 3
+
+    # --- Consumables (filler) ---
+    - id: 2000004
+      weight: 15
+    - id: 2000005
+      weight: 15
+    - id: 2050004
+      weight: 10
+    - id: 2022179
+      weight: 5
+    - id: 2022245
+      weight: 5
+
+    # --- Trash Scrolls (padding) ---
+    - id: 2041007
+      weight: 5
+    - id: 2040701
+      weight: 5
+    - id: 2040004
+      weight: 5
+    - id: 2040601
+      weight: 5
+    - id: 2048001
+      weight: 5
+
+
+
+elite:
+  # ~66% chance — general pool: better scrolls, stars, dark scrolls, chairs, buffs
+  items:
+    # --- High-Value Scrolls ---
+    - id: 2040805
+      weight: 8
+    - id: 2040302
+      weight: 8
+    - id: 2040514
+      weight: 6
+    - id: 2044702
+      weight: 6
+    - id: 2043302
+      weight: 5
+    - id: 2040502
+      weight: 5
+
+    # --- Dark Scrolls (30%) ---
+    - id: 2040811
+      weight: 8
+    - id: 2040815
+      weight: 6
+    - id: 2040305
+      weight: 6
+    - id: 2040307
+      weight: 5
+    - id: 2040509
+      weight: 5
+    - id: 2040519
+      weight: 5
+    - id: 2040521
+      weight: 4
+    - id: 2040917
+      weight: 4
+    - id: 2040922
+      weight: 3
+
+    # --- Throwing Stars ---
+    - id: 2070004
+      weight: 8
+    - id: 2070005
+      weight: 6
+    - id: 2070006
+      weight: 3
+    - id: 2070007
+      weight: 1
+
+    # --- Chairs (S-tier v1/v23) ---
+    - id: 3010002
+      weight: 2
+    - id: 3010003
+      weight: 2
+    - id: 3010006
+      weight: 2
+    - id: 3010014
+      weight: 1
+    - id: 3010016
+      weight: 1
+
+    # --- Special Scrolls ---
+    - id: 2340000
+      weight: 1
+    - id: 2049100
+      weight: 1
+
+    # --- Buff Consumables ---
+    - id: 2022179
+      weight: 8
+    - id: 2022245
+      weight: 6
+    - id: 2022273
+      weight: 4
+    - id: 2022121
+      weight: 4
+
+
+  # ~33% chance — hand-picked special items
+  special_items:
+    - id: 4001126
+      weight: 10
+    - id: 1002515
+      weight: 10
+      equip: true
+    - id: 1002516
+      weight: 10
+      equip: true
+    - id: 1002517
+      weight: 10
+      equip: true
+    - id: 1002518
+      weight: 10
+      equip: true
+    - id: 1002577
+      weight: 10
+      equip: true
+    - id: 1002578
+      weight: 10
+      equip: true
+    - id: 1002579
+      weight: 10
+      equip: true
+    - id: 1002580
+      weight: 10
+      equip: true
+    - id: 1002600
+      weight: 10
+      equip: true
+    - id: 1002601
+      weight: 10
+      equip: true
+    - id: 1002602
+      weight: 10
+      equip: true
+    - id: 1002603
+      weight: 10
+      equip: true
+    - id: 1072427
+      weight: 10
+      equip: true
+    - id: 1072428
+      weight: 10
+      equip: true
+    - id: 1072429
+      weight: 10
+      equip: true
+    - id: 1072430
+      weight: 10
+      equip: true
+    - id: 1072431
+      weight: 10
+      equip: true
+    - id: 1072432
+      weight: 10
+      equip: true
+    - id: 1072344
+      weight: 10
+      equip: true
+    - id: 1082145
+      weight: 10
+      equip: true
+    - id: 1082146
+      weight: 10
+      equip: true
+    - id: 1082147
+      weight: 10
+      equip: true
+    - id: 1082148
+      weight: 10
+      equip: true
+    - id: 1082149
+      weight: 10
+      equip: true
+    - id: 1082150
+      weight: 10
+      equip: true
+    - id: 1082223
+      weight: 10
+      equip: true
+    - id: 1102040
+      weight: 10
+      equip: true
+    - id: 1102041
+      weight: 10
+      equip: true
+    - id: 1102042
+      weight: 10
+      equip: true
+    - id: 1102043
+      weight: 10
+      equip: true
+    - id: 1102084
+      weight: 10
+      equip: true
+    - id: 1102085
+      weight: 10
+      equip: true
+    - id: 1102086
+      weight: 10
+      equip: true
+    - id: 1102087
+      weight: 10
+      equip: true
+    - id: 1012058
+      weight: 10
+      equip: true
+    - id: 1012059
+      weight: 10
+      equip: true
+    - id: 1012060
+      weight: 10
+      equip: true
+    - id: 1012061
+      weight: 10
+      equip: true
+    - id: 1012076
+      weight: 10
+      equip: true
+    - id: 1012077
+      weight: 10
+      equip: true
+    - id: 1012078
+      weight: 10
+      equip: true
+    - id: 1012079
+      weight: 10
+      equip: true
+    - id: 1022058
+      weight: 10
+      equip: true
+    - id: 1022060
+      weight: 10
+      equip: true
+    - id: 1032026
+      weight: 10
+      equip: true
+    - id: 1032027
+      weight: 10
+      equip: true
+    - id: 1032028
+      weight: 10
+      equip: true

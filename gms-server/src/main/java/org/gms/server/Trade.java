@@ -38,6 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
+import soloMapling.ArtificialPlayer.BotHelpers;
+import soloMapling.ArtificialPlayer.BotTradeSystem.BotTradeQueue;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -126,7 +128,9 @@ public class Trade {
 
         for (Item item : exchangeItems) {
             KarmaManipulator.toggleKarmaFlagToUntradeable(item);
-            InventoryManipulator.addFromDrop(chr.getClient(), item, show);
+            if (!BotHelpers.isBot(chr)) {
+                InventoryManipulator.addFromDrop(chr.getClient(), item, show);
+            }
         }
 
         if (exchangeMeso > 0) {//此处对金币交易进行扣税处理
@@ -186,11 +190,11 @@ public class Trade {
         chr.sendPacket(PacketCreator.getTradeResult(number, result));
     }
 
-    private boolean isLocked() {
+    public boolean isLocked() {
         return locked.get();
     }
 
-    private int getMeso() {
+    public int getMeso() {
         return meso;
     }
 
@@ -214,6 +218,14 @@ public class Trade {
         }
     }
 
+    public void setMesoBot(int meso) {
+        this.meso = meso;
+        chr.sendPacket(PacketCreator.getTradeMesoSet((byte) 0, this.meso));
+        if (partner != null) {
+            partner.getChr().sendPacket(PacketCreator.getTradeMesoSet((byte) 1, this.meso));
+        }
+    }
+
     public boolean addItem(Item item) {
         synchronized (items) {
             if (items.size() > 9) {
@@ -228,6 +240,17 @@ public class Trade {
             items.add(item);
         }
 
+        return true;
+    }
+
+    public boolean swapItem(Item item) {
+        synchronized (items) {
+            if (items.size() > 9) {
+                return false;
+            }
+            items.removeIf(existingItem -> existingItem.getPosition() == item.getPosition());
+            items.add(item);
+        }
         return true;
     }
 
@@ -271,7 +294,7 @@ public class Trade {
             tradeItems.add(new Pair<>(item, item.getInventoryType()));
         }
 
-        return Inventory.checkSpotsAndOwnership(chr, tradeItems);
+        return BotHelpers.isBot(chr) || Inventory.checkSpotsAndOwnership(chr, tradeItems);
     }
 
     private boolean fitsUniquesInInventory() {
@@ -394,8 +417,18 @@ public class Trade {
             }
 
             logTrade(local, partner);
-            local.completeTrade();
-            partner.completeTrade();
+            if (!BotHelpers.isBot(local.getChr())) {
+                local.completeTrade();
+            }
+            if (!BotHelpers.isBot(partner.getChr())) {
+                partner.completeTrade();
+            }
+            if (BotHelpers.isBot(local.getChr())) {
+                local.setCallbackSuccessfulTrade();
+            }
+            if (BotHelpers.isBot(partner.getChr())) {
+                partner.setCallbackSuccessfulTrade();
+            }
 
             partner.getChr().setTrade(null);
             chr.setTrade(null);
@@ -526,6 +559,9 @@ public class Trade {
 
                 c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 0));
                 c2.sendPacket(PacketCreator.tradeInvite(c1));
+                if (BotHelpers.isBot(c2)) {
+                    BotTradeQueue.getInstance().addTradeRequest(c2, c1);
+                }
             } else {
                 c1.message(I18nUtil.getMessage("Trade.inviteTrade.createInvite.msg1"));
                 cancelTrade(c1, TradeResult.NO_RESPONSE);
@@ -541,10 +577,12 @@ public class Trade {
         InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.TRADE, c1.getId(), c2.getId(), true);
 
         InviteResultType res = inviteRes.result;
-        if (res == InviteResultType.ACCEPTED) {
+        if (res == InviteResultType.ACCEPTED || BotHelpers.isBot(c2)) {
             if (c1.getTrade() != null && c1.getTrade().getPartner() == c2.getTrade() && c2.getTrade() != null && c2.getTrade().getPartner() == c1.getTrade()) {
                 c2.sendPacket(PacketCreator.getTradePartnerAdd(c1));
-                c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
+                if (!BotHelpers.isBot(c1)) {
+                    c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
+                }
                 c1.getTrade().setFullTrade(true);
                 c2.getTrade().setFullTrade(true);
             } else {
@@ -615,5 +653,21 @@ public class Trade {
             sj.add(I18nUtil.getLogMessage("Trade.info.inviteTrade.logTrade.msg3" , item.getQuantity(), itemName, item.getItemId()) + "\n");
         }
         return sj.toString();
+    }
+
+    public interface TradeResultCallback {
+        void onTradeResult(TradeResult result);
+    }
+
+    private TradeResultCallback callback;
+
+    public void setTradeResultCallback(TradeResultCallback callback) {
+        this.callback = callback;
+    }
+
+    private void setCallbackSuccessfulTrade() {
+        if (callback != null) {
+            callback.onTradeResult(TradeResult.SUCCESSFUL);
+        }
     }
 }

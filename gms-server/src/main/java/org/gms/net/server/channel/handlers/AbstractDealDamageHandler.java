@@ -103,6 +103,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    public record AttackTarget(short delay, List<Integer> damageLines) {
+    }
+
     /**
      * 封装一次距离校验最终采用的坐标样本。
      *

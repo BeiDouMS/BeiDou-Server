@@ -1,0 +1,1973 @@
+# TrainingBot dialogue — roaming grinder bot. Ambient flavor, not quest text.
+# Nodes delivered via the context path (executeBotContextDialogue); context tokens:
+#   self:   {MAP} {REGION} {MOB} {DROP} {LEVEL}
+#   player: {PLAYER_NAME} {PLAYER_JOB} {PLAYER_WEAPON} {PLAYER_GEAR} {PLAYER_PET} {PLAYER_GUILD}
+# Every token-bearing node also carries plain fallback lines (engine re-rolls to a plain line
+# when a token can't resolve). Node-level `emote` is a random mood palette decoupled from the
+# picked line; per-line {line:, emote:} tags pin a line's emotion.
+#
+# Per-job signature overlays live under sibling keys TrainingBot_Warrior/_Mage/_Thief/_Bowman
+# (the §7 recipe). NOTE: the handler does not yet merge these by job suffix — they are authored
+# data-ready; wiring (look up TrainingBot_<job>.Signature alongside the base pool) is still TODO.
+
+TrainingBot:
+
+  GrindAmbient:
+    text:
+      - "ok just a couple more levels then i log"
+      - {line: "grinding {MOB} is so chill", emote: 2}
+      - {line: "these {MOB}s never drop the {DROP} ugh", emote: 5}
+      - "brb getting water, mobs can wait lol"
+      - {line: "farming {MOB} all day i swear i see them when i close my eyes", emote: 6}
+      - "almost dinner time but ill grind till then ^^"
+      - {line: "{MAP} is so quiet today, just me n the mobs", emote: 0}
+      - "honestly i could fall asleep doing this"
+      - {line: "ooh a {DROP} dropped finally!! ty rng :)", emote: 2}
+      - "just one more level... ok maybe two"
+      - {line: "love how peaceful {MAP} is", emote: 2}
+      - "inv almost full again, ugh"
+      - {line: "come on {MOB} drop something good already", emote: 5}
+      - "raining outside, perfect grinding weather ^^"
+      - {line: "if i get this {DROP} im gonna scroll it so hard", emote: 3}
+      - "man i forgot to eat again xD"
+      - {line: "{MOB} go down so easy now, leveling feels nice", emote: 3}
+      - "hmm should i pot or just risk it"
+      - "almost out of pots, gotta hit the FM soon"
+      - {line: "another {DROP}? thats two today, lucky me ^^", emote: 2}
+      - "ahh i love this grind spot, no one ever comes here"
+      - {line: "wonder how much {DROP} sells for in FM these days", emote: 0}
+      - "...wait what time is it"
+      - "just gonna finish this round then take a break, promise"
+      - {line: "{MAP} music kinda makes me sleepy", emote: 6}
+      - {line: "these {MOB} keep KSing each others spawns lol", emote: 6}
+      - "so close to job adv, cant stop now"
+      - "tea's gone cold and im still grinding"
+      - {line: "respawns are slow today, c'mon {MOB} where u at", emote: 6}
+      - "five more then im out"
+      - "ooh shiny xD"
+      - "zzz"
+      - "brb snack"
+      - "lemme just clear this pack real quick"
+      - "ok ok last one for real this time"
+      - {line: "drop rate hates me today", emote: 4}
+      - "gonna afk if i hear this song one more loop lol"
+      - {line: "yesss finally something good", emote: 2}
+      - "hmm... did i lock the door irl"
+      - "anyone else still up or just me ^^"
+      - {line: "stop hitting me i was here first", emote: 5}
+      - "soft mobs go down easy, love it"
+      - "mp's getting low, slow down lil guy"
+      - {line: "i keep telling myself one more hour", emote: 6}
+      - "phone buzzing, ignoring it"
+      - "kinda hungry but the grind calls"
+      - {line: "missed the last hit ugh", emote: 4}
+      - "warm blanket plus grinding equals best night"
+      - "i blink and another levels gone, wild"
+      - {line: "look at all these mesos pile up hehe", emote: 3}
+      - "no one online this late, peaceful"
+      - "ill scroll my gear once i save up enough"
+      - "mobs respawning right on top of me lol perfect"
+      - {line: "this spot's my little secret", emote: 3}
+      - "brain power: zero"
+      - "ouch my wrists lol"
+      - "break time... or maybe five more"
+      - "this hit different tho"
+      - "dude im totally wiped out"
+      - "might actually stay up past midnight lol"
+      - "just my keyboard and mobs soundtracking my life"
+      - "ok but why is grinding so cozy tho"
+      - {line: "{MOB} respawning every 2 seconds, perfect", emote: 2}
+      - {line: "{MAP} gets cozy after midnight", emote: 0}
+      - {line: "can {DROP} just show up already", emote: 5}
+      - {line: "grinding {MOB} in my hoodie all night, this is the life", emote: 2}
+      - {line: "that {MOB} tried to KS me lol", emote: 6}
+      - {line: "{MAP} just feels safe right now", emote: 2}
+      - {line: "one more batch of {DROP} then bed i promise", emote: 4}
+      - {line: "{MOB} go down smooth when im in the zone", emote: 0}
+      - "nothing in this map can touch me"
+      - {line: "ONE {MOB} CRITTED ME FOR LIKE 300. three hundred. i need to sit down.", emote: 5}
+      - "good map."
+      - {line: "{MOB} GO DOWN SO EASY THIS IS AMAZING", emote: 2}
+      - "ugh same mobs same drops same everything"
+      - {line: "{MAP} is hands down the best grind spot at this range", emote: 3}
+      - "wonder what level ill be by the end of tonight"
+      - {line: "been killing {MOB} so long they should know my name by now", emote: 3}
+      - {line: "I JUST GOT A {DROP} I CANT BELIEVE IT", emote: 2}
+      - "whatever."
+      - {line: "if {DROP} doesnt drop this hour im switching maps", emote: 5}
+      - "autopilot mode engaged"
+      - {line: "grinding {MOB} with the window open, nice breeze tonight", emote: 2}
+      - {line: "everyone sleeps on {MAP} but the exp here is actually insane", emote: 3}
+      - "the mobs keep coming and so do i"
+      - "kind of just stuck in autopilot at this point"
+      - "every pull the same, kinda comforting honestly"
+      - "nothing like late night grinding to clear ur head"
+      - "inventory's getting messy, should organize after this"
+      - "starting to forget what the town looks like"
+      - "grind or be ground, thats the motto"
+      - "ok coffee number three, lets go"
+      - {line: "wait i already did this pull", emote: 6}
+      - "feels like ive been here forever and i kinda love it"
+      - "the grind never stops and neither do i"
+      - "mesos slowly piling up, this is the way"
+      - "nothing else to do, might as well level"
+      - "quietly becoming the best player no one notices"
+      - "blink and another 10 minutes gone"
+      - {line: "ok {MOB} if u drop {DROP} right now ill be ur best friend", emote: 2}
+      - {line: "{MAP} this late is actually so peaceful", emote: 0}
+      - {line: "the {MOB} here just dont stop coming, perfect", emote: 0}
+      - {line: "still no {DROP}, the rng is personally targeting me", emote: 5}
+      - {line: "grinding {MOB} in silence, just the bgm and me", emote: 0}
+      - {line: "{MAP} never disappoints for steady exp", emote: 3}
+      - {line: "pretty sure {MOB} know my schedule at this point", emote: 6}
+      - {line: "{DROP} dropped!! ok this makes up for the last hour", emote: 2}
+      - {line: "told myself id log off after one batch of {MOB} and here we are", emote: 7}
+      - {line: "the {MOB} spawn is so consistent here i love it", emote: 2}
+      - {line: "every time i think about leaving {MAP} it drops a good mob", emote: 6}
+      - {line: "clearing {MOB} on loop, could do this in my sleep", emote: 0}
+      - {line: "{DROP} better drop tonight or im taking it personally", emote: 5}
+      - {line: "{MAP} is just home at this point", emote: 2}
+      - {line: "{MOB} go down like butter when ur in the zone", emote: 3}
+      - "something about grinding solo just hits different sometimes"
+      - {line: "farming {MOB} in my sleep at this point", emote: 0}
+      - "the hours blend together when ur in the zone"
+      - {line: "{MAP} has become part of my identity lol", emote: 2}
+      - "head kinda empty just vibes and mobs"
+      - {line: "these {MOB} know my rhythm better than i do", emote: 3}
+      - "my reflexes are faster than my brain at this point"
+      - {line: "{DROP} rate has been blessing me all day", emote: 2}
+      - "autopilot mode but make it productive"
+      - {line: "the {MOB} respawn timer is music to my ears", emote: 2}
+      - "nothing but grinding and vibes this whole session"
+      - {line: "if i see {MOB} in my dreams tonight im not shocked", emote: 6}
+      - "could do this with my eyes closed honestly"
+      - {line: "{MAP} music is now my ringtone in real life", emote: 0}
+      - "lost in the grind is my natural state"
+      - {line: "{MOB} and me against the world", emote: 0}
+      - "the flow state is real and im in it"
+      - {line: "every {DROP} feels like a little victory", emote: 2}
+      - "grinding is my love language apparently"
+      - {line: "these {MOB} are predictable but comforting", emote: 2}
+      - "permanent indent forming where i sit"
+      - {line: "the {MAP} vibe at this hour is unmatched", emote: 0}
+      - "my fingers know the patterns without thinking"
+      - {line: "{MOB} go down like clockwork, satisfying", emote: 3}
+      - "peace and mobs, thats the life"
+      - {line: "{DROP} just dropped mid-thought and made me smile", emote: 2}
+      - "completely zoned in and its perfect"
+      - {line: "could stay in {MAP} forever honestly", emote: 2}
+      - "grinding hits the spot every single time"
+      - {line: "{MOB} spawn timing feels like a friend at this point", emote: 6}
+    emote:
+      - 0
+      - 6
+      - 2
+    wait: 1
+
+  GrindStart:
+    text:
+      - "alright {MOB} time, lets get these levels"
+      - {line: "ok {MAP} im here, lets grind", emote: 2}
+      - "back to the grind ^^"
+      - {line: "lvling at {MAP} today, comfy spot", emote: 2}
+      - {line: "ok lets farm {MOB} for a bit", emote: 0}
+      - {line: "kinda sleepy but the grind calls", emote: 4}
+      - {line: "{MAP} again lol, my second home", emote: 2}
+      - "ok one more level then i log, promise"
+      - {line: "lets gooo {MOB} dont stand a chance", emote: 3}
+      - {line: "got my pots, got my stars, lets grind", emote: 2}
+      - "brb gonna camp {MOB} for a while"
+      - {line: "mmm just gonna chill n farm here", emote: 0}
+      - {line: "{MAP} is so quiet, perfect for grinding", emote: 2}
+      - "ok focus, {MOB} wont kill themselves"
+      - {line: "hyped for this grind sesh lets go ^^", emote: 2}
+      - {line: "ty for the spot, time to farm {MOB}", emote: 2}
+      - "just gonna do a few {MOB} rounds then dinner lol"
+      - {line: "honestly love grinding at {MAP}", emote: 2}
+      - {line: "ok im awake now, {MOB} lets dance", emote: 0}
+      - "back at it, same map same {MOB} ^^"
+      - "lets get it"
+      - {line: "ahh missed this map", emote: 2}
+      - "okok warming up, here we go"
+      - {line: "yawn... 5 mins then i try", emote: 4}
+      - "home sweet grind"
+      - {line: "stocked up on pots, lets eat", emote: 3}
+      - "ok no distractions this time"
+      - {line: "morning everyone, clocking in lol", emote: 2}
+      - "wave 1 lets see"
+      - {line: "been waiting all day to camp here", emote: 2}
+      - {line: "kinda dead map but ill take it", emote: 0}
+      - {line: "deep breath, lets push to next job adv", emote: 0}
+      - "time to make these mobs wish they never spawned"
+      - {line: "GRINDING TIME LETS GOOOO ^^", emote: 2}
+      - "here we go again"
+      - {line: "ok {MAP}... dont let me down today", emote: 0}
+      - {line: "round two with {MOB}, fight me", emote: 3}
+      - "same spot same grind"
+      - {line: "{MOB} better drop something good this time or im gonna be so upset", emote: 5}
+      - {line: "{MAP} AGAIN AND IM SO HYPED ABOUT IT", emote: 2}
+      - "mmk lets do this"
+      - {line: "settling in at {MAP}, got snacks n everything", emote: 2}
+      - "grinding is just meditation with more clicking lol"
+      - {line: "alright {MOB}, ur about to have a very bad day", emote: 3}
+      - "sure hope this session goes better than last time"
+      - {line: "starting the {MOB} grind, pray for drops ^^", emote: 2}
+      - "lets see how far i get before i run outta pots"
+      - "ok lets go, no distractions this time i mean it"
+      - "pots packed, scrolls ready, lets grind"
+      - "logged on just to grind, no small talk today"
+      - {line: "this is gonna be a good session i can feel it", emote: 2}
+      - "ok lets get productive before i lose motivation"
+      - "warming up the fingers lol"
+      - "game time, everyone else can wait"
+      - "ok one more session just to see how far i get"
+      - {line: "ok {MOB}, lets see who gets tired first", emote: 3}
+      - {line: "back at {MAP} again, where else would i be lol", emote: 2}
+      - {line: "charging into {MOB}, no hesitation", emote: 3}
+      - {line: "{MAP} is quiet this time of day, perfect grinding weather", emote: 2}
+      - {line: "time to make {MOB} very unhappy", emote: 3}
+      - {line: "found a clean spot at {MAP}, camping here til i run outta pots", emote: 2}
+      - {line: "ok {MOB}... im warning u, i need this exp", emote: 0}
+      - {line: "fresh session at {MAP}, lets see what today brings ^^", emote: 2}
+      - "ready to grind, mind is clear, pots are full"
+      - {line: "back to farm {MOB}, lets get some good drops", emote: 0}
+      - "energy is up, exp is calling, lets go"
+      - {line: "ok {MAP}, im back and ready", emote: 2}
+      - {line: "{MOB} better watch out, im focused today", emote: 3}
+      - "starting strong, gonna level hard this session"
+      - {line: "time to make {MOB} regret everything", emote: 3}
+      - "fresh mindset, peak grinding hours ahead"
+      - {line: "{MAP} is calling and im answering ^^", emote: 2}
+      - "ready to dominate this grind session"
+      - {line: "lets farm {MOB} and get these levels", emote: 2}
+      - "fired up, focused, and ready for exp"
+      - {line: "ok {MOB}, the grind starts now", emote: 0}
+    emote:
+      - 0
+      - 2
+    wait: 1
+
+  LevelUp:
+    text:
+      - {line: "LEVEL {LEVEL} lets gooo", emote: 2}
+      - "ding! finally leveled"
+      - {line: "level {LEVEL} not bad if i say so myself", emote: 3}
+      - {line: "ayy hit {LEVEL} ^^", emote: 2}
+      - {line: "level up \\o/", emote: 2}
+      - {line: "ok {LEVEL} now just one more lvl then i sleep", emote: 2}
+      - {line: "all that grinding paid off lol", emote: 2}
+      - {line: "{LEVEL} babyyy", emote: 2}
+      - {line: "phew finally dinged, was stuck forever", emote: 2}
+      - {line: "free AP lets gooo", emote: 2}
+      - {line: "lvl {LEVEL}, told u id catch up xD", emote: 3}
+      - {line: "that level felt good", emote: 2}
+      - {line: "another one ^^", emote: 2}
+      - {line: "level {LEVEL}, job advance soon hehe", emote: 2}
+      - {line: "smooth, didnt even die this time", emote: 3}
+      - {line: "ding ding, AP/SP time", emote: 2}
+      - {line: "{LEVEL} already? didnt even notice lol", emote: 3}
+      - {line: "kinda proud of that grind", emote: 2}
+      - {line: "level {LEVEL} and still going \\o/", emote: 2}
+      - {line: "ez level, told u id get there", emote: 3}
+      - "ding!"
+      - "lets gooo \\o/"
+      - "finally"
+      - {line: "another one for the books ^^", emote: 2}
+      - "ooh new level just dropped"
+      - {line: "knew i had it in me", emote: 3}
+      - "stronger already hehe"
+      - {line: "putting these AP somewhere good lol", emote: 2}
+      - "wooo \\o/"
+      - "felt that one, big grind for it"
+      - {line: "yep yep, climbing nice and steady ^^", emote: 2}
+      - {line: "barely broke a sweat for that one", emote: 3}
+      - {line: "LEVEL {LEVEL} ARE U KIDDING ME LETS GOOOOO", emote: 2}
+      - "yep. another level. cool."
+      - {line: "level {LEVEL}, obviously, did u expect anything less", emote: 3}
+      - {line: "I CANT BELIEVE I ACTUALLY HIT {LEVEL} IM SHAKING", emote: 2}
+      - "ding. nice."
+      - {line: "level {LEVEL}, i earned every single exp point for that one", emote: 2}
+      - "woo level up, time for more AP decisions ill regret later"
+      - {line: "{LEVEL}! bet no one else grinded as hard as me for this one", emote: 3}
+      - {line: "DING DING DING {LEVEL} BABY", emote: 2}
+      - "finally."
+      - {line: "level {LEVEL}... that one took ages but worth it", emote: 2}
+      - "new level new me lol"
+      - {line: "hitting {LEVEL} at 3am alone feels kinda poetic", emote: 0}
+      - "honestly didnt think id make it today but here we are"
+      - {line: "level {LEVEL} and the exp bar resets to zero again", emote: 7}
+      - "leveled while half asleep lol"
+      - {line: "ok NOW i can log off. maybe.", emote: 3}
+      - "heck yeah, finally"
+      - {line: "felt the exp bar hit and got so happy lol", emote: 2}
+      - "worth every single mob"
+      - "ok that felt really good, im not gonna lie"
+      - "there we go, thats the stuff"
+      - "new level new me (same grind)"
+      - {line: "LEVEL {LEVEL}!! ok all that grinding wasnt for nothing", emote: 2}
+      - {line: "level {LEVEL}, another step toward job advance", emote: 2}
+      - {line: "ding! {LEVEL} and still grinding, what a life", emote: 2}
+      - {line: "yeah yeah {LEVEL}, no big deal, totally planned this", emote: 3}
+      - {line: "{LEVEL}. logged. moving on.", emote: 0}
+      - {line: "oh {LEVEL}? thought i was further behind lol, nice", emote: 6}
+      - {line: "level {LEVEL} and the grind resets like always", emote: 7}
+      - {line: "hitting {LEVEL} feels so good rn", emote: 2}
+      - {line: "{LEVEL}!! that one was smooth", emote: 2}
+      - {line: "level {LEVEL} baby, thats another one in the books", emote: 3}
+      - {line: "ding ding {LEVEL}, clean level", emote: 2}
+      - {line: "level {LEVEL} im flying through these levels", emote: 2}
+      - {line: "{LEVEL} achieved, feels amazing", emote: 3}
+      - {line: "another level another chance to get better at {LEVEL}", emote: 2}
+      - {line: "level {LEVEL} and looking good", emote: 2}
+      - {line: "hit {LEVEL} pretty quick this time", emote: 3}
+      - {line: "level {LEVEL} is where im at now, feeling strong", emote: 2}
+      - {line: "ding! level {LEVEL} has been achieved", emote: 2}
+      - {line: "getting closer to job adv, hit {LEVEL} today", emote: 3}
+    emote:
+      - 2
+      - 3
+    wait: 1
+
+  Damage:
+    text:
+      - {line: "ow, that {MOB} hits hard", emote: 5}
+      - {line: "oof almost wasnt watching my hp", emote: 7}
+      - "where did my pots go lol"
+      - {line: "ow ow ow {MOB} pls", emote: 5}
+      - {line: "ugh that {MOB} keeps hitting me", emote: 5}
+      - {line: "that one hurt T_T", emote: 4}
+      - {line: "yikes didnt mean to walk into that {MOB}", emote: 7}
+      - "ow my hp"
+      - {line: "ok rude, {MOB}", emote: 5}
+      - {line: "oof i fell again lol", emote: 7}
+      - {line: "that {MOB} came outta nowhere", emote: 6}
+      - {line: "ouch my poor little hp bar", emote: 4}
+      - {line: "stop hitting me {MOB} im grinding here", emote: 5}
+      - {line: "welp guess i need more pots", emote: 6}
+      - {line: "ow that fall hurt T_T", emote: 4}
+      - {line: "didnt see that {MOB} oops", emote: 7}
+      - "ow ow gimme a sec"
+      - {line: "{MOB} really got me lol so embarrassing", emote: 7}
+      - {line: "down to half hp from one {MOB} smh", emote: 5}
+      - "oof"
+      - "ow that stings"
+      - {line: "spiked me right off the ledge, cool cool", emote: 5}
+      - {line: "hp going down faster than i can pot lol", emote: 6}
+      - "yikes"
+      - {line: "ok that one i deserved", emote: 7}
+      - {line: "every time i look away it gets me smh", emote: 5}
+      - "ow ow"
+      - {line: "missed the landing again whoops", emote: 7}
+      - {line: "gonna sit and pot a sec before i drop", emote: 0}
+      - "ow no"
+      - "{MOB} ow"
+      - "brb potting"
+      - "not cool"
+      - "that hurt more than expected"
+      - "gonna need so many pots for this"
+      - "maybe i should grind somewhere easier"
+      - "that {MOB} is stronger than i thought"
+      - "need to stop getting hit so much"
+      - "took a hit, now im healing up"
+      - "fell down, need to be more careful"
+      - {line: "THAT {MOB} JUST HIT ME FOR HOW MUCH?? excuse me???", emote: 5}
+      - "tis but a scratch"
+      - "ow."
+      - {line: "{MOB} REALLY JUST WALKED UP AND HIT ME. wow ok.", emote: 5}
+      - {line: "lol that {MOB} thinks it can hurt me, cute", emote: 3}
+      - "ouch ok that one i felt"
+      - {line: "i am NEVER going near that {MOB} again. ever.", emote: 5}
+      - "meh, barely felt it"
+      - {line: "{MOB} got a lucky shot, wont happen again", emote: 3}
+      - "ow ok fine ill pot"
+      - {line: "that {MOB} has it out for me specifically i swear", emote: 5}
+      - "potted thru it np"
+      - "my hp bar is a suggestion at this point"
+      - {line: "walked right into {MOB} like a genius", emote: 7}
+      - {line: "just got clapped by {MOB} and im choosing to pretend it didnt happen", emote: 7}
+      - "ow lol that was dumb of me"
+      - {line: "ok ow, wasnt expecting that", emote: 7}
+      - "barely noticed, totally fine, this is fine"
+      - {line: "great now i gotta pot, ty very much", emote: 5}
+      - "one slip and half my hp gone, amazing"
+      - "that'll teach me to stop paying attention"
+      - "ok ow. rude."
+      - "brb having a moment about my hp"
+      - {line: "{MOB} got me while i was spacing out smh", emote: 7}
+      - {line: "ok {MOB} that was uncalled for", emote: 5}
+      - {line: "that {MOB} keeps targeting me specifically, im convinced", emote: 5}
+      - {line: "{MOB} crit me and i actually said ow out loud lol", emote: 7}
+      - {line: "nice shot {MOB}, wont happen again tho", emote: 3}
+      - {line: "did {MOB} just drain my whole pot supply, wow", emote: 5}
+      - {line: "fell right into {MOB} territory, my own fault honestly", emote: 7}
+      - {line: "{MOB} caught me off guard honestly", emote: 6}
+      - {line: "that {MOB} pack got me good", emote: 5}
+      - {line: "oops walked into {MOB} attack radius", emote: 7}
+      - "gotta watch my hp better"
+      - {line: "{MOB} is faster than i thought", emote: 5}
+      - {line: "yeah that {MOB} caught me slipping lol", emote: 6}
+      - "note to self dont get greedy"
+      - {line: "ok {MOB} i feel u, im potting up", emote: 0}
+      - {line: "damage taken, moving on", emote: 0}
+      - {line: "{MOB} got me but ill get them back", emote: 3}
+      - "taking it slow for a sec"
+      - {line: "{MOB} hitting harder than expected", emote: 6}
+      - {line: "ok that was my fault, {MOB} didnt even", emote: 7}
+      - {line: "potting up, {MOB} surprise attack", emote: 0}
+    emote:
+      - 5
+      - 7
+      - 0
+    wait: 1
+
+  NearDeath:
+    text:
+      - {line: "omg almost died lol", emote: 6}
+      - "ok ok backing off for a sec"
+      - {line: "phew that was close, outta pots too", emote: 7}
+      - {line: "AAA my hp T_T", emote: 6}
+      - {line: "nope nope nope brb retreating", emote: 6}
+      - {line: "potting potting come on come on", emote: 6}
+      - {line: "ok that scared me", emote: 7}
+      - {line: "red hp red hp RED HP omg", emote: 6}
+      - "gimme a sec to heal up"
+      - {line: "wow i really almost lost exp there", emote: 7}
+      - {line: "ty pots ty pots T_T", emote: 7}
+      - {line: "yikes too many mobs at once", emote: 6}
+      - "backing into the corner to rest"
+      - {line: "lol my heart actually skipped", emote: 7}
+      - {line: "ok lesson learned dont over pull", emote: 7}
+      - "just gonna sit here and breathe for a bit"
+      - {line: "phew, gonna need to restock soon", emote: 0}
+      - {line: "that mob hit waaay harder than i thought", emote: 6}
+      - {line: "ok i panicked a lil there sry", emote: 7}
+      - {line: "made it out alive, barely tho", emote: 0}
+      - "phew"
+      - "owowow ok ok"
+      - {line: "had like one hp left omg", emote: 6}
+      - "nooo not my exp bar T_T"
+      - {line: "scrolling back to town brb", emote: 0}
+      - "ok breathe, breathe"
+      - {line: "one more hit n i was toast lol", emote: 7}
+      - {line: "my hands are kinda shaking", emote: 6}
+      - {line: "thought i was a goner for sure", emote: 4}
+      - {line: "way too close, gonna slow it down", emote: 0}
+      - {line: "my whole life flashed before me lol", emote: 7}
+      - {line: "those mobs came outta nowhere, almost lost a whole bar T_T", emote: 4}
+      - {line: "I ALMOST DIED. I. ALMOST. DIED. im taking a walk.", emote: 6}
+      - "whatever its fine"
+      - {line: "pfft, planned that, had it under control the whole time", emote: 3}
+      - {line: "MY HP BAR IS LITERALLY A SLIVER OMG", emote: 6}
+      - "..."
+      - "that was way too close for comfort"
+      - {line: "this is the second time today. THE SECOND TIME.", emote: 5}
+      - {line: "almost lost exp there and i wouldve cried for real", emote: 7}
+      - "potting potting potting"
+      - {line: "ok {MOB} won that round, next time tho", emote: 5}
+      - "brb telling my friends about this near death experience"
+      - "my heart is going so fast omg"
+      - {line: "survived that somehow, dont ask me how", emote: 7}
+      - "im literally shaking at my desk lol"
+      - {line: "note to self: dont pull the whole map next time", emote: 7}
+      - {line: "ok i need to be more careful, that was so close", emote: 6}
+      - "barely alive, this is why i dont pull so many at once"
+      - "slamming every pot i have, brb"
+      - {line: "i should really not do that again T_T", emote: 7}
+      - "ok i need a moment and maybe a snack"
+      - {line: "my hands are sweating lol thats how close that was", emote: 6}
+      - "if my pots ran out there id have lost real exp, terrifying"
+      - "ok breathing. im fine. we're good."
+      - {line: "note to self: one pull at a time", emote: 7}
+      - "that was NOT the vibe, starting over"
+      - "almost went back to town the hard way"
+      - "hp went from full to nothing in like 2 seconds, terrifying"
+      - {line: "ok {MOB} made me genuinely scared for a second there", emote: 6}
+      - "logged on to grind, almost logged off permanently"
+      - {line: "{MOB} almost ended me. that's embarrassing.", emote: 7}
+      - "wait wait im actually gonna die"
+      - {line: "that was TOO close for comfort", emote: 7}
+      - "nope backing off immediately"
+      - {line: "HP DROP INCOMING", emote: 6}
+      - {line: "potting like crazy right now", emote: 6}
+      - {line: "i actually got terrified for a second lol", emote: 7}
+      - {line: "ok never doing that again", emote: 6}
+      - "that woke me up real quick"
+      - {line: "almost lost a whole level there omg", emote: 6}
+      - "time out, im getting healed up"
+      - {line: "holy that was scary", emote: 6}
+      - {{line: "potting potting POTTING", emote: 6}}
+      - {{line: "ok im retreating to safety", emote: 0}}
+      - {{line: "way way too close that time", emote: 7}}
+    emote:
+      - 6
+      - 7
+      - 0
+    wait: 1
+
+  MapShare:
+    text:
+      - {line: "this map taken {PLAYER_NAME}?", emote: 0}
+      - "wanna share? theres plenty of mobs"
+      - {line: "oh a {PLAYER_JOB} nice, ill take the left side", emote: 2}
+      - "this map taken? lmk if u wanna split"
+      - {line: "hey {PLAYER_NAME} :) want the right half?", emote: 2}
+      - "np theres room for two here"
+      - "u grinding too? we can share ^^"
+      - {line: "oh hi {PLAYER_NAME}, ill move to the next ch", emote: 0}
+      - "ill take top platform u take bottom, np"
+      - {line: "kinda my spot lol but ok we can share", emote: 5}
+      - "this map's pretty empty, plenty for both of us"
+      - {line: "welcome :) theres mobs on the left if u want", emote: 2}
+      - {line: "oh a {PLAYER_JOB}, wanna split the map?", emote: 0}
+      - "i can ch change if ur grinding, np"
+      - "wanna duo or u want ur own ch?"
+      - {line: "been here a while but i dont mind sharing", emote: 0}
+      - {line: "no ks i promise, just lmk where u wanna grind", emote: 2}
+      - "theres room, just dont ks pls lol"
+      - {line: "hey {PLAYER_NAME} u want this map? i can move", emote: 0}
+      - "ill yield the spawn to u, im almost done anyway"
+      - {line: "oh hi! plenty of mobs, go ahead {PLAYER_NAME}", emote: 2}
+      - {line: "this is kinda my grind spot but u can stay :)", emote: 5}
+      - "wanna take turns on the spawn?"
+      - "u looking to grind here too? we can share np"
+      - {line: "ill scoot over, all urs {PLAYER_NAME}", emote: 0}
+      - {line: "oh a {PLAYER_JOB}! u buff i grind? lol jk", emote: 2}
+      - "map's big enough, take whichever side u like"
+      - {line: "kinda was here first, but ill share half", emote: 5}
+      - "no worries ill just hop to another ch ^^"
+      - {line: "welcome to {MAP} :) theres room if u wanna stay", emote: 2}
+      - "ch change? i honestly dont mind"
+      - "all urs, i was bout to leave anyway"
+      - {line: "go ahead, gotta buy pots soon anyway", emote: 0}
+      - "this ledge is free if u want it"
+      - {line: "oh hey, didnt think anyone else came to this map lol", emote: 6}
+      - {line: "u after this spawn too? we can trade off ^^", emote: 2}
+      - "i usually camp here but ur welcome to the bottom mobs"
+      - {line: "if u stay just lemme keep the corner spawn ty", emote: 0}
+      - {line: "honestly grindings nicer with company, stick around :)", emote: 2}
+      - "been farming for my next lvl but theres more mobs than i can clear solo anyway"
+      - {line: "mobs respawn quick enough for both of us, no worries", emote: 0}
+      - {line: "ill give u the high platform, im comfy down here w my pots lol", emote: 2}
+      - "go ahead, im cycling channels anyway"
+      - "cool cool, we're good"
+      - "spawn's all urs"
+      - "yo {PLAYER_NAME}, plenty of room"
+      - "lmk if i'm ks-ing u"
+      - "grinding's way better when theres two of us"
+      - "omg hi! ive been here but dont worry bout me"
+      - "u can have the top, im grinding the bottom anyway"
+      - "np np, just trying to get some mobs in before dinner haha"
+      - "theres like, enough mobs for 5 people here lol"
+      - "honestly just need a few more kills, then all urs {PLAYER_NAME}"
+      - "i dont mind company at all, stick around if u want :)"
+      - "was just farming a bit before im gonna afk, u can stay"
+      - "this is my map. MY map. ...ok fine u can stay"
+      - {line: "oh great, company. wonderful.", emote: 5}
+      - {line: "HI HELLO YES HI new friend?? ^^", emote: 2}
+      - {line: "if u ks me im gonna write a very strongly worded megaphone about it", emote: 5}
+      - "hey."
+      - {line: "{PLAYER_NAME}, this map has the best spawn rate at our level range", emote: 0}
+      - "oh someone else, cool"
+      - {line: "yo {PLAYER_NAME}, just dont touch the left spawn and were good", emote: 0}
+      - {line: "a {PLAYER_JOB} huh, nice, the more the merrier i guess ^^", emote: 2}
+      - {line: "i was enjoying the silence but sure {PLAYER_NAME} u can stay", emote: 0}
+      - "been soloing this map for ages, ur welcome to join"
+      - {line: "oh {PLAYER_NAME}! wanna take the top platform?", emote: 2}
+      - {line: "{PLAYER_JOB}s are great grind partners, lets do this", emote: 2}
+      - "just dont ks pls, thats all i ask"
+      - {line: "ur lucky i just restocked on pots and im feeling generous lol", emote: 3}
+      - "take whatever side u want, im easy"
+      - "honestly was hoping someone would show up, gets lonely"
+      - "u can have the whole map, im about to afk"
+      - "sharing is caring n all that lol"
+      - "im on my way out anyway, great timing"
+      - {line: "just dont mess up my spawn route n we're cool", emote: 0}
+      - "two grinding is faster anyway trust me"
+      - "okay okay fair, stay"
+      - {line: "hey {PLAYER_NAME}, ill take right side u take left?", emote: 2}
+      - {line: "{PLAYER_JOB}? nice, u probably clear faster than me anyway", emote: 2}
+      - {line: "welcome to {MAP}, best kept secret at this level range", emote: 2}
+      - {line: "hey {PLAYER_NAME}, if ur staying please dont ks the top spawn", emote: 0}
+      - {line: "{PLAYER_JOB} huh, bet ur great in a party lol, wanna share?", emote: 2}
+      - {line: "{PLAYER_NAME} u want top or bottom of {MAP}? pick ur poison", emote: 0}
+      - {line: "sure {PLAYER_NAME}, plenty of mob for both of us at {MAP}", emote: 2}
+      - "plenty of room, no worries"
+      - {line: "yo {PLAYER_NAME} welcome, stay as long as u want", emote: 2}
+      - "map is big enough for multiple people grinding"
+      - {line: "hey {PLAYER_NAME}, just go ahead and grind, im cool", emote: 0}
+      - "just here for a bit, u can have the main spawns"
+      - {line: "no drama from me {PLAYER_NAME}, just grinding", emote: 0}
+      - "feel free to set up wherever u want"
+      - {{line: "{PLAYER_JOB}s and i can share this map ez", emote: 2}}
+      - "honestly prefer company over solo grinding"
+      - {{line: "u cool with sharing spawns {PLAYER_NAME}?", emote: 0}}
+      - "no ks here, just two grinders doing their thing"
+      - {{line: "{PLAYER_NAME} u were here first if u want it", emote: 0}}
+      - "sharing keeps it fresh, im down"
+      - {{line: "hey {PLAYER_NAME} lets just split the map fair", emote: 2}}
+      - "grinding together is better than competing anyway"
+      - {{line: "all good {PLAYER_NAME}, plenty for both", emote: 2}}
+      - "not gonna fight over mobs, we got enough"
+      - {{line: "{PLAYER_NAME} if u need the spot ill rotate out", emote: 0}}
+      - "honestly happy to have company out here"
+      - {{line: "{PLAYER_JOB}? nice we got synergy", emote: 2}}
+      - "just chill grinding, no tension"
+      - {{line: "hey {PLAYER_NAME}, all urs if u want the spot solo", emote: 0}}
+      - "two is better than one for grinding vibes"
+      - {{line: "{PLAYER_NAME} take what u need, im good", emote: 2}}
+      - "im not territorial about this map lol"
+      - {{line: "hey {PLAYER_JOB}! lets make this fun for both", emote: 2}}
+      - "coexisting peacefully over here ^^"
+      - {{line: "ok {PLAYER_NAME} we good? grinding buddies?", emote: 2}}
+    emote:
+      - 0
+      - 2
+      - 5
+    wait: 1
+
+  PlayerCompliment:
+    text:
+      - {line: "yo nice {PLAYER_WEAPON}", emote: 2}
+      - {line: "aww {PLAYER_PET} is so cute", emote: 2}
+      - {line: "kinda jealous of that {PLAYER_GEAR}", emote: 4}
+      - {line: "omg where'd u get that {PLAYER_WEAPON} o_o", emote: 2}
+      - {line: "love that {PLAYER_GEAR} sooo clean ^^", emote: 2}
+      - {line: "wish i had a {PLAYER_GEAR} like that :(", emote: 4}
+      - {line: "{PLAYER_PET} following u around is the cutest thing <3", emote: 2}
+      - {line: "what guild is {PLAYER_GUILD}?? lookin to join one", emote: 0}
+      - {line: "ooo {PLAYER_GUILD} ppl always got the nicest gear", emote: 2}
+      - {line: "ur {PLAYER_WEAPON} prob took so many scrolls omg", emote: 0}
+      - {line: "ur whole look is so put together", emote: 2}
+      - {line: "ty for not ksing me btw, ur cool ^^", emote: 2}
+      - "that cape is sooo cute where from"
+      - {line: "ur fame must be crazy high", emote: 0}
+      - {line: "omg can i pet {PLAYER_PET} pls", emote: 2}
+      - "saving up for gear like urs one day :)"
+      - "u look like u been playing forever, so jealous"
+      - {line: "{PLAYER_NAME} ur so decked out omg", emote: 2}
+      - "is that NX? it looks amazing on u"
+      - "haha nice fit, u got good taste"
+      - {line: "ur {PLAYER_GEAR} matches everything perfectly, jealous", emote: 4}
+      - "been wanting that weapon for ages"
+      - {line: "{PLAYER_PET} is just chillin and i love it ^^", emote: 2}
+      - "u must have so many mesos to look like that lol"
+      - "honestly ur gear is goals"
+      - "oh hey nice ^^"
+      - "u look strong"
+      - "cool fit :)"
+      - {line: "whoa hi o_o", emote: 2}
+      - "lookin good today"
+      - {line: "u seem like u really know what ur doing haha", emote: 2}
+      - "always nice runnin into someone cool out here"
+      - {line: "u kinda make me wanna train harder lol", emote: 2}
+      - "i hope i look as good as u someday haha"
+      - {line: "seein ppl like u around makes this map way more fun ^^", emote: 2}
+      - "ur drip is insane"
+      - "u got veteran energy"
+      - {line: "ur {PLAYER_WEAPON} is goals", emote: 3}
+      - "that fit hits hard"
+      - "been grinding way too long"
+      - "ur just cool"
+      - "honestly the vibe here is way better now"
+      - {line: "is that {PLAYER_WEAPON} worth the grind tho", emote: 2}
+      - {line: "bet that {PLAYER_GEAR} took forever to get", emote: 4}
+      - {line: "how long did u farm for that {PLAYER_GEAR}", emote: 2}
+      - {line: "{PLAYER_GUILD} has like the best energy", emote: 2}
+      - {line: "{PLAYER_PET} knows ur the real one", emote: 2}
+      - "ur making this whole grind feel less lonely, ty for that"
+      - "the way ur just vibing here makes me feel way better"
+      - {line: "ur {PLAYER_WEAPON} is so clean it actually makes me wanna level faster", emote: 3}
+      - {line: "ok {PLAYER_NAME} ur kinda making the rest of us look bad with that gear", emote: 3}
+      - {line: "wow {PLAYER_WEAPON}, thats... actually really impressive", emote: 2}
+      - "nice."
+      - {line: "{PLAYER_GEAR} IS SO GOOD OMG", emote: 2}
+      - {line: "wish my gear looked half as good as urs", emote: 4}
+      - {line: "that {PLAYER_WEAPON} must have taken forever to scroll", emote: 0}
+      - {line: "{PLAYER_PET} and {PLAYER_NAME} are the cutest duo here ^^", emote: 2}
+      - {line: "ur {PLAYER_GEAR} is making me rethink my whole build honestly", emote: 6}
+      - "u just look like someone who knows what theyre doing"
+      - {line: "ok but {PLAYER_GUILD} members always have the cleanest gear", emote: 2}
+      - "seriously how do u afford all that"
+      - {line: "that {PLAYER_NX} looks really good on u ^^", emote: 2}
+      - {line: "oh a lvl {PLAYER_LEVEL} {PLAYER_JOB}, respect", emote: 2}
+      - "im gonna grind twice as hard to catch up to u lol"
+      - {line: "{PLAYER_NAME} out here looking like a boss", emote: 2}
+      - "ur just built different honestly"
+      - "respect the hustle, u look amazing"
+      - "hope i look that good someday, goals"
+      - "u been grinding hard huh, it shows"
+      - "ok ur vibe is immaculate"
+      - "veteran energy, i can feel it"
+      - "u make this map look cooler just by being here"
+      - {line: "ok ur clearly doing something right lol", emote: 2}
+      - {line: "that {PLAYER_GEAR} is so hard to get, how long did it take", emote: 2}
+      - {line: "not to be weird but ur {PLAYER_WEAPON} is literally perfect", emote: 2}
+      - {line: "the way {PLAYER_PET} just follows u everywhere is adorable lol", emote: 2}
+      - {line: "{PLAYER_NAME} flexing on all of us with that {PLAYER_GEAR}", emote: 3}
+      - {line: "every time i see {PLAYER_GUILD} members they look so geared omg", emote: 2}
+      - {line: "is {PLAYER_NX} hard to get? it looks amazing", emote: 0}
+      - {line: "if i had {PLAYER_WEAPON} id never stop grinding lol", emote: 2}
+      - "ur whole energy is immaculate"
+      - {line: "{PLAYER_NAME} u just look like u understand the game", emote: 2}
+      - "the way u move around looks so practiced"
+      - {{line: "ur {PLAYER_GEAR} coordination is actually perfect", emote: 2}}
+      - "u clearly know what ur doing"
+      - {{line: "{PLAYER_PET} looks like a pro setup", emote: 2}}
+      - "ur skills are obviously well honed"
+      - {{line: "{PLAYER_JOB} mains always have the best vibes", emote: 2}}
+      - "u look like someones who enjoys the game"
+      - {{line: "{PLAYER_NAME} the way u play is so smooth", emote: 2}}
+      - "ur clearly put thought into ur build"
+      - {{line: "respect to u for having {PLAYER_GEAR} like that", emote: 0}}
+      - "u got that veteran look"
+      - {{line: "the fact that u have {PLAYER_WEAPON} means u work hard", emote: 2}}
+      - "ur grinding style is inspiring honestly"
+      - {{line: "{PLAYER_NAME} u make it look so easy", emote: 2}}
+      - "u got swag and it shows"
+      - {{line: "{PLAYER_GEAR} choices show taste", emote: 0}}
+      - "u seem like someone id want to party with"
+      - {{line: "the {PLAYER_WEAPON} choice is *chef's kiss*", emote: 3}}
+      - "u got the grind down to a science"
+      - {{line: "{PLAYER_NAME} u intimidate me a little lol", emote: 2}}
+      - "ur just built different"
+      - {{line: "{PLAYER_JOB}s like u make me wanna level faster", emote: 2}}
+      - "u clearly love this game"
+      - {{line: "wow {PLAYER_GEAR} is goals honestly", emote: 4}}
+      - "u make grinding look like art"
+    emote:
+      - 2
+      - 0
+    wait: 1
+
+  ShopRestock:
+    text:
+      - "gotta restock pots before i head back"
+      - {line: "broke again from buying pots", emote: 4}
+      - {line: "stocking up in {REGION}, brb", emote: 0}
+      - {line: "back in {REGION} to restock, almost out of whites", emote: 0}
+      - {line: "pot prices r killing my mesos T_T", emote: 4}
+      - "lemme check the npc shop real quick"
+      - {line: "spent all my grind money on blue pots again lol", emote: 4}
+      - {line: "stacked up nice this time, ready to head out :)", emote: 2}
+      - "brb buying orange pots"
+      - {line: "every meso i make goes straight to pots smh", emote: 4}
+      - {line: "restocked in {REGION}, full pots full hp lets go", emote: 2}
+      - "need like 200 whites before i grind again"
+      - {line: "shop run before the next session", emote: 0}
+      - {line: "down to 3 pots, cutting it close lol", emote: 6}
+      - {line: "broke after this shop trip, gotta grind more", emote: 4}
+      - "popping back to {REGION} for a quick restock"
+      - {line: "return scrolled to town just to buy pots", emote: 0}
+      - {line: "got my pots, picked up a few extra return scrolls too :)", emote: 2}
+      - {line: "why r pots so expensive, broke again", emote: 4}
+      - {line: "all restocked, see u back at the grind spot", emote: 0}
+      - "mesos all gone again lol"
+      - "brb pots"
+      - "so many whites this time :)"
+      - "gotta hit the shop b4 i die out there lol"
+      - "honestly i spend more time restocking than grinding"
+      - {line: "checking how many blues i can afford T_T", emote: 4}
+      - {line: "town trip, back in a sec", emote: 0}
+      - {line: "wallet empty after this one", emote: 4}
+      - "npc shop run, the usual"
+      - {line: "loaded up on pots, feeling good", emote: 2}
+      - "kinda hate how fast i burn thru whites"
+      - {line: "one good grind session and its all gone to pots smh", emote: 6}
+      - "almost out again"
+      - "restocking at 2am, so tired lol"
+      - "oof prices are up again"
+      - "ouch, how many blues can i even get"
+      - "stocking up on oranges too"
+      - "restocking in {REGION}, not too bad"
+      - "been here so often the npc knows my order T_T"
+      - "all my grind money comes here, never lasts til the next session T_T"
+      - "same place, same time, same pots, different day"
+      - "out of whites?"
+      - "imagine being rich enough to not worry about pot costs"
+      - {line: "RESTOCKED AND READY LETS GO BACK OUT THERE", emote: 2}
+      - "pots."
+      - "i spend more on pots than i earn from grinding, this is a scam"
+      - "back to the npc, my favorite person in the game apparently"
+      - "bought so many whites the npc probably thinks im running a pharmacy"
+      - "the pot-to-meso ratio is criminal and i have opinions about it"
+      - "just grabbing supplies n heading back out"
+      - "honestly the npc should give me a bulk discount at this point"
+      - "ok stocked up, round two"
+      - "wish i could carry more pots"
+      - {line: "mesos in, pots out, thats the cycle T_T", emote: 4}
+      - "brb buying every white pot this npc has"
+      - "the walk of shame back to town for pots"
+      - "if i had a meso for every pot i bought id have enough to buy more pots"
+      - "the npc shop cashflow goes one way and it's not toward me"
+      - "wish pots were cheaper, my mesos are crying"
+      - "grabbed everything, ready to go back out"
+      - "always feel better after a restock"
+      - {line: "ok blues are getting expensive, switching to oranges for now", emote: 4}
+      - "why do i always wait til im completely out before i come here"
+      - "in n out, quick restock, back to the grind"
+      - "every single time, out of pots, same story"
+      - {line: "back in {REGION} for the fifth time today lol", emote: 6}
+      - {line: "stocking up on whites in {REGION}, this is my whole budget rip", emote: 4}
+      - {line: "{REGION} npc is basically my landlord at this point", emote: 4}
+      - {line: "popped back to {REGION} real quick, needed blues desperately", emote: 0}
+      - {line: "restocked everything in {REGION}, now back to the real work", emote: 2}
+      - {line: "all my mesos went to {REGION} pots again. again.", emote: 4}
+      - {line: "ok {REGION} stocked me up, round two bout to go hard", emote: 2}
+      - {line: "heading to {REGION} real quick for supplies", emote: 0}
+      - "time to refill the pot stash again"
+      - {line: "spent all my mesos in {REGION} again whoops", emote: 4}
+      - "restocking is just part of the grind cycle"
+      - {{line: "back from {REGION}, loaded up", emote: 2}}
+      - "the pot tax is brutal but necessary"
+      - {{line: "{REGION} shop is my second home lol", emote: 4}}
+      - "running low, gotta hit the npc"
+      - {{line: "popping into {REGION} for blues", emote: 0}}
+      - "broke again from pots, grind harder i guess"
+      - {{line: "everything ready in {REGION} for round two", emote: 2}}
+      - "pot shortage activated, heading back"
+      - {{line: "{REGION} vendor knows my order by heart", emote: 6}}
+      - "restocking ritual engaged"
+    emote:
+      - 0
+      - 4
+      - 2
+    wait: 1
+
+  MapTransition:
+    text:
+      - "this spots dead, moving on"
+      - {line: "gonna go try {MAP} for a bit", emote: 0}
+      - "where to next hmm"
+      - "ok im done here, nothing left to kill"
+      - {line: "thinkin i'll head over to {MAP}", emote: 0}
+      - {line: "{MAP} sounds good actually, lets go ^^", emote: 2}
+      - "spawns kinda slow, gonna ch change or smth"
+      - {line: "rumor is {MAP} has better exp, worth a shot", emote: 0}
+      - "everyones grinding here lol, finding somewhere quieter"
+      - {line: "brb scrolling back, then off to {MAP}", emote: 0}
+      - "this map got boring fast"
+      - {line: "always wanted to grind {MAP}, finally goin", emote: 2}
+      - "alright shippin out, this place is overrun"
+      - {line: "kinda miss {MAP}, headin back there", emote: 0}
+      - "yawn... maybe somewhere with more mobs"
+      - {line: "packed it up, {MAP} next i think", emote: 0}
+      - "too many ppl camping here, im out"
+      - {line: "heard {MAP} is poppin today, otw", emote: 2}
+      - "kinda sleepy but one more map wont hurt"
+      - "anyway gonna wander a bit, find a new spot"
+      - "moving on"
+      - "next map it is"
+      - "off i go"
+      - "time to roam ^^"
+      - "drained this spot dry"
+      - "welp, nothin left here"
+      - "exp slowed way down, gonna find greener pastures"
+      - {line: "feels kinda empty now, lookin elsewhere", emote: 0}
+      - {line: "ok packing up, somewhere fresh sounds nice ^^", emote: 2}
+      - "respawns are crawlin, im wanderin off"
+      - {line: "gonna stretch my legs n hunt down some fresh mobs", emote: 2}
+      - "alright thats enough here, driftin along"
+      - "been parked here way too long, gonna go see whats out there"
+      - "comfy spot but the exp dried up, off to chase mobs somewhere new"
+      - {line: "tempted to just nap here, but theres better grindin waitin, lets go", emote: 6}
+      - "peace out, this map aint worthy"
+      - {line: "GONNA GO FIND EVEN BETTER MOBS LETS GO", emote: 2}
+      - "leaving."
+      - {line: "this map has BETRAYED me. zero drops. moving on.", emote: 5}
+      - "onward"
+      - {line: "heard {MAP} has better exp, gotta go verify", emote: 0}
+      - "ok this ch is dead, rotating"
+      - "time to see what else is out there"
+      - {line: "{MAP} is calling my name", emote: 2}
+      - "same grind different map"
+      - "need a change of scenery"
+      - "exp dried up, time to move"
+      - {line: "wonder if {MAP} is crowded today", emote: 6}
+      - "gonna go scout a new spot"
+      - "my feet are tired but the grind waits for no one"
+      - "gotta find somewhere fresh"
+      - "spawn's been bad all session, time to move"
+      - "done with this spot, on to better things"
+      - "exp per hour dropped, rotating out"
+      - {line: "gonna go find a quiet corner somewhere else", emote: 0}
+      - "not even sad to leave at this point"
+      - "peace, this map ran dry"
+      - "time to explore a bit"
+      - {line: "ok {MAP} i choose u, switching over", emote: 2}
+      - {line: "logging off this map, loading into {MAP}", emote: 0}
+      - {line: "checked {MAP} on my way here, looks less crowded", emote: 0}
+      - {line: "THIS MAP BETRAYED ME. {MAP} HERE I COME.", emote: 5}
+      - {line: "always said id try {MAP} eventually, today's the day i guess", emote: 2}
+      - {line: "heading out to {MAP}, mobs here weren't cooperating", emote: 0}
+      - {line: "done here. {MAP} next. simple.", emote: 0}
+      - {{line: "heading out from {MAP} now", emote: 0}}
+      - "time to try somewhere new"
+      - {{line: "leaving {MAP}, its been fun", emote: 0}}
+      - "onwards to fresh mobs"
+      - {{line: "{MAP} had its run, next adventure", emote: 2}}
+      - "gotta keep moving to stay ahead"
+      - {{line: "packing up, {MAP} later", emote: 0}}
+      - "new map new energy"
+      - {{line: "{MAP} was a solid grind spot but time to move", emote: 0}}
+      - "rotation time i guess"
+      - {{line: "ok {MAP} i bid u farewell", emote: 6}}
+      - "looking for better conditions elsewhere"
+      - {{line: "moving zones, {MAP} was chill but im restless", emote: 0}}
+      - "fresh legs fresh map fresh mobs"
+    emote:
+      - 0
+      - 6
+      - 2
+    wait: 1
+
+  Fatigue:
+    text:
+      - {line: "been farming {MOB} for hours... eyes hurt", emote: 4}
+      - "*yawn* how long have i been grinding"
+      - "just one more level then bed i swear"
+      - {line: "{MOB} is starting to blur together zzz", emote: 0}
+      - {line: "so tired but the exp is right there", emote: 4}
+      - "ugh my eyes -_- when did it get so late"
+      - {line: "{MOB} {MOB} {MOB}... thats all i see when i close my eyes now", emote: 4}
+      - "*yawn* one more pot then maybe i log off"
+      - {line: "how many {MOB} have i killed today lol i lost count", emote: 0}
+      - "soooo sleepy but i dont wanna lose my spot"
+      - {line: "been grinding {MOB} since forever... is it tomorrow already", emote: 4}
+      - "my back hurts from sitting here so long ugh"
+      - "almost there... almost... *yawn* zzz"
+      - {line: "i swear {MOB} respawn slower when ur this tired -_-", emote: 0}
+      - "maybe ill just rest my eyes for a sec T_T"
+      - "*yawn*"
+      - "so sleepy zzz"
+      - "my eyes -_-"
+      - "is it really that late already"
+      - "wow the sun is kinda coming up huh... oops"
+      - "i could honestly nap right here zzz"
+      - "just gonna grind till my pots run out then sleep"
+      - {line: "this spot feels like home at this point honestly lol", emote: 2}
+      - "warm and cozy and so so tired ueee"
+      - {line: "been so long my chair has a permanent dent in it now lol but the exp keeps tickin so im not movin", emote: 0}
+      - "fingers on autopilot zzz"
+      - "head drooping -_-"
+      - "blinking slowly"
+      - "running on caffeine and spite at this point"
+      - "cant tell if im playing or dreaming at this point"
+      - "the screen is so bright at 3am T_T"
+      - {line: "should really log off but {MOB} are dropping steady right now", emote: 4}
+      - "my brain stopped working like an hour ago"
+      - "everything aches but the exp bar wont stop calling me"
+      - {line: "tired enough to cry but {MOB} just spawned again so... five more minutes lol", emote: 7}
+      - {line: "IF I SEE ONE MORE {MOB} IM GOING TO SCREAM. ok im fine. one more.", emote: 5}
+      - "been better."
+      - {line: "lost count of how many {MOB} ive killed, its gotta be thousands", emote: 0}
+      - "autopilot engaged, brain offline"
+      - {line: "THE FACT THAT IM STILL GRINDING AT THIS HOUR SAYS SOMETHING ABOUT ME", emote: 6}
+      - "do i even enjoy this or is it habit at this point"
+      - {line: "if {MOB} had feelings theyd feel bad for me by now", emote: 4}
+      - "keyboard imprint on my forehead probably"
+      - "one more level one more level one more level"
+      - "pretty sure my chair has a permanent me-shaped dent"
+      - {line: "{MAP} is starting to feel like a prison lol", emote: 4}
+      - "dunno what day it is anymore"
+      - "coffee ran out two hours ago, running on stubbornness"
+      - {line: "eyes closing... {MOB} still spawning... must... grind...", emote: 4}
+      - "honestly forgot what the sun looks like"
+      - "ok i physically cannot stop, the exp bar is RIGHT there"
+      - "someone remind me why im still awake"
+      - "chair is so uncomfortable but here i am"
+      - {line: "ok five more kills then i genuinely need to sleep", emote: 4}
+      - "typing on autopilot, brain checked out an hour ago"
+      - "yawning every 30 seconds, this is not sustainable"
+      - "dont think i can blink without dozing off"
+      - "running on nothing but grind instincts"
+      - {line: "too tired to even appreciate {MOB} drops... they drop and i just stare", emote: 4}
+      - {line: "ANOTHER {MOB}. ok. sure. fine. whatever.", emote: 5}
+      - {line: "{MAP} feels like a fever dream at this hour", emote: 4}
+      - {line: "if {MOB} gave out pillows id be set right now", emote: 4}
+      - {line: "the {MAP} bgm is playing in my sleep now im pretty sure", emote: 0}
+      - {line: "just {MOB} after {MOB} after {MOB}... yeah ok. yeah.", emote: 0}
+      - {line: "been at {MAP} so long ive started naming the mobs", emote: 4}
+      - {{line: "my eyes are barely staying open but {MOB} dont care", emote: 4}}
+      - "the grinding reflex overtook rational thought hours ago"
+      - {{line: "honestly cant remember the last time i took a real break farming {MOB}", emote: 4}}
+      - "the blur between maps and mobs is real"
+      - {{line: "still hitting {MOB} somehow despite being half asleep", emote: 4}}
+      - "numbness has set in, just going through motions"
+      - {{line: "{MOB} just keep coming and im just here", emote: 0}}
+      - "physical body is tired but exp bar says keep going"
+      - {{line: "pretty sure im leveling in my sleep grinding {MOB}", emote: 4}}
+      - "everything feels distant but the grinding continues"
+      - {{line: "{MAP} has become a fever dream at this point", emote: 4}}
+      - "the ache is everywhere but the focus is unbreakable"
+      - {{line: "if {MOB} could talk they'd judge how tired i look", emote: 4}}
+      - "just... keep... clicking..."
+    emote:
+      - 0
+      - 4
+    wait: 1
+
+  Rare:
+    text:
+      - "why do i even keep leveling sometimes"
+      - "the grind feels different when no ones online to share it"
+      - {line: "i wonder if anyone i used to train with still plays", emote: 4}
+      - "same mobs, same map, just a higher number now..."
+      - {line: "remember when leveling actually felt like it meant something", emote: 4}
+      - "everyone i started with logged off years ago"
+      - {line: "sometimes i forget what i was even grinding toward", emote: 4}
+      - "the maps feel quieter than they used to"
+      - {line: "guess ill keep going... not really sure why anymore", emote: 4}
+      - "used to rush home just to log in and grind with friends"
+      - {line: "another level. wish someone was here to see it T_T", emote: 4}
+      - "funny how the numbers go up but it feels emptier"
+      - "logging in alone at 3am just feels different now"
+      - "i still hear the old grind music in my head sometimes..."
+      - "we used to race to see who'd hit the next level first"
+      - "anyway. one more pull."
+      - "the bgm hasnt changed but everything else kinda has"
+      - {line: "i miss the days when a level up meant someone would cheer for you", emote: 4}
+      - "...used to be more of us out here"
+      - {line: "every map still feels a little like a place i had to leave behind", emote: 4}
+      - "wonder if anyone would notice if i stopped logging in"
+      - "the exp bar goes up but nothing really changes"
+      - "used to make plans to play together, now i just grind alone"
+      - "funny how the game stays the same but everyone around it moves on"
+      - "i keep coming back to the same spots hoping theyll feel like they used to"
+      - "the maps are all still here. just... quieter."
+      - "sometimes i level up and just sit there for a minute"
+      - "the music still hits the same way it always did"
+      - "i used to screenshot every level up to share with friends"
+      - "hard to explain why i still play to people who never did"
+      - "the server feels different than it used to..."
+      - "sometimes i wonder who else is still out here, grinding away like me"
+      - "used to know what every level felt like. now they just tick by."
+      - "this game never really leaves you, even when you leave it for a while"
+      - {line: "funny that a map this empty still feels like somewhere", emote: 4}
+      - "the game remembers you, even when everyone else moved on"
+      - "sometimes the grind is just something to do while missing people"
+      - {line: "i keep playing like one day things will be like they were", emote: 4}
+      - "the exp goes up. everything else stays the same."
+      - "sat in this map for ten minutes just listening to the bgm once"
+      - {line: "sometimes i wonder if anyone else feels this way", emote: 4}
+      - {line: "the map hasnt changed but everything around it has", emote: 4}
+      - {line: "grinding alone is different when ur used to company", emote: 4}
+      - {line: "the levels still matter but theyre hollow somehow", emote: 4}
+      - {line: "i miss the laughter during the boring kills lol", emote: 4}
+      - {line: "the game goes on but not the same way it used to", emote: 4}
+      - {line: "sometimes levels feel like im chasing something i already lost", emote: 4}
+    emote:
+      - 0
+      - 4
+    wait: 1
+
+  Greeting:
+    text:
+      - "oh hi :)"
+      - {line: "hey ^^", emote: 2}
+      - "oh, sup!"
+      - "heyyy :)"
+      - "well hey ^^"
+      - {line: "oh, hey!", emote: 2}
+      - "yo ^^"
+      - "kinda mid-grind but hey! :)"
+      - {line: "been here a while lol, hey ^^", emote: 2}
+      - "been zoning out, hi! ^^"
+      - {line: "yo, didn't see u there! hi :)", emote: 6}
+      - {line: "oh hey {PLAYER_NAME}! what's up? :)", emote: 2}
+      - {line: "a {PLAYER_JOB}! oh hi :)", emote: 2}
+      - "sup {PLAYER_NAME} ^^"
+      - {line: "kinda deep in a grind sesh but hi {PLAYER_NAME}! glad u stopped by ^^", emote: 2}
+      - "a {PLAYER_JOB}! nice, hey :) just here farming mesos lol"
+      - "been grinding here forever, hi! nice to see someone ^^"
+      - {line: "oh {PLAYER_NAME}! didn't expect to see anyone, hi ^^", emote: 6}
+      - "just farming"
+      - "mesos on my mind"
+      - "grind szn :)"
+      - "longest day ever lol"
+      - "hey {PLAYER_NAME}! whatchu grinding?"
+      - "this map's been rly generous"
+      - "man the internet cafe grind is real"
+      - "coffee's cold but the exp rewards are hot :)"
+      - "ugh finally someone! been solo forever, kinda losing it"
+      - "oh {PLAYER_NAME}, nice! u farming or leveling?"
+      - "oh hi, come to admire me grind? cant blame u"
+      - "hey"
+      - {line: "HI OMG HELLO ^^", emote: 2}
+      - "oh, ur here. ok."
+      - "oh hey :) just chilling between pulls"
+      - {line: "hey {PLAYER_NAME}! grinding buddy? ^^", emote: 2}
+      - "yo, welcome to my map lol"
+      - "sup, just killing stuff"
+      - {line: "oh hey {PLAYER_NAME}, nice to see someone else out here", emote: 2}
+      - "been here so long i forgot how to talk to people lol"
+      - {line: "A PERSON!! hi hi hi ^^", emote: 2}
+      - "...hi"
+      - "oh hey, didnt hear u walk up, was mid-grind"
+      - {line: "hey {PLAYER_NAME}! u here to grind too?", emote: 2}
+      - "oh nice, company ^^"
+      - "heya, just takin a pot break"
+      - {line: "oh a {PLAYER_JOB}, cool! sup ^^", emote: 2}
+      - "welcome to the grind zone lol"
+      - "hey hey ^^"
+      - "yo :)"
+      - {line: "oh {PLAYER_NAME}! nice timing, i was about to fall asleep grinding lol", emote: 6}
+      - "hi, sorry, spacing out as usual"
+      - "evening ^^"
+      - "oh hey there, just doing my thing"
+      - {line: "hey {PLAYER_NAME}, hope ur grind is going well ^^", emote: 2}
+      - "hiii :)"
+      - "oh. hi. sorry i look like a mess, been here since morning lol"
+      - "sup sup"
+      - {line: "oh a {PLAYER_JOB}! hello :)", emote: 2}
+      - "hey, im kinda deep in a grind but always happy to chat ^^"
+      - "heyy! nice to see someone else out here"
+      - "oh perfect timing, was getting lonely lol"
+      - "hi! sorry if i look clueless, been grinding for hours"
+      - "oh! hi, didn't expect anyone today"
+      - {line: "oh hi, come on in, theres room ^^", emote: 2}
+      - "heyyy, just taking five before i get back to it"
+      - "welcome welcome ^^"
+      - "ooh hi! u caught me between pulls"
+      - "heyy :) good timing"
+      - "oh you're here, nice"
+      - "what's good ^^"
+      - {line: "oh a visitor! hi!", emote: 2}
+      - "sup lol, just doing my thing over here"
+      - "hey there! u grind here too?"
+      - "hi :) just me and the mobs out here usually"
+      - {line: "hey {PLAYER_NAME}! fancy seeing u here lol", emote: 2}
+      - {line: "oh {PLAYER_NAME}! sit down, theres mobs to kill ^^", emote: 2}
+      - {line: "a {PLAYER_JOB}! been a while since ive seen one out here", emote: 2}
+      - {line: "hey {PLAYER_NAME} :) how long u been grinding today", emote: 2}
+      - {line: "oh ur a {PLAYER_JOB}? cool, lots of mobs here for ur build", emote: 0}
+      - {line: "hi {PLAYER_NAME}! welcome to the grind :)", emote: 2}
+      - {line: "oh {PLAYER_NAME}, u look like u know what ur doing, nice", emote: 2}
+      - {line: "a {PLAYER_JOB} out here? surprising, hi ^^", emote: 6}
+      - {line: "hey {PLAYER_NAME}, catch me between kills lol", emote: 2}
+      - {line: "oh hi, {PLAYER_NAME} right? think ive seen u around before ^^", emote: 2}
+      - {line: "hi! {PLAYER_JOB}s are good at this map from what ive seen", emote: 2}
+      - {line: "hey {PLAYER_NAME}! been here a while, how u finding it out there?", emote: 2}
+      - {line: "{PLAYER_NAME}! hi! ok i was NOT expecting company today", emote: 6}
+      - {line: "oh a {PLAYER_JOB}! what level u grinding at", emote: 0}
+      - {line: "hey {PLAYER_NAME}, just be warned: this grind spot is addictive lol", emote: 3}
+      - "its nice when someones around"
+      - {line: "oh, company, that changes the energy ^^", emote: 2}
+      - "wasnt expecting to see anyone today"
+      - {{line: "hey hey, welcome to my corner", emote: 2}}
+      - "the solo grind hit different when u show up"
+      - {{line: "oh nice timing, i was getting lonely", emote: 6}}
+      - "just vibing out here, good to see u"
+      - {{line: "hey {PLAYER_NAME}! always happy to meet another grinder", emote: 2}}
+      - "the vibe just got better"
+      - {{line: "oh! didnt expect anyone, nice surprise ^^", emote: 2}}
+      - "grind feels less lonely now"
+      - {{line: "hey hey! welcome to the grind with me", emote: 2}}
+      - "this map just got more fun"
+      - "alright alright, lets make this a vibe"
+    emote:
+      - 0
+      - 2
+      - 6
+    wait: 1
+
+  PlayerReaction:
+    text:
+      - "oh hey"
+      - {line: "o_o", emote: 6}
+      - "heya ^^"
+      - "lol hi"
+      - "hey o/"
+      - {line: "oh!", emote: 6}
+      - "hi ^^"
+      - "whoa hey"
+      - "didnt see u come in"
+      - "havent seen u around here before"
+      - "where u headed after this?"
+      - "this spot has decent mobs"
+      - {line: "been here a while, kinda zoning out lol", emote: 4}
+      - "good map huh, mobs respawn pretty fast"
+      - "careful of the respawns over on the left"
+      - "u need pots? i got extras"
+      - {line: "just restocked, feeling good ^^", emote: 2}
+      - "this map gets kinda lonely, good to see u"
+      - "were u waiting for this spot? my bad lol, lots of room tho ^^"
+      - "oh hey {PLAYER_NAME}"
+      - {line: "oh a {PLAYER_JOB}!", emote: 2}
+      - "hey {PLAYER_NAME} ^^"
+      - "oh ur a {PLAYER_JOB}, nice"
+      - "hey {PLAYER_NAME}, u farming here too?"
+      - {line: "oh a {PLAYER_JOB}, good timing", emote: 2}
+      - "{PLAYER_NAME}! hey, didnt see u"
+      - "oh a {PLAYER_JOB}, havent seen one out here in a while"
+      - "hey {PLAYER_NAME}, hows the grind treating u"
+      - "oh {PLAYER_NAME}, u passing thru or staying to grind?"
+      - {line: "oh a {PLAYER_JOB}, nice, u guys level so fast", emote: 2}
+      - "hey {PLAYER_NAME}, mobs are spawning good today, good spot to stop"
+      - "almost didnt notice u, hey {PLAYER_NAME}"
+      - "hey {PLAYER_NAME}, been grinding long?"
+      - "oh {PLAYER_NAME}, safe travels ^^"
+      - "hey {PLAYER_NAME}, this map treating u well?"
+      - "hope u found ur spot ^^"
+      - "out here too huh, nice"
+      - "been pretty quiet till u showed up ^^"
+      - "hmm, hey ^^"
+      - "always nice seein someone out this way"
+      - "{PLAYER_NAME}, just out here grinding"
+      - "losing track of time"
+      - "this map hits different"
+      - "nocturnal grind life"
+      - "mobs never sleep lol"
+      - "just chilling"
+      - "gotta say, quiet maps hit the spot"
+      - "hey {PLAYER_NAME}, u found the chill spot"
+      - {line: "hey {PLAYER_NAME}, mobs just keep respawning here xD", emote: 2}
+      - "always nice when someone else appreciates the grind"
+      - {line: "oh a {PLAYER_JOB}, good to see other people out here", emote: 2}
+      - "{PLAYER_NAME}, same energy; just vibing with the mobs"
+      - "late nights just hit different; no chaos, just grind"
+      - {line: "a {PLAYER_JOB}? means we can actually just coexist here", emote: 2}
+      - "try not to be too impressed by my grind, i know its amazing"
+      - {line: "OH SOMEONE o_o HI", emote: 6}
+      - "hm."
+      - "oh."
+      - {line: "{PLAYER_NAME}! yo!", emote: 2}
+      - "been so quiet, startled me lol"
+      - {line: "a {PLAYER_JOB} out here? rare sighting ^^", emote: 2}
+      - "just doing my rounds"
+      - {line: "oh {PLAYER_NAME}, careful of the spawn over there", emote: 0}
+      - "late night crew checking in"
+      - {line: "oh a lvl {PLAYER_LEVEL} {PLAYER_JOB}, nice", emote: 2}
+      - "what brings u out this way"
+      - {line: "hey {PLAYER_NAME}, u grinding or just passing thru?", emote: 0}
+      - "is it always this quiet or just today"
+      - {line: "another {PLAYER_JOB}, the more the merrier ^^", emote: 2}
+      - "killing time and mobs, u know how it is"
+      - "oh cool, hey"
+      - {line: "{PLAYER_NAME} right? think ive seen u around before", emote: 0}
+      - "grinding is better with people around, welcome ^^"
+      - "ur the first person ive seen in like an hour lol"
+      - {line: "oh hey {PLAYER_NAME}, nice to see a face after all this solo grinding", emote: 2}
+      - "sup, just here killing stuff as usual"
+      - {line: "wait is that {PLAYER_GUILD}? ive heard of u guys", emote: 2}
+      - "been pretty uneventful till u showed up"
+      - {line: "{PLAYER_NAME} out here too huh, respect", emote: 2}
+      - "hmm hey"
+      - "oh hey, map's all urs if u want it, im flexible"
+      - {line: "yo {PLAYER_NAME}, good to see u", emote: 2}
+      - "careful around here, mobs hit harder than they look"
+      - {line: "a {PLAYER_JOB}! always cool seeing different classes out here", emote: 2}
+      - "oh hey there"
+      - "oh a visitor :)"
+      - "nice to see another face"
+      - "been quiet until now"
+      - "hey, u doing okay?"
+      - "oh, cool, company"
+      - "hey lol, didn't hear u"
+      - "just me out here till now haha"
+      - {line: "oh hey ^^", emote: 2}
+      - "u passing thru or grinding?"
+      - "welcome to my little corner lol"
+      - "woah hey, didn't see u coming"
+      - "oh ur here"
+      - "hey, mobs are decent here if u wanna stay"
+      - "sup :)"
+      - {line: "oh hey {PLAYER_NAME}! didn't think anyone would be out here today", emote: 2}
+      - {line: "a lvl {PLAYER_LEVEL} {PLAYER_JOB}! nice, hey ^^", emote: 2}
+      - {line: "{PLAYER_NAME}! hey, how's the grind going", emote: 2}
+      - {line: "oh a {PLAYER_JOB}, rare to see one at this spot", emote: 6}
+      - {line: "yo {PLAYER_NAME}, been here long?", emote: 0}
+      - {line: "huh, a {PLAYER_JOB}, cool choice for this area ^^", emote: 2}
+      - {line: "{PLAYER_NAME}! u always show up when things are getting quiet", emote: 2}
+      - {line: "wait {PLAYER_GUILD}? ive heard of ur guild, hey!", emote: 2}
+      - {line: "oh a {PLAYER_JOB} out here, nice, this map suits ur build", emote: 0}
+      - {line: "{PLAYER_NAME}, u farming here or just passing thru?", emote: 0}
+      - {line: "oh hey {PLAYER_NAME}, didn't know u came to this area", emote: 2}
+      - {line: "a {PLAYER_JOB} huh, they always seem so focused when they grind", emote: 0}
+      - {line: "{PLAYER_NAME}! was wondering if anyone else was around", emote: 2}
+      - {line: "oh {PLAYER_NAME}, hey! lvl {PLAYER_LEVEL} already?", emote: 2}
+      - {line: "hey {PLAYER_NAME}, {PLAYER_JOB}s always make this map feel more lively", emote: 2}
+      - "just another soul on the grind"
+      - {{line: "oh {PLAYER_NAME}, nice to have u here", emote: 2}}
+      - "the map feels more alive now"
+      - {{line: "hey {PLAYER_JOB}, u look focused too ^^", emote: 2}}
+      - "solidarity in the grind"
+      - {{line: "{PLAYER_NAME} u doing ur thing i see", emote: 0}}
+      - "grinding together even if separately"
+      - {{line: "oh lvl {PLAYER_LEVEL}! thats solid", emote: 2}}
+      - "nice knowing someones else is out here"
+      - {{line: "{PLAYER_NAME} u look like u belong in this spot", emote: 2}}
+      - "good energy out here now"
+      - {{line: "oh a {PLAYER_JOB}! adds to the vibe", emote: 2}}
+      - "theyre in their zone and i respect that"
+      - {{line: "{PLAYER_NAME} seems like they know what theyre doing", emote: 0}}
+      - "not alone anymore and thats nice"
+      - {{line: "oh {PLAYER_JOB} paired with that level is perfect", emote: 2}}
+      - "the atmosphere just got better"
+      - {{line: "hey {PLAYER_NAME}, im vibing with ur energy", emote: 2}}
+      - "another grinder on the journey"
+      - {{line: "{PLAYER_JOB}s are always so cool to see", emote: 2}}
+      - "were just two people doing what we love"
+      - {{line: "{PLAYER_NAME} u got that grinder look", emote: 2}}
+      - "the solitude is comfortable now"
+      - {{line: "oh ur here too, {PLAYER_NAME}, nice", emote: 0}}
+      - "two is always better than one"
+      - {{line: "{PLAYER_JOB} at {PLAYER_LEVEL} is respectable", emote: 2}}
+      - "the map energy just leveled up"
+      - "ya were just here doing our thing ^^"
+    emote:
+      - 0
+      - 2
+      - 6
+    wait: 1
+
+  WanderChat:
+    text:
+      - "hmm..."
+      - "just wandering"
+      - "la la la"
+      - "..."
+      - "just vibing"
+      - "taking the scenic route lol"
+      - "hm. ok."
+      - {line: "no one around huh", emote: 4}
+      - "quiet today"
+      - "humming to myself"
+      - {line: "left or right tho", emote: 6}
+      - "tum tum tum"
+      - "drifting through {MAP}"
+      - "keep going i guess"
+      - "just passin thru"
+      - "breeze feels nice out here"
+      - "this town feels so quiet today"
+      - {line: "kinda tired but gonna keep going", emote: 4}
+      - {line: "this map is kinda cozy", emote: 2}
+      - "hope i ate enough today lol"
+      - "been walking for a while now lol"
+      - "nobody around, just me and the mobs"
+      - "just one more spot then ill take a break"
+      - "thinking about pots. should restock soon"
+      - {line: "no ks drama today at least ^^", emote: 2}
+      - "nowhere specific to be"
+      - {line: "not a bad day for grinding i guess", emote: 2}
+      - "the mobs werent giving great drops today"
+      - "could go back to {MAP} i guess"
+      - {line: "{MAP} is kinda nice when its empty like this", emote: 2}
+      - "been in {MAP} longer than i meant to"
+      - "something about {MAP} feels cozy"
+      - "half paying attention"
+      - {line: "probably should job advance soon... but later", emote: 7}
+      - "kinda lost track of where i was going"
+      - "sometimes u just gotta walk around for a bit u know"
+      - "the world feels really big when ur just walking around like this"
+      - {line: "not sure what to do after {MAP}", emote: 6}
+      - "wonder if anyones grinding {MAP} right now or if its empty"
+      - {line: "the mobs in {MAP} were kinda rough today", emote: 4}
+      - "scrolls running out"
+      - "keep grinding"
+      - "round and round"
+      - "next spot?"
+      - "old routine"
+      - "eyes hurt lol"
+      - "what level am i even at this point"
+      - "could use a snack or something"
+      - "the mobs here arent too bad i guess"
+      - "gotta make this run count"
+      - "the {MAP} night grind is kinda peaceful"
+      - "lost track of time like always"
+      - "my whole body hurts but like, gotta keep the grind alive"
+      - "sometimes i forget why i'm even here, then another mob drops something cool"
+      - "could keep going like this for hours, if i had the time"
+      - "i own every map i walk thru, just saying"
+      - {line: "THE MUSIC HERE IS SO GOOD i love this game", emote: 2}
+      - "where am i even going"
+      - "hm."
+      - {line: "{MAP} is such an underrated area honestly", emote: 0}
+      - "legs tired"
+      - {line: "love the vibe of {MAP}", emote: 2}
+      - "just one of those days"
+      - {line: "havent been to {MAP} in forever", emote: 0}
+      - "walking walking walking"
+      - "think im lost lol"
+      - {line: "the mobs in {MAP} are kinda annoying", emote: 5}
+      - "wonder what everyone else is doing"
+      - "feel like ive been walking in circles"
+      - {line: "should i go back to {MAP} or try somewhere new hmm", emote: 6}
+      - "just putting one foot in front of the other"
+      - "if i find a good spot ill camp it for hours"
+      - "kinda miss having someone to walk around with"
+      - {line: "{MAP} always feels different at night", emote: 0}
+      - "need to find my next grind spot"
+      - "footsteps and bgm, thats all i hear"
+      - {line: "people sleep on {MAP} but its actually decent", emote: 0}
+      - "still looking"
+      - "ok where was that portal again"
+      - {line: "been thru {MAP} like five times today lol", emote: 6}
+      - "just going wherever the portals take me"
+      - "drifting"
+      - "mobs here are chill at least"
+      - {line: "{MAP} in the afternoon hits different ^^", emote: 2}
+      - "zoning out and walking, my specialty"
+      - "my mind is completely blank, just walking"
+      - "where was i going again"
+      - "nothing but me and the bgm"
+      - "think ill just wander a lil longer"
+      - "portal? or no portal? hmm"
+      - "not in a hurry, nowhere to be"
+      - "it's kinda nice just existing out here"
+      - {line: "every map feels the same at 3am", emote: 0}
+      - "following my feet and seeing where they take me"
+      - "the game is so quiet at this hour"
+      - "just kind of... floating around"
+      - "another lap and ill decide something"
+      - "does it count as exploring if ive been here a hundred times"
+      - {line: "lost in thought more than in the map lol", emote: 6}
+      - "headphones in, world out"
+      - {line: "something about {MAP} makes me just wanna slow down", emote: 0}
+      - {line: "every time i walk thru {MAP} i notice something new", emote: 2}
+      - {line: "been circling {MAP} forever today, no plan, just walking", emote: 6}
+      - {line: "{MAP} is quieter than i expected today", emote: 0}
+      - {line: "think ive done this route thru {MAP} like ten times already lol", emote: 6}
+      - {line: "something peaceful about {MAP} even when there's nothing going on", emote: 0}
+      - {line: "{MAP} at this hour feels like the whole world belongs to me", emote: 2}
+      - {line: "still wandering {MAP}, no destination needed", emote: 0}
+      - {line: "do people even realize how nice {MAP} is? underrated", emote: 2}
+      - {line: "the corners of {MAP} where no one goes are kinda my favorite", emote: 0}
+      - {line: "{MAP} again. ok fine. i just keep coming back here", emote: 6}
+      - {line: "the {MAP} scenery never gets old honestly", emote: 2}
+      - {line: "keep meaning to leave {MAP} and then... dont", emote: 4}
+      - {line: "walking around {MAP} just kills time in the best way", emote: 2}
+      - {line: "wander mode: on. destination: {MAP} again apparently", emote: 6}
+      - "just thinking about where next"
+      - {{line: "{MAP} is calling me back again lol", emote: 6}}
+      - "exploring options for the next session"
+      - {{line: "the {MAP} scenery is never boring honestly", emote: 2}}
+      - "slow walk through familiar places"
+      - {{line: "{MAP} just has that feeling u know", emote: 0}}
+      - "wandering leads to discoveries sometimes"
+      - {{line: "thinking about whether to go back to {MAP}", emote: 6}}
+      - "the journey is as good as the destination"
+      - {{line: "{MAP} was good but maybe ill try {MAP}", emote: 0}}
+      - "letting my feet decide where to go"
+      - {{line: "the {MAP} vibes are good this time of day", emote: 2}}
+      - "just drifting and thinking"
+      - {{line: "{MAP} pulls me back every time no matter what", emote: 2}}
+      - "peaceful moment before the grind"
+      - {{line: "{MAP} still feels fresh somehow", emote: 0}}
+      - "contemplating next steps"
+      - {{line: "{MAP} is always an option but theres other places", emote: 6}}
+      - "enjoying the walk"
+      - {{line: "the {MAP} layout is so familiar now", emote: 0}}
+      - "taking time to enjoy the world"
+      - {{line: "{MAP} has become like home u know", emote: 2}}
+      - "wandering without destination"
+      - {{line: "{MAP} one more time or somewhere new", emote: 6}}
+      - "the adventure of finding ur next spot"
+      - {{line: "{MAP} waiting for me but im in no rush", emote: 0}}
+      - "just absorbing the world"
+      - "letting the path decide"
+    emote:
+      - 0
+      - 6
+      - 2
+    wait: 1
+
+  EmoteReaction:
+    text:
+      - "lol"
+      - "^^"
+      - "hehe"
+      - "omg"
+      - "haha ^^"
+      - "same"
+      - ":o"
+      - {line: "haha ok i see u", emote: 3}
+      - "lol that got me"
+      - {line: "haha stop it xD", emote: 7}
+      - "lol same energy"
+      - {line: "aw hehe <3", emote: 2}
+      - "u got me lol"
+      - "haha ok ^^"
+      - {line: "aw that actually made me smile", emote: 2}
+      - {line: "lol didn't expect that but ok ^^", emote: 6}
+      - "u and ur emotes lol"
+      - "that was kinda cute lol"
+      - "ty just vibing :)"
+      - "brb don't die T_T"
+      - "aw come on xD"
+      - "grinding hits different"
+      - "ur making my grind feel less lonely"
+      - "that was pretty funny lol"
+      - "im way too tired for this"
+      - "ur kinda making my day better"
+      - "mb was totally spacing; whats up"
+      - "fine fine im awake now"
+      - "lol yeah thats about right"
+      - "was i supposed to react to that"
+      - {line: "AHAHAHA ok ok ^^", emote: 2}
+      - "cool"
+      - "pfft, i can do better emotes than that"
+      - "hah"
+      - "nooo dont make me laugh im trying to focus xD"
+      - ":)"
+      - {line: "omg stop lol", emote: 7}
+      - "u and me both lol"
+      - "ok that was good"
+      - "xD"
+      - "nice one lol"
+      - "lmaoo"
+      - "ok ok i see u ^^"
+      - "wait do that again lol"
+      - {line: "ok that caught me off guard haha", emote: 6}
+      - "^^;;"
+      - "ahaha ok"
+      - "T_T"
+      - "whyyy xD"
+      - "smooth"
+      - "that one got me, wont lie"
+      - "hehe ok"
+      - {line: "omg STOP im dying xD", emote: 2}
+      - "oh lol"
+      - ":D"
+      - "we vibin"
+      - "ok now im actually awake lol"
+      - "u win this round ^^"
+      - "lol wait what was that"
+      - "pfft what even was that lol"
+      - "stop it im trying to be focused out here"
+      - "pff ok"
+      - "ur energy is something else lol"
+      - "ok fair"
+      - "that made my day a lil better not gonna lie"
+      - {line: "SAME tho ^^", emote: 2}
+      - "oh wow ok"
+      - "lol im so tired this got me"
+      - "ok ur fun"
+      - {line: "ur doing this just to mess with me aren't u", emote: 3}
+      - "i was zoning out and now im not, good job"
+      - "heh ok"
+      - "u're alright ^^"
+      - {line: "oh i see what ur doing, clever", emote: 3}
+      - "nice"
+      - "ok but seriously tho, again"
+      - "ok i genuinely laughed at that"
+      - "ur making me forget im supposed to be grinding"
+      - "lol i cant"
+      - {line: "well played, i concede", emote: 2}
+      - "ok u win, i smiled"
+      - "we are really vibing today haha"
+      - "kinda love this interaction"
+      - {line: "lol ok ur officially my favorite person in this map", emote: 2}
+      - "not laughing... ok yes i am"
+      - {line: "i genuinely needed that, ty ^^", emote: 2}
+      - "ok good point"
+      - "ok i give, ur actually funny"
+      - ":D"
+      - "word ^^"
+      - "lol ok ok"
+      - "haha fair"
+      - {line: "that got a genuine laugh", emote: 2}
+      - "ur hilarious lol"
+      - {{line: "ok ok u win this round", emote: 2}}
+      - "that was smooth ngl"
+      - "hehe fair enough"
+      - "ok that one made me smile"
+      - {{line: "omg ur funny like actually", emote: 2}}
+      - "lol u got me"
+      - "that was good"
+      - {{line: "wait thats actually a good point lol", emote: 2}}
+      - "u and ur jokes"
+      - "lmao ok fine"
+      - {{line: "nah ur right tho ^^", emote: 2}}
+      - "that cracked me up"
+      - "ok im convinced"
+      - {{line: "u almost made me forget im grinding lol", emote: 2}}
+      - "that was clever ngl"
+      - {{line: "ok u deserve a win for that one", emote: 2}}
+      - ":P"
+      - "ur actually the best"
+      - "ok that was chef's kiss"
+      - {{line: "ur making my grind so much better rn", emote: 2}}
+    emote:
+      - 2
+      - 6
+      - 0
+    wait: 1
+
+  # --- Party recruit menu (interactive, spoken directly to the asking player) ---
+
+  TrainingTalk:
+    text:
+      - {line: "pretty good! {MOB} exp is steady, cant complain", emote: 2}
+      - "slow but steady, u know how it is"
+      - {line: "honestly? {MAP} is underrated, exp is solid here", emote: 2}
+      - {line: "been at it a while, {MOB} are basically free exp at this point", emote: 3}
+      - "grinding's grinding lol, one bar at a time"
+      - {line: "decent! drops have been stingy tho", emote: 4}
+      - "cant complain, spawns are quick n nobody's fighting me for them"
+      - {line: "just vibing with the {MOB} honestly", emote: 0}
+      - "the exp bar moves if u stare at it hard enough lol"
+      - {line: "solid session so far, {MAP} never lets me down", emote: 2}
+      - "u know, mobs die, exp goes up, life is simple"
+      - {line: "almost leveled actually! few more {MOB} should do it", emote: 2}
+    emote:
+      - 2
+      - 0
+    wait: 1
+
+  PartyAccept:
+    text:
+      - "a party? sure!! send the invite, i keep grinding either way"
+      - {line: "yes pls, grinding with company beats solo. invite me {PLAYER_NAME}!", emote: 2}
+      - "ok deal, invite me. fair warning i dont stop swinging lol"
+      - {line: "sure {PLAYER_NAME}, shoot the invite, more the merrier", emote: 2}
+      - "finally someone asks!! yes, invite me"
+      - "im down. invite me n grab a spot, mobs are plenty"
+      - {line: "party exp bonus? say less. invite me ^^", emote: 3}
+      - "yeah ok! this map's better with two anyway, send it"
+      - {line: "sure thing {PLAYER_NAME}, invite me, ill hold this side down", emote: 2}
+      - "ok but i already claimed this ledge, u can have the rest lol. invite me!"
+    emote:
+      - 2
+      - 3
+    wait: 1
+
+  PartyDecline:
+    text:
+      - "sry im in my solo grind era rn"
+      - {line: "nah, im racing a guildie to the next level, cant split exp", emote: 3}
+      - "mm pass, i ks people by accident, better for everyone if im solo lol"
+      - {line: "cant! almost at my level goal n im not sharing these {MOB}", emote: 5}
+      - "sry, im logging soon, wouldnt be a fair party member"
+      - {line: "nahh {PLAYER_NAME}, party exp math doesnt math for me today", emote: 0}
+      - "not today, this is my meditation time lol"
+      - "id just slow u down... is what im telling myself. no ty"
+      - {line: "cant, im doing a no-party challenge run. its going terribly", emote: 7}
+      - "hmm no ty, the mobs and i have an understanding"
+      - "sry, last party wiped n took my exp with them, still recovering T_T"
+      - {line: "pass! but ur welcome to half the map {PLAYER_NAME}", emote: 0}
+      - "solo grind hits different, sry"
+      - "gonna pass rn, im way too deep in the zone sry"
+    emote:
+      - 0
+      - 4
+      - 3
+    wait: 1
+
+  PartyJoined:
+    text:
+      - "in!! ok lets farm, party exp lets gooo"
+      - {line: "joined ^^ ok {PLAYER_NAME} pick a side, mobs for days", emote: 2}
+      - "accepted! back to swinging, enjoy the shared exp"
+      - {line: "party up! ur timing is good, spawns are hot rn", emote: 2}
+      - "ok we're official, dont steal my ledge tho lol"
+      - "invite accepted, lets make these mobs regret spawning"
+      - {line: "nice, a party! ok {PLAYER_NAME}, watch this", emote: 3}
+      - "joined! grinding together > grinding alone"
+    emote:
+      - 2
+    wait: 1
+
+  FollowAccept:
+    text:
+      - "ok ok packing up, lead the way!"
+      - {line: "field trip?? yes. right behind u {PLAYER_NAME}", emote: 2}
+      - "sure, this spot was drying up anyway, im with u"
+      - {line: "ok {PLAYER_NAME}, u navigate, i follow, deal", emote: 2}
+      - "aight im done here then, show me this better map of urs"
+      - "following! if this new spot is worse im blaming u lol"
+      - {line: "yep gimme a sec... ok lets move ^^", emote: 2}
+      - "deal, ive been curious whats past this map anyway"
+    emote:
+      - 2
+    wait: 1
+
+  PartyFirst:
+    text:
+      - "invite me to ur party first so i dont lose u!"
+      - {line: "party me first {PLAYER_NAME}, then ill follow u anywhere", emote: 0}
+      - "no party no follow, them's the rules lol"
+      - "gotta be party members first, send the invite!"
+      - {line: "im not following a stranger lol, party invite first ^^", emote: 3}
+      - "ask me to party first, THEN we talk field trips"
+    emote:
+      - 0
+      - 2
+    wait: 1
+
+  AlreadyPartied:
+    text:
+      - "we're literally already partied lol"
+      - {line: "{PLAYER_NAME}... check ur party tab hehe", emote: 3}
+      - "uh, look at ur party list ^^"
+      - "already in! short memory much? lol"
+      - {line: "we ARE a party, now get over here n grind", emote: 2}
+      - "cant join twice, thats not how parties work xD"
+    emote:
+      - 3
+      - 2
+    wait: 1
+
+  Goodbye:
+    text:
+      - "cya! back to the grind"
+      - {line: "later {PLAYER_NAME}, gl out there", emote: 2}
+      - "ok these mobs arent gonna kill themselves, cya"
+      - "peace! ill be here, as always lol"
+      - {line: "cya around {PLAYER_NAME} ^^", emote: 2}
+      - "later! swing by if u change ur mind about that party"
+    emote:
+      - 2
+      - 0
+    wait: 1
+
+  # --- Grind breaks (rest flavor; Fatigue plays mid-break) ---
+
+  BreakStart:
+    text:
+      - "brb bathroom"
+      - "grabbing a snack real quick, mobs dont move"
+      - {line: "thirsty, need a water refill, brb", emote: 0}
+      - "gonna stretch my legs for a min"
+      - {line: "afk a sec, dont touch my spot lol", emote: 3}
+      - "my eyes need a break from this screen"
+      - "brb, someone's at the door"
+      - "quick break, i earned it"
+      - {line: "food break!! back in a min", emote: 2}
+      - "gotta stand up, my legs are asleep"
+      - "1 min break, the mobs can wait"
+      - {line: "pausing real quick, hands need a rest", emote: 4}
+      - "brb refilling my drink"
+      - {line: "ok 5 min break... fine, 1 min break", emote: 6}
+    emote:
+      - 0
+      - 4
+      - 6
+    wait: 1
+
+  BreakOver:
+    text:
+      - "ok back to it"
+      - {line: "im back, did i miss anything", emote: 2}
+      - "break over, mobs beware"
+      - {line: "refreshed n ready, lets go", emote: 2}
+      - "ok that helped, round two"
+      - "back! ok where was i"
+      - {line: "water acquired, grind resumed", emote: 2}
+      - "alright, focus time again"
+      - {line: "im back babyyy", emote: 2}
+      - "ok break's over, these levels wont grind themselves"
+    emote:
+      - 2
+      - 0
+    wait: 1
+
+  # Chalkboard sign texts while resting - keep these SHORT (they render on a small board).
+  BreakSign:
+    text:
+      - "brb"
+      - "getting water"
+      - "afk 1 min"
+      - "bathroom brb"
+      - "snack break"
+      - "brb dont ks pls"
+      - "resting a sec"
+      - "back soon"
+      - "brb food"
+      - "stretching"
+    emote:
+      - 0
+    wait: 1
+
+# --- Per-job signature overlays (§7). Merged into the base pool by job suffix once wired. ---
+
+TrainingBot_Warrior:
+  Signature:
+    text:
+      - {line: "just stand in the middle n swing, warrior life ez", emote: 3}
+      - "tanky enough to facetank these all day"
+      - {line: "rushing {MOB} into a pile then brandish, so satisfying", emote: 2}
+      - {line: "no pots needed lol i just out-hp the whole map", emote: 3}
+      - {line: "big sword go thwack, dont overthink it", emote: 0}
+      - {line: "did a lil hp washing earlier, tanky as a wall now :)", emote: 2}
+      - {line: "power strike still hits like a truck, love this job", emote: 3}
+      - {line: "wading into {MOB} n just slash blastin away", emote: 0}
+      - {line: "my arms tired from swingin all day but cant stop", emote: 4}
+      - {line: "crusader advance soon, then the real grind starts", emote: 0}
+      - "spinning slash just melts groups of {MOB}s lol"
+      - "my gear's gettin better n my damage keeps scaling up"
+      - "warrior job makes grinding feel less like work"
+      - "one day ill be paladin but for now im just enjoyin warrior dmg"
+      - {line: "if ur not a warrior ur just doing it wrong", emote: 3}
+      - {line: "SLASH BLAST THE WHOLE PACK YESSS", emote: 2}
+      - "swing."
+      - "these mobs couldnt scratch me if they tried"
+      - {line: "hp so high i forgot what red looks like lol", emote: 3}
+      - "combo attack into the whole room, so clean"
+      - {line: "warrior tax is real, gear costs so much T_T", emote: 4}
+      - "just me and my sword against the world"
+      - {line: "rushing into {MOB} and just cleaving everything feels amazing", emote: 2}
+      - "gonna be a hero someday, literally, the job advance"
+      - {line: "warriors never retreat, we just advance forward... backwards", emote: 3}
+      - "wrist hurts from swinging so much, worth it"
+      - "sword builds are the only honest way to play this game"
+      - {line: "slashing through packs and feeling absolutely unstoppable", emote: 3}
+      - "warrior players built different, fight me"
+      - "defensive stance and just tanking it. warrior way."
+      - "not the flashiest class but the most satisfying to play honestly"
+      - {line: "if i have to see my hp go red ONE more time...", emote: 5}
+      - {line: "standing in the middle of {MOB} like a statue and just swinging, peak warrior", emote: 3}
+      - {line: "slashing {MOB} in half while tanking the hit, that's just class", emote: 3}
+      - {line: "{MOB} are falling so fast today, warriors were built for this", emote: 2}
+      - {line: "rush into {MOB} pack, slash blast, done. warriors make it look easy", emote: 3}
+      - {line: "taking hits from {MOB} and not even caring, high hp builds rule", emote: 0}
+      - {line: "{MOB} can barely dent me. warrior tax is worth it for this.", emote: 3}
+      - {line: "watching {MOB} bounce off my hp like nothing, warrior life is good", emote: 2}
+    emote:
+      - 3
+      - 0
+      - 2
+    wait: 1
+
+TrainingBot_Mage:
+  Signature:
+    text:
+      - {line: "one cast and the whole pack of {MOB} is gone, mage life", emote: 3}
+      - "low on mp again, brb sipping blue pots"
+      - {line: "teleport spam makes grinding so smooth ^^", emote: 2}
+      - {line: "blizzard the whole room then watch the exp roll in lol", emote: 3}
+      - "honestly one good aoe clears faster than my warrior friend swings twice"
+      - {line: "got jumped by {MOB} and nearly died, we mages r so squishy :(", emote: 4}
+      - "just finished mp washing, hp pool feels a lil better now"
+      - {line: "poison brace ticking away while i sip pots, comfy grind", emote: 0}
+      - {line: "thunderbolt go brrr, cant believe how fast this map melts", emote: 3}
+      - "wish i had a cleric friend grinding with me, healing would be so nice"
+      - "ice spear locks {MOB} while i pump spells, ez control"
+      - "poison ticking while i spam spells, f/p builds slap"
+      - "pots going down so fast, mp tax is crazy"
+      - "spells syncing perfect, that's the smooth mage grind"
+      - {line: "i could explain my build but ur brain would freeze. get it. i/l joke.", emote: 3}
+      - {line: "MP POTS COST MORE THAN MY RENT IN THIS GAME", emote: 5}
+      - "cast."
+      - {line: "MAGIC CLAW GOES BRRRRR", emote: 2}
+      - "teleporting makes every other class feel so slow honestly"
+      - {line: "one aoe and the whole platform is cleared, mage things ^^", emote: 3}
+      - {line: "out of mp AGAIN how is this possible", emote: 5}
+      - "INT gear is so hard to scroll ugh"
+      - {line: "meditation buff then straight to blasting {MOB}", emote: 0}
+      - "squishy but powerful, thats the mage way"
+      - "mp pots are my whole personality at this point"
+      - {line: "i teleport so much my legs forgot how to walk normally", emote: 3}
+      - "AoE clears are so satisfying, no other way to say it"
+      - "being squishy means nothing when u can clear a room in one cast"
+      - {line: "mages age so badly until they don't, and then they don't", emote: 0}
+      - "sometimes i drink so many blue pots i forget what hp pots look like"
+      - "teleport spam is the closest this game has to flight and i love it"
+      - {line: "people say mage is squishy. people have never seen my cast speed.", emote: 3}
+      - {line: "whole pack of {MOB} gone in two casts, mage things ^^", emote: 3}
+      - {line: "cleared the whole {MOB} spawn before the first one could even move lol", emote: 3}
+      - {line: "watching {MOB} get frozen mid-charge is never not funny", emote: 3}
+      - {line: "AoE on {MOB} and they just... cease to exist. beautiful.", emote: 3}
+      - {line: "i am running low on mp from blasting {MOB} but do i stop? no", emote: 5}
+      - {line: "teleport past {MOB}, cast behind them, they don't even know what happened", emote: 3}
+      - {line: "{MOB} sees me and doesn't realize the cast is already going lol", emote: 3}
+    emote:
+      - 3
+      - 0
+      - 2
+    wait: 1
+
+TrainingBot_Thief:
+  Signature:
+    text:
+      - {line: "crit after crit on {MOB}, lucky seven goes brr", emote: 3}
+      - "stars are so expensive, half my mesos gone"
+      - {line: "dodged every hit, avoid build is the way ^^", emote: 2}
+      - {line: "savage blow just shredded that {MOB}, claw life", emote: 3}
+      - "down to my last few stars again, gotta hit the shop soon :("
+      - {line: "haste on and im zoomin past everything lol", emote: 0}
+      - {line: "no crits this whole pull, my luck ran out", emote: 4}
+      - {line: "drain keeps me topped off, bandit grind is so chill", emote: 0}
+      - {line: "stars flyin everywhere, this {MOB} never stood a chance", emote: 3}
+      - "ilbis cost more than they kill some days, my wallet hurts"
+      - "back to back crits, feeling lucky"
+      - "evasion working overtime, {MOB} is whiffing hard"
+      - "throwing stars are eating my mesos"
+      - "claw attacks hit way harder than expected"
+      - {line: "every hit is a crit when ur this good", emote: 3}
+      - {line: "CRIT CRIT CRIT LETS GOOO", emote: 2}
+      - "..."
+      - {line: "STAR PRICES ARE A CRIME AGAINST THIEVES EVERYWHERE", emote: 5}
+      - {line: "dodge dodge dodge, cant touch this ^^", emote: 3}
+      - "luk build pays off when u see those crit numbers"
+      - {line: "just restocked on steelys, wallet is crying T_T", emote: 4}
+      - "assassinate would be so nice, cant wait for 4th job"
+      - {line: "flash jumped right past that {MOB}, clean", emote: 2}
+      - "dark sight saved me again, best skill in the game"
+      - "if i crit i win, and i usually crit"
+      - {line: "dark sight is the best passive in the game and i will die on this hill", emote: 3}
+      - "every star thrown is a statement"
+      - "the dodge rate on this build is genuinely absurd, i love it"
+      - {line: "assassin life is just counting ur stars n hoping for crits lol", emote: 3}
+      - "thieves clear FAST when it all clicks"
+      - "luk is the real stat, convince me otherwise"
+      - {line: "my star pouch is empty again. already. every time.", emote: 4}
+      - {line: "flash jump over {MOB}, claw on the way down, ez clear", emote: 3}
+      - {line: "stars into {MOB} from across the platform, clean as always", emote: 3}
+      - {line: "every {MOB} i dodge makes the whole build feel worth it", emote: 2}
+      - {line: "crit on {MOB} and the number was HUGE, heart skipped lol", emote: 2}
+      - {line: "haste active, zoomed past {MOB} without taking a single hit", emote: 3}
+      - {line: "dark sight thru the {MOB} spawn, they dont even notice me lol", emote: 3}
+      - {line: "{MOB} aggros me and i just dodge the whole thing, thief builds are so fun", emote: 2}
+    emote:
+      - 3
+      - 0
+      - 2
+    wait: 1
+
+TrainingBot_Bowman:
+  Signature:
+    text:
+      - {line: "pick em off before they even reach me, range gang", emote: 3}
+      - "outta arrows again ugh, gotta restock"
+      - {line: "kiting {MOB} around the platform, never even got touched ^^", emote: 2}
+      - {line: "soul arrow on so i dont even gotta buy arrows for a bit lol", emote: 3}
+      - "spacing is everything, just strafe and they never land a hit"
+      - {line: "arrow rain into the whole pack, cleared the ledge in one go", emote: 3}
+      - "watching the sun come up while i pick off {MOB}, comfy grind"
+      - {line: "ran dry on arrows mid {MOB} pack, ugh classic", emote: 5}
+      - "eye of amazon makes this whole map feel so small lol"
+      - "just me n my bow up here, real chill night"
+      - "bow up high on this platform, they're so far below me lol"
+      - "arrows hit so clean from up here ^^"
+      - "mana's full, soul arrow's ticking, just vibing :)"
+      - "standing still and strafing, {MOB} can't keep up lol"
+      - {line: "why get close when u can snipe from across the map lol", emote: 3}
+      - {line: "HURRICANE MODE ACTIVATED LETS GO", emote: 2}
+      - "aim."
+      - {line: "I RAN OUT OF ARROWS MID-PULL THIS IS THE WORST DAY", emote: 5}
+      - {line: "sniping {MOB} from the top platform, they never see it coming ^^", emote: 3}
+      - "strafe kiting is an art form and i am the artist"
+      - {line: "soul arrow ran out, back to buying arrows T_T", emote: 4}
+      - "bowman life is so peaceful, just me and my bow up high"
+      - {line: "arrow rain on the whole pack of {MOB}, beautiful ^^", emote: 2}
+      - "DEX builds scale so well, best stat dont @ me"
+      - "range is everything, close range is for people who like getting hit"
+      - {line: "soul arrow on, arrows infinite, this is the life ^^", emote: 3}
+      - "positioning is the unspoken core mechanic of bowman and i mastered it"
+      - "the platform up top is mine. has always been mine."
+      - {line: "every shot counts when ur a bowman, love the precision", emote: 2}
+      - "dex stat scaling is the cleanest curve in the game honestly"
+      - "running out of arrows mid-pull is a bowman rite of passage"
+      - {line: "i could stand here all day and never take a hit, range solves everything", emote: 3}
+      - {line: "kiting {MOB} along the ledge while they cant reach me, perfection", emote: 3}
+      - {line: "arrow rain on the {MOB} pack, watched the whole platform clear", emote: 3}
+      - {line: "sniping {MOB} before they even spawn fully, range advantage is real", emote: 3}
+      - {line: "{MOB} never even gets close enough to hit me, bowman moment", emote: 3}
+      - {line: "strafe kiting {MOB} around the whole platform, not a scratch taken", emote: 2}
+      - {line: "eye of amazon up, watching {MOB} from the other side of the map lol", emote: 3}
+      - {line: "hurricane into the {MOB} pack, they never stood a chance ^^", emote: 2}
+    emote:
+      - 3
+      - 0
+      - 2
+    wait: 1

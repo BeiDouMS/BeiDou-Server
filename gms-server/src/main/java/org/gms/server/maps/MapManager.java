@@ -58,27 +58,34 @@ public class MapManager {
         return getMap(mapid);
     }
 
-    private synchronized MapleMap loadMapFromWz(int mapid, boolean cache) {
-        MapleMap map;
-
+    /**
+     * Load a map without holding {@code synchronized(this)} across WZ/DB I/O.
+     * Holding the monitor while {@link MapFactory#loadLifeFromDb} waits on the
+     * Druid pool deadlocks under SoloMapling mass spawn (other threads hold DB
+     * connections and block on this same monitor).
+     */
+    private MapleMap loadMapFromWz(int mapid, boolean cache) {
         if (cache) {
             mapsRLock.lock();
             try {
-                map = maps.get(mapid);
+                MapleMap existing = maps.get(mapid);
+                if (existing != null) {
+                    return existing;
+                }
             } finally {
                 mapsRLock.unlock();
             }
-
-            if (map != null) {
-                return map;
-            }
         }
 
-        map = MapFactory.loadMapFromWz(mapid, world, channel, event);
+        MapleMap map = MapFactory.loadMapFromWz(mapid, world, channel, event);
 
         if (cache) {
             mapsWLock.lock();
             try {
+                MapleMap raced = maps.get(mapid);
+                if (raced != null) {
+                    return raced;
+                }
                 maps.put(mapid, map);
             } finally {
                 mapsWLock.unlock();

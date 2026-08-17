@@ -32,6 +32,7 @@ import org.gms.net.packet.Packet;
 import org.gms.server.Trade;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
+import soloMapling.ArtificialPlayer.BotHelpers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -126,7 +127,7 @@ public class PlayerShop extends AbstractMapObject {
         for (int i = 0; i < 3; i++) {
             if (visitors[i] == null) {
                 visitors[i] = visitor;
-                visitor.setSlot(i);
+                visitor.setSlot(i + 1);
 
                 this.broadcast(PacketCreator.getPlayerShopNewVisitor(visitor, i + 1));
                 owner.getMap().broadcastMessage(PacketCreator.updatePlayerShopBox(this));
@@ -339,7 +340,7 @@ public class PlayerShop extends AbstractMapObject {
         visitorLock.lock();
         try {
             for (int i = 0; i < 3; i++) {
-                if (visitors[i] != null) {
+                if (visitors[i] != null && !BotHelpers.isBot(visitors[i])) {
                     visitors[i].sendPacket(packet);
                 }
             }
@@ -421,17 +422,20 @@ public class PlayerShop extends AbstractMapObject {
     }
 
     public void chat(Client c, String chat) {
-        byte s = getVisitorSlot(c.getPlayer());
+        chat(c.getPlayer(), chat);
+    }
 
+    public void chat(Character player, String chat) {
+        byte s = getVisitorSlot(player);
         synchronized (chatLog) {
-            chatLog.add(new Pair<>(c.getPlayer(), chat));
+            chatLog.add(new Pair<>(player, chat));
             if (chatLog.size() > 25) {
                 chatLog.remove(0);
             }
-            chatSlot.put(c.getPlayer().getId(), s);
+            chatSlot.put(player.getId(), s);
         }
 
-        broadcast(PacketCreator.getPlayerShopChat(c.getPlayer(), chat, s));
+        broadcast(PacketCreator.getPlayerShopChat(player, chat, s));
     }
 
     private void recoverChatLog() {
@@ -490,6 +494,12 @@ public class PlayerShop extends AbstractMapObject {
         }
     }
 
+    public void setItems(List<PlayerShopItem> premadeShop) {
+        synchronized (items) {
+            items.addAll(premadeShop);
+        }
+    }
+
     public boolean hasItem(int itemid) {
         for (PlayerShopItem mpsi : getItems()) {
             if (mpsi.getItem().getItemId() == itemid && mpsi.isExist() && mpsi.getBundles() > 0) {
@@ -536,6 +546,46 @@ public class PlayerShop extends AbstractMapObject {
         return bannedList.contains(name);
     }
 
+    public boolean botBuy(Character bot, PlayerShopItem shopItem, int itemPosition, short quantity) {
+        synchronized (items) {
+            if (!shopItem.isExist() || shopItem.getBundles() < quantity) {
+                return false;
+            }
+
+            visitorLock.lock();
+            try {
+                int price = (int) Math.min((float) shopItem.getPrice() * quantity, Integer.MAX_VALUE);
+                if (!owner.canHoldMeso(price)) {
+                    return false;
+                }
+
+                price -= Trade.getFee(price);
+                owner.gainMeso(price, true);
+
+                SoldItem soldItem = new SoldItem(bot.getName(), shopItem.getItem().getItemId(), quantity, price);
+                if (!BotHelpers.isBot(owner)) {
+                    owner.sendPacket(PacketCreator.getPlayerShopOwnerUpdate(soldItem, itemPosition));
+                }
+                synchronized (sold) {
+                    sold.add(soldItem);
+                }
+
+                shopItem.setBundles((short) (shopItem.getBundles() - quantity));
+                if (shopItem.getBundles() < 1) {
+                    shopItem.setDoesExist(false);
+                    if (++boughtnumber == items.size()) {
+                        owner.setPlayerShop(null);
+                        setOpen(false);
+                        closeShop();
+                    }
+                }
+                return true;
+            } finally {
+                visitorLock.unlock();
+            }
+        }
+    }
+
     public synchronized boolean visitShop(Character chr) {
         if (this.isBanned(chr.getName())) {
             chr.dropMessage(1, "You have been banned from this store.");
@@ -552,7 +602,9 @@ public class PlayerShop extends AbstractMapObject {
             if (this.hasFreeSlot() && !this.isVisitor(chr)) {
                 this.addVisitor(chr);
                 chr.setPlayerShop(this);
-                this.sendShop(chr.getClient());
+                if (!BotHelpers.isBot(chr)) {
+                    this.sendShop(chr.getClient());
+                }
 
                 return true;
             }

@@ -29,7 +29,7 @@ import org.gms.client.inventory.Item;
 public class PlayerShopItem {
     private final Item item;
     private short bundles;
-    private final int price;
+    private int price;
     private boolean doesExist;
 
     public PlayerShopItem(Item item, short bundles, int price) {
@@ -57,6 +57,10 @@ public class PlayerShopItem {
 
     public int getPrice() {
         return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public void setBundles(short bundles) {

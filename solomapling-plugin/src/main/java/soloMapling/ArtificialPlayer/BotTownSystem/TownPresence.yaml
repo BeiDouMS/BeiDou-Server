@@ -1,0 +1,83 @@
+# Town Presence — ambient social-bot population per town (v0.4).
+#
+# One entry per town. `maps` is the town's map family: the main town map plus any interior sub-maps
+# (hospital, hideout, shops, salon). Each map carries its own fixed headcount so counts are hand-tunable
+# (owner decision, 2026-07-07). Bots are placed by the anchor-weighted sampler (TownPresenceSampler):
+# they cluster near NPCs/shops and on the main ground band, with a thin tail of stragglers on high
+# ledges — no per-map coordinates needed.
+#
+# Level band sets the decorator tier/gear/job spread for that town's ambient crowd.
+#
+# `count` (per map) = STATIONED SocialBots that stand at anchor-weighted spots being social.
+# `wanderers` (per town) = ROAMING TownWandererBots that stroll the town's map family, emote, and drift
+#   between sub-maps. Henesys is intentionally absent — its hand-polished HenesysBots already cover it;
+#   add a Henesys entry with a small `wanderers` only if you want a light top-up on top of them.
+#
+# To add an interior sub-map, append another `{map: <id>, count: <n>}` under that town's `maps:` —
+# NPC-anchored placement is near-perfect in interiors since the NPCs define the room. 2–4 bots make a
+# small room look lived-in. Seeded with main town maps only; interiors are added during curation.
+#
+# CURATION OVERRIDES (optional, per map) — the algorithm is the floor; these are the hand-polish on top.
+# Switch a map from the compact `{map, count}` form to a block and add any of:
+#   pins:  [{x: 1200, y: 200}, ...]                 # exact spots, always placed first
+#   ban:   [{x1: 3000, x2: 4000}, ...]              # never place here (y1/y2 optional = full height)
+#   boost: [{x1: 900, x2: 1600, mult: 2.5}, ...]    # multiply the crowd weight in this band
+# The in-game `!env townpresence mark [mapId]` command appends pins to the machine-owned TownPins.txt
+# sidecar (so this file's comments stay intact); those merge in automatically.
+#
+# After editing, apply live with `!env townpresence reload` (no server restart needed).
+
+towns:
+  - name: Kerning City
+    level_lo: 15
+    level_hi: 70
+    wanderers: 6
+    maps:
+      - {map: 103000000, count: 14}   # Kerning City (wide — spreads horizontally)
+      # Example of the override block form (delete the line above and uncomment to use):
+      # - map: 103000000
+      #   count: 14
+      #   pins: [{x: 300, y: 83}]        # e.g. always put someone by the west entrance
+      #   ban:  [{x1: 3200, x2: 4200}]   # e.g. keep bots off the far crane platform
+
+  - name: Ellinia
+    level_lo: 10
+    level_hi: 60
+    wanderers: 5
+    maps:
+      - {map: 101000000, count: 10}   # Ellinia (tall/skinny — concentrates low)
+
+  - name: Perion
+    level_lo: 10
+    level_hi: 65
+    wanderers: 5
+    maps:
+      - {map: 102000000, count: 10}   # Perion
+
+  - name: Sleepywood
+    level_lo: 25
+    level_hi: 80
+    wanderers: 5
+    maps:
+      - {map: 105040300, count: 10}   # Sleepywood
+
+  - name: Orbis
+    level_lo: 30
+    level_hi: 86
+    wanderers: 6
+    maps:
+      - {map: 200000000, count: 12}   # Orbis
+
+  - name: Ludibrium
+    level_lo: 25
+    level_hi: 90
+    wanderers: 6
+    maps:
+      - {map: 220000000, count: 14}   # Ludibrium (large)
+
+  - name: El Nath
+    level_lo: 50
+    level_hi: 85
+    wanderers: 5
+    maps:
+      - {map: 211000000, count: 10}   # El Nath

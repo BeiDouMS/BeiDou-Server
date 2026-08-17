@@ -1,0 +1,50 @@
+portal_versions:
+  674030100: 99 # Entrance to MV Lair
+  300000100: 99 # Entrance to Altair Forest
+  105100000: 99 # Balrog Boss Bottom of the Temple
+
+  221000000: 24 # Omega Sector
+  200082300: 26 # Orbis - Orbis Tower<B2> - Aqua Road
+  101030101: 34 # GPQ Excavation Site
+  200080101: 35 # OPQ
+  222000000: 37 # Korean Folk Town
+  600000000: 40 # NLC town Center
+  251000000: 41 # Herb Town
+  250000000: 41 # Mu Lung
+  682000100: 44 # Haunted house Foyer
+  610010000: 44 # Phantom Forest Bent Tree
+  240000000: 49 # Leafre
+  240010100: 49 # Minar Forest West Border
+  801030000: 54 # Showa Street 3
+  120000000: 62 # Nautilus Harbor (also removes it from the bot taxi network)
+  120010000: 62 # On The Way to the Harbor - Pirates
+  120000100: 62 # Nautilus Top Floor
+  120000200: 62 # Nautilus Submarine
+  610030010: 66 # CWK Hall of Mastery
+  270000000: 72 # Temple of Time Three Doors
+  130000200: 73 # Crossroads of Ereve
+  130000000: 73 # Ereve
+  925020001: 75 # Mu Lung Dojo Hall
+  551000100: 77 # Malaysia - Hard to control due to NPC's
+  106020000: 80 # Theme Dungeon Mushroom Castle
+  240070000: 83 # Tera Forest Time Gate
+  103040000: 83 # Kerning Square Lobby
+
+  # Mini-dungeon (single-person instance) entry maps — the 12 in server/maps/MiniDungeonInfo.
+  # These never get bots: every entrance is a SCRIPTED portal (MD_*), so the world graph builds no
+  # edge to them and isPortalinCurrentVersion is never even consulted (the gate only runs for plain
+  # target portals). Listed here for documentation/defense-in-depth; the real guard that keeps bots
+  # out of every instance (the full dungeonId..dungeonId+count ranges) is MiniDungeonInfo.isDungeonMap
+  # in BotGrindSystem/TrainingMapFinder. version 99 = permanently gated.
+  100020100: 99 # Henesys Pig Farm (Pig, Ribbon Pig)
+  105040320: 99 # Golem's Castle Ruins (Stone/Mixed Golem)
+  105050101: 99 # Cave of Mushrooms (Horny/Zombie Mushroom)
+  105090320: 99 # Drake's Blue Cave (Dark Drake)
+  221023401: 99 # Drummer Bunny's Lair (Drumming Bunny)
+  240020512: 99 # Round Table of Kentaurus (Kentaurus)
+  240040800: 99 # Restoring Memory (Skelegon, Skelosaurus)
+  240040900: 99 # Newt Secured Zone (Jr. Newtie)
+  251010410: 99 # Pillage of Treasure Island (Captain)
+  260020630: 99 # Hill of Sandstorms (Sand Rat)
+  261020301: 99 # Critical Error (Roid)
+  551030001: 99 # Longest Ride on Byebye Station (Froscola, Jester Scarlion)

@@ -1,0 +1,201 @@
+# =============================================================================
+# Equip Omit List - items bots must never auto-equip at spawn
+# =============================================================================
+# These are valid, equippable WZ items (correct reqLevel / reqJob / gender), so
+# the range-based selection in getRandomEquip and GenericEquipPool would pick
+# them like any other gear - but they look terrible on a bot. The classic case
+# is the "flag" items: decorative flag poles equipped as weapons (a bot
+# "attacks" by waving a flag), plus a few national-flag cosmetics.
+#
+# How it works (see EquipOmitList.java):
+#   - Both spawn-equip paths (full decoration via getRandomEquip, and the fast
+#     QuickEquip path via GenericEquipPool) skip these ids and re-roll a
+#     different item of the SAME slot, so the bot just gets something else.
+#   - This does NOT touch the NX cosmetic overlay (BotDecorateNX) or Free Market
+#     shop inventory generation - only the base equips a bot wears at spawn.
+#
+# To add/remove an item: edit the `ids` list below (inline "# name" comments are
+# allowed and ignored by the parser). Set `enabled: false` to switch the whole
+# list off and let bots wear everything again. The optional `ranges` block omits
+# a contiguous id block at once.
+#
+# Item ids were pulled from wz/String.wz/Eqp.img.xml by name. Camouflage gear
+# (Camouflaged Helmet/Uniform/Pants) matched a "flag" substring search but is
+# real military gear that looks fine, so it is intentionally NOT listed here.
+# =============================================================================
+
+enabled: true
+
+ids:
+  # --- Flag-pole WEAPONS (worst offenders - a bot "fights" holding a flag) ---
+  # Maple anniversary flags
+  - 1302033   # Maple Flag
+  - 1302035   # Maple Flag : 1000 Days
+  - 1302036   # Maple Flag : 1000 Days
+  - 1302065   # Blue Maple Flag
+  - 1302066   # Maple 1500 Anniv. Flag
+  - 1302067   # Maple 1500 Anniv. Flag
+  - 1312033   # Maple 1500 Anniv. Flag (axe)
+  - 1322055   # Maple 1500 Anniv. Flag (mace)
+  - 1332057   # Maple 1500 Anniv. Flag (dagger)
+  - 1382040   # Maple 1500 Anniv. Flag (staff)
+  - 1402040   # Maple 1500 Anniv. Flag (2H sword)
+  - 1412028   # Maple 1500 Anniv. Flag (2H axe)
+  - 1422032   # Maple 1500 Anniv. Flag (2H mace)
+  - 1432041   # Maple 1500 Anniv. Flag (spear)
+  - 1442052   # Maple 1500 Anniv. Flag (polearm)
+  - 1452046   # Maple 1500 Anniv. Flag (bow)
+  - 1462041   # Maple 1500 Anniv. Flag (crossbow)
+  - 1472056   # Maple 1500 Anniv. Flag (claw)
+  # National flags (Singapore / Malaysia)
+  - 1302073   # Singapore Flag (Beginner)
+  - 1302074   # Malaysia Flag (Beginner)
+  - 1302075   # Singapore Flag (One Handed Sword)
+  - 1302076   # Malaysia Flag (One Handed Sword)
+  - 1312036   # Malaysia Flag (One Handed Axe)
+  - 1322057   # Singapore Flag (One Handed Mace)
+  - 1322058   # Malaysia Flag (One Handed Mace)
+  - 1332060   # Singapore Flag (Dagger)
+  - 1332061   # Malaysia Flag (Dagger)
+  - 1382043   # Singapore Flag (Staff)
+  - 1382044   # Malaysia Flag (Staff)
+  - 1402042   # Singapore Flag (Two Handed Sword)
+  - 1412030   # Singapore Flag (Two Handed Axe)
+  - 1412031   # Malaysia Flag (Two Handed Axe)
+  - 1422034   # Singapore Flag (Two Handed Mace)
+  - 1432043   # Singapore Flag (Spear)
+  - 1432044   # Malaysia Flag (Spear)
+  - 1442058   # Singapore Flag (Pole Arm)
+  - 1452049   # Singapore Flag (Bow)
+  - 1452050   # Malaysia Flag (Bow)
+  - 1462044   # Singapore Flag (Crossbow)
+  - 1462045   # Malaysia Flag (Crossbow)
+  - 1472059   # Singapore Flag (Claw)
+  - 1472060   # Malaysia Flag (Claw)
+
+  # --- Flag-themed COSMETICS (borderline - delete any you want bots to keep) ---
+  - 1002500   # Korean Flag Bandana (cap)
+  - 1051143   # Korean Flag Tank Top & Skirt (overall)
+  - 1102019   # Korean-Flagged Cape
+  - 1102152   # Pirate Emblem Flag (cape)
+
+  # Random Lvl 10 Seraphim item
+  - 1302105 # - Seraphim One-handed Sword - (no description)
+  - 1312039 # - Seraphim One-handed Axe - (no description)
+  - 1322065 # - Seraphim One-handed Blunt Weapon - (no description)
+  - 1332081 # - Seraphim Dagger - (no description)
+  - 1372046 # - Seraphim Wand - (no description)
+  - 1382062 # - Seraphim Staff - (no description)
+  - 1402053 # - Seraphim Two-handed Sword - (no description)
+  - 1412035 # - Seraphim Two-handed Axe - (no description)
+  - 1422039 # - Seraphim Two-handed Blunt Weapon - (no description)
+  - 1432050 # - Seraphim Spear - (no description)
+  - 1442071 # - Seraphim Pole Arm - (no description)
+  - 1452062 # - Seraphim Bow - (no description)
+  - 1462056 # - Seraphim Crossbow - (no description)
+  - 1472077 # - Seraphim Claw - (no description)
+  - 1482029 # - Seraphim Knuckler - (no description)
+  - 1492030 # - Seraphim Gun - (no description)
+
+  # Pink Flower Tubes
+  - 1302071 # - Pink Flower Tube - (One Handed Sword)
+  - 1312034 # - Pink Flower Tube - (One Handed Axe)
+  - 1322056 # - Pink Flower Tube - (One Handed Mace)
+  - 1332059 # - Pink Flower Tube - (Dagger)
+  - 1382042 # - Pink Flower Tube - (Staff)
+  - 1402041 # - Pink Flower Tube - (Two Handed Sword)
+  - 1412029 # - Pink Flower Tube - (Two Handed Axe)
+  - 1422033 # - Pink Flower Tube - (Two Handed Mace)
+  - 1432042 # - Pink Flower Tube - (Spear)
+  - 1442053 # - Pink Flower Tube - (Pole Arm)
+  - 1452048 # - Pink Flower Tube - (Bow)
+  - 1462043 # - Pink Flower Tube - (Crossbow)
+  - 1472058 # - Pink Flower Tube - (Claw)
+  - 1482025 # - Pink Flower Tube - (Knuckler)
+  - 1492026 # - Pink Flower Tube - (Gun)
+
+  # --- "Weird" / boss-reward weapons bots should never wield ---
+  # Balrog weapons
+  - 1302112 # Balrog's Khan
+  - 1302113 # Balrog's Fraute
+  - 1312042 # Balrog's Gaea
+  - 1312043 # Balrog's Vifennis
+  - 1322068 # Balrog's Golden Hammer
+  - 1322069 # Balrog's Runi Hammer
+  - 1332084 # Balrog's Angelic Betrayal
+  - 1332085 # Dragon's Tail of Balrog
+  - 1332086 # Balrog's Cursayer
+  - 1332087 # Balrog's Varkit
+  - 1372050 # Balrog's Magicodar
+  - 1372051 # Balrog's Phoenix Wand
+  - 1382066 # Balrog's Kage
+  - 1382067 # Balrog's Blue Marine
+  - 1402056 # Balrog's Blue Screamer
+  - 1402057 # Heaven's Gate of Balrog
+  - 1402058 # Balrog's Berzerker
+  - 1402059 # Devil's Sunrise of Balrog
+  - 1412038 # Balrog's Helios
+  - 1412039 # Balrog's Colonian Axe
+  - 1422042 # Balrog's Morningstar
+  - 1422043 # Balrog's Leomite
+  - 1432054 # Balrog's Omega Spear
+  - 1432055 # Balrog's Fairfrozen
+  - 1442074 # Balrog's Eclipse
+  - 1442075 # Balrog's Hellslayer
+  - 1452066 # Balrog's Marine Arund
+  - 1452067 # Balrog's Fire Arund
+  - 1452068 # Balrog's Golden Arund
+  - 1452069 # Balrog's Dark Arund
+  - 1452070 # Balrog's Metus
+  - 1462059 # Balrog's Marine Raven
+  - 1462060 # Balrog's Fire Raven
+  - 1462061 # Balrog's Golden Raven
+  - 1462062 # Balrog's Dark Raven
+  - 1462063 # Balrog's Casa Crow
+  - 1472083 # Balrog's Black Mamba
+  - 1472084 # Balrog's Caster
+  - 1482031 # Balrog's Steel Renault
+  - 1482032 # Balrog's White Evil
+  - 1492035 # Balrog's Infinity
+  - 1492036 # Balrog's Peacemaker
+
+  # Zakum weapon
+  - 1372049 # Zakum's Tree Branch
+
+  # Bain weapons
+  - 1382068 # Bain Wings
+  - 1402062 # Bain Sword
+  - 1442078 # Bain Pole Arm
+  - 1452071 # Bain Long Bow
+  - 1472086 # Bain Biter
+  - 1492037 # Bain Shooter
+
+  # Basic / placeholder weapon
+  - 1442079 # Basic Polearm
+
+  # "Masks over call weapons" cosmetic weapons
+  - 1702212 # Galactic Legend - masks over call weapons
+  - 1702216 # Magic Heart Stick - masks over call weapons
+
+  # Astaroth weapons ("You can feel Astaroth's dark energy.")
+  - 1302133 # Astaroth One-Handed Sword
+  - 1332099 # Astaroth Short Sword
+  - 1372058 # Astaroth Wand
+  - 1382080 # Astaroth Staff
+  - 1402072 # Astaroth Two-Handed Sword
+  - 1412046 # Astaroth Axe
+  - 1432061 # Astaroth Spear
+  - 1442103 # Astaroth Polearm
+  - 1452085 # Astaroth Bow
+  - 1462075 # Astaroth Crossbow
+  - 1472100 # Astaroth Claw
+  - 1482046 # Astaroth Knuckles
+  - 1492048 # Astaroth Gun
+
+  # Solomon bows
+  - 1452083 # Solomon's Unstable Bow
+  - 1452084 # Solomon's Bow
+
+# Optional: omit a contiguous id block at once. Format: "min-max" (inclusive).
+# ranges:
+#   - "1302200-1302299"

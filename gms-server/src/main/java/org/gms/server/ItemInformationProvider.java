@@ -1352,18 +1352,24 @@ public class ItemInformationProvider {
         if (nameDescCache.containsKey(itemId)) {
             return nameDescCache.get(itemId);
         }
-        Data strings = getStringData(itemId);
-        if (strings == null) {
-            return null;
+        // SoloMapling parallel bot spawn races WZ DOM without this lock
+        synchronized (nameDescCache) {
+            if (nameDescCache.containsKey(itemId)) {
+                return nameDescCache.get(itemId);
+            }
+            Data strings = getStringData(itemId);
+            if (strings == null) {
+                return null;
+            }
+            String name = DataTool.getString("name", strings, null);
+            String desc = DataTool.getString("desc", strings, null);
+            if (name == null) {
+                return null;
+            }
+            Pair<String, String> ret = new Pair<>(name, desc);
+            nameDescCache.put(itemId, ret);
+            return ret;
         }
-        String name = DataTool.getString("name", strings, null);
-        String desc = DataTool.getString("desc", strings, null);
-        if (name == null) {
-            return null;
-        }
-        Pair<String, String> ret = new Pair<>(name, desc);
-        nameDescCache.put(itemId, ret);
-        return ret;
     }
 
     public String getMsg(int itemId) {

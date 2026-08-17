@@ -34,3 +34,19 @@ main/resources/static/
 src/main/resources/static/
 .claude/settings.local.json
 CLAUDE.local.md
+
+# SoloMapling / extension plugins (keep directory, ignore jars)
+gms-server/plugins/*.jar
+!gms-server/plugins/.gitkeep
+
+# Maven module build outputs
+**/target/
+
+# Local runtime noise (do not commit)
+gms-server/cache/
+gms-server/*.log
+gms-server/*.log.bak.*
+gms-server/BotLog.txt
+gms-server/heap.hprof
+gms-server/application.yml
+gms-server/start-solomapling.sh

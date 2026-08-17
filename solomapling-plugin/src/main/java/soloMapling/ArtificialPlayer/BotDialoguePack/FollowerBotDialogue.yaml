@@ -1,0 +1,119 @@
+# FollowerBot dialogue — a recruited companion tailing its leader. Spoken observed-only.
+# Nodes with a live player context may use {PLAYER_NAME}; LeaderLost/PartyFarewell fire with no
+# player (the leader just vanished), so those stay token-free — a token line with no player to
+# resolve against is dropped by the engine.
+
+FollowerBot:
+
+  FollowStart:
+    text:
+      - {line: "right behind u {PLAYER_NAME}!", emote: 2}
+      - "lead the way, ill keep up"
+      - {line: "ok {PLAYER_NAME} where we headed?", emote: 2}
+      - "party time, im with u"
+      - {line: "dont walk too fast lol, short legs", emote: 6}
+      - "lets go lets go ^^"
+      - {line: "im sticking with u {PLAYER_NAME}, dont lose me", emote: 2}
+      - "following! this is way better than standing around town"
+      - "ooh adventure time"
+      - {line: "u pick the map, ill bring the vibes", emote: 3}
+    emote:
+      - 2
+      - 0
+    wait: 1
+
+  StationHere:
+    text:
+      - {line: "this map? looks good {PLAYER_NAME}, ill set up here", emote: 2}
+      - "ok! grinding time, ill hold this spot down"
+      - {line: "nice pick {PLAYER_NAME}, mobs everywhere, lets farm", emote: 2}
+      - "alright im clocking in, lets get this exp"
+      - {line: "settling in here then, dont mind my ksing lol", emote: 3}
+      - "good spot. pots ready. lets grind ^^"
+      - {line: "here? perfect, i was getting tired of walking anyway", emote: 2}
+      - "deal, ill start clearing, u take whatever side u want"
+    emote:
+      - 2
+      - 3
+    wait: 1
+
+  LeaderLost:
+    text:
+      - "uh... hello? where'd u go"
+      - {line: "wait- did i just lose them??", emote: 6}
+      - "hmm they were JUST here"
+      - "ill wait here a bit i guess..."
+      - {line: "great, separated. classic me.", emote: 7}
+      - "maybe they went to change channels or smth"
+      - "hellooo? anyone?"
+      - {line: "ok dont panic, they'll be back... right?", emote: 6}
+    emote:
+      - 6
+      - 0
+    wait: 1
+
+  PartyFarewell:
+    text:
+      - "guess the party's over, was fun tho"
+      - {line: "aw, solo life again", emote: 4}
+      - "ok! good runs everyone, cya around"
+      - "welp, back to my own grind i guess"
+      - {line: "party disbanded huh... it was nice while it lasted", emote: 4}
+      - "gl out there! ill manage on my own ^^"
+      - "no party no problem, ive got mobs to hit"
+      - {line: "and just like that im a free agent again", emote: 0}
+    emote:
+      - 4
+      - 0
+    wait: 1
+
+  LoyalToLeader:
+    text:
+      - "sry, im already with someone"
+      - {line: "cant, im {PLAYER_NAME}... wait no, im someone else's party lol", emote: 7}
+      - "im spoken for! party rules"
+      - {line: "ask my party leader, i just follow orders ^^", emote: 2}
+      - "loyal to the party, sry"
+      - "cant leave my crew hanging"
+    emote:
+      - 0
+      - 2
+    wait: 1
+
+  NoMobsHere:
+    text:
+      - "train HERE? theres nothing to fight lol"
+      - {line: "uh... i dont see any mobs {PLAYER_NAME}", emote: 6}
+      - "id love to but the mobs said no (theres none)"
+      - "find us a map with actual monsters first ^^"
+      - {line: "swing at what exactly? the air?", emote: 3}
+      - "no mobs no grind, lead on"
+    emote:
+      - 6
+      - 3
+    wait: 1
+
+  Goodbye:
+    text:
+      - "ok! ill keep following"
+      - {line: "cya, im right behind u anyway lol", emote: 2}
+      - "np, lead on"
+      - "alright, onward ^^"
+      - {line: "ok {PLAYER_NAME}, just say the word when u find a spot", emote: 2}
+      - "got it, still tagging along"
+    emote:
+      - 2
+      - 0
+    wait: 1
+
+  PartyJoined:
+    text:
+      - "party accepted! now we're official ^^"
+      - {line: "joined ur party {PLAYER_NAME}, now the exp flows", emote: 2}
+      - "in! ok now take me somewhere good"
+      - {line: "officially partied up with {PLAYER_NAME}, lets go", emote: 2}
+      - "accepted, we're a real party now hehe"
+      - "party get! lead on"
+    emote:
+      - 2
+    wait: 1

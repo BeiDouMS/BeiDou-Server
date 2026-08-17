@@ -37,6 +37,7 @@ import org.gms.config.GameConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
+import soloMapling.ArtificialPlayer.BotTier;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
@@ -486,6 +487,7 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private boolean chasing = false;
+    private BotTier botTier = BotTier.getDefaultTier(); // SoloMapling bot tier (default C)
     private float mobExpRate = -1;
 
     @Getter
@@ -529,7 +531,7 @@ public class Character extends AbstractCharacterObject {
     }
 
 
-    private Character() {
+    public Character() {
         super.setListener(new CharacterListener(this));
         useCS = false;
         setStance(0);
@@ -625,6 +627,11 @@ public class Character extends AbstractCharacterObject {
         if (canRecvPartySearchInvite) {
             this.getWorldServer().getPartySearchCoordinator().attachPlayer(this);
         }
+    }
+
+    /** SoloMapling bots: clear awayFromWorld without PartySearch / playerAway side effects. */
+    public void markPresentInWorld() {
+        awayFromWorld.set(false);
     }
 
     public void setAwayFromChannelWorld() {
@@ -4904,6 +4911,35 @@ public class Character extends AbstractCharacterObject {
         return localstr;
     }
 
+    // GCMoveSystem: base 100 + equip bonuses + buff → BotMovementProfile bucket
+    public int getTotalMoveSpeedStat() {
+        int total = 100;
+        for (Item item : getInventory(InventoryType.EQUIPPED)) {
+            if (item instanceof Equip equip) {
+                total += equip.getSpeed();
+            }
+        }
+        Integer speedBuff = getBuffedValue(BuffStat.SPEED);
+        if (speedBuff != null) {
+            total += speedBuff;
+        }
+        return Math.max(1, total);
+    }
+
+    public int getTotalJumpStat() {
+        int total = 100;
+        for (Item item : getInventory(InventoryType.EQUIPPED)) {
+            if (item instanceof Equip equip) {
+                total += equip.getJump();
+            }
+        }
+        Integer jumpBuff = getBuffedValue(BuffStat.JUMP);
+        if (jumpBuff != null) {
+            total += jumpBuff;
+        }
+        return Math.max(1, total);
+    }
+
     public int getTotalDex() {
         return localdex;
     }
@@ -6836,7 +6872,7 @@ public class Character extends AbstractCharacterObject {
         enableActions();
     }
 
-    private void unsitChairInternal() {
+    public void unsitChairInternal() {
         int chairid = chair.get();
         if (chairid >= 0) {
             if (ItemConstants.isFishingChair(chairid)) {
@@ -6876,7 +6912,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void setChair(int chair) {
+    public void setChair(int chair) {
         this.chair.set(chair);
     }
 
@@ -10148,5 +10184,13 @@ public class Character extends AbstractCharacterObject {
     /** 更新全局攻击时间戳，只被正常主动技能调用 */
     public void updateGlobalTime(long now) {
         globalAttackTime = now;
+    }
+
+    public void setTier(BotTier newTier) {
+        this.botTier = BotTier.TierManager.safeTierSet(this.botTier, newTier);
+    }
+
+    public BotTier getTier() {
+        return BotTier.TierManager.getSafeTier(botTier);
     }
 }

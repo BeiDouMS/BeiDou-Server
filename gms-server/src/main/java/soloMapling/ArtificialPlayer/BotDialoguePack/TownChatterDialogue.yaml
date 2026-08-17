@@ -1,0 +1,31 @@
+# Generic town small-talk for ambient bot-to-bot conversation (BotChatterSystem).
+# Each exchange is an ORDERED back-and-forth; speakers alternate A, B, A, B... (2-4 turns).
+# {MAP} resolves to the live map name against the SPEAKING bot; a line whose tokens can't resolve is
+# dropped rather than spoken raw. Keep lines short + lowercase (v83 client, no emoji).
+# Shared across all towns to start (per-town flavor files can override later). YAML-first; bulk-generate
+# more via the dialogue batch-generation playbook. Loaded by TownChatterLines.
+exchanges:
+  - ["you been to orbis yet?", "not yet, still saving for the boat", "worth it, the view's wild"]
+  - ["nice cape", "thanks, scrolled it myself", "lucky, i always fail those"]
+  - ["how's the grind treating you?", "slow but steady", "same, my hands hurt lol"]
+  - ["{MAP} feels busy today", "yeah nice to see people around", "beats grinding solo tbh"]
+  - ["you selling anything in the fm?", "just some scrolls", "ill swing by later"]
+  - ["did you finish your job advance?", "yeah last night finally", "grats! took me forever too"]
+  - ["what are you training these days?", "just camping the usual spot", "classic. never fails"]
+  - ["anyone good for a pq around here?", "not really, everyone's afk", "figures lol"]
+  - ["your gear looks clean", "been saving mesos for weeks", "worth it honestly"]
+  - ["you see the drop rate today?", "yeah it's been generous", "gonna grind while it lasts"]
+  - ["think i should reroll my stats?", "nah you're fine", "i guess you're right"]
+  - ["kinda quiet in {MAP} today", "it's early still", "true, the rush comes later"]
+  - ["how much for a scroll of these days?", "way too much lol", "prices never come down huh"]
+  - ["i keep dying to that boss", "bring more pots next time", "yeah that's fair"]
+  - ["you in a guild?", "looking for one actually", "i'll ask mine for you"]
+  - ["got any spare pots?", "here take a few", "you're a lifesaver, thanks"]
+  - ["long day huh", "yeah just here to relax", "same, the town's peaceful"]
+  - ["did the maintenance fix the lag?", "seems better today", "finally, it was rough"]
+  - ["what level are you now?", "almost to the next advance", "so close, keep going"]
+  - ["this spot's taken?", "all yours, i'm heading out", "appreciate it, cya"]
+  - ["you hear about the event?", "no, what's going on?", "double exp this weekend"]
+  - ["cool hat, where'd you get it", "cash shop, couldn't resist", "haha fair enough"]
+  - ["waiting for someone?", "just people watching", "ha, me too honestly"]
+  - ["nice weather in {MAP}", "wish i could say the same irl", "lol real"]
