@@ -73,3 +73,6 @@ solomapling:
   plugins-enabled: true
   plugins-dir: plugins
   spawn-bots-on-startup: true
+  # Optional override path for EnvironmentPopulation.yaml (default: cwd-relative
+  # src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml, then classpath).
+  # population-config: src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml

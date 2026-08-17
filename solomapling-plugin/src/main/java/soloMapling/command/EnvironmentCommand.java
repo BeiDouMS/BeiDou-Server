@@ -16,6 +16,7 @@ import soloMapling.ArtificialPlayer.BotSpotClaims;
 import soloMapling.ArtificialPlayer.BotTownSystem.TownPinsStore;
 import soloMapling.ArtificialPlayer.BotTownSystem.TownPresenceConfig;
 import soloMapling.ArtificialPlayer.BotTownSystem.TownPresenceSampler;
+import soloMapling.Environment.EnvironmentPopulationConfig;
 import soloMapling.ArtificialPlayer.BotTypeManager;
 import soloMapling.ArtificialPlayer.ConversationManager;
 import soloMapling.ArtificialPlayer.SocialHotPotatoManager;
@@ -81,6 +82,10 @@ public class EnvironmentCommand extends Command {
         // rigid param-count dispatch below.
         if (params[0].equalsIgnoreCase("townpresence") || params[0].equalsIgnoreCase("tp")) {
             ExecutorServiceManager.getExecutorService().execute(() -> handleTownPresence(params, c));
+            return;
+        }
+        if (params[0].equalsIgnoreCase("population") || params[0].equalsIgnoreCase("pop")) {
+            ExecutorServiceManager.getExecutorService().execute(() -> handlePopulation(params, c));
             return;
         }
         if (params[0].equalsIgnoreCase("chatter")) {
@@ -213,6 +218,38 @@ public class EnvironmentCommand extends Command {
             }
             default -> p.dropMessage(6,
                     "!env townpresence reload | spawn [map n lo hi] | here [n] | wander [map n lo hi] | weights [topN] | mark [mapId]");
+        }
+    }
+
+    // !env population (alias pop) — inspect / reload EnvironmentPopulation.yaml (wave counts + training cohorts).
+    private static void handlePopulation(String[] params, Client c) {
+        Character p = c.getPlayer();
+        String action = params.length >= 2 ? params[1].toLowerCase() : "show";
+        switch (action) {
+            case "reload" -> {
+                var plan = EnvironmentPopulationConfig.reload();
+                p.dropMessage(6, "Population: reloaded from " + plan.loadedFrom()
+                        + " scale=" + plan.scale()
+                        + " trainingScaledTotal=" + plan.trainingCohortTotal()
+                        + " cohorts=" + plan.training().cohorts().size());
+            }
+            case "show", "status", "help" -> {
+                var plan = EnvironmentPopulationConfig.plan();
+                p.dropMessage(6, "Population source=" + plan.loadedFrom() + " scale=" + plan.scale()
+                        + " version=" + plan.version());
+                p.dropMessage(6, "Waves enabled: essentials=" + plan.essentials().enabled()
+                        + " fm=" + plan.fmBuildout().enabled()
+                        + " henesys=" + plan.henesysPopulation().enabled()
+                        + " training=" + plan.training().enabled()
+                        + " townPresence=" + plan.townPresence().enabled());
+                p.dropMessage(6, "Training cohorts=" + plan.training().cohorts().size()
+                        + " scaledTotal=" + plan.trainingCohortTotal()
+                        + " (edit EnvironmentPopulation.yaml; restart or !env load to apply spawn)");
+                if ("help".equals(action)) {
+                    p.dropMessage(6, "!env population reload | show");
+                }
+            }
+            default -> p.dropMessage(6, "!env population reload | show");
         }
     }
 
@@ -569,6 +606,7 @@ public class EnvironmentCommand extends Command {
         player.yellowMessage("!env grindprofile                - dump this map's grind spot profile (calibrate spot tuning)");
         player.yellowMessage("-- Town Presence --");
         player.yellowMessage("!env townpresence reload         - re-read TownPresence.yaml (no restart)");
+        player.yellowMessage("!env population reload|show      - re-read / dump EnvironmentPopulation.yaml");
         player.yellowMessage("!env townpresence spawn [map n lo hi] - spawn a town's social cohort (no args = all towns)");
         player.yellowMessage("!env townpresence here [count]   - spawn stationed social bots on your current map (dry-run)");
         player.yellowMessage("!env townpresence wander [map n lo hi] - spawn roaming wanderers (no map = your current map)");

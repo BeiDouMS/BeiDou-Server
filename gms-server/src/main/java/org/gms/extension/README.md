@@ -43,3 +43,7 @@ java -Xmx4g -Dspring.config.location=src/main/resources/application.yml \
 Runnable artifact is **`BeiDou-boot.jar`** (classifier `boot`). Thin `BeiDou.jar` is published for plugin compile classpath.
 
 See the repository root `README.md` section **扩展运行时 / SoloMapling** for the full operator guide.
+
+Population / TrainingBot counts: `EnvironmentPopulation.yaml` — see
+`solomapling-plugin/src/main/java/soloMapling/Environment/CONFIG.md`.
+

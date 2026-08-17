@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import soloMapling.ArtificialPlayer.BotClientHandler;
 import soloMapling.Environment.EnvironmentManager;
+import soloMapling.Environment.EnvironmentPopulationConfig;
 import soloMapling.command.ArtificialPlayerCommand;
 import soloMapling.command.BotMoveCommand;
 import soloMapling.command.EnvironmentCommand;
@@ -47,6 +48,15 @@ public final class SoloMaplingExtension implements ServerExtension {
         log.info("SoloMapling plugin onLoad hostId={} spawnBotsOnStartup={}",
                 runtime.hostId(),
                 runtime.config().getBool("solomapling.spawn-bots-on-startup", false));
+
+        String populationPath = runtime.config().getString("solomapling.population-config", "");
+        if (populationPath != null && !populationPath.isBlank()) {
+            EnvironmentPopulationConfig.setConfigPath(populationPath);
+            log.info("SoloMapling population-config override={}", populationPath);
+        }
+        var plan = EnvironmentPopulationConfig.plan();
+        log.info("SoloMapling population plan source={} scale={} trainingScaledTotal={}",
+                plan.loadedFrom(), plan.scale(), plan.trainingCohortTotal());
 
         registerCommands(runtime);
 

@@ -1,0 +1,107 @@
+# SoloMapling environment population — startup wave counts & TrainingBot cohorts.
+#
+# Loaded by EnvironmentPopulationConfig (same FS pattern as TownPresence.yaml).
+# Edit this file, then either:
+#   - restart the server with spawn-bots-on-startup: true, or
+#   - in-game: !env population reload   (affects the next !env load / population show)
+#
+# `scale` multiplies most integer counts (henesys / FM / merchants / training).
+# Use 0.25–0.5 for a light pilot; 1.0 is the BeiDou-tuned default (~1k bots with Wave 8 modest).
+# Town ambient SocialBot / wanderer counts stay in TownPresence.yaml (not scaled here).
+#
+# TrainingBot `map` is the *spawn hub* (town or deep junction). Grind field maps are still
+# discovered at runtime by TrainingMapFinder from that hub — do not list every field map here.
+
+version: 1
+scale: 1.0
+
+waves:
+  essentials:
+    enabled: true
+    casino_npcs: true
+    tutorial: true
+    henesys: {main: 10, market: 0, park: 0, social: 0}
+    fm_region: henesys
+    fm_entrance: {m1: 5, m2: 5, m5: 5}
+
+  fm_buildout:
+    enabled: true
+    fm_region: ludi
+    fm_entrance: {m1: 5, m2: 5, m5: 5}
+    merchants:
+      - {platform: m1, selling: 2, buying: 2, nx: 1}
+      - {platform: m2, selling: 2, buying: 2, nx: 0}
+      - {platform: m5, selling: 2, buying: 2, nx: 0}
+    gacha: true
+
+  henesys_population:
+    enabled: true
+    jq_pet_park: true
+    henesys: {main: 10, market: 10, park: 0, social: 5}
+    fillers_henesys: true
+    start_social_systems: true
+
+  expand_fm_market:
+    enabled: true
+    fm_region: perion
+    fm_entrance: {m1: 5, m2: 5, m5: 5}
+    merchants:
+      - {platform: m1, selling: 3, buying: 3, nx: 0}
+      - {platform: m2, selling: 2, buying: 2, nx: 1}
+      - {platform: m5, selling: 3, buying: 3, nx: 1}
+    fillers_henesys_market: true
+
+  henesys_sub_areas:
+    enabled: true
+    fm_region: elnath
+    henesys: {main: 10, market: 10, park: 10, social: 4}
+    fillers_henesys_park: true
+    fillers_potion_shop: true
+    fillers_game_zone: true
+    game_zone_hosts: true
+
+  specialty:
+    enabled: true
+    blackjack: true
+    drop_game: true
+    drop_game_spectators: true
+    social_pet_park: true
+    convert_scroll_bots: true
+
+  late_arrivals:
+    enabled: true
+    opq_lobby: true
+    merchants:
+      - {platform: m1, selling: 2, buying: 2, nx: 0}
+      - {platform: m2, selling: 2, buying: 2, nx: 1}
+      - {platform: m5, selling: 2, buying: 2, nx: 1}
+
+  training:
+    enabled: true
+    # Optional: bake nearby nav from this map before cohorts spawn (noop if hops <= 0).
+    warm_nav:
+      map: 100000000
+      hops: 1
+    # Spawn hubs → bots fan out to level-appropriate fields.
+    # BeiDou default is modest (~270). Full SoloMapling Cosmic was ~2400 — raise counts carefully.
+    cohorts:
+      - {map: 104000000, count: 5,  level_lo: 1,  level_hi: 15}   # Lith Harbour
+      - {map: 100000000, count: 25, level_lo: 10, level_hi: 95}  # Henesys
+      - {map: 103000000, count: 25, level_lo: 10, level_hi: 65}  # Kerning
+      - {map: 102000000, count: 25, level_lo: 10, level_hi: 65}  # Perion
+      - {map: 101000000, count: 25, level_lo: 10, level_hi: 65}  # Ellinia
+      - {map: 105040300, count: 25, level_lo: 25, level_hi: 95}  # Sleepywood
+      - {map: 105070001, count: 20, level_lo: 40, level_hi: 95}  # Ant Tunnel Park (deep hub)
+      - {map: 200000000, count: 25, level_lo: 30, level_hi: 86}  # Orbis
+      - {map: 220000000, count: 20, level_lo: 25, level_hi: 95}  # Ludibrium
+      - {map: 220050300, count: 15, level_lo: 70, level_hi: 95}  # Path of Time hub
+      - {map: 211000000, count: 20, level_lo: 50, level_hi: 80}  # El Nath
+      - {map: 211040300, count: 20, level_lo: 60, level_hi: 90}  # Sharp Cliff I
+      - {map: 100000000, count: 5,  level_lo: 1,  level_hi: 9}   # low-level beginners
+      - {map: 103000000, count: 5,  level_lo: 1,  level_hi: 9}
+      - {map: 102000000, count: 5,  level_lo: 1,  level_hi: 9}
+      - {map: 101000000, count: 5,  level_lo: 1,  level_hi: 9}
+
+  town_presence:
+    enabled: true
+    # Per-town counts: ArtificialPlayer/BotTownSystem/TownPresence.yaml
