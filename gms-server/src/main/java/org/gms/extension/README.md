@@ -48,3 +48,7 @@ Population / TrainingBot / town ambient counts: `EnvironmentPopulation.yaml`
 (`waves.*` and `waves.town_presence.towns`) — see
 `solomapling-plugin/src/main/java/soloMapling/Environment/CONFIG.md`.
 
+Runtime load order (not from `BeiDou-boot.jar`): optional
+`solomapling.population-config` → cwd
+`src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml` → plugin-jar classpath.
+

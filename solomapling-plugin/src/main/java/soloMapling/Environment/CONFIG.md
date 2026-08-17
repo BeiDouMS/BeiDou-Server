@@ -13,12 +13,24 @@ One file drives world population:
 
 `TownPresence.yaml` is deprecated and no longer read (stub only).
 
-## Paths (BeiDou)
+## Where to put the file at runtime (BeiDou)
 
-| Path | Role |
-|------|------|
-| `solomapling-plugin/.../Environment/EnvironmentPopulation.yaml` | Source of truth (packed in plugin jar) |
-| `gms-server/.../Environment/EnvironmentPopulation.yaml` | Runtime FS copy (cwd = `gms-server`) |
+**Do not put it in `BeiDou-boot.jar`.** The host fat jar does not need this file.
+`EnvironmentPopulationConfig` resolves it in this order:
+
+1. Optional override: `application.yml` → `solomapling.population-config: <path>`
+2. Working-directory file (start the JVM from **`gms-server/`**):  
+   `src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml`
+3. Classpath inside **`plugins/solomapling-plugin-*.jar`**:  
+   `soloMapling/Environment/EnvironmentPopulation.yaml`
+
+| Location | Role |
+|----------|------|
+| `solomapling-plugin/.../Environment/EnvironmentPopulation.yaml` | Source of truth; packed into the **plugin** jar at build |
+| `gms-server/.../Environment/EnvironmentPopulation.yaml` | Runtime FS copy — preferred for live edits (no plugin rebuild) |
+| `BeiDou-boot.jar` | Not used for this config |
+
+If the FS file exists under the process cwd, it wins over the copy inside the plugin jar.
 
 ## Live commands (GM ≥ 4)
 
@@ -26,6 +38,8 @@ One file drives world population:
 !env population show|reload   # whole file (waves + towns)
 !env townpresence reload      # same file; refreshes town plan + social map scope
 ```
+
+`reload` re-reads YAML but does not despawn bots already online — restart (or a full environment load) to apply new counts.
 
 ## Verify
 

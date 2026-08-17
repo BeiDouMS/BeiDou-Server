@@ -138,7 +138,11 @@ java -Xmx4g \
 - `scale: 0.5` 可整体缩小 Henesys/FM/商人/Training 数量（城镇氛围不缩放）。
 - `training.cohorts[].map` 是**出生枢纽**；真正练级图仍由 `TrainingMapFinder` 运行时发现。
 - 城镇氛围：`waves.town_presence.towns`（已替代独立的 `TownPresence.yaml`）。
-- 可选：`application.yml` → `solomapling.population-config: <path>` 覆盖配置路径。
+- **不必打进 `BeiDou-boot.jar`。** 启动时查找顺序：
+  1. `solomapling.population-config`（可选绝对/相对路径）
+  2. 工作目录 `gms-server/` 下的 `src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml`
+  3. `plugins/solomapling-plugin-*.jar` 内 classpath 资源（兜底）
+- 有 FS 文件时优先用文件，改人数无需重打插件。
 - 游戏内：`!env population show|reload`、`!env townpresence reload`（GM≥4）。
 
 详细说明见 `solomapling-plugin/src/main/java/soloMapling/Environment/CONFIG.md`。
