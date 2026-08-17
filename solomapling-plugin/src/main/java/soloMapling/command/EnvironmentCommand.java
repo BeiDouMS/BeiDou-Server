@@ -152,7 +152,8 @@ public class EnvironmentCommand extends Command {
                         total += m.count();
                     }
                 }
-                p.dropMessage(6, "TownPresence: reloaded " + towns.size() + " towns, " + total + " bots planned.");
+                p.dropMessage(6, "TownPresence: reloaded " + towns.size() + " towns, " + total
+                        + " social bots planned (from EnvironmentPopulation.yaml waves.town_presence.towns).");
             }
             case "spawn" -> {
                 if (params.length >= 4) {
@@ -228,10 +229,12 @@ public class EnvironmentCommand extends Command {
         switch (action) {
             case "reload" -> {
                 var plan = EnvironmentPopulationConfig.reload();
+                var towns = TownPresenceConfig.towns();
                 p.dropMessage(6, "Population: reloaded from " + plan.loadedFrom()
                         + " scale=" + plan.scale()
                         + " trainingScaledTotal=" + plan.trainingCohortTotal()
-                        + " cohorts=" + plan.training().cohorts().size());
+                        + " cohorts=" + plan.training().cohorts().size()
+                        + " towns=" + towns.size());
             }
             case "show", "status", "help" -> {
                 var plan = EnvironmentPopulationConfig.plan();
@@ -605,8 +608,8 @@ public class EnvironmentCommand extends Command {
         player.yellowMessage("!env getcharsonplatform <platId> - get chars on a platform");
         player.yellowMessage("!env grindprofile                - dump this map's grind spot profile (calibrate spot tuning)");
         player.yellowMessage("-- Town Presence --");
-        player.yellowMessage("!env townpresence reload         - re-read TownPresence.yaml (no restart)");
-        player.yellowMessage("!env population reload|show      - re-read / dump EnvironmentPopulation.yaml");
+        player.yellowMessage("!env townpresence reload         - re-read town_presence.towns from EnvironmentPopulation.yaml");
+        player.yellowMessage("!env population reload|show      - re-read EnvironmentPopulation.yaml (waves + towns)");
         player.yellowMessage("!env townpresence spawn [map n lo hi] - spawn a town's social cohort (no args = all towns)");
         player.yellowMessage("!env townpresence here [count]   - spawn stationed social bots on your current map (dry-run)");
         player.yellowMessage("!env townpresence wander [map n lo hi] - spawn roaming wanderers (no map = your current map)");

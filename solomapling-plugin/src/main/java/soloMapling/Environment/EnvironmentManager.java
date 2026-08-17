@@ -296,7 +296,7 @@ public class EnvironmentManager {
             runWave(8, "Training bots", tasks);
         }
 
-        // Ambient town population from TownPresence.yaml (separate file; not scaled by population.scale).
+        // Ambient town population from EnvironmentPopulation.yaml waves.town_presence.towns.
         var w9 = pop.townPresence();
         if (w9.enabled()) {
             List<Runnable> townTasks = new ArrayList<>();
@@ -356,10 +356,8 @@ public class EnvironmentManager {
         return ids;
     }
 
-    // Ambient town population: for each town in TownPresence.yaml, scatter its per-map stationed SocialBot
-    // headcounts plus its town-level roaming TownWandererBot count at anchor-weighted spots, so the seven
-    // towns beyond Henesys read as lived-in instead of only having grinders pass through. Fixed counts
-    // (YAML-tunable). Called from wave 9; also driven live by !env townpresence.
+    // Ambient town population: for each town in EnvironmentPopulation.yaml (town_presence.towns), scatter
+    // its per-map stationed SocialBot headcounts plus its town-level roaming TownWandererBot count.
     public static void spawnTownPresence() {
         for (TownPresenceConfig.TownEntry town : TownPresenceConfig.towns()) {
             spawnTown(town);

@@ -1,27 +1,28 @@
 package soloMapling.ArtificialPlayer.BotTownSystem;
 
-import com.esotericsoftware.yamlbeans.YamlReader;
+import soloMapling.Environment.EnvironmentPopulationConfig;
 
 import java.awt.Point;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// Loads TownPresence.yaml: the per-town ambient-population plan. YAML-first and fixed-count by design
-// so counts are hand-tunable per town (owner decision, 2026-07-07). Each town lists a level band and a
-// map family (the town map plus interior sub-maps), each map with its own social-bot headcount.
-//
-// Read from the source tree via YamlReader like the other bot configs (portal/npc versions, dialogue).
-// Scalars come back as strings, so ints are parsed defensively.
+/**
+ * Ambient town population plan. Town lists live in {@code EnvironmentPopulation.yaml}
+ * under {@code waves.town_presence.towns} (formerly a separate {@code TownPresence.yaml}).
+ *
+ * <p>Scalars from YamlBeans may be strings, so ints are parsed defensively.
+ */
 public final class TownPresenceConfig {
 
     private TownPresenceConfig() {
     }
 
-    private static final String YAML_PATH =
+    /** @deprecated Kept for docs/search; data is in EnvironmentPopulation.yaml. */
+    @Deprecated
+    private static final String LEGACY_YAML_PATH =
             "src/main/java/soloMapling/ArtificialPlayer/BotTownSystem/TownPresence.yaml";
 
     // One map within a town's family: how many ambient bots stand there, plus its curation overrides
@@ -41,6 +42,11 @@ public final class TownPresenceConfig {
 
     private static volatile List<TownEntry> cached;
 
+    /** Drop cached towns so the next {@link #towns()} re-parses (called from population reload). */
+    public static void invalidate() {
+        cached = null;
+    }
+
     // Parsed town entries (cached after first load). Returns an empty list on any parse/IO failure so a
     // bad edit degrades to "no town presence" rather than crashing world startup.
     public static List<TownEntry> towns() {
@@ -52,9 +58,10 @@ public final class TownPresenceConfig {
         return local;
     }
 
-    // Force a re-read from disk (used by the live-tuning !env command so edits apply without a restart).
+    // Force a re-read from EnvironmentPopulation.yaml (used by !env townpresence / population reload).
     public static List<TownEntry> reload() {
-        cached = load();
+        EnvironmentPopulationConfig.reload();
+        cached = loadFromRaw(EnvironmentPopulationConfig.rawTownsList());
         return cached;
     }
 
@@ -71,20 +78,22 @@ public final class TownPresenceConfig {
         return ids;
     }
 
-    @SuppressWarnings("unchecked")
     private static List<TownEntry> load() {
+        // Ensure population YAML is loaded (sets rawTownsList).
+        EnvironmentPopulationConfig.plan();
+        List<?> raw = EnvironmentPopulationConfig.rawTownsList();
+        if (raw.isEmpty()) {
+            System.out.println("[TownPresenceConfig] no waves.town_presence.towns in EnvironmentPopulation.yaml"
+                    + " (legacy path " + LEGACY_YAML_PATH + " is no longer read)");
+        }
+        return loadFromRaw(raw);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<TownEntry> loadFromRaw(List<?> townList) {
         List<TownEntry> out = new ArrayList<>();
         try {
-            YamlReader reader = new YamlReader(new FileReader(YAML_PATH));
-            Map<String, Object> root = (Map<String, Object>) reader.read();
-            if (root == null) {
-                return out;
-            }
-            Object townsNode = root.get("towns");
-            if (!(townsNode instanceof List<?> townList)) {
-                return out;
-            }
-            Map<Integer, List<Point>> sidecarPins = TownPinsStore.load(); // read the marked-pins file once
+            Map<Integer, List<Point>> sidecarPins = TownPinsStore.load();
             for (Object t : townList) {
                 if (!(t instanceof Map<?, ?> town)) {
                     continue;
@@ -114,7 +123,7 @@ public final class TownPresenceConfig {
                 }
             }
         } catch (Exception e) {
-            System.out.println("[TownPresenceConfig] failed to load " + YAML_PATH + ": " + e.getMessage());
+            System.out.println("[TownPresenceConfig] failed to parse towns: " + e.getMessage());
             return new ArrayList<>();
         }
         return out;

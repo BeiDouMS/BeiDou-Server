@@ -14,9 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import soloMapling.ArtificialPlayer.BotTownSystem.TownPresenceConfig;
+
 /**
  * Loads {@code EnvironmentPopulation.yaml}: startup wave toggles, FM/Henesys/merchant counts,
- * and TrainingBot spawn cohorts. Town ambient headcounts remain in {@code TownPresence.yaml}.
+ * TrainingBot spawn cohorts, and {@code waves.town_presence.towns} (ambient town bots).
  *
  * <p>Resolution order for the file:
  * <ol>
@@ -117,10 +119,12 @@ public final class EnvironmentPopulationConfig {
 
     private static volatile String overridePath;
     private static volatile PopulationPlan cached;
+    private static volatile Map<String, Object> cachedRoot;
 
     public static void setConfigPath(String path) {
         overridePath = (path == null || path.isBlank()) ? null : path.trim();
         cached = null;
+        cachedRoot = null;
     }
 
     public static PopulationPlan plan() {
@@ -134,6 +138,8 @@ public final class EnvironmentPopulationConfig {
 
     public static PopulationPlan reload() {
         cached = load();
+        // TownPresenceConfig reads the same YAML; drop its cache so the next towns() re-parses.
+        TownPresenceConfig.invalidate();
         return cached;
     }
 
@@ -142,22 +148,51 @@ public final class EnvironmentPopulationConfig {
         return Optional.ofNullable(p.loadedFrom());
     }
 
+    /**
+     * Raw {@code waves.town_presence.towns} list from the last successful load (empty if absent).
+     * Used by {@link TownPresenceConfig}.
+     */
+    @SuppressWarnings("unchecked")
+    public static List<?> rawTownsList() {
+        plan();
+        Map<String, Object> root = cachedRoot;
+        if (root == null) {
+            return List.of();
+        }
+        Map<String, Object> waves = asMap(root.get("waves"));
+        Map<String, Object> tp = asMap(waves.get("town_presence"));
+        Object towns = tp.get("towns");
+        if (towns instanceof List<?> list) {
+            return list;
+        }
+        // Legacy: top-level towns: (old TownPresence.yaml shape if someone pasted it)
+        Object top = root.get("towns");
+        if (top instanceof List<?> list) {
+            return list;
+        }
+        return List.of();
+    }
+
     @SuppressWarnings("unchecked")
     private static PopulationPlan load() {
         try (Reader reader = openReader()) {
             if (reader == null) {
                 System.out.println("[EnvironmentPopulationConfig] no config found; using built-in defaults");
+                cachedRoot = null;
                 return defaults("(built-in)");
             }
             YamlReader yaml = new YamlReader(reader);
             Map<String, Object> root = (Map<String, Object>) yaml.read();
             if (root == null) {
+                cachedRoot = null;
                 return defaults("(empty yaml)");
             }
+            cachedRoot = root;
             return parse(root, currentSourceLabel);
         } catch (Exception e) {
             System.out.println("[EnvironmentPopulationConfig] failed to load: " + e.getMessage()
                     + " — falling back to built-in defaults");
+            cachedRoot = null;
             return defaults("(fallback after error)");
         }
     }

@@ -123,31 +123,30 @@ java -Xmx4g \
 - 可运行产物是带 classifier 的 **`BeiDou-boot.jar`**；主产物 `BeiDou.jar` 为瘦 jar，供插件模块编译依赖。
 - 克隆假人模板角色名为 **`fmbot`**（Flyway `V1.9.3`）。
 - 游戏内 GM ≥ 4 可用：`!smping`、`!env`、`!bot`、`!move`、`!fmbot`、`!gcmove`。
-- Wave 数量与 TrainingBot 出生点目前主要在 `EnvironmentManager` 硬编码；城镇氛围人数见 `TownPresence.yaml`（可用 `!env townpresence reload` 热更）。
 
 ## 人口配置化（EnvironmentPopulation.yaml）
 
-启动波次数量、FM/商人批次、**TrainingBot 出生枢纽** 由 YAML 控制（不再改 Java 硬编码）：
+启动波次数量、FM/商人批次、**TrainingBot 出生枢纽**与**城镇氛围**均由同一 YAML 控制：
 
 | 文件 | 作用 |
 |------|------|
-| `solomapling-plugin/.../Environment/EnvironmentPopulation.yaml` | 波次开关、人数、`scale`、training cohorts |
-| `gms-server/.../Environment/EnvironmentPopulation.yaml` | 运行时 FS 副本（工作目录 = `gms-server`） |
-| `TownPresence.yaml` | Wave 9 城镇氛围（独立热更） |
+| `EnvironmentPopulation.yaml` | 波次开关、人数、`scale`、training cohorts、**town_presence.towns** |
+| ~~`TownPresence.yaml`~~ | 已并入上文件；仅保留废弃 stub |
 
 要点：
 
 - `scale: 0.5` 可整体缩小 Henesys/FM/商人/Training 数量（城镇氛围不缩放）。
 - `training.cohorts[].map` 是**出生枢纽**；真正练级图仍由 `TrainingMapFinder` 运行时发现。
+- 城镇氛围：`waves.town_presence.towns`（已替代独立的 `TownPresence.yaml`）。
 - 可选：`application.yml` → `solomapling.population-config: <path>` 覆盖配置路径。
-- 游戏内：`!env population show|reload`（GM≥4）。
+- 游戏内：`!env population show|reload`、`!env townpresence reload`（GM≥4）。
 
 详细说明见 `solomapling-plugin/src/main/java/soloMapling/Environment/CONFIG.md`。
 
 无整服启动时的自动校验：
 
 ```bash
-mvn -pl solomapling-plugin -am test -Dtest=EnvironmentPopulationConfigTest
+mvn -pl solomapling-plugin -am test -Dtest=EnvironmentPopulationConfigTest -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
 ## 与 Cosmic 版 SoloMapling 的关系

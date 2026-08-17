@@ -7,6 +7,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import soloMapling.ArtificialPlayer.BotTownSystem.TownPresenceConfig;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,6 +34,13 @@ class EnvironmentPopulationConfigTest {
         assertEquals("henesys", plan.essentials().fmRegion());
         assertEquals(5, plan.essentials().fmEntrance().m1());
         assertTrue(plan.loadedFrom() != null && !plan.loadedFrom().isBlank());
+
+        var towns = TownPresenceConfig.towns();
+        assertEquals(7, towns.size());
+        int social = towns.stream().flatMap(t -> t.maps().stream()).mapToInt(m -> m.count()).sum();
+        int wanderers = towns.stream().mapToInt(t -> t.wanderers()).sum();
+        assertEquals(80, social);      // 14+10+10+10+12+14+10
+        assertEquals(38, wanderers);   // 6+5+5+5+6+6+5
     }
 
     @Test

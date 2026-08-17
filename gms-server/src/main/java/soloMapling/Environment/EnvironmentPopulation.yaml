@@ -1,16 +1,19 @@
-# SoloMapling environment population — startup wave counts & TrainingBot cohorts.
+# SoloMapling environment population — startup waves, TrainingBot hubs, and town ambient bots.
 #
-# Loaded by EnvironmentPopulationConfig (same FS pattern as TownPresence.yaml).
-# Edit this file, then either:
-#   - restart the server with spawn-bots-on-startup: true, or
-#   - in-game: !env population reload   (affects the next !env load / population show)
+# Single config for world population. Loaded by EnvironmentPopulationConfig / TownPresenceConfig.
+# Edit, then restart (spawn-bots-on-startup) or:
+#   !env population reload   — re-read this file (waves + towns)
+#   !env townpresence reload — same file; refreshes ambient town plan + social map scope
 #
-# `scale` multiplies most integer counts (henesys / FM / merchants / training).
+# `scale` multiplies Henesys / FM / merchant / training counts (not town_presence.towns).
 # Use 0.25–0.5 for a light pilot; 1.0 is the BeiDou-tuned default (~1k bots with Wave 8 modest).
-# Town ambient SocialBot / wanderer counts stay in TownPresence.yaml (not scaled here).
 #
 # TrainingBot `map` is the *spawn hub* (town or deep junction). Grind field maps are still
-# discovered at runtime by TrainingMapFinder from that hub — do not list every field map here.
+# discovered at runtime by TrainingMapFinder — do not list every field map here.
+#
+# town_presence.towns: ambient SocialBots (per-map count) + TownWandererBots (wanderers).
+# Henesys is intentionally absent — HenesysBots already cover it.
+# Optional per-map curation: pins / ban / boost. TownPins.txt merges in at load.
 
 version: 1
 scale: 1.0
@@ -78,12 +81,9 @@ waves:
 
   training:
     enabled: true
-    # Optional: bake nearby nav from this map before cohorts spawn (noop if hops <= 0).
     warm_nav:
       map: 100000000
       hops: 1
-    # Spawn hubs → bots fan out to level-appropriate fields.
-    # BeiDou default is modest (~270). Full SoloMapling Cosmic was ~2400 — raise counts carefully.
     cohorts:
       - {map: 104000000, count: 5,  level_lo: 1,  level_hi: 15}   # Lith Harbour
       - {map: 100000000, count: 25, level_lo: 10, level_hi: 95}  # Henesys
@@ -104,4 +104,59 @@ waves:
 
   town_presence:
     enabled: true
-    # Per-town counts: ArtificialPlayer/BotTownSystem/TownPresence.yaml
+    # count = stationed SocialBots; wanderers = roaming TownWandererBots.
+    # Per-map overrides (optional block form):
+    #   - map: 103000000
+    #     count: 14
+    #     pins: [{x: 300, y: 83}]
+    #     ban:  [{x1: 3200, x2: 4200}]
+    #     boost: [{x1: 900, x2: 1600, mult: 2.5}]
+    towns:
+      - name: Kerning City
+        level_lo: 15
+        level_hi: 70
+        wanderers: 6
+        maps:
+          - {map: 103000000, count: 14}
+
+      - name: Ellinia
+        level_lo: 10
+        level_hi: 60
+        wanderers: 5
+        maps:
+          - {map: 101000000, count: 10}
+
+      - name: Perion
+        level_lo: 10
+        level_hi: 65
+        wanderers: 5
+        maps:
+          - {map: 102000000, count: 10}
+
+      - name: Sleepywood
+        level_lo: 25
+        level_hi: 80
+        wanderers: 5
+        maps:
+          - {map: 105040300, count: 10}
+
+      - name: Orbis
+        level_lo: 30
+        level_hi: 86
+        wanderers: 6
+        maps:
+          - {map: 200000000, count: 12}
+
+      - name: Ludibrium
+        level_lo: 25
+        level_hi: 90
+        wanderers: 6
+        maps:
+          - {map: 220000000, count: 14}
+
+      - name: El Nath
+        level_lo: 50
+        level_hi: 85
+        wanderers: 5
+        maps:
+          - {map: 211000000, count: 10}
