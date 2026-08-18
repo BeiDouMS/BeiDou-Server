@@ -74,7 +74,7 @@ web中所有的图片均需要联网获取，感谢 https://maplestory.io 提供
 
 # 扩展运行时 / SoloMapling
 
-北斗支持通过 **SPI 插件**加载外部扩展，而不必把大框架永久打进主 jar。当前首个完整插件是 [SoloMapling](https://github.com/MadaraGameDev/SoloMapling)（冒险岛 v83 假人 / 城镇 / 自由市场 / 练级 bot 框架）；**插件源码与构建在 SoloMapling 仓库的 `beidou-plugin/` 模块**，本仓库只提供宿主运行时。SPI 契约在独立仓库 [maple-extension-api](https://github.com/zmzeng/maple-extension-api)（`dev.maple.extension:extension-api`），不绑定北斗或任何插件。
+北斗支持通过 **SPI 插件**加载外部扩展，而不必把大框架永久打进主 jar。当前首个完整插件是 [SoloMapling](https://github.com/MadaraGameDev/SoloMapling)（冒险岛 v83 假人 / 城镇 / 自由市场 / 练级 bot 框架）；**SoloMapling 仓库本身就是插件工程**，本仓库只提供宿主运行时。SPI 契约在独立仓库 [maple-extension-api](https://github.com/zmzeng/maple-extension-api)（`dev.maple.extension:extension-api`），不绑定北斗或任何插件。
 
 更细的模块说明见：`gms-server/src/main/java/org/gms/extension/README.md`。
 
@@ -84,7 +84,7 @@ web中所有的图片均需要联网获取，感谢 https://maplestory.io 提供
 |------|------|
 | `dev.maple.extension:extension-api` | 宿主无关 SPI：`ServerExtension`、`HostRuntime`、配置 / 事件总线 / 命令注册 |
 | `org.gms.extension.runtime` | 北斗实现：`BeiDouHostRuntime`、`ExtensionLoader`（扫描 `plugins/*.jar` + `ServiceLoader`） |
-| SoloMapling `beidou-plugin/` | 独立构建的 SoloMapling 插件 jar，入口类 `SoloMaplingExtension` |
+| SoloMapling 仓库 | 独立构建的 SoloMapling 插件 jar，入口类 `SoloMaplingExtension` |
 | `gms-server/plugins/` | 插件 jar 放置目录（jar 本身不入库，保留 `.gitkeep`） |
 
 **启动顺序：** Spring Boot 就绪 → `ServerManager` 构建 `HostRuntime` 并 `load(plugins/)`（各插件 `onLoad`）→ `Server.init()` 拉起登录服与频道 → `notifyServerReady()`（各插件 `onServerReady`）→ SoloMapling 按配置延迟约 1s 执行 `EnvironmentManager` 多波刷图。
@@ -117,7 +117,7 @@ mvn -pl gms-server -am install -DskipTests
 mvn -pl gms-server package -DskipTests   # 产出 BeiDou-boot.jar
 
 # 2. 在 SoloMapling 仓库构建插件 jar
-cd /path/to/SoloMapling/beidou-plugin
+cd /path/to/SoloMapling
 mvn package -DskipTests
 
 # 3. 部署：将插件 jar 放入 gms-server/plugins/
@@ -135,14 +135,6 @@ java -Xmx4g \
 - 可运行产物是带 classifier 的 **`BeiDou-boot.jar`**；主产物 `BeiDou.jar` 为瘦 jar，供插件模块编译依赖。
 - 克隆假人模板角色名为 **`fmbot`**（Flyway `V1.9.3`）。
 - 游戏内 GM ≥ 4 可用：`!smping`、`!env`、`!bot`、`!move`、`!fmbot`、`!gcmove`。
-- 人口 YAML 配置见 SoloMapling `beidou-plugin/src/main/java/soloMapling/Environment/CONFIG.md`。
+- 人口 YAML 配置见 SoloMapling `src/main/java/soloMapling/Environment/CONFIG.md`。
 
-## 与 Cosmic 版 SoloMapling 的关系
-
-| | Cosmic 集成 | BeiDou 集成 |
-|--|-------------|-------------|
-| 框架代码位置 | 编进 Cosmic 主工程 `soloMapling/` | 独立 jar：SoloMapling `beidou-plugin/` |
-| 加载方式 | 启动即内嵌 | `plugins/` + SPI |
-| 上游源码 | SoloMapling 仓库 | 同左 |
-
-上游框架改动请先落在 SoloMapling 仓库，BeiDou 侧只需更新 `plugins/` 中的 jar 与可选的外部 YAML 配置。
+上游框架改动请先落在 SoloMapling 仓库，北斗侧只需更新 `plugins/` 中的 jar 与可选的外部 YAML 配置。

@@ -10,7 +10,7 @@ Feature branch reference: `feat/beidou-solomapling-plugin`
 | `org.gms.extension.runtime` | Host-side runtime (`ExtensionLoader`, `BeiDouHostRuntime`, …) |
 | `gms-server/plugins/*.jar` | Drop zone for external plugins (gitignored jars; keep `.gitkeep`) |
 
-SoloMapling plugin sources live in the [SoloMapling](https://github.com/MadaraGameDev/SoloMapling) repo under `beidou-plugin/`.
+SoloMapling plugin sources live in the [SoloMapling](https://github.com/MadaraGameDev/SoloMapling) repo (the repo **is** the plugin).
 
 ## Load order
 
@@ -41,7 +41,7 @@ mvn -pl gms-server -am install -DskipTests
 mvn -pl gms-server package -DskipTests
 
 # Plugin (SoloMapling repo)
-cd /path/to/SoloMapling/beidou-plugin
+cd /path/to/SoloMapling
 mvn package -DskipTests
 cp target/solomapling-plugin-*-SNAPSHOT.jar /path/to/BeiDou-Server/gms-server/plugins/
 
@@ -60,7 +60,7 @@ Artificial characters are identified by plugin-registered `CharacterClassifier`s
 
 Population / TrainingBot / town ambient counts: `EnvironmentPopulation.yaml`
 (`waves.*` and `waves.town_presence.towns`) — see SoloMapling
-`beidou-plugin/src/main/java/soloMapling/Environment/CONFIG.md`.
+`src/main/java/soloMapling/Environment/CONFIG.md`.
 
 Runtime load order (not from `BeiDou-boot.jar`): optional
 `solomapling.population-config` → cwd file override → plugin-jar classpath.
