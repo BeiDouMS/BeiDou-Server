@@ -74,7 +74,7 @@ web中所有的图片均需要联网获取，感谢 https://maplestory.io 提供
 
 # 扩展运行时 / SoloMapling
 
-北斗支持通过 **SPI 插件**加载外部扩展，而不必把大框架永久打进主 jar。当前首个完整插件是 [SoloMapling](https://github.com/MadaraGameDev/SoloMapling)（冒险岛 v83 假人 / 城镇 / 自由市场 / 练级 bot 框架）；**插件源码与构建在 SoloMapling 仓库的 `beidou-plugin/` 模块**，本仓库只提供宿主运行时。
+北斗支持通过 **SPI 插件**加载外部扩展，而不必把大框架永久打进主 jar。当前首个完整插件是 [SoloMapling](https://github.com/MadaraGameDev/SoloMapling)（冒险岛 v83 假人 / 城镇 / 自由市场 / 练级 bot 框架）；**插件源码与构建在 SoloMapling 仓库的 `beidou-plugin/` 模块**，本仓库只提供宿主运行时。SPI 契约在独立仓库 [maple-extension-api](https://github.com/zmzeng/maple-extension-api)（`dev.maple.extension:extension-api`），不绑定北斗或任何插件。
 
 更细的模块说明见：`gms-server/src/main/java/org/gms/extension/README.md`。
 
@@ -82,14 +82,14 @@ web中所有的图片均需要联网获取，感谢 https://maplestory.io 提供
 
 | 组件 | 作用 |
 |------|------|
-| `extension-api` | 宿主与插件共用的 SPI：`ServerExtension`、`HostRuntime`、配置 / 事件总线 / 命令注册 |
+| `dev.maple.extension:extension-api` | 宿主无关 SPI：`ServerExtension`、`HostRuntime`、配置 / 事件总线 / 命令注册 |
 | `org.gms.extension.runtime` | 北斗实现：`BeiDouHostRuntime`、`ExtensionLoader`（扫描 `plugins/*.jar` + `ServiceLoader`） |
 | SoloMapling `beidou-plugin/` | 独立构建的 SoloMapling 插件 jar，入口类 `SoloMaplingExtension` |
 | `gms-server/plugins/` | 插件 jar 放置目录（jar 本身不入库，保留 `.gitkeep`） |
 
 **启动顺序：** Spring Boot 就绪 → `ServerManager` 构建 `HostRuntime` 并 `load(plugins/)`（各插件 `onLoad`）→ `Server.init()` 拉起登录服与频道 → `notifyServerReady()`（各插件 `onServerReady`）→ SoloMapling 按配置延迟约 1s 执行 `EnvironmentManager` 多波刷图。
 
-插件只依赖 `extension-api`；游戏逻辑仍由北斗宿主提供。假人是真实的 `Character` 对象，因此 gms-server 内仍保留少量 hook（`BotClient`、地图 / 交易 / 雇佣商店、命令桥接等）。
+插件对 SPI 只依赖 `extension-api`（provided）；游戏逻辑仍由北斗宿主提供。假人是真实的 `Character` 对象，因此 gms-server 内仍保留少量 hook（`BotClient`、地图 / 交易 / 雇佣商店、命令桥接等）。
 
 ## 配置
 
@@ -107,9 +107,13 @@ solomapling:
 ## 构建与加载 SoloMapling
 
 ```bash
-# 1. 构建并安装北斗宿主（extension-api + 瘦 jar gms-server）
+# 0. 安装中立 SPI（独立仓库 maple-extension-api）
+cd /path/to/maple-extension-api
+mvn install
+
+# 1. 构建并安装北斗宿主（瘦 jar gms-server）
 cd /path/to/BeiDou-Server
-mvn -pl extension-api,gms-server -am install -DskipTests
+mvn -pl gms-server -am install -DskipTests
 mvn -pl gms-server package -DskipTests   # 产出 BeiDou-boot.jar
 
 # 2. 在 SoloMapling 仓库构建插件 jar

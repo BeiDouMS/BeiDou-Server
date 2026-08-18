@@ -1,6 +1,6 @@
 package org.gms.extension.runtime;
 
-import org.gms.extension.api.HostConfig;
+import dev.maple.extension.api.HostConfig;
 import org.springframework.core.env.Environment;
 
 /**

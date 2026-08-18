@@ -1,7 +1,7 @@
 package org.gms.extension.runtime;
 
-import org.gms.extension.api.HostCommandHandler;
-import org.gms.extension.api.HostCommandRegistry;
+import dev.maple.extension.api.HostCommandHandler;
+import dev.maple.extension.api.HostCommandRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

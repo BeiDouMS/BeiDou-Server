@@ -1,9 +1,9 @@
 package org.gms.extension.runtime;
 
-import org.gms.extension.api.HostRuntime;
-import org.gms.extension.api.ServerExtension;
-import org.gms.extension.api.event.ServerReadyEvent;
-import org.gms.extension.api.event.ServerShutdownEvent;
+import dev.maple.extension.api.HostRuntime;
+import dev.maple.extension.api.ServerExtension;
+import dev.maple.extension.api.event.ServerReadyEvent;
+import dev.maple.extension.api.event.ServerShutdownEvent;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

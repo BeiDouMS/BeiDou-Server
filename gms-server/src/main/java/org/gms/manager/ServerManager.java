@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.ServerApplication;
 import org.gms.constants.net.ServerConstants;
-import org.gms.extension.api.HostRuntime;
+import dev.maple.extension.api.HostRuntime;
 import org.gms.extension.runtime.BeiDouHostCommandRegistry;
 import org.gms.extension.runtime.BeiDouHostConfig;
 import org.gms.extension.runtime.BeiDouHostRuntime;

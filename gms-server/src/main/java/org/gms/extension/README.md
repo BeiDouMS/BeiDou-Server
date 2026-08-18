@@ -6,7 +6,7 @@ Feature branch reference: `feat/beidou-solomapling-plugin`
 
 | Module / package | Role |
 |------------------|------|
-| `extension-api` | Shared SPI (`ServerExtension`, `HostRuntime`, `HostConfig`, `HostEventBus`, `HostCommandRegistry`) |
+| `dev.maple.extension:extension-api` | Host-neutral SPI (separate repo: [maple-extension-api](https://github.com/zmzeng/maple-extension-api)) |
 | `org.gms.extension.runtime` | Host-side runtime (`ExtensionLoader`, `BeiDouHostRuntime`, …) |
 | `gms-server/plugins/*.jar` | Drop zone for external plugins (gitignored jars; keep `.gitkeep`) |
 
@@ -32,8 +32,12 @@ solomapling:
 ## Build & install SoloMapling plugin
 
 ```bash
+# Neutral SPI
+cd /path/to/maple-extension-api && mvn install
+
 # Host (this repo)
-mvn -pl extension-api,gms-server -am install -DskipTests
+cd /path/to/BeiDou-Server
+mvn -pl gms-server -am install -DskipTests
 mvn -pl gms-server package -DskipTests
 
 # Plugin (SoloMapling repo)

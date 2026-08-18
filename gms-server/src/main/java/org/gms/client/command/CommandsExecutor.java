@@ -34,7 +34,7 @@ import org.gms.client.command.commands.gm5.*;
 import org.gms.client.command.commands.gm6.*;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
-import org.gms.extension.api.HostRuntime;
+import dev.maple.extension.api.HostRuntime;
 import org.gms.extension.runtime.BeiDouHostCommandRegistry;
 import org.gms.extension.runtime.ExtensionLoader;
 import org.gms.manager.ServerManager;

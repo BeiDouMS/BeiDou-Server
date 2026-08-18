@@ -1,7 +1,7 @@
 package org.gms.extension.runtime;
 
-import org.gms.extension.api.HostEvent;
-import org.gms.extension.api.HostEventBus;
+import dev.maple.extension.api.HostEvent;
+import dev.maple.extension.api.HostEventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

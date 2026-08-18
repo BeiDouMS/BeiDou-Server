@@ -1,9 +1,9 @@
 package org.gms.extension.runtime;
 
-import org.gms.extension.api.HostCommandRegistry;
-import org.gms.extension.api.HostConfig;
-import org.gms.extension.api.HostEventBus;
-import org.gms.extension.api.HostRuntime;
+import dev.maple.extension.api.HostCommandRegistry;
+import dev.maple.extension.api.HostConfig;
+import dev.maple.extension.api.HostEventBus;
+import dev.maple.extension.api.HostRuntime;
 
 /**
  * BeiDou implementation of {@link HostRuntime}. Constructed once per server process.
