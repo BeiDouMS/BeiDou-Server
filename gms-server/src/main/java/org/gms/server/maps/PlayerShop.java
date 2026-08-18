@@ -20,8 +20,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package org.gms.server.maps;
+import org.gms.extension.runtime.ExtensionLoader;
 
-import org.gms.client.BotClient;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Inventory;
@@ -340,7 +340,7 @@ public class PlayerShop extends AbstractMapObject {
         visitorLock.lock();
         try {
             for (int i = 0; i < 3; i++) {
-                if (visitors[i] != null && !BotClient.isBot(visitors[i])) {
+                if (visitors[i] != null && !ExtensionLoader.isArtificial(visitors[i])) {
                     visitors[i].sendPacket(packet);
                 }
             }
@@ -563,7 +563,7 @@ public class PlayerShop extends AbstractMapObject {
                 owner.gainMeso(price, true);
 
                 SoldItem soldItem = new SoldItem(bot.getName(), shopItem.getItem().getItemId(), quantity, price);
-                if (!BotClient.isBot(owner)) {
+                if (!ExtensionLoader.isArtificial(owner)) {
                     owner.sendPacket(PacketCreator.getPlayerShopOwnerUpdate(soldItem, itemPosition));
                 }
                 synchronized (sold) {
@@ -602,7 +602,7 @@ public class PlayerShop extends AbstractMapObject {
             if (this.hasFreeSlot() && !this.isVisitor(chr)) {
                 this.addVisitor(chr);
                 chr.setPlayerShop(this);
-                if (!BotClient.isBot(chr)) {
+                if (!ExtensionLoader.isArtificial(chr)) {
                     this.sendShop(chr.getClient());
                 }
 

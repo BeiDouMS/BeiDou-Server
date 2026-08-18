@@ -1,9 +1,11 @@
 package org.gms.extension.runtime;
 
+import dev.maple.extension.api.HostEvent;
 import dev.maple.extension.api.HostRuntime;
 import dev.maple.extension.api.ServerExtension;
 import dev.maple.extension.api.event.ServerReadyEvent;
 import dev.maple.extension.api.event.ServerShutdownEvent;
+import org.gms.client.Character;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,22 @@ public final class ExtensionLoader {
 
     public HostRuntime getRuntime() {
         return runtime;
+    }
+
+    public static boolean isArtificial(int characterId) {
+        HostRuntime rt = INSTANCE.runtime;
+        return rt != null && rt.isArtificialCharacter(characterId);
+    }
+
+    public static boolean isArtificial(Character chr) {
+        return chr != null && isArtificial(chr.getId());
+    }
+
+    public static void publish(HostEvent event) {
+        HostRuntime rt = INSTANCE.runtime;
+        if (rt != null) {
+            rt.events().publish(event);
+        }
     }
 
     public synchronized void load(HostRuntime runtime, Path pluginsDir) {

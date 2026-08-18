@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.net.server.channel.handlers;
 
-import org.gms.client.BotClient;
+import dev.maple.extension.api.event.CharacterChatEvent;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
@@ -30,7 +30,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.extension.runtime.SoloMaplingBridge;
+import org.gms.extension.runtime.ExtensionLoader;
 import org.gms.server.ChatLogger;
 import org.gms.util.PacketCreator;
 
@@ -64,8 +64,8 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
             if (!chr.isHidden()) {
                 chr.getMap().broadcastMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
                 ChatLogger.log(c, "General", s);
-                if (!BotClient.isBot(chr)) {
-                    SoloMaplingBridge.onChatGeneral(chr, s);
+                if (!ExtensionLoader.isArtificial(chr)) {
+                    ExtensionLoader.publish(new CharacterChatEvent(chr.getId(), s));
                 }
             } else {
                 chr.getMap().broadcastGMMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));

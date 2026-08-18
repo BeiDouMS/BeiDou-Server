@@ -20,8 +20,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.server.maps;
+import org.gms.extension.runtime.ExtensionLoader;
 
-import org.gms.client.BotClient;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Inventory;
@@ -829,7 +829,7 @@ public class HiredMerchant extends AbstractMapObject {
             }
 
             Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterByName(ownerName);
-            if (owner != null && !BotClient.isBot(owner)) {
+            if (owner != null && !ExtensionLoader.isArtificial(owner)) {
                 owner.addMerchantMesos(price);
             } else {
                 try (Connection con = DatabaseConnection.getConnection()) {

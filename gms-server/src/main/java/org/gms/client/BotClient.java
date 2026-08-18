@@ -69,13 +69,4 @@ public class BotClient extends Client {
     public long getLastPacket() {
         return System.currentTimeMillis();
     }
-
-    /** SoloMapling artificial player id range (see BotHelpers in plugin). */
-    public static boolean isBot(Character chr) {
-        if (chr == null) {
-            return false;
-        }
-        int id = chr.getId();
-        return id > 20_000 || id == 999;
-    }
 }

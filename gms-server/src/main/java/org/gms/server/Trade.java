@@ -21,7 +21,7 @@
 */
 package org.gms.server;
 
-import org.gms.client.BotClient;
+import dev.maple.extension.api.event.TradeInviteEvent;
 import org.gms.client.Character;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
@@ -34,7 +34,7 @@ import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResult;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
-import org.gms.extension.runtime.SoloMaplingBridge;
+import org.gms.extension.runtime.ExtensionLoader;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,7 +128,7 @@ public class Trade {
 
         for (Item item : exchangeItems) {
             KarmaManipulator.toggleKarmaFlagToUntradeable(item);
-            if (!BotClient.isBot(chr)) {
+            if (!ExtensionLoader.isArtificial(chr)) {
                 InventoryManipulator.addFromDrop(chr.getClient(), item, show);
             }
         }
@@ -294,7 +294,7 @@ public class Trade {
             tradeItems.add(new Pair<>(item, item.getInventoryType()));
         }
 
-        return BotClient.isBot(chr) || Inventory.checkSpotsAndOwnership(chr, tradeItems);
+        return ExtensionLoader.isArtificial(chr) || Inventory.checkSpotsAndOwnership(chr, tradeItems);
     }
 
     private boolean fitsUniquesInInventory() {
@@ -417,16 +417,16 @@ public class Trade {
             }
 
             logTrade(local, partner);
-            if (!BotClient.isBot(local.getChr())) {
+            if (!ExtensionLoader.isArtificial(local.getChr())) {
                 local.completeTrade();
             }
-            if (!BotClient.isBot(partner.getChr())) {
+            if (!ExtensionLoader.isArtificial(partner.getChr())) {
                 partner.completeTrade();
             }
-            if (BotClient.isBot(local.getChr())) {
+            if (ExtensionLoader.isArtificial(local.getChr())) {
                 local.setCallbackSuccessfulTrade();
             }
-            if (BotClient.isBot(partner.getChr())) {
+            if (ExtensionLoader.isArtificial(partner.getChr())) {
                 partner.setCallbackSuccessfulTrade();
             }
 
@@ -559,8 +559,8 @@ public class Trade {
 
                 c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 0));
                 c2.sendPacket(PacketCreator.tradeInvite(c1));
-                if (BotClient.isBot(c2)) {
-                    SoloMaplingBridge.addBotTradeRequest(c2, c1);
+                if (ExtensionLoader.isArtificial(c2)) {
+                    ExtensionLoader.publish(new TradeInviteEvent(c2.getId(), c1.getId()));
                 }
             } else {
                 c1.message(I18nUtil.getMessage("Trade.inviteTrade.createInvite.msg1"));
@@ -577,10 +577,10 @@ public class Trade {
         InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.TRADE, c1.getId(), c2.getId(), true);
 
         InviteResultType res = inviteRes.result;
-        if (res == InviteResultType.ACCEPTED || BotClient.isBot(c2)) {
+        if (res == InviteResultType.ACCEPTED || ExtensionLoader.isArtificial(c2)) {
             if (c1.getTrade() != null && c1.getTrade().getPartner() == c2.getTrade() && c2.getTrade() != null && c2.getTrade().getPartner() == c1.getTrade()) {
                 c2.sendPacket(PacketCreator.getTradePartnerAdd(c1));
-                if (!BotClient.isBot(c1)) {
+                if (!ExtensionLoader.isArtificial(c1)) {
                     c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
                 }
                 c1.getTrade().setFullTrade(true);

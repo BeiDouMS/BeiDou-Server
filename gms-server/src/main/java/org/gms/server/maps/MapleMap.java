@@ -21,7 +21,7 @@
  */
 package org.gms.server.maps;
 
-import org.gms.client.BotClient;
+import dev.maple.extension.api.event.CharacterMapEnteredEvent;
 import org.gms.client.BuffStat;
 import org.gms.client.Character;
 import org.gms.client.Client;
@@ -72,7 +72,7 @@ import org.gms.server.life.SpawnPoint;
 import org.gms.server.partyquest.CarnivalFactory;
 import org.gms.server.partyquest.CarnivalFactory.MCSkill;
 import org.gms.server.partyquest.GuardianSpawnPoint;
-import org.gms.extension.runtime.SoloMaplingBridge;
+import org.gms.extension.runtime.ExtensionLoader;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 import org.gms.util.Randomizer;
@@ -433,7 +433,7 @@ public class MapleMap {
             for (Character chr : characters) {
                 if (condition == null || condition.canSpawn(chr)) {
                     if (chr.getPosition().distanceSq(mapobject.getPosition()) <= getRangedDistance()) {
-                        if (!BotClient.isBot(chr)) {
+                        if (!ExtensionLoader.isArtificial(chr)) {
                             inRangeCharacters.add(chr);
                             chr.addVisibleMapObject(mapobject);
                         }
@@ -2543,8 +2543,8 @@ public class MapleMap {
         chr.setMapId(mapid);
         chr.updateActiveEffects();
 
-        if (!BotClient.isBot(chr)) {
-            SoloMaplingBridge.onMapEntered(chr, mapid);
+        if (!ExtensionLoader.isArtificial(chr)) {
+            ExtensionLoader.publish(new CharacterMapEnteredEvent(chr.getId(), mapid));
         }
 
         if (this.getHPDec() > 0) {
@@ -2560,11 +2560,11 @@ public class MapleMap {
                 aggroMonitor.startAggroCoordinator();
             }
 
-            if (onFirstUserEnter.length() != 0 && !BotClient.isBot(chr)) {
+            if (onFirstUserEnter.length() != 0 && !ExtensionLoader.isArtificial(chr)) {
                 msm.runMapScript(chr.getClient(), "onFirstUserEnter/" + onFirstUserEnter, true);
             }
         }
-        if (onUserEnter.length() != 0 && !BotClient.isBot(chr)) {
+        if (onUserEnter.length() != 0 && !ExtensionLoader.isArtificial(chr)) {
             if (onUserEnter.equals("cygnusTest") && !MapId.isCygnusIntro(mapid)) {
                 chr.saveLocation("INTRO");
             }
@@ -2916,7 +2916,7 @@ public class MapleMap {
             for (Character c : characters) {
                 // SoloMapling bots stay on maps with awayFromWorld=true until marked entered;
                 // never treat them as disconnect ghosts.
-                if (c != null && c.isAwayFromWorld() && !BotClient.isBot(c)) {
+                if (c != null && c.isAwayFromWorld() && !ExtensionLoader.isArtificial(c)) {
                     ghosts.add(c);
                 }
             }
@@ -3030,7 +3030,7 @@ public class MapleMap {
                 if (chrDisconnected(iterator, chr)) {
                     continue;
                 }
-                if (chr != source && !BotClient.isBot(chr)) {
+                if (chr != source && !ExtensionLoader.isArtificial(chr)) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
                         if (rangedFrom.distanceSq(chr.getPosition()) <= rangeSq) {
                             chr.sendPacket(packet);
@@ -3081,7 +3081,7 @@ public class MapleMap {
         chrRLock.lock();
         try {
             for (Character chr : characters) {
-                if (chr != source && !BotClient.isBot(chr)) {
+                if (chr != source && !ExtensionLoader.isArtificial(chr)) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
                         if (rangedFrom.distanceSq(chr.getPosition()) <= rangeSq) {
                             chr.getClient().announceBossHpBar(mm, bossHash, packet);

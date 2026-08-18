@@ -54,6 +54,10 @@ Runnable artifact is **`BeiDou-boot.jar`** (classifier `boot`). Thin `BeiDou.jar
 
 See the repository root `README.md` section **扩展运行时 / SoloMapling** for the full operator guide.
 
+Gameplay events (character ids only): `CharacterMapEnteredEvent`, `CharacterChatEvent`, `TradeInviteEvent`.
+Artificial characters are identified by plugin-registered `CharacterClassifier`s (`ExtensionLoader.isArtificial`), not a SoloMapling-specific bridge.
+
+
 Population / TrainingBot / town ambient counts: `EnvironmentPopulation.yaml`
 (`waves.*` and `waves.town_presence.towns`) — see SoloMapling
 `beidou-plugin/src/main/java/soloMapling/Environment/CONFIG.md`.
