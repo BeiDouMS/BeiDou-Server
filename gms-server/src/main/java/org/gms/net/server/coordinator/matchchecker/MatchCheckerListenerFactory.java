@@ -20,7 +20,6 @@
 package org.gms.net.server.coordinator.matchchecker;
 
 import org.gms.net.server.coordinator.matchchecker.listener.MatchCheckerCPQChallenge;
-import org.gms.net.server.coordinator.matchchecker.listener.MatchCheckerGuildCreation;
 
 /**
  * @author Ronan
@@ -29,7 +28,6 @@ public class MatchCheckerListenerFactory {
 
     public enum MatchCheckerType {
 
-        GUILD_CREATION(MatchCheckerGuildCreation.loadListener()),
         CPQ_CHALLENGE(MatchCheckerCPQChallenge.loadListener());
 
         private final AbstractMatchCheckerListener listener;

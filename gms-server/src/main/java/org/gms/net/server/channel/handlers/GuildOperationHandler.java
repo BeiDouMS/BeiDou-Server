@@ -29,20 +29,15 @@ import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
-import org.gms.net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import org.gms.net.server.guild.Alliance;
 import org.gms.net.server.guild.Guild;
 import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.guild.GuildResponse;
-import org.gms.net.server.world.Party;
-import org.gms.net.server.world.World;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 public final class GuildOperationHandler extends AbstractPacketHandler {
@@ -72,7 +67,6 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 }
                 if (mc.getMeso() < GameConfig.getServerInt("create_guild_cost")) {
                     mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message2"));
-                    //mc.dropMessage(1, "You do not have " + GameConstants.numberWithCommas(GameConfig.getServerInt("create_guild_cost")) + " mesos to create a Guild.");
                     return;
                 }
                 String guildName = p.readString();
@@ -81,30 +75,29 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                Set<Character> eligibleMembers = new HashSet<>(Guild.getEligiblePlayersForGuild(mc));
-                if (eligibleMembers.size() < GameConfig.getServerInt("create_guild_min_partners")) {
-                    if (mc.getMap().getAllPlayers().size() < GameConfig.getServerInt("create_guild_min_partners")) {
-                        // thanks NovaStory for noticing message in need of smoother info
-                        mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message4"));
-                    } else {
-                        // players may be unaware of not belonging on a party in order to become eligible, thanks Hair (Legalize) for pointing this out
-                        mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message5"));
-                    }
-
+                // 必须在队伍中且为队长才能创建公会
+                if (mc.getParty() == null || !mc.isPartyLeader()) {
+                    mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message9"));
                     return;
                 }
 
-                if (!Party.createParty(mc, true)) {
-                    mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message6"));
+                // 直接创建公会：校验通过后立即创建，无需同屏确认
+                int guildId = Server.getInstance().createGuild(mc.getId(), guildName);
+                if (guildId == 0) {
+                    mc.sendPacket(GuildPackets.genericGuildMessage((byte) 0x23));
                     return;
                 }
+                mc.gainMeso(-GameConfig.getServerInt("create_guild_cost"), true, false, true);
 
-                Set<Integer> eligibleCids = new HashSet<>();
-                for (Character chr : eligibleMembers) {
-                    eligibleCids.add(chr.getId());
-                }
+                mc.getMGC().setGuildId(guildId);
+                Server.getInstance().getGuild(guildId, mc.getWorld(), mc);  // 初始化并缓存公会结构
+                Server.getInstance().changeRank(guildId, mc.getId(), 1);     // 设为会长(rank 1)，同时落库 characters
 
-                c.getWorldServer().getMatchCheckerCoordinator().createMatchConfirmation(MatchCheckerType.GUILD_CREATION, c.getWorld(), mc.getId(), eligibleCids, guildName);
+                mc.sendPacket(GuildPackets.showGuildInfo(mc));
+                mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message8"));
+
+                mc.getGuild().broadcastNameChanged();
+                mc.getGuild().broadcastEmblemChanged();
                 break;
             case 0x05:
                 if (mc.getGuildId() <= 0 || mc.getGuildRank() > 2) {
@@ -255,32 +248,6 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 Server.getInstance().setGuildNotice(mc.getGuildId(), notice);
-                break;
-            case 0x1E:
-                p.readInt();
-                World wserv = c.getWorldServer();
-
-                if (mc.getParty() != null) {
-                    wserv.getMatchCheckerCoordinator().dismissMatchConfirmation(mc.getId());
-                    return;
-                }
-
-                int leaderid = wserv.getMatchCheckerCoordinator().getMatchConfirmationLeaderid(mc.getId());
-                if (leaderid != -1) {
-                    boolean result = p.readByte() != 0;
-                    if (result && wserv.getMatchCheckerCoordinator().isMatchConfirmationActive(mc.getId())) {
-                        Character leader = wserv.getPlayerStorage().getCharacterById(leaderid);
-                        if (leader != null) {
-                            int partyid = leader.getPartyId();
-                            if (partyid != -1) {
-                                Party.joinParty(mc, partyid, true);    // GMS gimmick "party to form guild" recalled thanks to Vcoc
-                            }
-                        }
-                    }
-
-                    wserv.getMatchCheckerCoordinator().answerMatchConfirmation(mc.getId(), result);
-                }
-
                 break;
             default:
                 log.warn("Unhandled GUILD_OPERATION packet: {}", p);

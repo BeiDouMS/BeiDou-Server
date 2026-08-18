@@ -26,8 +26,6 @@ import lombok.Setter;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.config.GameConfig;
-import org.gms.net.server.coordinator.matchchecker.MatchCheckerCoordinator;
-import org.gms.net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.maps.Door;
 import org.gms.server.maps.MapleMap;
@@ -414,11 +412,6 @@ public class Party {
             }
 
             player.setParty(null);
-
-            MatchCheckerCoordinator mmce = c.getWorldServer().getMatchCheckerCoordinator();
-            if (mmce.getMatchConfirmationLeaderid(player.getId()) == player.getId() && mmce.getMatchConfirmationType(player.getId()) == MatchCheckerType.GUILD_CREATION) {
-                mmce.dismissMatchConfirmation(player.getId());
-            }
         }
     }
 

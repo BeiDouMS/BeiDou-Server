@@ -28,7 +28,6 @@ import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
-import org.gms.net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResult;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
@@ -42,8 +41,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -441,20 +440,20 @@ public class Guild {
                 }
             }
 
-            try (PreparedStatement ps = con.prepareStatement("INSERT INTO guilds (`leader`, `name`, `signature`) VALUES (?, ?, ?)")) {
+            final int guildId;
+            try (PreparedStatement ps = con.prepareStatement(
+                    "INSERT INTO guilds (`leader`, `name`, `signature`) VALUES (?, ?, ?)"
+                    , Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, leaderId);
                 ps.setString(2, name);
                 ps.setInt(3, (int) System.currentTimeMillis());
                 ps.executeUpdate();
-            }
 
-            final int guildId;
-            try (PreparedStatement ps = con.prepareStatement("SELECT guildid FROM guilds WHERE leader = ?")) {
-                ps.setInt(1, leaderId);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    rs.next();
-                    guildId = rs.getInt("guildid");
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (!rs.next()) {
+                        return 0;
+                    }
+                    guildId = rs.getInt(1);
                 }
             }
 
@@ -742,20 +741,6 @@ public class Guild {
             sender.sendPacket(mgr.getPacket(targetName));
         }
         return false;
-    }
-
-    public static Set<Character> getEligiblePlayersForGuild(Character guildLeader) {
-        Set<Character> guildMembers = new HashSet<>();
-        guildMembers.add(guildLeader);
-
-        MatchCheckerCoordinator mmce = guildLeader.getWorldServer().getMatchCheckerCoordinator();
-        for (Character chr : guildLeader.getMap().getAllPlayers()) {
-            if (chr.getParty() == null && chr.getGuild() == null && mmce.getMatchConfirmationLeaderid(chr.getId()) == -1) {
-                guildMembers.add(chr);
-            }
-        }
-
-        return guildMembers;
     }
 
     public static void displayGuildRanks(Client c, int npcid) {

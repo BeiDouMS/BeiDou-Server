@@ -80,15 +80,6 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet createGuildMessage(String masterName, String guildName) {
-        OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
-        p.writeByte(0x3);
-        p.writeInt(0);
-        p.writeString(masterName);
-        p.writeString(guildName);
-        return p;
-    }
-
     /**
      * Gets a Heracle/guild message packet.
      * <p>
