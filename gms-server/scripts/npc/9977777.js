@@ -28,6 +28,57 @@ var ambientSong = "Bgm04/Shinin'Harbor";
 
 var feature_tree = [];
 var feature_cursor;
+var affixOperation;
+var affixEquipSlot;
+
+function isAffixNpcMap() {
+    return cm.getPlayer().getMapId() == 910000000;
+}
+
+function runAffixCommand(commandClass, params) {
+    var command = new (Java.type(commandClass))();
+    command.execute(cm.getClient(), params);
+}
+
+function startAffixNpc() {
+    status = 0;
+    affixOperation = -1;
+    affixEquipSlot = -1;
+    cm.sendSimple("请选择词条工匠服务：\r\n#L0#查看装备词条#l\r\n#L1#重铸词条#l\r\n#L2#锁定或解锁词条#l\r\n#L3#分解装备#l");
+}
+
+function actionAffixNpc(selection) {
+    if (status == 0) {
+        affixOperation = selection;
+        status = 1;
+        if (selection == 0) {
+            runAffixCommand("org.gms.client.command.commands.gm0.InspectCommand", []);
+            cm.dispose();
+        } else {
+            cm.sendGetNumber("请输入装备栏位：", 1, 1, 96);
+        }
+    } else if (status == 1) {
+        if (selection > 0 && selection < 97) {
+            if (affixOperation == 1) {
+                runAffixCommand("org.gms.client.command.commands.gm0.RerollAffixCommand", [String(selection)]);
+                cm.dispose();
+            } else if (affixOperation == 2) {
+                affixEquipSlot = selection;
+                status = 2;
+                cm.sendGetNumber("请输入词条序号（从0开始）：", 0, 0, 7);
+            } else if (affixOperation == 3) {
+                runAffixCommand("org.gms.client.command.commands.gm0.SalvageEquipmentCommand", [String(selection)]);
+                cm.dispose();
+            }
+        }
+    } else if (status == 2 && affixOperation == 2) {
+        runAffixCommand("org.gms.client.command.commands.gm0.LockAffixCommand", [
+            String(affixEquipSlot),
+            String(selection)
+        ]);
+        cm.dispose();
+    }
+}
 
 var tabs = ["PQs", "Skills", "Quests", "Player Social Network", "Cash & Items", "Monsters, Maps & Reactors", "PQ potentials", "Player potentials", "Server potentials", "Commands", "Custom NPCs", "Localhost edits", "Project"];
 
@@ -306,12 +357,24 @@ function writeAllFeatures() {
 }
 
 function start() {
+    if (isAffixNpcMap()) {
+        startAffixNpc();
+        return;
+    }
     status = -1;
     writeAllFeatures();
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
+    if (isAffixNpcMap()) {
+        if (mode <= 0) {
+            cm.dispose();
+            return;
+        }
+        actionAffixNpc(selection);
+        return;
+    }
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
     if (mode == -1) {
         cm.getPlayer().sendPacket(PacketCreator.musicChange(ambientSong));

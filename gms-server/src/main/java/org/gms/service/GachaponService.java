@@ -4,7 +4,11 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
+import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.EquipmentAffixGenerator;
+import org.gms.client.inventory.EquipmentDropSource;
 import org.gms.client.inventory.Item;
+import org.gms.constants.inventory.ItemConstants;
 import org.gms.dao.entity.GachaponRewardDO;
 import org.gms.dao.entity.GachaponRewardPoolDO;
 import org.gms.dao.mapper.GachaponRewardMapper;
@@ -259,7 +263,24 @@ public class GachaponService {
 
         int random = Randomizer.nextInt(poolRewards.size());
         GachaponRewardDO reward = poolRewards.get(random);
-        Item itemGained = player.getAbstractPlayerInteraction().gainItem(reward.getItemId(), reward.getQuantity(), true, true);
+        Item itemGained;
+        if (ItemConstants.getInventoryType(reward.getItemId()).isEquip()) {
+            Equip equip = (Equip) ItemInformationProvider.getInstance().getEquipById(reward.getItemId());
+            if (equip == null) {
+                return;
+            }
+            itemGained = player.getAbstractPlayerInteraction().gainEquipment(
+                    EquipmentAffixGenerator.generate(
+                            ItemInformationProvider.getInstance().randomizeStats(equip),
+                            EquipmentDropSource.GACHAPON
+                    ),
+                    true
+            );
+        } else {
+            itemGained = player.getAbstractPlayerInteraction().gainItem(
+                    reward.getItemId(), reward.getQuantity(), true, true
+            );
+        }
         // 修复背包满导致的空指针
         if (itemGained == null) {
             return;

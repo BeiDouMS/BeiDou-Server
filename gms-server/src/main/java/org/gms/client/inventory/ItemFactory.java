@@ -98,7 +98,7 @@ public enum ItemFactory {
         }
     }
 
-    private static Equip loadEquipFromResultSet(ResultSet rs) throws SQLException {
+    private static Equip loadEquipFromResultSet(Connection con, ResultSet rs) throws SQLException {
         Equip equip = new Equip(rs.getInt("itemid"), (short) rs.getInt("position"));
         equip.setOwner(rs.getString("owner"));
         equip.setQuantity((short) rs.getInt("quantity"));
@@ -126,8 +126,74 @@ public enum ItemFactory {
         equip.setExpiration(rs.getLong("expiration"));
         equip.setGiftFrom(rs.getString("giftFrom"));
         equip.setRingId(rs.getInt("ringid"));
+        equip.setRarity(rs.getByte("rarity"));
+        equip.setLoadedAffixes(loadAffixes(con, rs.getInt("inventoryitemid")));
 
         return equip;
+    }
+
+    private static List<EquipmentAffix> loadAffixes(Connection con, int inventoryItemId) throws SQLException {
+        List<EquipmentAffix> affixes = new ArrayList<>();
+        try (PreparedStatement ps = con.prepareStatement("""
+                     SELECT slot_index, affix_code, affix_tier, affix_value, roll_seed, locked
+                     FROM inventory_equipment_affix
+                     WHERE inventoryitemid = ?
+                     ORDER BY slot_index
+                     """)) {
+            ps.setInt(1, inventoryItemId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    affixes.add(EquipmentAffix.builder()
+                            .slotIndex(rs.getInt("slot_index"))
+                            .affixCode(rs.getString("affix_code"))
+                            .affixTier(rs.getInt("affix_tier"))
+                            .value(rs.getInt("affix_value"))
+                            .rollSeed(rs.getLong("roll_seed"))
+                            .locked(rs.getBoolean("locked"))
+                            .build());
+                }
+            }
+        }
+        return affixes;
+    }
+
+    private static void saveAffixes(Connection con, int inventoryItemId, Equip equip) throws SQLException {
+        try (PreparedStatement delete = con.prepareStatement(
+                "DELETE FROM inventory_equipment_affix WHERE inventoryitemid = ?")) {
+            delete.setInt(1, inventoryItemId);
+            delete.executeUpdate();
+        }
+        if (equip.getAffixes().isEmpty()) {
+            return;
+        }
+        try (PreparedStatement ps = con.prepareStatement("""
+                INSERT INTO inventory_equipment_affix
+                    (inventoryitemid, slot_index, affix_code, affix_tier, affix_value, roll_seed, locked)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """)) {
+            for (EquipmentAffix affix : equip.getAffixes()) {
+                ps.setInt(1, inventoryItemId);
+                ps.setInt(2, affix.getSlotIndex());
+                ps.setString(3, affix.getAffixCode());
+                ps.setInt(4, affix.getAffixTier());
+                ps.setInt(5, affix.getValue());
+                ps.setLong(6, affix.getRollSeed());
+                ps.setBoolean(7, affix.isLocked());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
+
+    private static void deleteAffixes(Connection con, String ownerColumn, int ownerId, int factoryValue) throws SQLException {
+        String sql = "DELETE a FROM inventory_equipment_affix a " +
+                "INNER JOIN inventoryitems i ON i.inventoryitemid = a.inventoryitemid " +
+                "WHERE i.type = ? AND i." + ownerColumn + " = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, factoryValue);
+            ps.setInt(2, ownerId);
+            ps.executeUpdate();
+        }
     }
 
     public static List<Pair<Item, Integer>> loadEquippedItems(int id, boolean isAccount, boolean login) throws SQLException {
@@ -151,7 +217,7 @@ public enum ItemFactory {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         Integer cid = rs.getInt("characterid");
-                        items.add(new Pair<>(loadEquipFromResultSet(rs), cid));
+                        items.add(new Pair<>(loadEquipFromResultSet(con, rs), cid));
                     }
                 }
             }
@@ -181,7 +247,7 @@ public enum ItemFactory {
                         InventoryType mit = InventoryType.getByType(rs.getByte("inventorytype"));
 
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                            items.add(new Pair<>(loadEquipFromResultSet(rs), mit));
+                            items.add(new Pair<>(loadEquipFromResultSet(con, rs), mit));
                         } else {
                             int petid = rs.getInt("petid");
                             if (rs.wasNull()) {
@@ -214,6 +280,7 @@ public enum ItemFactory {
                 con.setAutoCommit(false);
             }
             try {
+                deleteAffixes(con, account ? "accountid" : "characterid", id, value);
                 StringBuilder query = new StringBuilder();
                 query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
                 query.append(account ? "accountid" : "characterid").append("` = ?");
@@ -244,13 +311,21 @@ public enum ItemFactory {
                             psItem.executeUpdate();
 
                             if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                                try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                                try (PreparedStatement psEquip = con.prepareStatement("""
+                                        INSERT INTO inventoryequipment
+                                            (inventoryitemid, upgradeslots, level, str, dex, `int`, luk, hp, mp,
+                                             watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, locked,
+                                             vicious, itemlevel, itemexp, ringid, rarity)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                        """)) {
+                                    int inventoryItemId;
                                     try (ResultSet rs = psItem.getGeneratedKeys()) {
                                         if (!rs.next()) {
                                             throw new RuntimeException("Inserting item failed.");
                                         }
 
-                                        psEquip.setInt(1, rs.getInt(1));
+                                        inventoryItemId = rs.getInt(1);
+                                        psEquip.setInt(1, inventoryItemId);
                                     }
 
                                     Equip equip = (Equip) item;
@@ -276,7 +351,9 @@ public enum ItemFactory {
                                     psEquip.setInt(21, equip.getItemLevel());
                                     psEquip.setInt(22, equip.getItemExp());
                                     psEquip.setInt(23, equip.getRingId());
+                                    psEquip.setInt(24, equip.getRarity());
                                     psEquip.executeUpdate();
+                                    saveAffixes(con, inventoryItemId, equip);
                                 }
                             }
                         }
@@ -340,7 +417,7 @@ public enum ItemFactory {
                         InventoryType mit = InventoryType.getByType(rs.getByte("inventorytype"));
 
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                            items.add(new Pair<>(loadEquipFromResultSet(rs), mit));
+                            items.add(new Pair<>(loadEquipFromResultSet(con, rs), mit));
                         } else {
                             if (bundles > 0) {
                                 int petid = rs.getInt("petid");
@@ -380,6 +457,7 @@ public enum ItemFactory {
                     ps.executeUpdate();
                 }
 
+                deleteAffixes(con, account ? "accountid" : "characterid", id, value);
                 StringBuilder query = new StringBuilder();
                 query.append("DELETE `inventoryitems`, `inventoryequipment` FROM `inventoryitems` LEFT JOIN `inventoryequipment` USING(`inventoryitemid`) WHERE `type` = ? AND `");
                 query.append(account ? "accountid" : "characterid").append("` = ?");
@@ -433,8 +511,16 @@ public enum ItemFactory {
 
                     // Equipment
                     if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                        try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                        try (PreparedStatement ps = con.prepareStatement("""
+                                INSERT INTO inventoryequipment
+                                    (inventoryitemid, upgradeslots, level, str, dex, `int`, luk, hp, mp,
+                                     watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, locked,
+                                     vicious, itemlevel, itemexp, ringid, rarity)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                """)) {
+                            int inventoryItemId;
                             ps.setInt(1, genKey);
+                            inventoryItemId = genKey;
 
                             Equip equip = (Equip) item;
                             ps.setInt(2, equip.getUpgradeSlots());
@@ -459,7 +545,9 @@ public enum ItemFactory {
                             ps.setInt(21, equip.getItemLevel());
                             ps.setInt(22, equip.getItemExp());
                             ps.setInt(23, equip.getRingId());
+                            ps.setInt(24, equip.getRarity());
                             ps.executeUpdate();
+                            saveAffixes(con, inventoryItemId, equip);
                         }
                     }
                 }

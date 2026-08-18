@@ -2076,6 +2076,7 @@ public class Character extends AbstractCharacterObject {
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
                             } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
+                                announcePickedEquipment(mItem);
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
                             } else {
                                 enableActions();
@@ -2128,6 +2129,7 @@ public class Character extends AbstractCharacterObject {
                         }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {//此段判断为处理捡取治疗道具和怪物卡加入图鉴
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
+                        announcePickedEquipment(mItem);
                         if (mItem.getItemId() == ItemId.ARPQ_SPIRIT_JEWEL) {
                             updateAriantScore();
                         }
@@ -2151,6 +2153,12 @@ public class Character extends AbstractCharacterObject {
             }
         }
         enableActions();
+    }
+
+    private void announcePickedEquipment(Item item) {
+        if (item instanceof Equip equip && !equip.getAffixes().isEmpty()) {
+            dropMessage(5, EquipmentAffixFormatter.format(equip));
+        }
     }
 
     public int countItem(int itemid) {
@@ -4624,7 +4632,49 @@ public class Character extends AbstractCharacterObject {
             return 1;
         }
 
-        return expRate;
+        return expRate * (1 + getEquipmentPercent("EXP_RATE") / 100.0f);
+    }
+
+    public float getMesoRate() {
+        return mesoRate * (1 + getEquipmentPercent("MESO_RATE") / 100.0f);
+    }
+
+    public float getDropRate() {
+        return dropRate * (1 + getEquipmentPercent("DROP_RATE") / 100.0f);
+    }
+
+    public int getBossDamageReductionPercent() {
+        double remaining = 1.0;
+        for (Item item : getInventory(InventoryType.EQUIPPED).list()) {
+            if (!(item instanceof Equip equip)) {
+                continue;
+            }
+            for (EquipmentAffix affix : equip.getAffixes()) {
+                if ("BOSS_DAMAGE_REDUCTION".equals(affix.getAffixCode())) {
+                    remaining *= 1 - (affix.getValue() / 100.0);
+                }
+            }
+        }
+        return (int) Math.min(Math.round((1 - remaining) * 100), 70);
+    }
+
+    private int getEquipmentPercent(String affixCode) {
+        int percent = 0;
+        for (Item item : getInventory(InventoryType.EQUIPPED).list()) {
+            if (!(item instanceof Equip equip)) {
+                continue;
+            }
+            for (EquipmentAffix affix : equip.getAffixes()) {
+                if (affixCode.equals(affix.getAffixCode())) {
+                    percent += affix.getValue();
+                }
+            }
+        }
+        return percent;
+    }
+
+    public int getEquipmentIgnoreDefensePercent() {
+        return Math.min(getEquipmentPercent("IGNORE_DEFENSE"), 80);
     }
 
     public float getLevelExpRate() {
@@ -4669,7 +4719,7 @@ public class Character extends AbstractCharacterObject {
 
     public float getBossDropRate() {
         World w = getWorldServer();
-        return (dropRate / w.getDropRate()) * w.getBossDropRate();
+        return (getDropRate() / w.getDropRate()) * w.getBossDropRate();
     }
 
     public int getCouponMesoRate() {
@@ -4820,6 +4870,25 @@ public class Character extends AbstractCharacterObject {
 
     public Inventory getInventory(InventoryType type) {
         return inventory[type.ordinal()];
+    }
+
+    public int applyBossDamageMultiplier(int damage) {
+        if (damage <= 0) {
+            return damage;
+        }
+        double multiplier = 1.0;
+        for (Item item : getInventory(InventoryType.EQUIPPED).list()) {
+            if (!(item instanceof Equip equip)) {
+                continue;
+            }
+            for (EquipmentAffix affix : equip.getAffixes()) {
+                if ("BOSS_DAMAGE".equals(affix.getAffixCode())) {
+                    multiplier *= 1.0 + (affix.getValue() / 100.0);
+                }
+            }
+        }
+        long adjustedDamage = Math.round(damage * multiplier);
+        return (int) Math.min(adjustedDamage, Integer.MAX_VALUE);
     }
 
     public boolean haveItemWithId(int itemid, boolean checkEquipped) {

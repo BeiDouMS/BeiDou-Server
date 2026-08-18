@@ -24,6 +24,7 @@ package org.gms.scripting.reactor;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.EquipmentAffixGenerator;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.constants.inventory.ItemConstants;
@@ -180,7 +181,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                     if (ItemConstants.getInventoryType(d.itemId) != InventoryType.EQUIP) {
                         drop = new Item(d.itemId, (short) 0, (short) 1);
                     } else {
-                        drop = ii.randomizeStats((Equip) ii.getEquipById(d.itemId));
+                        drop = EquipmentAffixGenerator.generate(ii.randomizeStats((Equip) ii.getEquipById(d.itemId)));
                     }
 
                     reactor.getMap().dropFromReactor(getPlayer(), reactor, drop, dropPos, (short) d.questid);
@@ -212,7 +213,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                         drop = new Item(d.itemId, (short) 0, (short) 1);
                     } else {
                         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-                        drop = ii.randomizeStats((Equip) ii.getEquipById(d.itemId));
+                        drop = EquipmentAffixGenerator.generate(ii.randomizeStats((Equip) ii.getEquipById(d.itemId)));
                     }
 
                     r.getMap().dropFromReactor(getPlayer(), r, drop, dropPos, (short) d.questid);

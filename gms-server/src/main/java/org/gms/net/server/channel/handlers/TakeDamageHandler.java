@@ -279,6 +279,9 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     damage *= (highDef.getEffect(hdLevel).getX() / 1000.0);
                 }
             }
+            if (attacker != null && attacker.isBoss()) {
+                damage = Math.round(damage * (1 - chr.getBossDamageReductionPercent() / 100.0f));
+            }
             Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
             if (chr.getBuffedValue(BuffStat.MAGIC_GUARD) != null && mpattack == 0) {
                 int mploss = (int) (damage * (chr.getBuffedValue(BuffStat.MAGIC_GUARD).doubleValue() / 100.0));

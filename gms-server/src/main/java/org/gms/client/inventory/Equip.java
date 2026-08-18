@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Equip extends Item {
     private static final Logger log = LoggerFactory.getLogger(Equip.class);
@@ -77,6 +79,9 @@ public class Equip extends Item {
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
     private float itemExp;
     private int ringid = -1;
+    private byte rarity;
+    private List<EquipmentAffix> affixes = new ArrayList<>();
+    private Map<String, Integer> affixContributions = new HashMap<>();
     private boolean wear = false;
     private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
     private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -117,6 +122,18 @@ public class Equip extends Item {
         ret.upgradeSlots = upgradeSlots;
         ret.itemLevel = itemLevel;
         ret.itemExp = itemExp;
+        ret.rarity = rarity;
+        ret.affixes = affixes.stream()
+                .map(affix -> EquipmentAffix.builder()
+                        .slotIndex(affix.getSlotIndex())
+                        .affixCode(affix.getAffixCode())
+                        .affixTier(affix.getAffixTier())
+                        .value(affix.getValue())
+                        .rollSeed(affix.getRollSeed())
+                        .locked(affix.isLocked())
+                        .build())
+                .collect(Collectors.toCollection(ArrayList::new));
+        ret.affixContributions = new HashMap<>(affixContributions);
         ret.level = level;
         ret.itemLog = new LinkedList<>(itemLog);
         ret.setOwner(getOwner());
@@ -141,51 +158,51 @@ public class Equip extends Item {
     }
 
     public short getStr() {
-        return str;
+        return withAffix("STR", str);
     }
 
     public short getDex() {
-        return dex;
+        return withAffix("DEX", dex);
     }
 
     public short getInt() {
-        return _int;
+        return withAffix("INT", _int);
     }
 
     public short getLuk() {
-        return luk;
+        return withAffix("LUK", luk);
     }
 
     public short getHp() {
-        return hp;
+        return withAffix("HP", hp);
     }
 
     public short getMp() {
-        return mp;
+        return withAffix("MP", mp);
     }
 
     public short getWatk() {
-        return watk;
+        return withAffix("WATK", watk);
     }
 
     public short getMatk() {
-        return matk;
+        return withAffix("MATK", matk);
     }
 
     public short getWdef() {
-        return wdef;
+        return withAffix("WDEF", wdef);
     }
 
     public short getMdef() {
-        return mdef;
+        return withAffix("MDEF", mdef);
     }
 
     public short getAcc() {
-        return acc;
+        return withAffix("ACC", acc);
     }
 
     public short getAvoid() {
-        return avoid;
+        return withAffix("AVOID", avoid);
     }
 
     public short getHands() {
@@ -193,15 +210,55 @@ public class Equip extends Item {
     }
 
     public short getSpeed() {
-        return speed;
+        return withAffix("SPEED", speed);
     }
 
     public short getJump() {
-        return jump;
+        return withAffix("JUMP", jump);
     }
 
     public short getVicious() {
         return vicious;
+    }
+
+    public byte getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(byte rarity) {
+        this.rarity = rarity;
+    }
+
+    public List<EquipmentAffix> getAffixes() {
+        return affixes;
+    }
+
+    public void setAffixes(List<EquipmentAffix> affixes) {
+        this.affixes = affixes == null ? new ArrayList<>() : new ArrayList<>(affixes);
+        this.affixContributions = new HashMap<>();
+        for (EquipmentAffix affix : this.affixes) {
+            if (isFlatAffix(affix.getAffixCode())) {
+                this.affixContributions.merge(affix.getAffixCode(), affix.getValue(), Integer::sum);
+            }
+        }
+    }
+
+    public void setLoadedAffixes(List<EquipmentAffix> affixes) {
+        setAffixes(affixes);
+        str = withoutAffix("STR", str);
+        dex = withoutAffix("DEX", dex);
+        _int = withoutAffix("INT", _int);
+        luk = withoutAffix("LUK", luk);
+        hp = withoutAffix("HP", hp);
+        mp = withoutAffix("MP", mp);
+        watk = withoutAffix("WATK", watk);
+        matk = withoutAffix("MATK", matk);
+        wdef = withoutAffix("WDEF", wdef);
+        mdef = withoutAffix("MDEF", mdef);
+        acc = withoutAffix("ACC", acc);
+        avoid = withoutAffix("AVOID", avoid);
+        speed = withoutAffix("SPEED", speed);
+        jump = withoutAffix("JUMP", jump);
     }
 
     @Override
@@ -210,51 +267,51 @@ public class Equip extends Item {
     }
 
     public void setStr(short str) {
-        this.str = str;
+        this.str = withoutAffix("STR", str);
     }
 
     public void setDex(short dex) {
-        this.dex = dex;
+        this.dex = withoutAffix("DEX", dex);
     }
 
     public void setInt(short _int) {
-        this._int = _int;
+        this._int = withoutAffix("INT", _int);
     }
 
     public void setLuk(short luk) {
-        this.luk = luk;
+        this.luk = withoutAffix("LUK", luk);
     }
 
     public void setHp(short hp) {
-        this.hp = hp;
+        this.hp = withoutAffix("HP", hp);
     }
 
     public void setMp(short mp) {
-        this.mp = mp;
+        this.mp = withoutAffix("MP", mp);
     }
 
     public void setWatk(short watk) {
-        this.watk = watk;
+        this.watk = withoutAffix("WATK", watk);
     }
 
     public void setMatk(short matk) {
-        this.matk = matk;
+        this.matk = withoutAffix("MATK", matk);
     }
 
     public void setWdef(short wdef) {
-        this.wdef = wdef;
+        this.wdef = withoutAffix("WDEF", wdef);
     }
 
     public void setMdef(short mdef) {
-        this.mdef = mdef;
+        this.mdef = withoutAffix("MDEF", mdef);
     }
 
     public void setAcc(short acc) {
-        this.acc = acc;
+        this.acc = withoutAffix("ACC", acc);
     }
 
     public void setAvoid(short avoid) {
-        this.avoid = avoid;
+        this.avoid = withoutAffix("AVOID", avoid);
     }
 
     public void setHands(short hands) {
@@ -262,11 +319,31 @@ public class Equip extends Item {
     }
 
     public void setSpeed(short speed) {
-        this.speed = speed;
+        this.speed = withoutAffix("SPEED", speed);
     }
 
     public void setJump(short jump) {
-        this.jump = jump;
+        this.jump = withoutAffix("JUMP", jump);
+    }
+
+    private short withAffix(String code, short baseValue) {
+        return clampShort(baseValue + affixContributions.getOrDefault(code, 0));
+    }
+
+    private short withoutAffix(String code, short displayedValue) {
+        return clampShort(displayedValue - affixContributions.getOrDefault(code, 0));
+    }
+
+    private static short clampShort(int value) {
+        return (short) Math.max(Short.MIN_VALUE, Math.min(Short.MAX_VALUE, value));
+    }
+
+    private static boolean isFlatAffix(String affixCode) {
+        return switch (affixCode) {
+            case "STR", "DEX", "INT", "LUK", "HP", "MP", "WATK", "MATK",
+                    "WDEF", "MDEF", "ACC", "AVOID", "SPEED", "JUMP" -> true;
+            default -> false;
+        };
     }
 
     public void setVicious(short vicious) {

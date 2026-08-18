@@ -671,6 +671,13 @@ public class AbstractPlayerInteraction {
         return item;
     }
 
+    public Item gainEquipment(Equip equip, boolean showMessage) {
+        if (!InventoryManipulator.addFromDrop(c, equip, showMessage, equip.getPetId())) {
+            return null;
+        }
+        return equip;
+    }
+
     public void gainFame(int delta) {
         getPlayer().gainFame(delta);
     }

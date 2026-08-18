@@ -26,6 +26,8 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.EquipmentDropSource;
+import org.gms.client.inventory.EquipmentAffixGenerator;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
@@ -691,7 +693,10 @@ public class MapleMap {
                     }
                 } else {
                     if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                        idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+                        idrop = EquipmentAffixGenerator.generate(
+                                ii.randomizeStats((Equip) ii.getEquipById(de.itemId)),
+                                mob.isBoss() ? EquipmentDropSource.BOSS : EquipmentDropSource.NORMAL
+                        );
                     } else {
                         idrop = new Item(de.itemId, (short) 0, (short) ((de.Maximum != 1 && de.Maximum > de.Minimum)? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : de.Maximum));
                     }
@@ -719,7 +724,10 @@ public class MapleMap {
                 }
                 if (de.itemId != 0) {
                     if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                        idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+                        idrop = EquipmentAffixGenerator.generate(
+                                ii.randomizeStats((Equip) ii.getEquipById(de.itemId)),
+                                mob.isBoss() ? EquipmentDropSource.BOSS : EquipmentDropSource.NORMAL
+                        );
                     } else {
                         idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
                     }
@@ -1355,7 +1363,9 @@ public class MapleMap {
             }
         }
         if (monster.isAlive()) {
-            boolean killed = monster.damage(chr, damage, false);
+            int adjustedDamage = applyIgnoreDefense(chr, monster, damage);
+            adjustedDamage = monster.isBoss() ? chr.applyBossDamageMultiplier(adjustedDamage) : adjustedDamage;
+            boolean killed = monster.damage(chr, adjustedDamage, false);
 
             selfDestruction selfDestr = monster.getStats().selfDestruction();
             if (selfDestr != null && selfDestr.getHp() > -1) {// should work ;p
@@ -1370,6 +1380,27 @@ public class MapleMap {
             return true;
         }
         return false;
+    }
+
+    private int applyIgnoreDefense(final Character chr, final Monster monster, final int damage) {
+        if (damage <= 0) {
+            return damage;
+        }
+        int ignoreDefense = chr.getEquipmentIgnoreDefensePercent();
+        if (ignoreDefense <= 0) {
+            return damage;
+        }
+
+        int defense = Math.max(monster.getStats().getPDDamage(), monster.getStats().getMDDamage());
+        if (defense <= 0) {
+            return damage;
+        }
+
+        double effectiveDefense = defense * (1 - ignoreDefense / 100.0);
+        double multiplier = (100.0 + defense) / (100.0 + effectiveDefense);
+        multiplier = Math.min(multiplier, 2.0);
+        long adjustedDamage = Math.round(damage * multiplier);
+        return (int) Math.min(Integer.MAX_VALUE, adjustedDamage);
     }
 
     // 巴洛古(Balrog)讨伐胜利广播
@@ -2243,7 +2274,7 @@ public class MapleMap {
                 if (ItemConstants.getInventoryType(randomedId) != InventoryType.EQUIP) {
                     drop = new Item(randomedId, (short) 0, (short) (rnd.nextInt(copies) + minCopies));
                 } else {
-                    drop = ii.randomizeStats((Equip) ii.getEquipById(randomedId));
+                    drop = EquipmentAffixGenerator.generate(ii.randomizeStats((Equip) ii.getEquipById(randomedId)));
                 }
 
                 spawnItemDrop(dropper, owner, drop, calcDropPos(dropPos, pos), ffaDrop, playerDrop);
