@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.server.maps;
 
+import org.gms.client.BotClient;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Inventory;
@@ -43,7 +44,6 @@ import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import soloMapling.ArtificialPlayer.BotHelpers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -829,7 +829,7 @@ public class HiredMerchant extends AbstractMapObject {
             }
 
             Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterByName(ownerName);
-            if (owner != null && !BotHelpers.isBot(owner)) {
+            if (owner != null && !BotClient.isBot(owner)) {
                 owner.addMerchantMesos(price);
             } else {
                 try (Connection con = DatabaseConnection.getConnection()) {

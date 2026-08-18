@@ -1,4 +1,4 @@
-# BeiDou Extension Runtime + SoloMapling Plugin
+# BeiDou Extension Runtime
 
 Feature branch reference: `feat/beidou-solomapling-plugin`
 
@@ -8,8 +8,9 @@ Feature branch reference: `feat/beidou-solomapling-plugin`
 |------------------|------|
 | `extension-api` | Shared SPI (`ServerExtension`, `HostRuntime`, `HostConfig`, `HostEventBus`, `HostCommandRegistry`) |
 | `org.gms.extension.runtime` | Host-side runtime (`ExtensionLoader`, `BeiDouHostRuntime`, …) |
-| `solomapling-plugin` | Full SoloMapling framework as a loadable jar |
 | `gms-server/plugins/*.jar` | Drop zone for external plugins (gitignored jars; keep `.gitkeep`) |
+
+SoloMapling plugin sources live in the [SoloMapling](https://github.com/MadaraGameDev/SoloMapling) repo under `beidou-plugin/`.
 
 ## Load order
 
@@ -31,11 +32,16 @@ solomapling:
 ## Build & install SoloMapling plugin
 
 ```bash
-# from BeiDou-Server root
-mvn -pl extension-api,gms-server,solomapling-plugin -am package -DskipTests
-cp solomapling-plugin/target/solomapling-plugin-*-SNAPSHOT.jar gms-server/plugins/
+# Host (this repo)
+mvn -pl extension-api,gms-server -am install -DskipTests
+mvn -pl gms-server package -DskipTests
 
-cd gms-server
+# Plugin (SoloMapling repo)
+cd /path/to/SoloMapling/beidou-plugin
+mvn package -DskipTests
+cp target/solomapling-plugin-*-SNAPSHOT.jar /path/to/BeiDou-Server/gms-server/plugins/
+
+cd /path/to/BeiDou-Server/gms-server
 java -Xmx4g -Dspring.config.location=src/main/resources/application.yml \
   -jar target/BeiDou-boot.jar
 ```
@@ -45,10 +51,8 @@ Runnable artifact is **`BeiDou-boot.jar`** (classifier `boot`). Thin `BeiDou.jar
 See the repository root `README.md` section **扩展运行时 / SoloMapling** for the full operator guide.
 
 Population / TrainingBot / town ambient counts: `EnvironmentPopulation.yaml`
-(`waves.*` and `waves.town_presence.towns`) — see
-`solomapling-plugin/src/main/java/soloMapling/Environment/CONFIG.md`.
+(`waves.*` and `waves.town_presence.towns`) — see SoloMapling
+`beidou-plugin/src/main/java/soloMapling/Environment/CONFIG.md`.
 
 Runtime load order (not from `BeiDou-boot.jar`): optional
-`solomapling.population-config` → cwd
-`src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml` → plugin-jar classpath.
-
+`solomapling.population-config` → cwd file override → plugin-jar classpath.

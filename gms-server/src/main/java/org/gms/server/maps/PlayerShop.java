@@ -21,6 +21,7 @@
 */
 package org.gms.server.maps;
 
+import org.gms.client.BotClient;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Inventory;
@@ -32,7 +33,6 @@ import org.gms.net.packet.Packet;
 import org.gms.server.Trade;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
-import soloMapling.ArtificialPlayer.BotHelpers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -340,7 +340,7 @@ public class PlayerShop extends AbstractMapObject {
         visitorLock.lock();
         try {
             for (int i = 0; i < 3; i++) {
-                if (visitors[i] != null && !BotHelpers.isBot(visitors[i])) {
+                if (visitors[i] != null && !BotClient.isBot(visitors[i])) {
                     visitors[i].sendPacket(packet);
                 }
             }
@@ -563,7 +563,7 @@ public class PlayerShop extends AbstractMapObject {
                 owner.gainMeso(price, true);
 
                 SoldItem soldItem = new SoldItem(bot.getName(), shopItem.getItem().getItemId(), quantity, price);
-                if (!BotHelpers.isBot(owner)) {
+                if (!BotClient.isBot(owner)) {
                     owner.sendPacket(PacketCreator.getPlayerShopOwnerUpdate(soldItem, itemPosition));
                 }
                 synchronized (sold) {
@@ -602,7 +602,7 @@ public class PlayerShop extends AbstractMapObject {
             if (this.hasFreeSlot() && !this.isVisitor(chr)) {
                 this.addVisitor(chr);
                 chr.setPlayerShop(this);
-                if (!BotHelpers.isBot(chr)) {
+                if (!BotClient.isBot(chr)) {
                     this.sendShop(chr.getClient());
                 }
 

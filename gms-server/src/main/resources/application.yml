@@ -69,10 +69,10 @@ gms:
     login-port: 8484
 
 # SoloMapling plugin SPI (beidou-runtime)
+# Build the plugin jar from SoloMapling/beidou-plugin and drop it into plugins/.
 solomapling:
   plugins-enabled: true
   plugins-dir: plugins
   spawn-bots-on-startup: true
-  # Optional override path for EnvironmentPopulation.yaml (default: cwd-relative
-  # src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml, then classpath).
-  # population-config: src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml
+  # Optional override path for EnvironmentPopulation.yaml (default: plugin-jar classpath).
+  # population-config: /path/to/EnvironmentPopulation.yaml

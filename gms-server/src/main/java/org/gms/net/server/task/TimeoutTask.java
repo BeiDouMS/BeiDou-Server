@@ -1,11 +1,11 @@
 package org.gms.net.server.task;
 
+import org.gms.client.BotClient;
 import org.gms.client.Character;
 import org.gms.config.GameConfig;
 import org.gms.net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import soloMapling.ArtificialPlayer.BotHelpers;
 
 import java.util.Collection;
 
@@ -20,7 +20,7 @@ public class TimeoutTask extends BaseTask implements Runnable {
         long time = System.currentTimeMillis();
         Collection<Character> chars = wserv.getPlayerStorage().getAllCharacters();
         for (Character chr : chars) {
-            if (!BotHelpers.isBot(chr) && time - chr.getClient().getLastPacket() > GameConfig.getServerLong("timeout_duration")) {
+            if (!BotClient.isBot(chr) && time - chr.getClient().getLastPacket() > GameConfig.getServerLong("timeout_duration")) {
                 log.info("Chr {} auto-disconnected due to inactivity", chr.getName());
                 // 默认1h还没有发过任何包，那就是异常连接，直接断开
                 chr.getClient().timeoutDisconnect();
