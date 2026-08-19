@@ -32,9 +32,6 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.util.concurrent.TimeUnit.DAYS;
-import static java.util.concurrent.TimeUnit.HOURS;
-
 /**
  * @author Conrad
  * @author Ronan
@@ -66,14 +63,12 @@ public class ExpeditionBossLog {
             this.week = week;
         }
 
-        private static List<Pair<Timestamp, BossLogEntry>> getBossLogResetTimestamps(Calendar timeNow, boolean week) {
+        private static List<Pair<Timestamp, BossLogEntry>> getBossLogResetTimestamps(Calendar timeNow) {
             List<Pair<Timestamp, BossLogEntry>> resetTimestamps = new LinkedList<>();
 
             Timestamp ts = new Timestamp(timeNow.getTime().getTime());  // reset all table entries actually, thanks Conrad
             for (BossLogEntry b : BossLogEntry.values()) {
-                if (b.week == week) {
-                    resetTimestamps.add(new Pair<>(ts, b));
-                }
+                resetTimestamps.add(new Pair<>(ts, b));
             }
 
             return resetTimestamps;
@@ -96,35 +91,31 @@ public class ExpeditionBossLog {
         Boss logs resets 12am, weekly thursday 12AM - thanks Smitty Werbenjagermanjensen (superadlez) - https://www.reddit.com/r/Maplestory/comments/61tiup/about_reset_time/
         */
 
-        Calendar thursday = Calendar.getInstance();
-        thursday.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-        thursday.set(Calendar.HOUR, 0);
-        thursday.set(Calendar.MINUTE, 0);
-        thursday.set(Calendar.SECOND, 0);
+        // 周/日清理统一：无条件删 attempttime <= 本周期起点 的记录，保留当前周期内的记录
+        ExpeditionBossLog.resetBossLogTable(true, getCycleBoundary(true));
+        ExpeditionBossLog.resetBossLogTable(false, getCycleBoundary(false));
+    }
 
-        Calendar now = Calendar.getInstance();
-
-        long weekLength = DAYS.toMillis(7);
-        long halfDayLength = HOURS.toMillis(12);
-
-        long deltaTime = now.getTime().getTime() - thursday.getTime().getTime();    // 2x time: get Date into millis
-        deltaTime += halfDayLength;
-        deltaTime %= weekLength;
-        deltaTime -= halfDayLength;
-
-        if (deltaTime < halfDayLength) {
-            ExpeditionBossLog.resetBossLogTable(true, thursday);
+    /**
+     * 计算当前周期的起点时间戳（清理阈值）：
+     * 日清理为今天0点，周清理为最近一个已过的周四0点（本周四未到则回退到上周四）。
+     */
+    private static Calendar getCycleBoundary(boolean week) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        if (week) {
+            c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);   // 本周四0点
+            if (c.after(Calendar.getInstance())) {             // 本周四还没到，回退到上周四0点
+                c.add(Calendar.DAY_OF_MONTH, -7);
+            }
         }
-
-        now.set(Calendar.HOUR, 0);
-        now.set(Calendar.MINUTE, 0);
-        now.set(Calendar.SECOND, 0);
-
-        ExpeditionBossLog.resetBossLogTable(false, now);
+        return c;
     }
 
     private static void resetBossLogTable(boolean week, Calendar c) {
-        List<Pair<Timestamp, BossLogEntry>> resetTimestamps = BossLogEntry.getBossLogResetTimestamps(c, week);
+        List<Pair<Timestamp, BossLogEntry>> resetTimestamps = BossLogEntry.getBossLogResetTimestamps(c);
 
         try (Connection con = DatabaseConnection.getConnection()) {
             for (Pair<Timestamp, BossLogEntry> p : resetTimestamps) {
