@@ -20,6 +20,13 @@ var cpqMinLvl = 30;
 var cpqMaxLvl = 50;
 var cpqMinAmt = 2;
 var cpqMaxAmt = 6;
+(function () {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {
+        cpqMinLvl = 1;
+        cpqMaxLvl = 999;
+    }
+})();
 
 // Ronan's custom ore refiner NPC
 var refineRocks = true;     // enables moon rock, star rock
