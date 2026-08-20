@@ -8911,7 +8911,10 @@ public class Character extends AbstractCharacterObject {
         evtLock.lock();
         try {
             for (Quest quest : questExpirations.keySet()) {
-                quest.forfeit(this);
+                if (quest.getTimeLimit() > 0) {
+                    // timeLimit2 是medalQuest的长期任务，不能在进入商城时被取消
+                    quest.forfeit(this);
+                }
             }
 
             questExpirations.clear();
