@@ -35,8 +35,8 @@ function action(mode, type, selection) {
             status--;
         }
         if (cm.getPlayer().getMapId() == 980010000) {
-            if (cm.getLevel() > 30) {
-                cm.sendOk("你已经超过了#r等级30#k，因此你不能再参与这个副本了。");
+            if (cm.getLevel() > exped.getMaxLevel()) {
+                cm.sendOk("你已经超过了#r等级" + exped.getMaxLevel() + "#k，因此你不能再参与这个副本了。");
                 cm.dispose();
                 return;
             }
