@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ChatLogger;
 import org.gms.util.PacketCreator;
+import org.gms.extension.event.CharacterChatEvent;
+import org.gms.extension.runtime.HostHooks;
 
 public final class GeneralChatHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(GeneralChatHandler.class);
@@ -62,6 +64,9 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
             if (!chr.isHidden()) {
                 chr.getMap().broadcastMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
                 ChatLogger.log(c, "General", s);
+                if (!HostHooks.isArtificial(chr)) {
+                    HostHooks.publish(new CharacterChatEvent(chr, s));
+                }
             } else {
                 chr.getMap().broadcastGMMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
                 ChatLogger.log(c, "GM General", s);

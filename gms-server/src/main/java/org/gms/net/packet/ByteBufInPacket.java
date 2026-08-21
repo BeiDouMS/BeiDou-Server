@@ -106,4 +106,9 @@ public class ByteBufInPacket implements InPacket {
         sb.insert(2 * index, '_');
         return sb.toString();
     }
+
+    @Override
+    public InPacket copy() {
+        return new ByteBufInPacket(byteBuf.copy());
+    }
 }

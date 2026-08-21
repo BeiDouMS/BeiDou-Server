@@ -8,7 +8,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>extension-api</module>
         <module>gms-server</module>
+        <!-- SoloMapling lives in the external solomapling-plugin repo; drop jar into gms-server/plugins/ -->
     </modules>
 
 

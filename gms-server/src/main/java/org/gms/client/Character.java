@@ -486,6 +486,7 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private boolean chasing = false;
+    private BotTier botTier = BotTier.getDefaultTier(); // artificial-character performance tier (default C)
     private float mobExpRate = -1;
 
     @Getter
@@ -529,7 +530,7 @@ public class Character extends AbstractCharacterObject {
     }
 
 
-    private Character() {
+    public Character() {
         super.setListener(new CharacterListener(this));
         useCS = false;
         setStance(0);
@@ -625,6 +626,11 @@ public class Character extends AbstractCharacterObject {
         if (canRecvPartySearchInvite) {
             this.getWorldServer().getPartySearchCoordinator().attachPlayer(this);
         }
+    }
+
+    /** Headless / artificial characters: clear awayFromWorld without PartySearch side effects. */
+    public void markPresentInWorld() {
+        awayFromWorld.set(false);
     }
 
     public void setAwayFromChannelWorld() {
@@ -4639,7 +4645,7 @@ public class Character extends AbstractCharacterObject {
         int quickLv = GameConfig.getWorldInt(getWorld(), "quick_level");
         if (level >= quickLv) return 1;
 
-        return 1f + (quickLv - level) * GameConfig.getWorldFloat(getWorld(), "quick_level_exp_rate");
+        return 1f + (quickLv - level) * GameConfig.getWorldFloat(getWorld(), "quick_level_rate");
     }
 
     public void updateMobExpRate() {
@@ -4902,6 +4908,35 @@ public class Character extends AbstractCharacterObject {
 
     public int getTotalStr() {
         return localstr;
+    }
+
+    // GCMoveSystem: base 100 + equip bonuses + buff → BotMovementProfile bucket
+    public int getTotalMoveSpeedStat() {
+        int total = 100;
+        for (Item item : getInventory(InventoryType.EQUIPPED)) {
+            if (item instanceof Equip equip) {
+                total += equip.getSpeed();
+            }
+        }
+        Integer speedBuff = getBuffedValue(BuffStat.SPEED);
+        if (speedBuff != null) {
+            total += speedBuff;
+        }
+        return Math.max(1, total);
+    }
+
+    public int getTotalJumpStat() {
+        int total = 100;
+        for (Item item : getInventory(InventoryType.EQUIPPED)) {
+            if (item instanceof Equip equip) {
+                total += equip.getJump();
+            }
+        }
+        Integer jumpBuff = getBuffedValue(BuffStat.JUMP);
+        if (jumpBuff != null) {
+            total += jumpBuff;
+        }
+        return Math.max(1, total);
     }
 
     public int getTotalDex() {
@@ -6836,7 +6871,7 @@ public class Character extends AbstractCharacterObject {
         enableActions();
     }
 
-    private void unsitChairInternal() {
+    public void unsitChairInternal() {
         int chairid = chair.get();
         if (chairid >= 0) {
             if (ItemConstants.isFishingChair(chairid)) {
@@ -6876,7 +6911,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void setChair(int chair) {
+    public void setChair(int chair) {
         this.chair.set(chair);
     }
 
@@ -10148,5 +10183,13 @@ public class Character extends AbstractCharacterObject {
     /** 更新全局攻击时间戳，只被正常主动技能调用 */
     public void updateGlobalTime(long now) {
         globalAttackTime = now;
+    }
+
+    public void setTier(BotTier newTier) {
+        this.botTier = BotTier.TierManager.safeTierSet(this.botTier, newTier);
+    }
+
+    public BotTier getTier() {
+        return BotTier.TierManager.getSafeTier(botTier);
     }
 }

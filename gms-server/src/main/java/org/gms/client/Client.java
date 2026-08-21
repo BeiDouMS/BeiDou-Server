@@ -1463,6 +1463,10 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public synchronized void announceBossHpBar(Monster mm, final int mobHash, Packet packet) {
+        // Shared BotClient has no Character; bots never show a boss HP bar UI.
+        if (player == null) {
+            return;
+        }
         long timeNow = System.currentTimeMillis();
         int targetHash = player.getTargetHpBarHash();
 

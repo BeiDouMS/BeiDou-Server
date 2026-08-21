@@ -126,6 +126,21 @@ public enum Job {
         */
     }
 
+    public int getJobTier() {
+        if (id == 0) {
+            return 0;
+        }
+
+        int lastTwoDigits = id % 100;
+        return switch (lastTwoDigits) {
+            case 0 -> 1;
+            case 10, 20, 30 -> 2;
+            case 11, 21, 31 -> 3;
+            case 12, 22, 32 -> 4;
+            default -> 0;
+        };
+    }
+
     public static Job getJobStyleInternal(int jobid, byte opt) {
         int jobtype = jobid / 100;
 

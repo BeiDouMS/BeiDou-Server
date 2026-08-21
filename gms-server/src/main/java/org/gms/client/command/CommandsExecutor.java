@@ -34,6 +34,9 @@ import org.gms.client.command.commands.gm5.*;
 import org.gms.client.command.commands.gm6.*;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
+import org.gms.extension.api.HostRuntime;
+import org.gms.extension.runtime.BeiDouHostCommandRegistry;
+import org.gms.extension.runtime.ExtensionLoader;
 import org.gms.manager.ServerManager;
 import org.gms.service.CommandService;
 import org.gms.util.I18nUtil;
@@ -118,6 +121,9 @@ public class CommandsExecutor {
 
         final Command command = registeredCommands.get(commandName);
         if (command == null) {
+            if (tryExtensionCommand(client, commandName, lowercaseParams)) {
+                return;
+            }
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message2", commandName));
             return;
         }
@@ -134,6 +140,30 @@ public class CommandsExecutor {
 
         command.execute(client, params);
         log.info(I18nUtil.getLogMessage("CommandsExecutor.handleInternal.info1"), client.getPlayer().getName(), command.getClass().getSimpleName());
+    }
+
+    private boolean tryExtensionCommand(Client client, String commandName, String[] params) {
+        HostRuntime runtime = ExtensionLoader.getInstance().getRuntime();
+        if (runtime == null || !(runtime.commands() instanceof BeiDouHostCommandRegistry registry)) {
+            return false;
+        }
+        BeiDouHostCommandRegistry.RegisteredCommand registered = registry.get(commandName);
+        if (registered == null) {
+            return false;
+        }
+        if (client.getPlayer().gmLevel() < registered.level()) {
+            client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message3"));
+            return true;
+        }
+        String[] args;
+        if (params.length > 0 && !params[0].isEmpty()) {
+            args = Arrays.copyOfRange(params, 0, params.length);
+        } else {
+            args = new String[]{};
+        }
+        registered.handler().handle(client.getPlayer().getId(), args);
+        log.info(I18nUtil.getLogMessage("CommandsExecutor.handleInternal.info1"), client.getPlayer().getName(), "ext:" + commandName);
+        return true;
     }
 
     private void addCommandInfo(String name, Class<? extends Command> commandClass) {
