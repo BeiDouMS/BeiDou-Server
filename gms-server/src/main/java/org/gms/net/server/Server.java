@@ -1223,9 +1223,9 @@ public class Server {
 
         lgnWLock.lock();
         try {
-            accountCharacterCount.put(accountid, (short) (accountCharacterCount.get(accountid) + 1));
+            accountCharacterCount.merge(accountid, (short) 1, (current, one) -> (short) (current + one));
 
-            Set<Integer> accChars = accountChars.get(accountid);
+            Set<Integer> accChars = accountChars.computeIfAbsent(accountid, ignored -> new HashSet<>());
             accChars.add(chrid);
 
             worldChars.put(chrid, world);

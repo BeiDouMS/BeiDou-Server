@@ -48,6 +48,36 @@ public abstract class CharacterFactory {
             return -1;
         }
 
+        Character newCharacter = prepareNewCharacter(c, name, face, hair, skin, gender, recipe);
+        if (newCharacter == null) {
+            return -2;
+        }
+
+        if (!newCharacter.insertNewChar(recipe)) {
+            return -2;
+        }
+        c.sendPacket(PacketCreator.addNewCharEntry(newCharacter));
+
+        Server.getInstance().createCharacterEntry(newCharacter);
+        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[New Char]: " + c.getAccountName() + I18nUtil.getMessage("CharacterFactory.message1") + name));
+        log.info("账号 {} 创建了角色 {}", c.getAccountName(), name);
+
+        return 0;
+    }
+
+    /**
+     * Builds the exact native character state consumed by insertNewChar,
+     * without touching the database or server character-entry cache.
+     */
+    protected static Character prepareNewCharacter(
+            Client c,
+            String name,
+            int face,
+            int hair,
+            int skin,
+            int gender,
+            CharacterFactoryRecipe recipe
+    ) {
         Character newCharacter = Character.getDefault(c);
         newCharacter.setWorld(c.getWorld());
         newCharacter.setSkinColor(SkinColor.getById(skin));
@@ -91,18 +121,9 @@ public abstract class CharacterFactory {
 
         if (!MakeCharInfoValidator.isNewCharacterValid(newCharacter)) {
             log.warn("Owner from account {} tried to packet edit in character creation", c.getAccountName());
-            return -2;
+            return null;
         }
 
-        if (!newCharacter.insertNewChar(recipe)) {
-            return -2;
-        }
-        c.sendPacket(PacketCreator.addNewCharEntry(newCharacter));
-
-        Server.getInstance().createCharacterEntry(newCharacter);
-        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[New Char]: " + c.getAccountName() + I18nUtil.getMessage("CharacterFactory.message1") + name));
-        log.info("账号 {} 创建了角色 {}", c.getAccountName(), name);
-
-        return 0;
+        return newCharacter;
     }
 }

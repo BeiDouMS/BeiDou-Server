@@ -2295,6 +2295,71 @@ public class MapleMap {
         activateItemReactors(mdrop, owner.getClient());
     }
 
+    /**
+     * Spawns a normal-expiry player drop that only {@code owner} can pick up.
+     * Used by host-directed transfers after the exact inventory item is removed.
+     */
+    public final MapItem spawnOwnerOnlyItemDrop(
+            final MapObject dropper,
+            final Character owner,
+            final Item item,
+            Point pos
+    ) {
+        if (FieldLimit.DROP_LIMIT.check(this.getFieldLimit())) {
+            return null;
+        }
+
+        final Point droppos = calcDropPos(pos, pos);
+        final MapItem mdrop = new MapItem(item, droppos, dropper, owner, owner.getClient(), (byte) 0, true);
+        mdrop.setDropTime(Server.getInstance().getCurrentTime());
+        mdrop.lockItem();
+        try {
+            mdrop.setPartyOwnerIdLocked(-1);
+            mdrop.setPermanentOwner(true);
+        } finally {
+            mdrop.unlockItem();
+        }
+
+        try {
+            spawnAndAddRangedMapObject(mdrop, c -> {
+                mdrop.lockItem();
+                try {
+                    c.sendPacket(PacketCreator.dropItemFromMapObject(
+                            c.getPlayer(), mdrop, dropper.getPosition(), droppos, (byte) 1));
+                } finally {
+                    mdrop.unlockItem();
+                }
+            }, null);
+        } catch (RuntimeException e) {
+            if (getMapObject(mdrop.getObjectId()) != mdrop) {
+                return null;
+            }
+            log.warn("Owner-only item {} spawned but one viewer notification failed",
+                    item.getItemId(), e);
+        }
+
+        mdrop.lockItem();
+        try {
+            try {
+                broadcastItemDropMessage(mdrop, dropper.getPosition(), droppos, (byte) 0);
+            } catch (RuntimeException e) {
+                log.warn("Owner-only item {} spawned but drop broadcast failed",
+                        item.getItemId(), e);
+            }
+        } finally {
+            mdrop.unlockItem();
+        }
+
+        instantiateItemDrop(mdrop);
+        try {
+            activateItemReactors(mdrop, owner.getClient());
+        } catch (RuntimeException e) {
+            log.warn("Owner-only item {} spawned but reactor activation failed",
+                    item.getItemId(), e);
+        }
+        return mdrop;
+    }
+
     public final MapItem spawnItemDropNoExpire(final MapObject dropper, final Character owner, final Item item, Point pos,
                                                final boolean ffaDrop, final boolean playerDrop) {
         if (FieldLimit.DROP_LIMIT.check(this.getFieldLimit())) {
@@ -2682,7 +2747,12 @@ public class MapleMap {
             broadcastSpawnPlayerMapObjectMessage(chr, chr, true);
         }
 
-        sendObjectPlacement(chr.getClient());
+        // Artificial players have a headless client with no viewer Character.
+        // They must be visible to real players, but there is no socket/viewer
+        // that needs the map's existing objects sent back to them.
+        if (!HostHooks.isArtificial(chr)) {
+            sendObjectPlacement(chr.getClient());
+        }
 
         if (isStartingEventMap() && !eventStarted()) {
             chr.getMap().getPortal("join00").setPortalStatus(false);

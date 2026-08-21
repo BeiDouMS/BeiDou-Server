@@ -8,6 +8,8 @@
         <property name="every_file_size">10MB</property>
         <property name="rolling_fileName">${basePath}/out.log</property>
         <property name="rolling_filePattern">${basePath}/%d{yyyyMMdd}/out%i.log</property>
+        <property name="solomapling_fileName">${basePath}/BotLog.txt</property>
+        <property name="solomapling_filePattern">${basePath}/%d{yyyyMMdd}/BotLog%i.txt</property>
         <property name="rolling_max">10</property>
         <property name="rolling_timeInterval">1</property>
         <property name="rolling_timeModulate">true</property>
@@ -36,15 +38,70 @@
                 </Delete>
             </DefaultRolloverStrategy>
         </RollingFile>
+
+        <RollingFile name="SoloMaplingRollingFile"
+                     fileName="${solomapling_fileName}"
+                     filePattern="${solomapling_filePattern}">
+            <ThresholdFilter level="${file_print_level}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${log_pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${rolling_timeInterval}" modulate="${rolling_timeModulate}"/>
+                <SizeBasedTriggeringPolicy size="${every_file_size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${rolling_max}">
+                <Delete basePath="${basePath}" maxDepth="2">
+                    <IfFileName glob="*/BotLog*.txt"/>
+                    <IfLastModified age="1d"/>
+                    <IfAccumulatedFileSize exceeds="100MB"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <RollingFile name="CompanionRollingFile"
+                     fileName="${basePath}/companion.log"
+                     filePattern="${basePath}/%d{yyyyMMdd}/companion%i.log">
+            <ThresholdFilter level="${file_print_level}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${log_pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${rolling_timeInterval}" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${every_file_size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${rolling_max}">
+                <Delete basePath="${basePath}" maxDepth="2">
+                    <IfFileName glob="*/companion*.log"/>
+                    <IfLastModified age="1d"/>
+                    <IfAccumulatedFileSize exceeds="100MB"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
     </appenders>
 
     <loggers>
-        <!-- 降低 Druid 的日志级别 -->
+        <Logger name="soloMapling.BotLogger" level="INFO" additivity="false">
+            <AppenderRef ref="SoloMaplingRollingFile"/>
+        </Logger>
+
+        <Logger name="soloMapling.companion" level="DEBUG" additivity="false">
+            <AppenderRef ref="CompanionRollingFile"/>
+        </Logger>
+        <Logger name="soloMapling.command.CompanionCommand" level="INFO" additivity="false">
+            <AppenderRef ref="CompanionRollingFile"/>
+        </Logger>
+        <Logger name="soloMapling.ArtificialPlayer.BotTypes.CompanionBot"
+                level="DEBUG" additivity="false">
+            <AppenderRef ref="CompanionRollingFile"/>
+        </Logger>
+        <Logger name="org.gms.extension.runtime.BeiDouHostCharacterProvisioner"
+                level="INFO" additivity="false">
+            <AppenderRef ref="CompanionRollingFile"/>
+        </Logger>
+
+        <!-- Reduce Druid logging noise. -->
         <Logger name="com.alibaba.druid" level="ERROR">
             <AppenderRef ref="Console"/>
         </Logger>
 
-        <!-- 降低 flyway 的日志级别 -->
+        <!-- Reduce Flyway logging noise. -->
         <Logger name="org.flywaydb.core.internal.command.DbMigrate" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>

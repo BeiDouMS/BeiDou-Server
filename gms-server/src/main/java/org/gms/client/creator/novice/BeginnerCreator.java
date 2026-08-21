@@ -19,6 +19,7 @@
 */
 package org.gms.client.creator.novice;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Job;
 import org.gms.client.creator.CharacterFactory;
@@ -33,6 +34,15 @@ import org.gms.constants.id.MapId;
  */
 public class BeginnerCreator extends CharacterFactory {
 
+    public static final int DEFAULT_GENDER = 0;
+    public static final int DEFAULT_FACE = 20000;
+    public static final int DEFAULT_HAIR = 30000;
+    public static final int DEFAULT_SKIN = 0;
+    public static final int DEFAULT_TOP = 1040002;
+    public static final int DEFAULT_BOTTOM = 1060002;
+    public static final int DEFAULT_SHOES = 1072001;
+    public static final int DEFAULT_WEAPON = 1302000;
+
     private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
         CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
         giveItem(recipe, ItemId.BEGINNERS_GUIDE, 1, InventoryType.ETC);
@@ -44,13 +54,27 @@ public class BeginnerCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
+        return createNewCharacter(c, name, face, hair, skin, gender,
+                createRecipe(Job.BEGINNER, 1, beginnerMap(), top, bottom, shoes, weapon));
+    }
 
-        int iMapID = MapId.MUSHROOM_TOWN;
-        if (GameConfig.getServerBoolean("use_beidou_beginner_map"))
-        {
-            iMapID = MapId.BEIDOU_BEGINNER;
-        }
+    public static CharacterFactoryRecipe createDefaultRecipe() {
+        return createRecipe(Job.BEGINNER, 1, beginnerMap(),
+                DEFAULT_TOP, DEFAULT_BOTTOM, DEFAULT_SHOES, DEFAULT_WEAPON);
+    }
 
-        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BEGINNER, 1, iMapID, top, bottom, shoes, weapon));
+    public static Character prepareProvisionedCharacter(int accountId, int worldId, String name) {
+        Client client = Client.createMock();
+        client.setAccID(accountId);
+        client.setWorld(worldId);
+        client.setAccountName("<provisioning>");
+        return prepareNewCharacter(client, name, DEFAULT_FACE, DEFAULT_HAIR,
+                DEFAULT_SKIN, DEFAULT_GENDER, createDefaultRecipe());
+    }
+
+    private static int beginnerMap() {
+        return GameConfig.getServerBoolean("use_beidou_beginner_map")
+                ? MapId.BEIDOU_BEGINNER
+                : MapId.MUSHROOM_TOWN;
     }
 }

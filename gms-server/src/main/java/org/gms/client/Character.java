@@ -7411,7 +7411,41 @@ public class Character extends AbstractCharacterObject {
         savedLocations[SavedLocationType.fromString(type).ordinal()] = new SavedLocation(getMapId(), closest != null ? closest.getId() : 0);
     }
 
+    /**
+     * Creates a character in its own transaction, preserving the historical
+     * public method contract.
+     */
     public final boolean insertNewChar(CharacterFactoryRecipe recipe) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            con.setAutoCommit(false);
+            con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            try {
+                if (!insertNewChar(recipe, con)) {
+                    con.rollback();
+                    return false;
+                }
+                con.commit();
+                return true;
+            } catch (Exception e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+                con.setAutoCommit(true);
+            }
+        } catch (Throwable t) {
+            log.error("Error creating chr {}, level: {}, job: {}", name, level, job.getId(), t);
+            return false;
+        }
+    }
+
+    /**
+     * Creates the character and all native child rows on the caller's
+     * connection. This method never commits, rolls back, closes, or changes
+     * transaction settings on that connection.
+     */
+    public final boolean insertNewChar(CharacterFactoryRecipe recipe, Connection con) throws SQLException {
+        Objects.requireNonNull(con, "con");
         attrStr = recipe.getStr();
         attrDex = recipe.getDex();
         attrInt = recipe.getInt();
@@ -7440,12 +7474,7 @@ public class Character extends AbstractCharacterObject {
         this.events.put("rescueGaga", new RescueGaga(0));
 
 
-        try (Connection con = DatabaseConnection.getConnection()) {
-            con.setAutoCommit(false);
-            con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-
-            try {
-                // Character info
+        // Character info
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (str, dex, luk, `int`, gm, skincolor, gender, job, hair, face, map, meso, spawnpoint, accountid, name, world, hp, mp, maxhp, maxmp, level, ap, sp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, attrStr);
                     ps.setInt(2, attrDex);
@@ -7558,20 +7587,7 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
 
-                con.commit();
-                return true;
-            } catch (Exception e) {
-                con.rollback();
-                throw e;
-            } finally {
-                con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-                con.setAutoCommit(true);
-            }
-        } catch (Throwable t) {
-            log.error("Error creating chr {}, level: {}, job: {}", name, level, job.getId(), t);
-        }
-
-        return false;
+        return true;
     }
 
     public void saveCharToDB() {
@@ -9055,7 +9071,11 @@ public class Character extends AbstractCharacterObject {
 
     @Override
     public void sendSpawnData(Client client) {
-        if (!this.isHidden() || client.getPlayer().gmLevel() > 1) {
+        Character viewer = client == null ? null : client.getPlayer();
+        if (viewer == null) {
+            return;
+        }
+        if (!this.isHidden() || viewer.gmLevel() > 1) {
             client.sendPacket(PacketCreator.spawnPlayerMapObject(client, this, false));
 
             if (buffEffects.containsKey(getJobMapChair(job))) { // mustn't effLock, chrLock sendSpawnData

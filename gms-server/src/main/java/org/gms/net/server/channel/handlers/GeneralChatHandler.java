@@ -64,12 +64,12 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
             if (!chr.isHidden()) {
                 chr.getMap().broadcastMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
                 ChatLogger.log(c, "General", s);
-                if (!HostHooks.isArtificial(chr)) {
-                    HostHooks.publish(new CharacterChatEvent(chr, s));
-                }
             } else {
                 chr.getMap().broadcastGMMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
                 ChatLogger.log(c, "GM General", s);
+            }
+            if (!HostHooks.isArtificial(chr)) {
+                HostHooks.publish(new CharacterChatEvent(chr, s));
             }
 
             chr.getAutoBanManager().spam(7);
