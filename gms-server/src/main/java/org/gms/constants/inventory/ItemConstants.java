@@ -21,6 +21,7 @@
 */
 package org.gms.constants.inventory;
 
+import org.gms.client.inventory.BodyPart;
 import org.gms.client.inventory.InventoryType;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
@@ -241,6 +242,38 @@ public final class ItemConstants {
     public static boolean isHair(int itemId) {
         int itemType = itemId / 10000;
         return itemType == 3 || itemType == 4 || itemType == 6;
+    }
+
+    public static int getItemPrefix(int itemId) {
+        return itemId / 10000;
+    }
+
+    public static int getEquipSlotType(int itemId) {
+        int itemPrefix = getItemPrefix(itemId);
+        if (isWeapon(itemId)) {
+            return BodyPart.WEAPON.getValue();
+        }
+
+        return switch (itemPrefix) {
+            case 100 -> BodyPart.CAP.getValue();
+            case 101 -> BodyPart.FACE_ACCESSORY.getValue();
+            case 102 -> BodyPart.EYE_ACCESSORY.getValue();
+            case 103 -> BodyPart.EAR_ACCESSORY.getValue();
+            case 104 -> BodyPart.COAT.getValue();
+            case 105 -> BodyPart.LONGCOAT.getValue();
+            case 106 -> BodyPart.PANTS.getValue();
+            case 107 -> BodyPart.SHOES.getValue();
+            case 108 -> BodyPart.GLOVE.getValue();
+            case 109, 119, 134 -> BodyPart.SHIELD.getValue();
+            case 110 -> BodyPart.CAPE.getValue();
+            case 111 -> BodyPart.RING_1.getValue();
+            case 112 -> BodyPart.PENDANT.getValue();
+            case 113 -> BodyPart.BELT.getValue();
+            case 114 -> BodyPart.MEDAL.getValue();
+            case 115 -> BodyPart.SHOULDER.getValue();
+            case 118 -> BodyPart.BADGE.getValue();
+            default -> 0;
+        };
     }
 
     public static boolean isNewCharDefaultFace(int job, int gender, int faceId) {

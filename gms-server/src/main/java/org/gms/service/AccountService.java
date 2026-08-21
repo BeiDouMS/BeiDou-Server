@@ -149,6 +149,14 @@ public class AccountService {
         return GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(password, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(password);
     }
 
+    /**
+     * Password encoding entry point for ephemeral credentials supplied by
+     * extensions. Callers remain responsible for clearing the source array.
+     */
+    public String encryptPassword(char[] password) throws NoSuchAlgorithmException {
+        return encryptPassword(String.valueOf(password));
+    }
+
     public boolean checkPassword(String pwd, AccountsDO accountsDO) {
         String passHash = accountsDO.getPassword();
         if (passHash.charAt(0) == '$' && passHash.charAt(1) == '2' && BCrypt.checkpw(pwd, passHash)) {

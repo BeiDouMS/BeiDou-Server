@@ -29,6 +29,7 @@ public enum EquipType {
     UNDEFINED(-1),
     ACCESSORY(0),
     CAP(100),
+    EARRING(103),
     CAPE(110),
     COAT(104),
     FACE(2),

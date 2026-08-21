@@ -922,6 +922,14 @@ public class StatEffect {
         return applyTo(chr, chr, true, pos, false, 1);
     }
 
+    /**
+     * Applies this effect to a target as if it were cast by {@code caster}.
+     * The target receives the effect without paying the caster's primary cost.
+     */
+    public boolean applyToTarget(Character caster, Character target) {
+        return applyTo(caster, target, false, null, false, 1);
+    }
+
     // primary: the player caster of the buff
     private boolean applyTo(Character applyfrom, Character applyto, boolean primary, Point pos, boolean useMaxRange, int affectedPlayers) {
         if (skill && (sourceid == GM.HIDE || sourceid == SuperGM.HIDE)) {
@@ -1213,6 +1221,13 @@ public class StatEffect {
      */
     public boolean hasBoundingBox() {
         return lt != null && rb != null;
+    }
+
+    public Rectangle getAttackBox(Point from, boolean facingLeft) {
+        if (!hasBoundingBox()) {
+            return null;
+        }
+        return calculateBoundingBox(from, facingLeft);
     }
 
     /**
@@ -1560,7 +1575,7 @@ public class StatEffect {
         return false;
     }
 
-    private boolean isPartyBuff() {
+    public boolean isPartyBuff() {
         if (lt == null || rb == null) {
             return false;
         }

@@ -67,3 +67,12 @@ gms:
     localhost: 127.0.0.1
     # 客户端登录端口
     login-port: 8484
+
+# SoloMapling plugin SPI (beidou-runtime)
+solomapling:
+  plugins-enabled: true
+  plugins-dir: plugins
+  spawn-bots-on-startup: true
+  # Optional override path for EnvironmentPopulation.yaml (default: cwd-relative
+  # src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml, then classpath).
+  # population-config: src/main/java/soloMapling/Environment/EnvironmentPopulation.yaml

@@ -82,7 +82,9 @@ import org.gms.provider.wz.WZFiles;
 import org.gms.server.StatEffect;
 import org.gms.server.life.Element;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SkillFactory {
@@ -91,6 +93,13 @@ public class SkillFactory {
 
     public static Skill getSkill(int id) {
         return skills.get(id);
+    }
+
+    public static List<Skill> getSkillsForJob(int jobId) {
+        return skills.values().stream()
+                .filter(skill -> skill.getId() / 10000 == jobId)
+                .sorted(Comparator.comparingInt(Skill::getId))
+                .toList();
     }
 
     public static void loadAllSkills() {

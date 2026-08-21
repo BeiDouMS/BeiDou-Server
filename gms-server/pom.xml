@@ -65,6 +65,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.gms</groupId>
+            <artifactId>extension-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- springboot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -237,6 +243,8 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
+                            <!-- Fat/runnable jar: BeiDou-boot.jar; main artifact stays thin for plugin compile -->
+                            <classifier>boot</classifier>
                             <mainClass>${mainClass}</mainClass>
                         </configuration>
                     </execution>

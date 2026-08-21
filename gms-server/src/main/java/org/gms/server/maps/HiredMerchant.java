@@ -38,10 +38,12 @@ import org.gms.net.server.world.World;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.Trade;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.gms.extension.runtime.HostHooks;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,7 +70,7 @@ public class HiredMerchant extends AbstractMapObject {
     private static final int VISITOR_HISTORY_LIMIT = 10;
     private static final int BLACKLIST_LIMIT = 20;
 
-    private final int ownerId;
+    private int ownerId;
     private final int itemId;
     private final int mesos = 0;
     private final int channel;
@@ -102,6 +104,14 @@ public class HiredMerchant extends AbstractMapObject {
         this.ownerName = owner.getName();
         this.description = desc;
         this.map = owner.getMap();
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public void broadcastToVisitorsThreadsafe(Packet packet) {
@@ -797,6 +807,59 @@ public class HiredMerchant extends AbstractMapObject {
 
     public Set<String> getBlacklist() {
         return Collections.unmodifiableSet(blacklist);
+    }
+
+    public void botBuy(Character bot, PlayerShopItem shopItem, short quantity) {
+        synchronized (items) {
+            Item item = shopItem.getItem().copy();
+            int price = (int) Math.min((float) shopItem.getPrice() * quantity, Integer.MAX_VALUE);
+            price -= Trade.getFee(price);
+
+            synchronized (sold) {
+                sold.add(new SoldItem(bot.getName(), shopItem.getItem().getItemId(), quantity, price));
+            }
+
+            shopItem.setBundles((short) (shopItem.getBundles() - quantity));
+            if (shopItem.getBundles() < 1) {
+                shopItem.setDoesExist(false);
+            }
+
+            if (GameConfig.getServerBoolean("use_announce_shopitemsold")) {
+                announceItemSold(item, price, getQuantityLeft(shopItem.getItem().getItemId()));
+            }
+
+            Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterByName(ownerName);
+            if (owner != null && !HostHooks.isArtificial(owner)) {
+                owner.addMerchantMesos(price);
+            } else {
+                try (Connection con = DatabaseConnection.getConnection()) {
+                    long merchantMesos = 0;
+                    try (PreparedStatement ps = con.prepareStatement("SELECT MerchantMesos FROM characters WHERE id = ?")) {
+                        ps.setInt(1, ownerId);
+                        try (ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                merchantMesos = rs.getInt(1);
+                            }
+                        }
+                    }
+                    merchantMesos += price;
+                    try (PreparedStatement ps = con.prepareStatement(
+                            "UPDATE characters SET MerchantMesos = ? WHERE id = ?")) {
+                        ps.setInt(1, (int) Math.min(merchantMesos, Integer.MAX_VALUE));
+                        ps.setInt(2, ownerId);
+                        ps.executeUpdate();
+                    }
+                } catch (SQLException e) {
+                    log.error(I18nUtil.getLogMessage("HiredMerchant.botBuy.error1", ownerName), e);
+                }
+            }
+
+            try {
+                saveItems(false);
+            } catch (SQLException e) {
+                log.error(I18nUtil.getLogMessage("HiredMerchant.botBuy.error1", ownerName), e);
+            }
+        }
     }
 
     private boolean isBlacklisted(String chrName) {

@@ -259,6 +259,69 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
         }
     }
 
+    public static void updatePositionBot(InPacket p, AnimatedMapObject target, int yOffset) throws EmptyMovementException {
+        byte numCommands = p.readByte();
+        if (numCommands < 1) {
+            throw new EmptyMovementException(p);
+        }
+        for (byte i = 0; i < numCommands; i++) {
+            byte command = p.readByte();
+            switch (command) {
+                case 0:
+                case 5:
+                case 17: {
+                    short xpos = p.readShort();
+                    short ypos = p.readShort();
+                    target.setPosition(new Point(xpos, ypos + yOffset));
+                    p.skip(6);
+                    target.setStance(p.readByte());
+                    p.readShort();
+                    break;
+                }
+                case 1:
+                case 2:
+                case 6:
+                case 12:
+                case 13:
+                case 16:
+                case 18:
+                case 19:
+                case 20:
+                case 22:
+                    p.skip(4);
+                    target.setStance(p.readByte());
+                    p.readShort();
+                    break;
+                case 3:
+                case 4:
+                case 7:
+                case 8:
+                case 9:
+                case 11:
+                    p.skip(8);
+                    target.setStance(p.readByte());
+                    break;
+                case 14:
+                    p.skip(9);
+                    break;
+                case 10:
+                    p.readByte();
+                    break;
+                case 15:
+                    p.skip(12);
+                    target.setStance(p.readByte());
+                    p.readShort();
+                    break;
+                case 21:
+                    p.skip(3);
+                    break;
+                default:
+                    log.warn("Unhandled Case: {}", command);
+                    throw new EmptyMovementException(p);
+            }
+        }
+    }
+
     /**
      * 处理瞬移动作（3/4）：同步坐标并在玩家对象上记录传送前后坐标。
      */

@@ -15,4 +15,5 @@ public interface InPacket extends Packet {
     int available();
     void seek(int byteOffset);
     int getPosition();
+    InPacket copy();
 }

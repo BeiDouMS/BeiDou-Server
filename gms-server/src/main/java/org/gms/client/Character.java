@@ -486,6 +486,7 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private boolean chasing = false;
+    private BotTier botTier = BotTier.getDefaultTier(); // artificial-character performance tier (default C)
     private float mobExpRate = -1;
 
     @Getter
@@ -529,7 +530,7 @@ public class Character extends AbstractCharacterObject {
     }
 
 
-    private Character() {
+    public Character() {
         super.setListener(new CharacterListener(this));
         useCS = false;
         setStance(0);
@@ -625,6 +626,11 @@ public class Character extends AbstractCharacterObject {
         if (canRecvPartySearchInvite) {
             this.getWorldServer().getPartySearchCoordinator().attachPlayer(this);
         }
+    }
+
+    /** Headless / artificial characters: clear awayFromWorld without PartySearch side effects. */
+    public void markPresentInWorld() {
+        awayFromWorld.set(false);
     }
 
     public void setAwayFromChannelWorld() {
@@ -4639,7 +4645,7 @@ public class Character extends AbstractCharacterObject {
         int quickLv = GameConfig.getWorldInt(getWorld(), "quick_level");
         if (level >= quickLv) return 1;
 
-        return 1f + (quickLv - level) * GameConfig.getWorldFloat(getWorld(), "quick_level_exp_rate");
+        return 1f + (quickLv - level) * GameConfig.getWorldFloat(getWorld(), "quick_level_rate");
     }
 
     public void updateMobExpRate() {
@@ -4902,6 +4908,35 @@ public class Character extends AbstractCharacterObject {
 
     public int getTotalStr() {
         return localstr;
+    }
+
+    // GCMoveSystem: base 100 + equip bonuses + buff → BotMovementProfile bucket
+    public int getTotalMoveSpeedStat() {
+        int total = 100;
+        for (Item item : getInventory(InventoryType.EQUIPPED)) {
+            if (item instanceof Equip equip) {
+                total += equip.getSpeed();
+            }
+        }
+        Integer speedBuff = getBuffedValue(BuffStat.SPEED);
+        if (speedBuff != null) {
+            total += speedBuff;
+        }
+        return Math.max(1, total);
+    }
+
+    public int getTotalJumpStat() {
+        int total = 100;
+        for (Item item : getInventory(InventoryType.EQUIPPED)) {
+            if (item instanceof Equip equip) {
+                total += equip.getJump();
+            }
+        }
+        Integer jumpBuff = getBuffedValue(BuffStat.JUMP);
+        if (jumpBuff != null) {
+            total += jumpBuff;
+        }
+        return Math.max(1, total);
     }
 
     public int getTotalDex() {
@@ -6836,7 +6871,7 @@ public class Character extends AbstractCharacterObject {
         enableActions();
     }
 
-    private void unsitChairInternal() {
+    public void unsitChairInternal() {
         int chairid = chair.get();
         if (chairid >= 0) {
             if (ItemConstants.isFishingChair(chairid)) {
@@ -6876,7 +6911,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void setChair(int chair) {
+    public void setChair(int chair) {
         this.chair.set(chair);
     }
 
@@ -7376,7 +7411,41 @@ public class Character extends AbstractCharacterObject {
         savedLocations[SavedLocationType.fromString(type).ordinal()] = new SavedLocation(getMapId(), closest != null ? closest.getId() : 0);
     }
 
+    /**
+     * Creates a character in its own transaction, preserving the historical
+     * public method contract.
+     */
     public final boolean insertNewChar(CharacterFactoryRecipe recipe) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            con.setAutoCommit(false);
+            con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            try {
+                if (!insertNewChar(recipe, con)) {
+                    con.rollback();
+                    return false;
+                }
+                con.commit();
+                return true;
+            } catch (Exception e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+                con.setAutoCommit(true);
+            }
+        } catch (Throwable t) {
+            log.error("Error creating chr {}, level: {}, job: {}", name, level, job.getId(), t);
+            return false;
+        }
+    }
+
+    /**
+     * Creates the character and all native child rows on the caller's
+     * connection. This method never commits, rolls back, closes, or changes
+     * transaction settings on that connection.
+     */
+    public final boolean insertNewChar(CharacterFactoryRecipe recipe, Connection con) throws SQLException {
+        Objects.requireNonNull(con, "con");
         attrStr = recipe.getStr();
         attrDex = recipe.getDex();
         attrInt = recipe.getInt();
@@ -7405,12 +7474,7 @@ public class Character extends AbstractCharacterObject {
         this.events.put("rescueGaga", new RescueGaga(0));
 
 
-        try (Connection con = DatabaseConnection.getConnection()) {
-            con.setAutoCommit(false);
-            con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-
-            try {
-                // Character info
+        // Character info
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (str, dex, luk, `int`, gm, skincolor, gender, job, hair, face, map, meso, spawnpoint, accountid, name, world, hp, mp, maxhp, maxmp, level, ap, sp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, attrStr);
                     ps.setInt(2, attrDex);
@@ -7523,20 +7587,7 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
 
-                con.commit();
-                return true;
-            } catch (Exception e) {
-                con.rollback();
-                throw e;
-            } finally {
-                con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-                con.setAutoCommit(true);
-            }
-        } catch (Throwable t) {
-            log.error("Error creating chr {}, level: {}, job: {}", name, level, job.getId(), t);
-        }
-
-        return false;
+        return true;
     }
 
     public void saveCharToDB() {
@@ -9020,7 +9071,11 @@ public class Character extends AbstractCharacterObject {
 
     @Override
     public void sendSpawnData(Client client) {
-        if (!this.isHidden() || client.getPlayer().gmLevel() > 1) {
+        Character viewer = client == null ? null : client.getPlayer();
+        if (viewer == null) {
+            return;
+        }
+        if (!this.isHidden() || viewer.gmLevel() > 1) {
             client.sendPacket(PacketCreator.spawnPlayerMapObject(client, this, false));
 
             if (buffEffects.containsKey(getJobMapChair(job))) { // mustn't effLock, chrLock sendSpawnData
@@ -10148,5 +10203,13 @@ public class Character extends AbstractCharacterObject {
     /** 更新全局攻击时间戳，只被正常主动技能调用 */
     public void updateGlobalTime(long now) {
         globalAttackTime = now;
+    }
+
+    public void setTier(BotTier newTier) {
+        this.botTier = BotTier.TierManager.safeTierSet(this.botTier, newTier);
+    }
+
+    public BotTier getTier() {
+        return BotTier.TierManager.getSafeTier(botTier);
     }
 }

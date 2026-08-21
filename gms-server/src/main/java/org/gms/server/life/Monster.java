@@ -42,6 +42,7 @@ import org.gms.constants.skills.NightWalker;
 import org.gms.constants.skills.Priest;
 import org.gms.constants.skills.Shadower;
 import org.gms.constants.skills.WhiteKnight;
+import org.gms.extension.runtime.HostHooks;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.coordinator.world.MonsterAggroCoordinator;
@@ -592,6 +593,15 @@ public class Monster extends AbstractLoadedLife {
 
         int membersSize = expMembers.size();
         float participationExp = partyDamage * expPerDmg;
+        Party participantParty = partyParticipation.keySet().iterator().next().getParty();
+        if (hasArtificialMember(participantParty)) {
+            log.info("Artificial-party EXP diagnostic map={} mobId={} mobLevel={} mobExp={} partyDamage={} participationExp={} "
+                            + "participants={} partyMembers={} eligible={} totalPartyLevel={}",
+                    getMap().getId(), getId(), getLevel(), getExp(), partyDamage, participationExp,
+                    describeCharacters(partyParticipation.keySet()),
+                    describePartyMembers(participantParty),
+                    describeCharacters(expMembers), totalPartyLevel);
+        }
 
         // thanks Crypter for reporting an insufficiency on party exp bonuses
         boolean hasPartySharers = membersSize > 1;
@@ -601,6 +611,41 @@ public class Monster extends AbstractLoadedLife {
             distributePlayerExperience(mc, participationExp, partyBonusMod, totalPartyLevel, mc == participationMvp, isWhiteExpGain(mc, personalRatio, sdevRatio), hasPartySharers);
             giveFamilyRep(mc.getFamilyEntry());
         }
+    }
+
+    private static boolean hasArtificialMember(Party party) {
+        if (party == null) {
+            return false;
+        }
+        for (PartyCharacter member : party.getMembers()) {
+            if (member.getPlayer() != null && HostHooks.isArtificial(member.getPlayer())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String describePartyMembers(Party party) {
+        List<String> members = new ArrayList<>();
+        if (party != null) {
+            for (PartyCharacter member : party.getMembers()) {
+                Character player = member.getPlayer();
+                members.add(member.getId() + ":player=" + (player != null)
+                        + ":map=" + (player == null || player.getMap() == null ? -1 : player.getMapId())
+                        + ":logged=" + (player != null && player.isLoggedInWorld())
+                        + ":artificial=" + (player != null && HostHooks.isArtificial(player)));
+            }
+        }
+        return members.toString();
+    }
+
+    private static String describeCharacters(Collection<Character> characters) {
+        List<String> members = new ArrayList<>();
+        for (Character character : characters) {
+            members.add(character.getId() + ":level=" + character.getLevel()
+                    + ":exp=" + character.getExp());
+        }
+        return members.toString();
     }
 
     private void distributeExperience(int killerId) {
@@ -1855,10 +1900,30 @@ public class Monster extends AbstractLoadedLife {
         Character newControllerDead = null;
 
         Character newControllerWithPuppet = null;
+        int minHiddenControlled = Integer.MAX_VALUE;
+        Character hiddenController = null;
+        int minHiddenControlledDead = Integer.MAX_VALUE;
+        Character hiddenControllerDead = null;
 
         for (Character chr : getMap().getAllPlayers()) {
-            if (!chr.isHidden() && chr.isLoggedInWorld()) {   // 过滤已断线/awayFromWorld 的幽灵玩家，避免被选为 controller 候选
+            if (!HostHooks.isArtificial(chr) && chr.isLoggedInWorld()) {
                 int ctrlMonsSize = chr.getNumControlledMonsters();
+
+                // Prefer visible players, preserving normal controller distribution. A hidden GM
+                // remains a valid fallback: its real client can drive mob movement without revealing
+                // the GM. Headless bots must never be selected because they cannot emit MOVE_LIFE.
+                if (chr.isHidden()) {
+                    if (chr.isAlive()) {
+                        if (ctrlMonsSize < minHiddenControlled) {
+                            minHiddenControlled = ctrlMonsSize;
+                            hiddenController = chr;
+                        }
+                    } else if (ctrlMonsSize < minHiddenControlledDead) {
+                        minHiddenControlledDead = ctrlMonsSize;
+                        hiddenControllerDead = chr;
+                    }
+                    continue;
+                }
 
                 if (isCharacterPuppetInVicinity(chr)) {
                     newControllerWithPuppet = chr;
@@ -1881,8 +1946,12 @@ public class Monster extends AbstractLoadedLife {
             return newControllerWithPuppet;
         } else if (newController != null) {
             return newController;
-        } else {
+        } else if (newControllerDead != null) {
             return newControllerDead;
+        } else if (hiddenController != null) {
+            return hiddenController;
+        } else {
+            return hiddenControllerDead;
         }
     }
 
@@ -1920,6 +1989,9 @@ public class Monster extends AbstractLoadedLife {
      * player controller.
      */
     public void aggroSwitchController(Character newController, boolean immediateAggro) {
+        if (newController != null && HostHooks.isArtificial(newController)) {
+            newController = getNextControllerCandidate();
+        }
         if (aggroUpdateLock.tryLock()) {
             try {
                 Character prevController = getController();

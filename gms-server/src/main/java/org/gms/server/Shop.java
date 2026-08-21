@@ -106,12 +106,20 @@ public class Shop {
                 if (c.getPlayer().getMeso() >= amount) {
                     if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                         if (!ItemConstants.isRechargeable(itemId)) { //Pets can't be bought from shops
-                            InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                            c.getPlayer().gainMeso(-amount, false);
+                            if (InventoryManipulator.addById(c, itemId, quantity, "", -1)) {
+                                c.getPlayer().gainMeso(-amount, false);
+                            } else {
+                                c.sendPacket(PacketCreator.shopTransaction((byte) 3));
+                                return;
+                            }
                         } else {
                             quantity = ii.getSlotMax(c, item.getItemId());
-                            InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                            c.getPlayer().gainMeso(-item.getPrice(), false);
+                            if (InventoryManipulator.addById(c, itemId, quantity, "", -1)) {
+                                c.getPlayer().gainMeso(-item.getPrice(), false);
+                            } else {
+                                c.sendPacket(PacketCreator.shopTransaction((byte) 3));
+                                return;
+                            }
                         }
                         c.sendPacket(PacketCreator.shopTransaction((byte) 0));
                     } else {
@@ -262,6 +270,17 @@ public class Shop {
 
     private ShopItem findBySlot(short slot) {
         return items.get(slot);
+    }
+
+    /**
+     * Immutable catalog view for trusted server-side automation.
+     *
+     * <p>Slots in the returned list are the same zero-based slots accepted by
+     * {@link #buy(Client, short, int, short)}. Returning a copy prevents an
+     * extension from mutating the live shop catalog.</p>
+     */
+    public List<ShopItem> getItems() {
+        return List.copyOf(items);
     }
 
     public static Shop createFromDB(int id, boolean isShopId) {

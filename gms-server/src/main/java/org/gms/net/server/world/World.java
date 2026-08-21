@@ -452,7 +452,8 @@ public class World {
     public void registerAccountCharacterView(Integer accountId, Character chr) {
         accountCharsLock.lock();
         try {
-            accountChars.get(accountId).put(chr.getId(), chr);
+            accountChars.computeIfAbsent(accountId, ignored -> new TreeMap<>())
+                    .put(chr.getId(), chr);
         } finally {
             accountCharsLock.unlock();
         }
@@ -461,7 +462,10 @@ public class World {
     public void unregisterAccountCharacterView(Integer accountId, Integer chrId) {
         accountCharsLock.lock();
         try {
-            accountChars.get(accountId).remove(chrId);
+            SortedMap<Integer, Character> chars = accountChars.get(accountId);
+            if (chars != null) {
+                chars.remove(chrId);
+            }
         } finally {
             accountCharsLock.unlock();
         }

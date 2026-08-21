@@ -74,6 +74,8 @@ import org.gms.server.partyquest.GuardianSpawnPoint;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 import org.gms.util.Randomizer;
+import org.gms.extension.event.CharacterMapEnteredEvent;
+import org.gms.extension.runtime.HostHooks;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -125,7 +127,10 @@ public class MapleMap {
     private final Map<MobLootEntry, Long> mobLootEntries = new HashMap(20);
     private final List<Runnable> statUpdateRunnables = new ArrayList(50);
     private final List<Rectangle> areas = new ArrayList<>();
+    private final List<Rope> ropes = new ArrayList<>();
     private FootholdTree footholds = null;
+    private float footholdSpeed = 1.0f;
+    private boolean swim;
     private Pair<Integer, Integer> xLimits;  // caches the min and max x's with available footholds
     private final Rectangle mapArea = new Rectangle();
     private final int mapid;
@@ -428,8 +433,10 @@ public class MapleMap {
             for (Character chr : characters) {
                 if (condition == null || condition.canSpawn(chr)) {
                     if (chr.getPosition().distanceSq(mapobject.getPosition()) <= getRangedDistance()) {
-                        inRangeCharacters.add(chr);
-                        chr.addVisibleMapObject(mapobject);
+                        if (!HostHooks.isArtificial(chr)) {
+                            inRangeCharacters.add(chr);
+                            chr.addVisibleMapObject(mapobject);
+                        }
                     }
                 }
             }
@@ -794,6 +801,11 @@ public class MapleMap {
         spawnDrop(drop, this.calcDropPos(dropPos, reactor.getPosition()), reactor, chr, (byte) (chr.getParty() != null ? 1 : 0), questid);
     }
 
+    public void dropFromReactor(final Character chr, final Reactor reactor, Item drop, Point dropPos, short questid,
+                                short delay) {
+        dropFromReactor(chr, reactor, drop, dropPos, questid);
+    }
+
     private void stopItemMonitor() {
         itemMonitor.cancel(false);
         itemMonitor = null;
@@ -926,8 +938,38 @@ public class MapleMap {
         droppedItemCount.incrementAndGet();
     }
 
+    private void instantiateItemDropNoExpire(MapItem mdrop) {
+        if (droppedItemCount.get() >= GameConfig.getServerInt("item_limit_on_map")) {
+            MapObject mapobj;
+            do {
+                mapobj = null;
+                objectWLock.lock();
+                try {
+                    while (mapobj == null && !registeredDrops.isEmpty()) {
+                        mapobj = registeredDrops.remove(0).get();
+                    }
+                } finally {
+                    objectWLock.unlock();
+                }
+            } while (!makeDisappearItemFromMap(mapobj));
+        }
+
+        objectWLock.lock();
+        try {
+            registerItemDropNoExpire(mdrop);
+            registeredDrops.add(new WeakReference<>(mdrop));
+        } finally {
+            objectWLock.unlock();
+        }
+        droppedItemCount.incrementAndGet();
+    }
+
     private void registerItemDrop(MapItem mdrop) {
         droppedItems.put(mdrop, !everlast ? Server.getInstance().getCurrentTime() + GameConfig.getServerLong("item_expire_time") : Long.MAX_VALUE);
+    }
+
+    private void registerItemDropNoExpire(MapItem mdrop) {
+        droppedItems.put(mdrop, Long.MAX_VALUE);
     }
 
     private void unregisterItemDrop(MapItem mdrop) {
@@ -1177,6 +1219,14 @@ public class MapleMap {
         instantiateItemDrop(mdrop);
     }
 
+    /**
+     * Compatibility overload for delayed drop sources. Meso drops are instantiated
+     * immediately by the map's existing drop lifecycle, so the delay is packet-only.
+     */
+    public final void spawnMesoDrop(final int meso, final Point position, final MapObject dropper, final Character owner, final boolean playerDrop, final byte droptype, short delay) {
+        spawnMesoDrop(meso, position, dropper, owner, playerDrop, droptype);
+    }
+
     public final void disappearingItemDrop(final MapObject dropper, final Character owner, final Item item, final Point pos) {
         final Point droppos = calcDropPos(pos, pos);
         final MapItem mdrop = new MapItem(item, droppos, dropper, owner, owner.getClient(), (byte) 1, false);
@@ -1246,6 +1296,30 @@ public class MapleMap {
 
     public final List<MapObject> getMonsters() {
         return getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.MONSTER));
+    }
+
+    public final List<MapObject> getHiredMerchants() {
+        return getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.HIRED_MERCHANT));
+    }
+
+    public final List<MapObject> getPlayerStores() {
+        return getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.SHOP));
+    }
+
+    public final List<PlayerShop> getAllPlayerShops() {
+        List<PlayerShop> list = new LinkedList<>();
+        for (MapObject mmo : getPlayerStores()) {
+            list.add((PlayerShop) mmo);
+        }
+        return list;
+    }
+
+    public final List<HiredMerchant> getAllHiredMerchants() {
+        List<HiredMerchant> list = new LinkedList<>();
+        for (MapObject mmo : getHiredMerchants()) {
+            list.add((HiredMerchant) mmo);
+        }
+        return list;
     }
 
     public final List<Reactor> getAllReactors() {
@@ -1965,6 +2039,17 @@ public class MapleMap {
         }
     }
 
+    public List<Point> getMonsterSpawnPositions() {
+        List<Point> positions = new ArrayList<>();
+        for (SpawnPoint spawnPoint : getAllMonsterSpawn()) {
+            Point position = spawnPoint.getPosition();
+            if (position != null) {
+                positions.add(new Point(position));
+            }
+        }
+        return positions;
+    }
+
     public void spawnAllMonsterIdFromMapSpawnList(int id) {
         spawnAllMonsterIdFromMapSpawnList(id, 1, false);
     }
@@ -2210,6 +2295,105 @@ public class MapleMap {
         activateItemReactors(mdrop, owner.getClient());
     }
 
+    /**
+     * Spawns a normal-expiry player drop that only {@code owner} can pick up.
+     * Used by host-directed transfers after the exact inventory item is removed.
+     */
+    public final MapItem spawnOwnerOnlyItemDrop(
+            final MapObject dropper,
+            final Character owner,
+            final Item item,
+            Point pos
+    ) {
+        if (FieldLimit.DROP_LIMIT.check(this.getFieldLimit())) {
+            return null;
+        }
+
+        final Point droppos = calcDropPos(pos, pos);
+        final MapItem mdrop = new MapItem(item, droppos, dropper, owner, owner.getClient(), (byte) 0, true);
+        mdrop.setDropTime(Server.getInstance().getCurrentTime());
+        mdrop.lockItem();
+        try {
+            mdrop.setPartyOwnerIdLocked(-1);
+            mdrop.setPermanentOwner(true);
+        } finally {
+            mdrop.unlockItem();
+        }
+
+        try {
+            spawnAndAddRangedMapObject(mdrop, c -> {
+                mdrop.lockItem();
+                try {
+                    c.sendPacket(PacketCreator.dropItemFromMapObject(
+                            c.getPlayer(), mdrop, dropper.getPosition(), droppos, (byte) 1));
+                } finally {
+                    mdrop.unlockItem();
+                }
+            }, null);
+        } catch (RuntimeException e) {
+            if (getMapObject(mdrop.getObjectId()) != mdrop) {
+                return null;
+            }
+            log.warn("Owner-only item {} spawned but one viewer notification failed",
+                    item.getItemId(), e);
+        }
+
+        mdrop.lockItem();
+        try {
+            try {
+                broadcastItemDropMessage(mdrop, dropper.getPosition(), droppos, (byte) 0);
+            } catch (RuntimeException e) {
+                log.warn("Owner-only item {} spawned but drop broadcast failed",
+                        item.getItemId(), e);
+            }
+        } finally {
+            mdrop.unlockItem();
+        }
+
+        instantiateItemDrop(mdrop);
+        try {
+            activateItemReactors(mdrop, owner.getClient());
+        } catch (RuntimeException e) {
+            log.warn("Owner-only item {} spawned but reactor activation failed",
+                    item.getItemId(), e);
+        }
+        return mdrop;
+    }
+
+    public final MapItem spawnItemDropNoExpire(final MapObject dropper, final Character owner, final Item item, Point pos,
+                                               final boolean ffaDrop, final boolean playerDrop) {
+        if (FieldLimit.DROP_LIMIT.check(this.getFieldLimit())) {
+            this.disappearingItemDrop(dropper, owner, item, pos);
+            return null;
+        }
+
+        final Point droppos = calcDropPos(pos, pos);
+        final MapItem mdrop = new MapItem(item, droppos, dropper, owner, owner.getClient(),
+                (byte) (ffaDrop ? 2 : 0), playerDrop);
+        mdrop.setDropTime(Server.getInstance().getCurrentTime());
+
+        spawnAndAddRangedMapObject(mdrop, c -> {
+            mdrop.lockItem();
+            try {
+                c.sendPacket(PacketCreator.dropItemFromMapObject(c.getPlayer(), mdrop, dropper.getPosition(), droppos,
+                        (byte) 1));
+            } finally {
+                mdrop.unlockItem();
+            }
+        }, null);
+
+        mdrop.lockItem();
+        try {
+            broadcastItemDropMessage(mdrop, dropper.getPosition(), droppos, (byte) 0);
+        } finally {
+            mdrop.unlockItem();
+        }
+
+        instantiateItemDropNoExpire(mdrop);
+        activateItemReactors(mdrop, owner.getClient());
+        return mdrop;
+    }
+
     public final void spawnItemDropList(List<Integer> list, final MapObject dropper, final Character owner, Point pos) {
         spawnItemDropList(list, 1, 1, dropper, owner, pos, true, false);
     }
@@ -2424,6 +2608,10 @@ public class MapleMap {
         chr.setMapId(mapid);
         chr.updateActiveEffects();
 
+        if (!HostHooks.isArtificial(chr)) {
+            HostHooks.publish(new CharacterMapEnteredEvent(chr, mapid));
+        }
+
         if (this.getHPDec() > 0) {
             getWorldServer().addPlayerHpDecrease(chr);
         } else {
@@ -2437,11 +2625,11 @@ public class MapleMap {
                 aggroMonitor.startAggroCoordinator();
             }
 
-            if (onFirstUserEnter.length() != 0) {
+            if (onFirstUserEnter.length() != 0 && !HostHooks.isArtificial(chr)) {
                 msm.runMapScript(chr.getClient(), "onFirstUserEnter/" + onFirstUserEnter, true);
             }
         }
-        if (onUserEnter.length() != 0) {
+        if (onUserEnter.length() != 0 && !HostHooks.isArtificial(chr)) {
             if (onUserEnter.equals("cygnusTest") && !MapId.isCygnusIntro(mapid)) {
                 chr.saveLocation("INTRO");
             }
@@ -2559,7 +2747,12 @@ public class MapleMap {
             broadcastSpawnPlayerMapObjectMessage(chr, chr, true);
         }
 
-        sendObjectPlacement(chr.getClient());
+        // Artificial players have a headless client with no viewer Character.
+        // They must be visible to real players, but there is no socket/viewer
+        // that needs the map's existing objects sent back to them.
+        if (!HostHooks.isArtificial(chr)) {
+            sendObjectPlacement(chr.getClient());
+        }
 
         if (isStartingEventMap() && !eventStarted()) {
             chr.getMap().getPortal("join00").setPortalStatus(false);
@@ -2791,7 +2984,9 @@ public class MapleMap {
         chrRLock.lock();
         try {
             for (Character c : characters) {
-                if (c != null && c.isAwayFromWorld()) {
+                // SoloMapling bots stay on maps with awayFromWorld=true until marked entered;
+                // never treat them as disconnect ghosts.
+                if (c != null && c.isAwayFromWorld() && !HostHooks.isArtificial(c)) {
                     ghosts.add(c);
                 }
             }
@@ -2905,7 +3100,7 @@ public class MapleMap {
                 if (chrDisconnected(iterator, chr)) {
                     continue;
                 }
-                if (chr != source) {
+                if (chr != source && !HostHooks.isArtificial(chr)) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
                         if (rangedFrom.distanceSq(chr.getPosition()) <= rangeSq) {
                             chr.sendPacket(packet);
@@ -2956,7 +3151,7 @@ public class MapleMap {
         chrRLock.lock();
         try {
             for (Character chr : characters) {
-                if (chr != source) {
+                if (chr != source && !HostHooks.isArtificial(chr)) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
                         if (rangedFrom.distanceSq(chr.getPosition()) <= rangeSq) {
                             chr.getClient().announceBossHpBar(mm, bossHash, packet);
@@ -3186,6 +3381,10 @@ public class MapleMap {
         return portals.get(portalid);
     }
 
+    public Collection<Portal> getPortals() {
+        return Collections.unmodifiableCollection(portals.values());
+    }
+
     public void addMapleArea(Rectangle rec) {
         areas.add(rec);
     }
@@ -3204,6 +3403,30 @@ public class MapleMap {
 
     public FootholdTree getFootholds() {
         return footholds;
+    }
+
+    public void addRope(Rope rope) {
+        ropes.add(rope);
+    }
+
+    public List<Rope> getRopes() {
+        return Collections.unmodifiableList(ropes);
+    }
+
+    public float getFootholdSpeed() {
+        return footholdSpeed;
+    }
+
+    public void setFootholdSpeed(float footholdSpeed) {
+        this.footholdSpeed = footholdSpeed;
+    }
+
+    public boolean isSwim() {
+        return swim;
+    }
+
+    public void setSwim(boolean swim) {
+        this.swim = swim;
     }
 
     public void setMapPointBoundings(int px, int py, int h, int w) {
@@ -3386,6 +3609,10 @@ public class MapleMap {
                 player.addVisibleMapObject(mo);
             }
         }
+    }
+
+    public void moveBot(Character player, Point newPosition) {
+        player.setPosition(newPosition);
     }
 
     public final void toggleEnvironment(final String ms) {

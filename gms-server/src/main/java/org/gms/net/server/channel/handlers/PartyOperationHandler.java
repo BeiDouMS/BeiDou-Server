@@ -24,6 +24,9 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.config.GameConfig;
+import org.gms.extension.api.HostRuntime;
+import org.gms.extension.event.PartyInviteEvent;
+import org.gms.extension.runtime.ExtensionLoader;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
@@ -97,6 +100,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                         if (party.getMembers().size() < 6) {
                             if (InviteCoordinator.createInvite(InviteType.PARTY, player, party.getId(), invited.getId())) {
                                 invited.sendPacket(PacketCreator.partyInvite(player));
+                                publishInvite(invited, player, party.getId());
                             } else {
                                 c.sendPacket(PacketCreator.partyStatusMessage(22, invited.getName()));
                             }
@@ -123,5 +127,15 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 break;
             }
         }
+    }
+
+    // The invite packet only reaches a real client. Extensions that own a character without one
+    // (SoloMapling bots) answer through this event instead.
+    private static void publishInvite(Character invited, Character inviter, int partyId) {
+        HostRuntime runtime = ExtensionLoader.getInstance().getRuntime();
+        if (runtime == null) {
+            return;
+        }
+        runtime.events().publish(new PartyInviteEvent(invited, inviter, partyId));
     }
 }
