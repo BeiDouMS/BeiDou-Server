@@ -49,6 +49,9 @@ function end(mode, type, selection) {
         } else if (status == 4) {
             qm.gainMeso(-10000);
 
+            var skillid = Math.floor(qm.getPlayer().getJob().getId() / 1000) * 10000000 + 1007;
+            qm.teachSkill(skillid, 1, 3, -1);
+
             qm.forceCompleteQuest();
             qm.dispose();
         }
