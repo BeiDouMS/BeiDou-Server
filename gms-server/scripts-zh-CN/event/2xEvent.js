@@ -98,8 +98,9 @@ function start() {
 function stop() {
     const Server = Java.type('org.gms.net.server.Server');
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
+    const GameConfig = Java.type('org.gms.config.GameConfig');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
-    world.setExpRate(4); // 将经验值恢复到原来的4倍（正常情况下）
+    world.setExpRate(GameConfig.getWorldFloat(world.getId(), "exp_rate")); // 恢复为 game_config 配置的基准经验倍率
     world.broadcastPacket(PacketCreator.serverNotice(6, "很遗憾，紧急经验池(EXP)能量已耗尽需要重新充能，经验倍率已恢复正常。"));
 }
 

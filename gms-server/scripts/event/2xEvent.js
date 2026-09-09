@@ -63,15 +63,16 @@ function start() {
     const Server = Java.type('org.gms.net.server.Server');
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
-    world.setExpRate(8);
+    world.setExpRate(world.getExpRate() * 2); // double the current exp rate
     world.broadcastPacket(PacketCreator.serverNotice(6, "The Bunny Onslaught Survival Scanner (BOSS) has detected an Easter Bunny onslaught soon! The GM team has activated the Emergency XP Pool (EXP) that doubles experience gained for the next two hours!"));
 }
 
 function stop() {
     const Server = Java.type('org.gms.net.server.Server');
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
+    const GameConfig = Java.type('org.gms.config.GameConfig');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
-    world.setExpRate(4);
+    world.setExpRate(GameConfig.getWorldFloat(world.getId(), "exp_rate")); // restore the exp rate configured in game_config
     world.broadcastPacket(PacketCreator.serverNotice(6, "Unfortunately the Emergency XP Pool (EXP) has run out of juice for now and needs to recharge causing the EXP rate to go back to normal."));
 }
 
