@@ -10,8 +10,7 @@ var bossmaps = Array(
 		Array(220080000,380000,"闹钟BOSS                  #r（消耗38万金币）#b"), 
 		Array(211042300,380000,"扎昆BOSS                  #r（消耗38万金币）#b"),
         Array(702070400,380000,"妖僧BOSS                  #r（消耗38万金币）#b"),
-        Array(541020700,380000,"树精BOSS                  #r（消耗38万金币）#b"),		
-        Array(105100100,380000,"巨魔蝙蝠                  #r（消耗38万金币）#b"),			
+        Array(105100100,380000,"巨魔蝙蝠                  #r（消耗38万金币）#b"),
 		Array(240040700,380000,"暗黑龙王                  #r（消耗38万金币）#b"),
         Array(270000100,380000,"品克缤BOSS                #r（消耗38万金币）#b")		
 		);
@@ -35,9 +34,8 @@ var monstermaps = Array(
 		Array(230040100,2880,"深海峡谷2#r（2880金币）#b　　 　　适合 90 ~ 100 级玩家"),
 		Array(551030100,2980,"阴森世界入口#r（2980金币）#b　　　适合 95 ~ 120 级玩家"),
 		Array(240030102,3080,"消失的树林#r（3080金币）#b　  　　适合 100 ~ 120 级玩家"),
-		Array(240040511,3280,"被遗忘的龙之巢#r（3280金币）#b  　适合 105 ~ 130 级玩家"),		  
-		Array(541020000,3580,"乌鲁城入口#r（3580金币）#b　　  　适合 105 ~ 150 级玩家")
-		); 
+		Array(240040511,3280,"被遗忘的龙之巢#r（3280金币）#b  　适合 105 ~ 130 级玩家")
+		);
 
 //------------------------------------------------------------------------		
 
@@ -161,31 +159,43 @@ function level3() {
 }
 
 //----------------------------------------------------------------------------------
-function levelBoss(selection) {
-	cm.gainMeso(-bossmaps[selection][1]);
+/**
+ * @description 校验选择范围、余额与目标地图存在性，全部通过后才扣费并传送
+ */
+function warpWithFee(maps, selection) {
+	if (selection < 0 || selection >= maps.length) {
+		cm.dispose();
+		return;
+	}
+	var cost = maps[selection][1];
+	if (cm.getMeso() < cost) {
+		cm.sendOk("金币不足，需要 " + cost + " 金币。");
+		cm.dispose();
+		return;
+	}
+	if (cm.getPlayer().getMap(maps[selection][0], true) == null) { // 地图不存在时自动向玩家提示
+		cm.dispose();
+		return;
+	}
+	cm.gainMeso(-cost);
 	cm.getPlayer().saveLocationOnWarp();
-	cm.warp(bossmaps[selection][0]);
+	cm.warp(maps[selection][0]);
 	cm.dispose();
+}
+
+function levelBoss(selection) {
+	warpWithFee(bossmaps, selection);
 }
 
 function levelLevelUp(selection) {
-	cm.gainMeso(-monstermaps[selection][1]);
-	cm.getPlayer().saveLocationOnWarp();
-	cm.warp(monstermaps[selection][0]);
-	cm.dispose();
+	warpWithFee(monstermaps, selection);
 }
 
 function levelTown(selection) {
-	cm.gainMeso(-townmaps[selection][1]);
-	cm.getPlayer().saveLocationOnWarp();
-	cm.warp(townmaps[selection][0]);
-	cm.dispose();
+	warpWithFee(townmaps, selection);
 }
 
 function levelFuben(selection) {
-	cm.gainMeso(-fubenmaps[selection][1]);
-	cm.getPlayer().saveLocationOnWarp();
-	cm.warp(fubenmaps[selection][0]);
-	cm.dispose();
+	warpWithFee(fubenmaps, selection);
 }
 //----------------------------------------------------------------------------------
