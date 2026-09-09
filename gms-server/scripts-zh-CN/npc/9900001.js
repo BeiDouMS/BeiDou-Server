@@ -23,6 +23,8 @@
 /**
  * @description 拍卖行中心脚本
  */
+const LoggerFactory = Java.type('org.slf4j.LoggerFactory');
+const log = LoggerFactory.getLogger("npc/9900001.js");
 var OldTitle ="\t\t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\t\t\t\t\r\n";
 var status = -1;
 var i = 0;
@@ -68,6 +70,13 @@ function action(mode, type, selection) {
 }
 
 function doSelect(selection) {
+    // GM功能(61-68)需服务端二次校验：菜单渲染时的isGM判断只影响文本，selection由客户端数据包直接上送，可被改包绕过
+    if (selection >= 61 && selection <= 68 && !cm.getPlayer().isGM()) {
+        log.warn(`[脚本中心] 非GM玩家 ${cm.getPlayer().getName()}(id:${cm.getPlayer().getId()}) 尝试访问GM选项 ${selection}，已拦截`);
+        cm.sendOk("该功能暂不支持，敬请期待！");
+        cm.dispose();
+        return;
+    }
     switch (selection) {
         // 非GM功能
 		case 999:

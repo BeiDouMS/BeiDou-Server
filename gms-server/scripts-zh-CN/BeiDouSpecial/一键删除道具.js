@@ -5,6 +5,11 @@ var sel;
 
 
 function start() {
+    // GM专用脚本，服务端校验，防止绕过脚本中心菜单直接调起
+    if (!cm.getPlayer().isGM()) {
+        cm.dispose();
+        return;
+    }
     levelStart();
 }
 
