@@ -165,6 +165,8 @@ public final class Channel {
             log.info(I18nUtil.getLogMessage("Channel.info1"), getId(), port);
         } catch (Exception e) {
             log.error(I18nUtil.getLogMessage("Channel.error1"), e);
+            // 端口被占等启动失败时快速失败，避免半初始化的频道被挂进大区带病运行
+            throw new IllegalStateException(I18nUtil.getLogMessage("Channel.error2", world, channel, port), e);
         }
     }
 

@@ -747,7 +747,7 @@ public class Server {
             }
         } catch (Exception e) {
             log.error(I18nUtil.getLogMessage("Server.init.error3"), e); //For those who get errors
-            System.exit(0);
+            System.exit(1);
         }
 
         loginServer = initLoginServer(serviceProperty.getLoginPort());

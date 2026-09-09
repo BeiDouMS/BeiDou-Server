@@ -25,8 +25,10 @@ public class ServerApplication {
         try {
             initDb(args);
         } catch (Exception e) {
+            // 此处 Spring 上下文尚未启动，无法使用 I18nUtil，保留硬编码文案
             log.error("自动创建数据库失败：", e);
-            return;
+            // 以非零退出码结束进程，便于 systemd/docker 等监控体系感知启动失败
+            System.exit(1);
         }
         SpringApplication.run(ServerApplication.class, args);
     }
