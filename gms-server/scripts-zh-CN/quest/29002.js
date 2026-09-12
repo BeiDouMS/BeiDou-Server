@@ -45,7 +45,7 @@ function end(mode, type, selection) {
     }
 
     var questRecord = qm.getQuestRecord(qm.getQuest());
-    if (questRecord == null || System.currentTimeMillis() > questRecord.getCompletionTime() + challengeDurationMs) {
+    if (questRecord == null) {
         qm.sendOk("30 天挑战期限已经结束了。如果你还想挑战#b#t" + medalId + "##k，请先重新接取任务。");
         qm.dispose();
         return;
