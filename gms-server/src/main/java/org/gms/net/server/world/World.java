@@ -577,7 +577,7 @@ public class World {
     }
 
     public void removePlayer(Character chr) {
-        Channel cserv = chr.getClient().getChannelServer();
+        Channel cserv = chr.getClient() != null ? chr.getClient().getChannelServer() : null;
 
         if (cserv != null) {
             if (!cserv.removePlayer(chr)) {
@@ -591,7 +591,11 @@ public class World {
             }
         }
 
-        players.removePlayer(chr.getId());
+        // 关服兜底阶段 players 可能已被置空；这里空转即可，调用方紧接着还要 saveCharToDB，不能在这抛
+        PlayerStorage ps = players;
+        if (ps != null) {
+            ps.removePlayer(chr.getId());
+        }
     }
 
     public void addFamily(int id, Family f) {
@@ -2125,7 +2129,12 @@ public class World {
 
     public final void shutdown() {
         for (Channel ch : getChannels()) {
-            ch.shutdown();
+            try {
+                ch.shutdown();
+            } catch (Exception e) {
+                // 单个频道关不掉不能阻断其余频道的断线存档
+                log.error(I18nUtil.getLogMessage("World.shutdown.error1"), id, ch.getId(), e);
+            }
         }
 
         if (petsSchedule != null) {
@@ -2188,7 +2197,13 @@ public class World {
             hpDecSchedule = null;
         }
 
-        players.disconnectAll();
+        try {
+            // 兜底：断开仍留在大区里（换频道转场中、频道断线时漏掉）的角色。
+            // 这一步抛出去会一路冲到 Spring 的 destroy，之后的存档、登录口关闭全部跳过，所以必须兜住。
+            players.disconnectAll();
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("World.shutdown.error2"), id, e);
+        }
         players = null;
 
         clearWorldData();

@@ -1646,6 +1646,26 @@ public class Server {
         return () -> shutdownInternal(restart);
     }
 
+    /**
+     * 关服流程是否正在进行。进商城 / 进 MTS / 换频道等会把角色从频道 players 里摘出去的操作在此期间一律拒绝。
+     */
+    public boolean isShuttingDown() {
+        return shuttingDown;
+    }
+
+    private void stopLoginServerQuietly() {
+        LoginServer ls = loginServer;
+        if (ls == null) {
+            return;
+        }
+        loginServer = null;   // 先置空：关服流程里会调两次（先关门、最后收尾），第二次直接跳过
+        try {
+            ls.stop();
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Server.shutdownInternal.error5"), e);
+        }
+    }
+
     public void shutdownInternal(boolean restart) {
         // 重入保护在 synchronized 外判断，避免 Spring 关闭钩子等调用方
         // 在 System.exit 时卡在等锁导致 JVM 退出超时、端口不释放。
@@ -1676,20 +1696,43 @@ public class Server {
         if (getWorlds() == null) {
             return;//already shutdown
         }
+
+        // 先关门再断人：online=false 让 Client.channelActive 拒绝一切新连接，登录口先停，
+        // 避免断线存档进行到一半又有人登进来 / 进商城 / 换频道，在半关闭的频道里撞 NPE。
+        // （EnterCashShopHandler / EnterMTSHandler / ChangeChannelHandler 会看 isShuttingDown() 直接拒绝。）
+        online = false;
+        stopLoginServerQuietly();
+        log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info6"));
+
         for (World w : getWorlds()) {
-            w.shutdown();
+            try {
+                w.shutdown();
+            } catch (Exception e) {
+                log.error(I18nUtil.getLogMessage("Server.shutdownInternal.error4"), w.getId(), e);
+            }
         }
 
-        hpMpAlertService.saveAll();
-        hpMpAlertService.clear();
+        try {
+            hpMpAlertService.saveAll();
+            hpMpAlertService.clear();
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Server.shutdownInternal.error3"), e);
+        }
 
+        // 每个频道最多等 30 秒：Channel.shutdown 已把 finishedShutdown 放进 finally，正常不会等到；
+        // 这里只是最后一道保险，绝不能无上限死等（那会让进程只能被 kill -9）。
         for (Channel ch : getAllChannels()) {
-            while (!ch.finishedShutdown()) {
+            for (int i = 0; i < 30 && !ch.finishedShutdown(); i++) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ie) {
                     log.error(I18nUtil.getLogMessage("Server.shutdownInternal.error1"), ie);
+                    Thread.currentThread().interrupt();
+                    break;
                 }
+            }
+            if (!ch.finishedShutdown()) {
+                log.error(I18nUtil.getLogMessage("Server.shutdownInternal.error2"), ch.getWorld(), ch.getId(), 30);
             }
         }
 
@@ -1698,8 +1741,7 @@ public class Server {
         ThreadManager.getInstance().stop();
         TimerManager.getInstance().purge();
         TimerManager.getInstance().stop();
-        loginServer.stop();
-        online = false;
+        stopLoginServerQuietly();
         log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info4"));
         if (restart) {
             log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info5"));

@@ -27,6 +27,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.server.maps.MiniDungeonInfo;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
@@ -37,6 +38,13 @@ public class EnterCashShopHandler extends AbstractPacketHandler {
     public void handlePacket(InPacket p, Client c) {
         try {
             Character mc = c.getPlayer();
+
+            // 关服进行中：进商城会把角色从频道 players 摘走，正撞上频道关闭流程，直接拒绝
+            if (Server.getInstance().isShuttingDown()) {
+                c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Server.shuttingDown.message1")));
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
 
             if (mc.cannotEnterCashShop()) {
                 c.sendPacket(PacketCreator.enableActions());

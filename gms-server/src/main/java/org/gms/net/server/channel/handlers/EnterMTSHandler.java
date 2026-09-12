@@ -35,6 +35,7 @@ import org.gms.server.MTSItemInfo;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.sql.Connection;
@@ -50,6 +51,13 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
+
+        // 关服进行中：进 MTS 同样会把角色摘出频道，拒绝
+        if (Server.getInstance().isShuttingDown()) {
+            c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Server.shuttingDown.message1")));
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
 
         if (!GameConfig.getServerBoolean("use_mts")) {
             openCenterScript(c);

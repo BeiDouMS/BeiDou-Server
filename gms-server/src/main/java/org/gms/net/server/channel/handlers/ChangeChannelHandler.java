@@ -26,6 +26,7 @@ import org.gms.client.autoban.AutobanFactory;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
@@ -37,6 +38,12 @@ public final class ChangeChannelHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         int channel = p.readByte() + 1;
         p.readInt();
+        // 关服进行中：换频道是「转场」路径（异步存档 + 从频道摘出），拒绝，等关服流程统一断线存档
+        if (Server.getInstance().isShuttingDown()) {
+            c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Server.shuttingDown.message1")));
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
         c.getPlayer().getAutoBanManager().setTimestamp(6, Server.getInstance().getCurrentTimestamp(), 3);
         if (c.getChannel() == channel) {
             AutobanFactory.GENERAL.alert(c.getPlayer(), "CCing to same channel.");

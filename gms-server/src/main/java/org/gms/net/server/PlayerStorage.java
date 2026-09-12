@@ -23,6 +23,9 @@ package org.gms.net.server;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.util.I18nUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +37,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class PlayerStorage {
+    private static final Logger log = LoggerFactory.getLogger(PlayerStorage.class);
     private final Map<Integer, Character> storage = new LinkedHashMap<>();
     private final Map<String, Character> nameStorage = new LinkedHashMap<>();
     private final Lock rlock;
@@ -106,9 +110,14 @@ public class PlayerStorage {
         }
 
         for (Character mc : chrList) {
-            Client client = mc.getClient();
-            if (client != null) {
-                client.forceDisconnect();
+            try {
+                Client client = mc.getClient();
+                if (client != null) {
+                    client.forceDisconnect();
+                }
+            } catch (Exception e) {
+                // 关服路径：一个角色断线/存档失败，不能让列表里排在后面的角色全部跳过存档
+                log.error(I18nUtil.getLogMessage("PlayerStorage.disconnectAll.error1"), mc.getName(), mc.getId(), e);
             }
         }
 

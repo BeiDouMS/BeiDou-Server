@@ -184,33 +184,59 @@ public final class Channel {
         eventSM = new EventScriptManager(this, getEvents());
     }
 
+    /**
+     * 关闭频道。每一步各自兜住异常：关服路径上任何一步失败都不能让后面的玩家存档被跳过，
+     * 也不能让 {@code finishedShutdown} 永远置不上（Server 那边在等它，等不到就挂死到被 kill -9）。
+     * <p>
+     * 历史问题：原来整个方法只有一个 try/catch，且 {@code players = null} 在别的频道还没断人之前就执行了——
+     * 别的频道里在商城/MTS 的玩家断线时会走 {@code World.removePlayer} 遍历所有频道，撞上这个 null 直接 NPE，
+     * 该玩家的 saveCharToDB 被跳过（商城里买的东西全丢），异常被 log.info 吞掉，频道再也关不完。
+     */
     public synchronized void shutdown() {
+        if (finishedShutdown) {
+            return;
+        }
+
+        log.info(I18nUtil.getLogMessage("Channel.shutdown.info1"), world, channel);
         try {
-            if (finishedShutdown) {
-                return;
-            }
-
-            log.info(I18nUtil.getLogMessage("Channel.shutdown.info1"), world, channel);
-
-            closeAllMerchants();
-            disconnectAwayPlayers();
-            players.disconnectAll();
-
-            eventSM.dispose();
-            eventSM = null;
-
-            mapManager.dispose();
-            mapManager = null;
-
-            closeChannelSchedules();
-            players = null;
-
-            channelServer.stop();
-
-            finishedShutdown = true;
+            runShutdownStep("closeAllMerchants", this::closeAllMerchants);
+            runShutdownStep("disconnectAwayPlayers", this::disconnectAwayPlayers);
+            runShutdownStep("disconnectAll", () -> {
+                if (players != null) {
+                    players.disconnectAll();
+                }
+            });
+            runShutdownStep("eventSM.dispose", () -> {
+                if (eventSM != null) {
+                    eventSM.dispose();
+                    eventSM = null;
+                }
+            });
+            runShutdownStep("mapManager.dispose", () -> {
+                if (mapManager != null) {
+                    mapManager.dispose();
+                    mapManager = null;
+                }
+            });
+            runShutdownStep("closeChannelSchedules", this::closeChannelSchedules);
+            // 不再把 players 置 null：storage 已在 disconnectAll 里清空，保留对象可以让
+            // 关服过程中晚到的 removePlayer / broadcast 调用安全空转，而不是 NPE。
+            runShutdownStep("channelServer.stop", () -> {
+                if (channelServer != null) {
+                    channelServer.stop();
+                }
+            });
             log.info(I18nUtil.getLogMessage("Channel.shutdown.info2"), world, channel);
+        } finally {
+            finishedShutdown = true;
+        }
+    }
+
+    private void runShutdownStep(String stepName, Runnable step) {
+        try {
+            step.run();
         } catch (Exception e) {
-            log.info(I18nUtil.getLogMessage("Channel.shutdown.error1"), world, channel, e.getMessage(), e);
+            log.error(I18nUtil.getLogMessage("Channel.shutdown.error3"), world, channel, stepName, e);
         }
     }
 
@@ -287,7 +313,8 @@ public final class Channel {
     }
 
     public boolean removePlayer(Character chr) {
-        return players.removePlayer(chr.getId()) != null;
+        PlayerStorage ps = players;
+        return ps != null && ps.removePlayer(chr.getId()) != null;
     }
 
     public int getChannelCapacity() {
@@ -355,10 +382,17 @@ public final class Channel {
 
     private void disconnectAwayPlayers() {
         World wserv = getWorldServer();
-        for (Integer cid : playersAway) {
-            Character chr = wserv.getPlayerStorage().getCharacterById(cid);
-            if (chr != null && chr.isLoggedIn()) {
-                chr.getClient().forceDisconnect();
+        // 必须先拷贝：forceDisconnect 会经 Character.setDisconnectedFromChannelWorld → removePlayerAway
+        // 从 playersAway 里删自己，直接遍历 HashSet 会在第 2 个人处抛 ConcurrentModificationException。
+        // 逐人 try/catch：一个人断线失败不能让后面的人跳过存档。
+        for (Integer cid : new ArrayList<>(playersAway)) {
+            try {
+                Character chr = wserv.getPlayerStorage().getCharacterById(cid);
+                if (chr != null && chr.isLoggedIn() && chr.getClient() != null) {
+                    chr.getClient().forceDisconnect();
+                }
+            } catch (Exception e) {
+                log.error(I18nUtil.getLogMessage("Channel.shutdown.error2"), world, channel, cid, e);
             }
         }
     }

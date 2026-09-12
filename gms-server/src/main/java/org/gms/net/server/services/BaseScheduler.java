@@ -22,8 +22,12 @@ package org.gms.net.server.services;
 import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
+import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,6 +42,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Ronan
  */
 public abstract class BaseScheduler {
+    private static final Logger log = LoggerFactory.getLogger(BaseScheduler.class);
     private int idleProcs = 0;
     private final List<SchedulerListener> listeners = new LinkedList<>();
     private final List<Lock> externalLocks = new LinkedList<>();
@@ -176,5 +181,34 @@ public abstract class BaseScheduler {
             unlockScheduler();
             externalLocks.clear();
         }
+    }
+
+    /**
+     * 立即执行所有尚未到期/尚未被调度跑到的条目并清空。给关服路径用：
+     * 换频道/进商城这类「转场」存档只是注册到本调度器、由 200ms 一跳的定时器执行，
+     * 关服时若直接 dispose 会把没跑到的存档整条丢掉。返回执行的条目数。
+     */
+    protected int flushPendingEntries() {
+        List<Pair<Runnable, Long>> pending;
+        lockScheduler();
+        try {
+            if (schedulerTask != null) {
+                schedulerTask.cancel(false);
+                schedulerTask = null;
+            }
+            pending = new ArrayList<>(registeredEntries.values());
+            registeredEntries.clear();
+        } finally {
+            unlockScheduler();
+        }
+
+        for (Pair<Runnable, Long> entry : pending) {
+            try {
+                entry.getLeft().run();
+            } catch (Exception e) {
+                log.error(I18nUtil.getLogMessage("BaseScheduler.flushPendingEntries.error1"), e);
+            }
+        }
+        return pending.size();
     }
 }
