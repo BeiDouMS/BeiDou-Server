@@ -242,6 +242,12 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- 2.x 默认版本认不出 JUnit 5，mvn test 会静默跑 0 个用例；3.x 自动识别 junit-platform -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
         </plugins>
     </build>
 
