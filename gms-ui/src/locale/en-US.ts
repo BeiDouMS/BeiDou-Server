@@ -10,6 +10,7 @@ import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import inventory from '@/views/game/inventory/locale/en-US';
 import autoban from '@/views/game/autoban/locale/en-US';
+import autobanLog from '@/views/game/autobanLog/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -27,6 +28,7 @@ export default {
   'menu.game.command': 'Command',
   'menu.game.file': 'File',
   'menu.game.autoban': 'Autoban',
+  'menu.game.autobanLog': 'Anti-cheat Log',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -58,4 +60,5 @@ export default {
   ...inventory,
   ...config,
   ...autoban,
+  ...autobanLog,
 };

@@ -36,16 +36,19 @@ public class AutobanManager {
     }
 
     public void addPoint(AutobanFactory fac, String reason) {
-        if (GameConfig.getServerBoolean("use_auto_ban")) {
-            if (chr.isGM() || chr.isBanned()) {
-                return;
-            }
+        // 检查该类型是否被禁用：不计分、不打日志、不落库
+        if (fac.isDisabled()) {
+            return;
+        }
 
-            // 检查该类型是否被禁用
-            if (fac.isDisabled()) {
-                return;
-            }
-
+        // GM/已封禁者豁免计分与处置，但仍打日志并落库（GM 用自己号验证检测点时能看到记录），此时 points 留空
+        boolean exempt = chr.isGM() || chr.isBanned();
+        // 获取生效的积分阈值
+        int effectivePoints = fac.getEffectivePoints();
+        Integer currentPoints = null;
+        boolean reached = false;
+        if (!exempt) {
+            // 计分本身不受 use_auto_ban 控制：留痕模式下也能看到每个人的累计分；只有封禁处置受开关控制
             // 获取生效的过期时间
             long effectiveExpire = fac.getEffectiveExpiretime();
 
@@ -64,15 +67,18 @@ public class AutobanManager {
                 points.put(fac, 1);
             }
 
-            // 获取生效的积分阈值
-            int effectivePoints = fac.getEffectivePoints();
-            if (points.get(fac) >= effectivePoints) {
-                chr.autoBan(reason);
-            }
+            currentPoints = points.get(fac);
+            reached = currentPoints >= effectivePoints;
         }
+
         if (GameConfig.getServerBoolean("use_auto_ban_log")) {
             // Lets log every single point too.
             log.info("Autoban - chr {} caused {} {}", Character.makeMapleReadable(chr.getName()), fac.name(), reason);
+        }
+        // 先留痕再处置，避免处置流程变更 Client 状态后再取账号信息
+        AutobanLogger.record(chr, fac.name(), reached ? AutobanLogger.ACTION_AUTOBAN : AutobanLogger.ACTION_POINT, currentPoints, effectivePoints, reason);
+        if (reached && GameConfig.getServerBoolean("use_auto_ban")) {
+            chr.autoBan(reason);
         }
     }
 
@@ -128,11 +134,12 @@ public class AutobanManager {
         if (this.timestamp[type] == time) {
             this.timestampcounter[type]++;
             if (this.timestampcounter[type] >= times) {
+                log.info("Autoban - Chr {} was caught spamming TYPE {} and has been disconnected", chr, type);
+                // 先留痕再断线：disconnect 异步清空 Client 的账号信息，后落库会丢 account_name
+                AutobanLogger.record(chr, AutobanLogger.TYPE_TIMESTAMP_SPAM, AutobanLogger.ACTION_DISCONNECT, null, times, "type=" + type);
                 if (GameConfig.getServerBoolean("use_auto_ban")) {
                     chr.getClient().disconnect(false, false);
                 }
-
-                log.info("Autoban - Chr {} was caught spamming TYPE {} and has been disconnected", chr, type);
             }
         } else {
             this.timestamp[type] = time;

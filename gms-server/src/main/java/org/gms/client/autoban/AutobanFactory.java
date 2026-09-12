@@ -167,6 +167,8 @@ public enum AutobanFactory {
     }
 
     public void alert(Character chr, String reason) {
+        // 无论开关与 !ignore 名单如何都落库留痕；ignore 只屏蔽 GM 黄字
+        AutobanLogger.record(chr, this.name(), AutobanLogger.ACTION_ALERT, null, null, reason);
         if (GameConfig.getServerBoolean("use_auto_ban")) {
             if (chr != null && isIgnored(chr.getId())) {
                 return;
@@ -180,6 +182,10 @@ public enum AutobanFactory {
     }
 
     public void autoban(Character chr, String value) {
+        if (GameConfig.getServerBoolean("use_auto_ban_log")) {
+            log.info(I18nUtil.getLogMessage("AutobanFactory.autoban.info1"), chr != null ? Character.makeMapleReadable(chr.getName()) : "", this.name(), value);
+        }
+        AutobanLogger.record(chr, this.name(), AutobanLogger.ACTION_AUTOBAN, null, null, value);
         if (GameConfig.getServerBoolean("use_auto_ban")) {
             chr.autoBan("Autobanned for (" + this.name() + ": " + value + ")");
             //chr.sendPolice("You will be disconnected for (" + this.name() + ": " + value + ")");

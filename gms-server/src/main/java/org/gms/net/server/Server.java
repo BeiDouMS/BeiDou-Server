@@ -730,6 +730,7 @@ public class Server {
         // 主动清理每日零点需要清理的数据
         new BossLogTask().run();
         new ExtendValueTask().run();
+        new AutobanLogCleanTask().run();
         log.info(I18nUtil.getLogMessage("Server.init.info5"));
 
         ThreadManager.getInstance().start();
@@ -802,6 +803,7 @@ public class Server {
         ExpeditionBossLog.resetBossLogTable();
         tMan.register(new BossLogTask(), DAYS.toMillis(1), timeLeft);
         tMan.register(new ExtendValueTask(), DAYS.toMillis(1), timeLeft);
+        tMan.register(new AutobanLogCleanTask(), DAYS.toMillis(1), timeLeft);
     }
 
     public Alliance getAlliance(int id) {
