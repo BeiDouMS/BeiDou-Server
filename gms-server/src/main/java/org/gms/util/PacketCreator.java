@@ -1147,8 +1147,8 @@ public class PacketCreator {
         p.writePos(summon.getPosition());
         p.writeByte(summon.getStance());    //bMoveAction & foothold, found thanks to Rien dev team
         p.writeShort(0);
-        p.writeBool(!summon.isPuppet()); // 0 and the summon can't attack - but puppets don't attack with 1 either ^.-
         p.writeByte(summon.getMovementType().getValue()); // 0 = don't move, 1 = follow (4th mage summons?), 2/4 = only tele follow, 3 = bird follow
+        p.writeByte(summon.getAssistantType().getValue()); // 0 and the summon can't attack - but puppets don't attack with 1 either ^.-
         p.writeBool(!animated);
         return p;
     }

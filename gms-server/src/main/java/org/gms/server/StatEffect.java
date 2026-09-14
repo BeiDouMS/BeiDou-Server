@@ -1782,10 +1782,7 @@ public class StatEffect {
         return morphId;
     }
 
-    private SummonMovementType getSummonMovementType() {
-        if (!skill) {
-            return null;
-        }
+    public static SummonMovementType getSummonMovementType(int sourceid) {
         switch (sourceid) {
             case Ranger.PUPPET:
             case Sniper.PUPPET:
@@ -1801,7 +1798,6 @@ public class StatEffect {
             case Outlaw.GAVIOTA:
                 return SummonMovementType.CIRCLE_FOLLOW;
             case DarkKnight.BEHOLDER:
-                return SummonMovementType.ASSISTANT;
             case FPArchMage.ELQUINES:
             case ILArchMage.IFRIT:
             case Bishop.BAHAMUT:
@@ -1814,6 +1810,13 @@ public class StatEffect {
                 return SummonMovementType.FOLLOW;
         }
         return null;
+    }
+
+    private SummonMovementType getSummonMovementType() {
+        if (!skill) {
+            return null;
+        }
+        return getSummonMovementType(sourceid);
     }
 
     public boolean isSkill() {

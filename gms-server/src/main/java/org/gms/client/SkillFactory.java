@@ -373,6 +373,17 @@ public class SkillFactory {
             }
         }
 
+        Data summonNode = data.getChildByPath("summon");
+        if (summonNode != null) {
+            SkillSummonNode node = new SkillSummonNode(
+                summonNode.getChildByPath("attack1") != null,
+                summonNode.getChildByPath("skill1") != null,
+                summonNode.getChildByPath("move") != null,
+                summonNode.getChildByPath("fly") != null
+            );
+            ret.setSummonNode(node);
+        }
+
         for (Data level : data.getChildByPath("level")) {
             ret.addLevelEffect(StatEffect.loadSkillEffectFromData(level, id, isBuff));
         }
