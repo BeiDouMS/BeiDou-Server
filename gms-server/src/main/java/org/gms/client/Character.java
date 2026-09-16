@@ -5642,8 +5642,9 @@ public class Character extends AbstractCharacterObject {
             sendPacket(PacketCreator.giveBuff(energyBar, 0, stat));
             sendPacket(PacketCreator.showOwnBuffEffect(energycharge.getId(), 2));
             getMap().broadcastPacket(this, PacketCreator.showBuffEffect(id, energycharge.getId(), 2));
+            // 海盗状态封包的时长单位为秒，StatEffect 内部使用毫秒。
             getMap().broadcastPacket(this, PacketCreator.giveForeignPirateBuff(id, energycharge.getId(),
-                    ceffect.getDuration(), stat));
+                    ceffect.getDuration() / 1000, stat));
         }
         if (energyBar >= 10000 && energyBar < 11000) {
             energyBar = 15000;
