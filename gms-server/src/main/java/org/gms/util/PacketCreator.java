@@ -5585,7 +5585,9 @@ public class PacketCreator {
 
     public static Packet showNameChangeCancel(boolean success) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_NAME_CHANGE_RESULT);
-        p.writeBool(success);
+        // v83 这里是结果码而非布尔值：0 为成功，非 0 分支还会读取错误信息标记。
+        // 成功时发送 1 且没有后续字节，会让客户端解包越界并掉线。
+        p.writeByte(success ? 0 : 1);
         if (!success) {
             p.writeByte(0);
         }
