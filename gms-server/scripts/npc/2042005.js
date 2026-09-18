@@ -9,6 +9,13 @@ var cpqMinLvl = 51;
 var cpqMaxLvl = 70;
 var cpqMinAmt = 2;
 var cpqMaxAmt = 6;
+(function () {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {
+        cpqMinLvl = 1;
+        cpqMaxLvl = 999;
+    }
+})();
 
 function start() {
     status = -1;
