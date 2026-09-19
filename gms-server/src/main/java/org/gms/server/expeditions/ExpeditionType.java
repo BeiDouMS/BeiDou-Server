@@ -66,11 +66,11 @@ public enum ExpeditionType {
     }
 
     public int getMinLevel() {
-        return minLevel;
+        return !GameConfig.getServerBoolean("use_enable_party_level_limit_lift") ? minLevel : 1;
     }
 
     public int getMaxLevel() {
-        return maxLevel;
+        return !GameConfig.getServerBoolean("use_enable_party_level_limit_lift") ? maxLevel : 999;
     }
 
     public int getRegistrationMinutes() {
