@@ -26,6 +26,7 @@ import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
 import org.gms.util.I18nUtil;
+import org.gms.util.RuntimePaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,9 +54,9 @@ public abstract class AbstractScriptManager {
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
 
         // 默认脚本目录始终是 scripts，里面保留英文原版脚本。
-        Path scriptPath = Path.of(SCRIPT_DIRECTORY, path);
+        Path scriptPath = RuntimePaths.getScriptsHome().resolve(path);
         // 语言脚本目录只放已本地化的脚本文件，不要求复制完整 scripts 目录。
-        Path scriptLangPath = Path.of(SCRIPT_DIRECTORY + "-" + serviceProperty.getLanguage(), path);
+        Path scriptLangPath = RuntimePaths.getScriptsHome(serviceProperty.getLanguage()).resolve(path);
 
         // 按文件级别选择脚本：先找语言文件，找不到再回退到英文原版文件。
         Path actualPath;
