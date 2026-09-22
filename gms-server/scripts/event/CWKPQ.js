@@ -38,6 +38,60 @@ var eventTime = 2;     // 2 minutes for first stg
 
 const maxLobbies = 1;
 
+const GameConfig = Java.type('org.gms.config.GameConfig');
+minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;
+if (GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {
+    minLevel = 1, maxLevel = 999;
+}
+
+function canSoloSkip(eim) {
+    return GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1;
+}
+
+function skipStage2(eim) {
+    if (eim.getIntProperty("glpq2") >= 5) {
+        return;
+    }
+    eim.setIntProperty("glpq2", 5);
+    eim.dropMessage(6, "The Antellion grants you the next portal! Proceed!");
+    eim.showClearEffect(610030200, "2pt", 2);
+    eim.giveEventPlayersStageReward(2);
+}
+
+function skipStage3(eim) {
+    if (eim.getIntProperty("glpq3") >= 5 && eim.getIntProperty("glpq3_p") >= 5) {
+        return;
+    }
+    eim.setIntProperty("glpq3", 5);
+    eim.setIntProperty("glpq3_p", 5);
+    eim.dropMessage(6, "The Antellion grants you the next portal! Proceed!");
+    eim.showClearEffect(610030300, "3pt", 2);
+    eim.giveEventPlayersStageReward(3);
+}
+
+function skipStage4(eim) {
+    if (eim.getIntProperty("glpq4") >= 5) {
+        return;
+    }
+    eim.setIntProperty("glpq4", 5);
+    eim.setIntProperty("glpq_s", 777);
+    var map = eim.getMapInstance(610030400);
+    map.killAllMonsters();
+    eim.dropMessage(6, "The Antellion grants you the next portal! Proceed!");
+    eim.showClearEffect(610030400, "4pt", 2);
+    eim.giveEventPlayersStageReward(4);
+}
+
+function skipStage5(eim) {
+    if (eim.getIntProperty("glpq5") >= 5) {
+        return;
+    }
+    eim.setIntProperty("glpq5", 5);
+    eim.dropMessage(6, "The Antellion grants you the next portal! Proceed!");
+    eim.showClearEffect(610030500, "5pt", 2);
+    eim.giveEventPlayersStageReward(5);
+}
+
 function init() {
     setEventRequirements();
 }
@@ -264,11 +318,17 @@ function changedMap(eim, player, mapid) {
                     eim.restartEventTimer(600000); //10 mins
                     eim.setIntProperty("current_instance", 1);
                 }
+                if (canSoloSkip(eim)) {
+                    skipStage2(eim);
+                }
                 break;
             case 610030300:
                 if (eim.getIntProperty("current_instance") == 1) {
                     eim.restartEventTimer(600000); //10 mins
                     eim.setIntProperty("current_instance", 2);
+                }
+                if (canSoloSkip(eim)) {
+                    skipStage3(eim);
                 }
                 break;
             case 610030400:
@@ -276,11 +336,17 @@ function changedMap(eim, player, mapid) {
                     eim.restartEventTimer(600000); //10 mins
                     eim.setIntProperty("current_instance", 3);
                 }
+                if (canSoloSkip(eim)) {
+                    skipStage4(eim);
+                }
                 break;
             case 610030500:
                 if (eim.getIntProperty("current_instance") == 3) {
                     eim.restartEventTimer(1200000); //20 mins
                     eim.setIntProperty("current_instance", 4);
+                }
+                if (canSoloSkip(eim)) {
+                    skipStage5(eim);
                 }
                 break;
             case 610030600:
