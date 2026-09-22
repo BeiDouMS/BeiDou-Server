@@ -68,6 +68,9 @@ public class HiredMerchant extends AbstractMapObject {
     private static final Logger log = LoggerFactory.getLogger(HiredMerchant.class);
     private static final int VISITOR_HISTORY_LIMIT = 10;
     private static final int BLACKLIST_LIMIT = 20;
+    // 客户端 EXIT 的退出原因码：收店用 0x12，客户端关窗并提示"已超过营业时间而关闭商店！"；
+    // 与"店主正在整理物品"（0x11 + ROOM 0x12 维护提示）区分，关店不再被显示成整理中。
+    private static final int EXIT_STATUS_CLOSED = 0x12;
 
     private final int ownerId;
     private final int itemId;
@@ -209,7 +212,11 @@ public class HiredMerchant extends AbstractMapObject {
         return -1; //Actually 0 because of the +1's.
     }
 
-    private void removeAllVisitors() {
+    /**
+     * @param maintenance 仅店主进店整理为 true：访客看到"商店主人正在整理物品"；
+     *                    收店/到期为 false：用 EXIT+0x12 通知访客商店已关闭，不再复用整理中的提示。
+     */
+    private void removeAllVisitors(boolean maintenance) {
         visitorLock.lock();
         try {
             for (int i = 0; i < 3; i++) {
@@ -218,8 +225,12 @@ public class HiredMerchant extends AbstractMapObject {
                 if (visitor != null) {
                     final Character visitorChr = visitor.chr;
                     visitorChr.setHiredMerchant(null);
-                    visitorChr.sendPacket(PacketCreator.leaveHiredMerchant(i + 1, 0x11));
-                    visitorChr.sendPacket(PacketCreator.hiredMerchantMaintenanceMessage());
+                    if (maintenance) {
+                        visitorChr.sendPacket(PacketCreator.leaveHiredMerchant(i + 1, 0x11));
+                        visitorChr.sendPacket(PacketCreator.hiredMerchantMaintenanceMessage());
+                    } else {
+                        visitorChr.sendPacket(PacketCreator.leaveHiredMerchant(i + 1, EXIT_STATUS_CLOSED));
+                    }
                     visitors[i] = null;
                     addVisitorToHistory(visitor);
                 }
@@ -401,7 +412,7 @@ public class HiredMerchant extends AbstractMapObject {
                 ownerBanned = true;
                 open.set(false);
             }
-            forceCloseInternal();
+            forceCloseInternal(false);
         } finally {
             if (ownerClient != null) ownerClient.unlockClient();
         }
@@ -412,18 +423,26 @@ public class HiredMerchant extends AbstractMapObject {
     }
 
     public void forceClose() {
+        forceClose(false);
+    }
+
+    /**
+     * @param expired 到期收店（营业时长耗尽）：店主在商店窗口内时用 EXIT+0x12 关窗并提示"已超过营业时间而关闭商店！"，
+     *                不在窗口内则用普通提示告知；其他收店原因（封禁、关服、店主自行关店）维持原有退出流程。
+     */
+    public void forceClose(boolean expired) {
         World worldServer = Server.getInstance().getWorld(world);
         Character owner = worldServer == null ? null : worldServer.getPlayerStorage().getCharacterById(ownerId);
         Client ownerClient = owner == null ? null : owner.getClient();
         if (ownerClient != null) ownerClient.lockClient();
         try {
-            forceCloseInternal();
+            forceCloseInternal(expired);
         } finally {
             if (ownerClient != null) ownerClient.unlockClient();
         }
     }
 
-    private void forceCloseInternal() {
+    private void forceCloseInternal(boolean expired) {
         if (!closing.compareAndSet(false, true)) {
             return;
         }
@@ -462,7 +481,7 @@ public class HiredMerchant extends AbstractMapObject {
             try {
                 setOpen(false);
                 if (map != null) {
-                    removeAllVisitors();
+                    removeAllVisitors(false);
                 }
             } finally {
                 visitorLock.unlock();
@@ -475,9 +494,13 @@ public class HiredMerchant extends AbstractMapObject {
         visitorLock.lock();
         try {
             setOpen(false);
-            removeAllVisitors();
+            removeAllVisitors(false);
 
             if (returnToOwner) {
+                if (expired) {
+                    // 到期时店主正在商店窗口中：用 EXIT+0x12 关窗，客户端提示"已超过营业时间而关闭商店！"
+                    owner.sendPacket(PacketCreator.leaveHiredMerchant(0x00, EXIT_STATUS_CLOSED));
+                }
                 closeOwnerMerchantAfterClaim(owner);
                 map = null;
                 return;
@@ -486,6 +509,10 @@ public class HiredMerchant extends AbstractMapObject {
             visitorLock.unlock();
         }
 
+        if (expired && !ownerBanned && owner != null && owner.isLoggedInWorld()) {
+            // 店主不在商店窗口内，无法用 EXIT 关窗提示，改用普通提示告知到期
+            owner.dropMessage(6, I18nUtil.getMessage("HiredMerchant.expired.message1", description));
+        }
         if (ownerBanned && owner != null) removeOwner(owner);
         synchronized (items) {
             detached = true;
@@ -529,7 +556,7 @@ public class HiredMerchant extends AbstractMapObject {
         map.broadcastMessage(PacketCreator.removeHiredMerchantBox(ownerId));
         c.getChannelServer().removeHiredMerchant(ownerId, this);
 
-        this.removeAllVisitors();
+        this.removeAllVisitors(false);
         this.removeOwner(c.getPlayer());
 
         try {
@@ -592,7 +619,7 @@ public class HiredMerchant extends AbstractMapObject {
             }
             if (this.isOwner(chr)) {
                 this.setOpen(false);
-                this.removeAllVisitors();
+                this.removeAllVisitors(true);
 
                 chr.sendPacket(PacketCreator.getHiredMerchant(chr, this, false));
             } else if (!this.isOpen()) {

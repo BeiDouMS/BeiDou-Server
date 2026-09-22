@@ -1654,14 +1654,17 @@ public class World {
 
     public void runHiredMerchantSchedule() {
         List<HiredMerchant> merchantsToClose = new ArrayList<>();
+        List<HiredMerchant> expiredMerchantsToClose = new ArrayList<>();
         activeMerchantsLock.lock();
         try {
             merchantUpdate = Server.getInstance().getCurrentTime();
             for (Map.Entry<Integer, Pair<HiredMerchant, Integer>> entry : activeMerchants.entrySet()) {
                 int timeOn = entry.getValue().getRight();
                 HiredMerchant merchant = entry.getValue().getLeft();
-                if (merchant.isClosedForBan() || timeOn > 144) { // 1440 minutes == 24hrs
+                if (merchant.isClosedForBan()) {
                     merchantsToClose.add(merchant);
+                } else if (timeOn > 144) { // 1440 minutes == 24hrs
+                    expiredMerchantsToClose.add(merchant);
                 } else {
                     entry.setValue(new Pair<>(merchant, timeOn + 1));
                 }
@@ -1671,11 +1674,19 @@ public class World {
         }
         // 收店需要客户端/物品锁，不能持注册表锁等待，避免与店主操作互锁。
         for (HiredMerchant merchant : merchantsToClose) {
-            try {
-                merchant.forceClose();
-            } catch (RuntimeException e) {
-                log.error(I18nUtil.getLogMessage("HiredMerchant.close.scheduleFailed", merchant.getOwnerId()), e);
-            }
+            closeScheduledMerchant(merchant, false);
+        }
+        // 到期收店额外带上到期语义，便于客户端提示"已超过营业时间而关闭商店！"。
+        for (HiredMerchant merchant : expiredMerchantsToClose) {
+            closeScheduledMerchant(merchant, true);
+        }
+    }
+
+    private void closeScheduledMerchant(HiredMerchant merchant, boolean expired) {
+        try {
+            merchant.forceClose(expired);
+        } catch (RuntimeException e) {
+            log.error(I18nUtil.getLogMessage("HiredMerchant.close.scheduleFailed", merchant.getOwnerId()), e);
         }
     }
 
