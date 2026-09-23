@@ -208,8 +208,8 @@ public enum SendOpcode implements Opcode {
     REMOVE_SPECIAL_MAPOBJECT(0xB0), // 移除特殊地图对象
     MOVE_SUMMON(0xB1), // 移动召唤兽
     SUMMON_ATTACK(0xB2), // 召唤兽攻击
-    DAMAGE_SUMMON(0xB3), // 召唤兽受到伤害
-    SUMMON_SKILL(0xB4), // 召唤兽技能
+    DAMAGE_SUMMON(0xB4), // 召唤兽受到伤害
+    SUMMON_SKILL(0xB3), // 召唤兽技能
     SPAWN_DRAGON(0xB5), // 生成龙
     MOVE_DRAGON(0xB6), // 移动龙
     REMOVE_DRAGON(0xB7), // 移除龙
