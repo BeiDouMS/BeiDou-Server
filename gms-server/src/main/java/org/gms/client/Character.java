@@ -281,6 +281,7 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private String search = null;
     private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map //玩家客户端当前正在尝试更改地图或登录游戏地图
+    private final AtomicBoolean warpInProgress = new AtomicBoolean(false);  // 该玩家的一次换图正在执行（跨线程换图时用它拒绝按旧图发对象包）
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
     private final AtomicInteger exp = new AtomicInteger();
     private final AtomicInteger gachaExp = new AtomicInteger();
@@ -1754,6 +1755,7 @@ public class Character extends AbstractCharacterObject {
         }
         final Party k = e;
 
+        this.warpInProgress.set(true);
         sendPacket(warpPacket);
         map.removePlayer(this);
         if (client.getChannelServer().getPlayerStorage().getCharacterById(getId()) != null) {
@@ -1761,6 +1763,7 @@ public class Character extends AbstractCharacterObject {
             setPosition(pos);
             map.addPlayer(this);
             visitMap(map);
+            this.warpInProgress.set(false);
 
             prtLock.lock();
             try {
@@ -1778,6 +1781,7 @@ public class Character extends AbstractCharacterObject {
             silentPartyUpdateInternal(getParty());  // EIM script calls inside
         } else {    //切换地图时卡住了
             log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn2"), getName(), map.getMapName(), map.getId());
+            this.warpInProgress.set(false);
             client.disconnect(true, false);     // thanks BHB for noticing a player storage stuck case here
             return;
         }
@@ -1816,6 +1820,15 @@ public class Character extends AbstractCharacterObject {
      */
     public void setMapTransitionComplete() {
         this.mapTransitioning.set(false);
+    }
+
+    /**
+     * 该玩家的一次换图是否正在执行（与"等待切换完成"的 isChangingMaps 不同：它在 map 字段
+     * 切换完成后立即结束，所以能区分"上一次换图还没执行完"和"已在等客户端确认"）
+     * @return boolean
+     */
+    public boolean isWarping() {
+        return this.warpInProgress.get();
     }
 
     public void changePage(int page) {
