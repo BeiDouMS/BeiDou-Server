@@ -1857,6 +1857,12 @@ public class Monster extends AbstractLoadedLife {
         Character newControllerWithPuppet = null;
 
         for (Character chr : getMap().getAllPlayers()) {
+            // 正在换图的玩家不能接管怪：此刻他的 map 字段可能还指向本图，把怪交还回去会让
+            // 本图的怪被一个已在新图的人控制（幽灵怪不动），并把旧图的怪"播"到新图客户端上
+            if (chr.isChangingMaps()) {
+                continue;
+            }
+
             if (!chr.isHidden() && chr.isLoggedInWorld()) {   // 过滤已断线/awayFromWorld 的幽灵玩家，避免被选为 controller 候选
                 int ctrlMonsSize = chr.getNumControlledMonsters();
 
@@ -1928,7 +1934,9 @@ public class Monster extends AbstractLoadedLife {
                 }
 
                 aggroRemoveController();
-                if (!(newController != null && newController.isLoggedInWorld() && newController.getMap() == this.getMap())) {
+                if (!(newController != null && newController.isLoggedInWorld()
+                        && !newController.isChangingMaps()
+                        && newController.getMap() == this.getMap())) {
                     return;
                 }
 
