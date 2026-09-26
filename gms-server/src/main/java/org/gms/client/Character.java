@@ -6802,6 +6802,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void raiseQuestMobCount(int id) {
+        int progressAmount = Math.max(1, GameConfig.getWorldInt(getWorld(), "quest_mob_kill_rate"));
         // It seems nexon uses monsters that don't exist in the WZ (except string) to merge multiple mobs together for these 3 monsters.
         // We also want to run mobKilled for both since there are some quest that don't use the updated ID...
         if (id == MobId.GREEN_MUSHROOM || id == MobId.DEJECTED_GREEN_MUSHROOM) {
@@ -6821,7 +6822,7 @@ public class Character extends AbstractCharacterObject {
                         continue;
                     }
 
-                    if (qs.progress(id)) {
+                    if (qs.progress(id, progressAmount)) {
                         announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
                         if (qs.getInfoNumber() > 0) {
                             announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, true);
