@@ -32,6 +32,16 @@ const ACCOUNT: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'audit-log',
+      name: 'AuditLog',
+      component: () => import('@/views/auditLog/index.vue'),
+      meta: {
+        locale: 'menu.account.auditLog',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 
