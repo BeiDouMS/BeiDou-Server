@@ -29,7 +29,10 @@
 
 function init() {
     em.setProperty("bossMobId", 5220003);
-    em.setProperty("bossMapId", 220050000);
+    // 决策：Timer1/Timer2 在英文层统一登记英文地图 220050100（时间漩涡）。
+    // 本脚本实际刷怪地图仍为 220050000（失落的时间<1>），此处仅统一属性登记显示，
+    // 不改变实际刷怪逻辑/效果（两脚本均刷提莫 5220003）。
+    em.setProperty("bossMapId", 220050100);
     scheduleNew();
 }
 

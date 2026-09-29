@@ -28,6 +28,7 @@
 
 function init() {
     em.setProperty("bossMobId", 5220003);
+    // 英文层 Timer（时间漩涡 220050100）。Timer2 已按决策统一登记同一英文地图 ID（见 Timer2 注释）。
     em.setProperty("bossMapId", 220050100);
     scheduleNew();
 }
