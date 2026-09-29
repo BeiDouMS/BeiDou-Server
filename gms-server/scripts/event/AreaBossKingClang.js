@@ -30,6 +30,8 @@
 var hotSand;
 
 function init() {
+    em.setProperty("bossMobId", 5220001);
+    em.setProperty("bossMapId", 110040000);
     hotSand = em.getChannelServer().getMapFactory().getMap(110040000);
     scheduleNew();
 }

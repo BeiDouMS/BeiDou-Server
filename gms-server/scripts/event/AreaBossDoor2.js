@@ -25,6 +25,8 @@
  **/
 
 function init() {
+    em.setProperty("bossMobId", 9400609);
+    em.setProperty("bossMapId", 677000005);
     scheduleNew();
 }
 

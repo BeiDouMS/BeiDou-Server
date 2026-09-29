@@ -27,6 +27,8 @@
  ThreeStep - based on xQuasar's King Clang spawner
  **/
 function init() {
+    em.setProperty("bossMobId", 6220001);
+    em.setProperty("bossMapId", 221040301);
     scheduleNew();
 }
 

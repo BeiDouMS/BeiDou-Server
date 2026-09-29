@@ -30,6 +30,8 @@
 var setupTask;
 
 function init() {
+    em.setProperty("bossMobId", 8220000);
+    em.setProperty("bossMapId", 200010300);
     scheduleNew();
 }
 
