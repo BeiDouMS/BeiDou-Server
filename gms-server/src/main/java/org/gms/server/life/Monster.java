@@ -43,7 +43,6 @@ import org.gms.constants.skills.Priest;
 import org.gms.constants.skills.Shadower;
 import org.gms.constants.skills.WhiteKnight;
 import org.gms.net.packet.Packet;
-import org.gms.net.server.channel.Channel;
 import org.gms.net.server.coordinator.world.MonsterAggroCoordinator;
 import org.gms.net.server.services.task.channel.MobAnimationService;
 import org.gms.net.server.services.task.channel.MobClearSkillService;
@@ -119,6 +118,8 @@ public class Monster extends AbstractLoadedLife {
 
     private final Lock externalLock = new ReentrantLock();
     private final Lock monsterLock = new ReentrantLock(true);
+    // 按怪物串行化状态变更和发包；调用调度器、广播时不持有 statiLock。
+    private final Object statusLifecycleLock = new Object();
     private final Lock statiLock = new ReentrantLock();
     private final Lock animationLock = new ReentrantLock();
     private final Lock aggroUpdateLock = new ReentrantLock();
@@ -943,13 +944,15 @@ public class Monster extends AbstractLoadedLife {
             listener.monsterKilled(getAnimationTime("die1"));
         }
 
-        statiLock.lock();
-        try {
-            stati.clear();
-            alreadyBuffed.clear();
-            listeners.clear();
-        } finally {
-            statiLock.unlock();
+        synchronized (statusLifecycleLock) {
+            statiLock.lock();
+            try {
+                stati.clear();
+                alreadyBuffed.clear();
+                listeners.clear();
+            } finally {
+                statiLock.unlock();
+            }
         }
     }
 
@@ -1138,12 +1141,69 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    private int broadcastStatusEffect(final MonsterStatusEffect status) {
-        int animationTime = status.getSkill().getAnimationTime();
-        Packet packet = PacketCreator.applyMonsterStatus(getObjectId(), status, null);
-        broadcastMonsterStatusMessage(packet);
+    private boolean applyStatusEffect(MonsterStatusEffect effect, long duration, List<Integer> reflection,
+                                     Runnable overtimeAction, int overtimeDelay) {
+        synchronized (statusLifecycleLock) {
+            if (map == null || !isAlive() || map.getMapObject(getObjectId()) != this) {
+                return false;
+            }
 
-        return animationTime;
+            Set<MonsterStatusEffect> replacedEffects = new HashSet<>();
+            statiLock.lock();
+            try {
+                for (MonsterStatus stat : effect.getStati().keySet()) {
+                    MonsterStatusEffect oldEffect = stati.put(stat, effect);
+                    if (oldEffect != null && oldEffect != effect) {
+                        oldEffect.removeActiveStatus(stat);
+                        if (oldEffect.getStati().isEmpty()) {
+                            replacedEffects.add(oldEffect);
+                        }
+                    }
+                    alreadyBuffed.add(stat);
+                }
+            } finally {
+                statiLock.unlock();
+            }
+
+            MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
+            for (MonsterStatusEffect oldEffect : replacedEffects) {
+                service.interruptMobStatus(map.getId(), oldEffect);
+            }
+            broadcastMonsterStatusMessage(PacketCreator.applyMonsterStatus(getObjectId(), effect, reflection));
+            service.registerMobStatus(map.getId(), effect, () -> cancelStatusEffect(effect, effect.getStati().keySet()),
+                    duration, overtimeAction, overtimeDelay);
+            return true;
+        }
+    }
+
+    private void cancelStatusEffect(MonsterStatusEffect effect, Collection<MonsterStatus> statuses) {
+        synchronized (statusLifecycleLock) {
+            Map<MonsterStatus, Integer> removed = new EnumMap<>(MonsterStatus.class);
+            statiLock.lock();
+            try {
+                for (MonsterStatus stat : new ArrayList<>(statuses)) {
+                    // 旧任务即使已经被调度线程取出，也不能取消刷新后属于新效果的状态。
+                    if (stati.get(stat) == effect) {
+                        removed.put(stat, effect.getStati().get(stat));
+                        stati.remove(stat);
+                        effect.removeActiveStatus(stat);
+                    }
+                }
+            } finally {
+                statiLock.unlock();
+            }
+            if (removed.isEmpty()) {
+                return;
+            }
+
+            MapleMap statusMap = map;
+            if (statusMap != null && isAlive() && statusMap.getMapObject(getObjectId()) == this) {
+                broadcastMonsterStatusMessage(PacketCreator.cancelMonsterStatus(getObjectId(), removed));
+            }
+            if (!effect.isMonsterSkill()) {
+                setVenomMulti(0);
+            }
+        }
     }
 
     public boolean applyStatus(Character from, final MonsterStatusEffect status, boolean poison, long duration) {
@@ -1193,53 +1253,13 @@ public class Monster extends AbstractLoadedLife {
             }
         }
 
-        final Channel ch = map.getChannelServer();
-        final int mapid = map.getId();
-        if (statis.size() > 0) {
-            statiLock.lock();
-            try {
-                for (MonsterStatus stat : statis.keySet()) {
-                    final MonsterStatusEffect oldEffect = stati.get(stat);
-                    if (oldEffect != null) {
-                        oldEffect.removeActiveStatus(stat);
-                        if (oldEffect.getStati().isEmpty()) {
-                            MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
-                            service.interruptMobStatus(mapid, oldEffect);
-                        }
-                    }
-                }
-            } finally {
-                statiLock.unlock();
-            }
-        }
-
-        final Runnable cancelTask = () -> {
-            if (isAlive()) {
-                Packet packet = PacketCreator.cancelMonsterStatus(getObjectId(), status.getStati());
-                broadcastMonsterStatusMessage(packet);
-            }
-
-            statiLock.lock();
-            try {
-                for (MonsterStatus stat : status.getStati().keySet()) {
-                    stati.remove(stat);
-                }
-            } finally {
-                statiLock.unlock();
-            }
-
-            setVenomMulti(0);
-        };
-
         Runnable overtimeAction = null;
         int overtimeDelay = -1;
 
-        int animationTime;
         if (poison) {
             int poisonLevel = from.getSkillLevel(status.getSkill());
             int poisonDamage = Math.min(Short.MAX_VALUE, (int) (getMaxHp() / (70.0 - poisonLevel) + 0.999));
             status.setValue(MonsterStatus.POISON, poisonDamage);
-            animationTime = broadcastStatusEffect(status);
 
             overtimeAction = new DamageTask(poisonDamage, from, status, 0);
             overtimeDelay = 1000;
@@ -1266,7 +1286,6 @@ public class Monster extends AbstractLoadedLife {
                 poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
                 status.setValue(MonsterStatus.VENOMOUS_WEAPON, poisonDamage);
                 status.setValue(MonsterStatus.POISON, poisonDamage);
-                animationTime = broadcastStatusEffect(status);
 
                 overtimeAction = new DamageTask(poisonDamage, from, status, 0);
                 overtimeDelay = 1000;
@@ -1277,7 +1296,6 @@ public class Monster extends AbstractLoadedLife {
         } else if (status.getSkill().getId() == Hermit.SHADOW_WEB || status.getSkill().getId() == NightWalker.SHADOW_WEB) { //Shadow Web
             int webDamage = (int) (getMaxHp() / 50.0 + 0.999);
             status.setValue(MonsterStatus.SHADOW_WEB, Integer.valueOf(webDamage));
-            animationTime = broadcastStatusEffect(status);
             
             overtimeAction = new DamageTask(webDamage, from, status, 1);
             overtimeDelay = 3500;
@@ -1288,74 +1306,33 @@ public class Monster extends AbstractLoadedLife {
             final int damage = (int) ((from.getStr() + from.getLuk()) * ((3.7 * skill.getEffect(level).getDamage()) / 100));
 
             status.setValue(MonsterStatus.NINJA_AMBUSH, damage);
-            animationTime = broadcastStatusEffect(status);
 
             overtimeAction = new DamageTask(damage, from, status, 2);
             overtimeDelay = 1000;
-        } else {
-            animationTime = broadcastStatusEffect(status);
         }
 
-        statiLock.lock();
-        try {
-            for (MonsterStatus stat : status.getStati().keySet()) {
-                stati.put(stat, status);
-                alreadyBuffed.add(stat);
-            }
-        } finally {
-            statiLock.unlock();
-        }
-
-        MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
-        service.registerMobStatus(mapid, status, cancelTask, duration + animationTime - 100, overtimeAction, overtimeDelay);
-        return true;
+        return applyStatusEffect(status, duration + status.getSkill().getAnimationTime() - 100, null,
+                overtimeAction, overtimeDelay);
     }
 
     public final void dispelSkill(final MobSkill skill) {
-        List<MonsterStatus> toCancel = new ArrayList<>();
-        for (Entry<MonsterStatus, MonsterStatusEffect> effects : stati.entrySet()) {
-            MonsterStatusEffect mse = effects.getValue();
-            if (mse.getMobSkill() != null && mse.getMobSkill().getType() == skill.getType()) { //not checking for level.
-                toCancel.add(effects.getKey());
+        synchronized (statusLifecycleLock) {
+            List<MonsterStatus> toCancel = new ArrayList<>();
+            for (Entry<MonsterStatus, MonsterStatusEffect> effects : getStati().entrySet()) {
+                MonsterStatusEffect mse = effects.getValue();
+                if (mse.getMobSkill() != null && mse.getMobSkill().getType() == skill.getType()) { //not checking for level.
+                    toCancel.add(effects.getKey());
+                }
             }
-        }
-        for (MonsterStatus stat : toCancel) {
-            debuffMobStat(stat);
+            for (MonsterStatus stat : toCancel) {
+                debuffMobStat(stat);
+            }
         }
     }
 
     public void applyMonsterBuff(final Map<MonsterStatus, Integer> stats, final int x, long duration, MobSkill skill, final List<Integer> reflection) {
-        final Runnable cancelTask = () -> {
-            if (isAlive()) {
-                Packet packet = PacketCreator.cancelMonsterStatus(getObjectId(), stats);
-                broadcastMonsterStatusMessage(packet);
-
-                statiLock.lock();
-                try {
-                    for (final MonsterStatus stat : stats.keySet()) {
-                        stati.remove(stat);
-                    }
-                } finally {
-                    statiLock.unlock();
-                }
-            }
-        };
         final MonsterStatusEffect effect = new MonsterStatusEffect(stats, null, skill, true);
-        Packet packet = PacketCreator.applyMonsterStatus(getObjectId(), effect, reflection);
-        broadcastMonsterStatusMessage(packet);
-
-        statiLock.lock();
-        try {
-            for (MonsterStatus stat : stats.keySet()) {
-                stati.put(stat, effect);
-                alreadyBuffed.add(stat);
-            }
-        } finally {
-            statiLock.unlock();
-        }
-
-        MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
-        service.registerMobStatus(map.getId(), effect, cancelTask, duration);
+        applyStatusEffect(effect, duration, reflection, null, -1);
     }
 
     public void refreshMobPosition() {
@@ -1373,24 +1350,22 @@ public class Monster extends AbstractLoadedLife {
     }
 
     private void debuffMobStat(MonsterStatus stat) {
-        MonsterStatusEffect oldEffect;
-        statiLock.lock();
-        try {
-            oldEffect = stati.remove(stat);
-        } finally {
-            statiLock.unlock();
-        }
-
-        if (oldEffect != null) {
-            Packet packet = PacketCreator.cancelMonsterStatus(getObjectId(), oldEffect.getStati());
-            broadcastMonsterStatusMessage(packet);
+        synchronized (statusLifecycleLock) {
+            MonsterStatusEffect oldEffect = getStati(stat);
+            if (oldEffect == null) {
+                return;
+            }
+            cancelStatusEffect(oldEffect, Collections.singleton(stat));
+            if (oldEffect.getStati().isEmpty() && map != null) {
+                MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
+                service.interruptMobStatus(map.getId(), oldEffect);
+            }
         }
     }
 
     public void debuffMob(int skillid) {
         MonsterStatus[] statups = {MonsterStatus.WEAPON_ATTACK_UP, MonsterStatus.WEAPON_DEFENSE_UP, MonsterStatus.MAGIC_ATTACK_UP, MonsterStatus.MAGIC_DEFENSE_UP};
-        statiLock.lock();
-        try {
+        synchronized (statusLifecycleLock) {
             if (skillid == Hermit.SHADOW_MESO) {
                 debuffMobStat(statups[1]);
                 debuffMobStat(statups[3]);
@@ -1421,8 +1396,6 @@ public class Monster extends AbstractLoadedLife {
                     }
                 }
             }
-        } finally {
-            statiLock.unlock();
         }
     }
 
