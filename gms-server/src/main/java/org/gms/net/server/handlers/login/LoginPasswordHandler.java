@@ -33,7 +33,6 @@ import org.gms.util.DatabaseConnection;
 import org.gms.util.HexTool;
 import org.gms.util.PacketCreator;
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Calendar;
 
@@ -65,7 +64,7 @@ public final class LoginPasswordHandler implements PacketHandler {
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement("INSERT INTO accounts (name, password, birthday, tempban) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS)) { //Jayd: Added birthday, tempban
                 ps.setString(1, login);
-                ps.setString(2, GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(pwd, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(pwd));
+                ps.setString(2, BCrypt.hashpw(pwd, BCrypt.gensalt(12)));
                 ps.setDate(3, Date.valueOf(DefaultDates.getBirthday()));
                 ps.setTimestamp(4, Timestamp.valueOf(DefaultDates.getTempban()));
                 ps.executeUpdate();
@@ -74,7 +73,7 @@ public final class LoginPasswordHandler implements PacketHandler {
                     rs.next();
                     c.setAccID(rs.getInt(1));
                 }
-            } catch (SQLException | NoSuchAlgorithmException e) {
+            } catch (SQLException e) {
                 c.setAccID(-1);
                 e.printStackTrace();
             } finally {
