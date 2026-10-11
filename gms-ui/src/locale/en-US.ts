@@ -7,6 +7,7 @@ import commandInfo from '@/views/game/commandInfo/locale/en-US';
 import workplace from '@/views/dashboard/workplace/locale/en-US';
 import informationSearch from '@/views/dashboard/informationSearch/locale/en-US';
 import account from '@/views/account/locale/en-US';
+import auditLog from '@/views/auditLog/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import inventory from '@/views/game/inventory/locale/en-US';
 import autoban from '@/views/game/autoban/locale/en-US';
@@ -30,6 +31,7 @@ export default {
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
+  'menu.account.auditLog': 'Audit Log',
   'menu.arco': 'UI Doc',
   'menu.beiDou': 'About BeiDou',
   'message.success': 'Success',
@@ -49,6 +51,7 @@ export default {
   ...workplace,
   ...login,
   ...account,
+  ...auditLog,
   ...npcShop,
   ...cashShop,
   ...drop,

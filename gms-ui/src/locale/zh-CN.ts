@@ -7,6 +7,7 @@ import commandInfo from '@/views/game/commandInfo/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import informationSearch from '@/views/dashboard/informationSearch/locale/zh-CN';
 import account from '@/views/account/locale/zh-CN';
+import auditLog from '@/views/auditLog/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
 import inventory from '@/views/game/inventory/locale/zh-CN';
 import autoban from '@/views/game/autoban/locale/zh-CN';
@@ -31,6 +32,7 @@ export default {
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
+  'menu.account.auditLog': '审计日志',
   'menu.arco': 'UI 开发文档',
   'menu.beiDou': '关于北斗',
   // 提示信息
@@ -52,6 +54,7 @@ export default {
   ...workplace,
   ...login,
   ...account,
+  ...auditLog,
   ...npcShop,
   ...cashShop,
   ...drop,
