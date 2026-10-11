@@ -155,17 +155,26 @@ public class QuestStatus {
     }
 
     public boolean progress(int id) {
+        return progress(id, 1);
+    }
+
+    public boolean progress(int id, int amount) {
+        if (amount <= 0) {
+            return false;
+        }
         String currentStr = progress.get(id);
         if (currentStr == null) {
             return false;
         }
 
         int current = Integer.parseInt(currentStr);
-        if (current >= this.getQuest().getMobAmountNeeded(id)) {
+        int needed = this.getQuest().getMobAmountNeeded(id);
+        if (current >= needed) {
             return false;
         }
 
-        String str = StringUtil.getLeftPaddedStr(Integer.toString(++current), '0', 3);
+        int updated = (int) Math.min((long) current + amount, needed);
+        String str = StringUtil.getLeftPaddedStr(Integer.toString(updated), '0', 3);
         progress.put(id, str);
         //this.setUpdated();
         return true;
