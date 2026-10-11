@@ -375,7 +375,7 @@ public class Character extends AbstractCharacterObject {
     private Map<Quest, Long> questExpirations = new LinkedHashMap<>();
     private ScheduledFuture<?> dragonBloodSchedule;
     private ScheduledFuture<?> hpDecreaseTask;
-    private ScheduledFuture<?> beholderHealingSchedule, beholderBuffSchedule, berserkSchedule;
+    private ScheduledFuture<?> berserkSchedule;
     private ScheduledFuture<?> skillCooldownTask = null;
     private ScheduledFuture<?> buffExpireTask = null;
     private ScheduledFuture<?> itemExpireTask = null;
@@ -3564,15 +3564,6 @@ public class Character extends AbstractCharacterObject {
                             summons.remove(summonId);
                             if (summon.isPuppet()) {
                                 map.removePlayerPuppet(this);
-                            } else if (summon.getSkill() == DarkKnight.BEHOLDER) {
-                                if (beholderHealingSchedule != null) {
-                                    beholderHealingSchedule.cancel(false);
-                                    beholderHealingSchedule = null;
-                                }
-                                if (beholderBuffSchedule != null) {
-                                    beholderBuffSchedule.cancel(false);
-                                    beholderBuffSchedule = null;
-                                }
                             }
                         }
                     } else if (mbs == BuffStat.DRAGONBLOOD) {
@@ -4174,45 +4165,6 @@ public class Character extends AbstractCharacterObject {
             prepareDragonBlood(effect);
         } else if (effect.isBerserk()) {
             checkBerserk(isHidden());
-        } else if (effect.isBeholder()) {
-            final int beholder = DarkKnight.BEHOLDER;
-            if (beholderHealingSchedule != null) {
-                beholderHealingSchedule.cancel(false);
-            }
-            if (beholderBuffSchedule != null) {
-                beholderBuffSchedule.cancel(false);
-            }
-            Skill bHealing = SkillFactory.getSkill(DarkKnight.AURA_OF_BEHOLDER);
-            int bHealingLvl = getSkillLevel(bHealing);
-            if (bHealingLvl > 0) {
-                final StatEffect healEffect = bHealing.getEffect(bHealingLvl);
-                int healInterval = (int) SECONDS.toMillis(healEffect.getX());
-                beholderHealingSchedule = TimerManager.getInstance().register(() -> {
-                    if (awayFromWorld.get()) {
-                        return;
-                    }
-
-                    addHP(healEffect.getHp());
-                    sendPacket(PacketCreator.showOwnBuffEffect(beholder, 2));
-                    getMap().broadcastMessage(Character.this, PacketCreator.summonSkill(getId(), beholder, 5), true);
-                    getMap().broadcastMessage(Character.this, PacketCreator.showOwnBuffEffect(beholder, 2), false);
-                }, healInterval, healInterval);
-            }
-            Skill bBuff = SkillFactory.getSkill(DarkKnight.HEX_OF_BEHOLDER);
-            if (getSkillLevel(bBuff) > 0) {
-                final StatEffect buffEffect = bBuff.getEffect(getSkillLevel(bBuff));
-                int buffInterval = (int) SECONDS.toMillis(buffEffect.getX());
-                beholderBuffSchedule = TimerManager.getInstance().register(() -> {
-                    if (awayFromWorld.get()) {
-                        return;
-                    }
-
-                    buffEffect.applyTo(Character.this);
-                    sendPacket(PacketCreator.showOwnBuffEffect(beholder, 2));
-                    getMap().broadcastMessage(Character.this, PacketCreator.summonSkill(getId(), beholder, (int) (Math.random() * 3) + 6), true);
-                    getMap().broadcastMessage(Character.this, PacketCreator.showBuffEffect(getId(), beholder, 2), false);
-                }, buffInterval, buffInterval);
-            }
         } else if (effect.isRecovery()) {
             int healInterval = (GameConfig.getServerBoolean("use_ultra_recovery")) ? 2000 : 5000;
             final byte heal = (byte) effect.getX();
@@ -9605,16 +9557,6 @@ public class Character extends AbstractCharacterObject {
             hpDecreaseTask.cancel(true);
         }
         hpDecreaseTask = null;
-
-        if (beholderHealingSchedule != null) {
-            beholderHealingSchedule.cancel(true);
-        }
-        beholderHealingSchedule = null;
-
-        if (beholderBuffSchedule != null) {
-            beholderBuffSchedule.cancel(true);
-        }
-        beholderBuffSchedule = null;
 
         if (berserkSchedule != null) {
             berserkSchedule.cancel(true);
