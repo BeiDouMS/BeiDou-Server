@@ -101,6 +101,7 @@ function action(mode, type, selection) {
             if (cm.getJobId() % 10 == 0) {
                 cm.gainItem(4031058, -1);
                 cm.changeJobById(cm.getJobId() + 1);
+                cm.getPlayer().removePartyQuestItem("JB3");
                 cm.getPlayer().removePartyQuestItem("JBQ");
             }
 
@@ -121,16 +122,17 @@ function action(mode, type, selection) {
             if (cm.haveItem(4031057)) {
                 cm.gainItem(4031057, -1);
                 cm.getPlayer().setPartyQuestItemObtained("JBQ");
+                cm.getPlayer().removePartyQuestItem("JB3");
             }
             cm.sendNextPrev("这是测试的第二部分。这个测试将决定你是否足够聪明，可以迈向伟大的下一步。在奥西利亚大陆的雪原深处，有一片被白雪覆盖的黑暗区域，被称为圣地，即使怪物也无法靠近。在这个区域的中心，有一块被称为圣石的巨大石头。你需要献上一件特殊的物品作为祭品，然后圣石将在当场测试你的智慧。");
         } else if (status == 2) {
             cm.sendNextPrev("你需要诚实而坚定地回答每一个问题。如果你能正确回答所有问题，那么圣石将正式接受你，并交给你#b#t4031058##k。把项链拿回来，我会帮助你迈向下一步。祝你好运。");
         }
-    } else if (cm.getPlayer().gotPartyQuestItem("JB3") && selection == 0) {
-        cm.sendNext("去，和#b#p1022000#对话，然后给我带来#b#t4031057#。");
-        cm.dispose();
     } else if (cm.getPlayer().gotPartyQuestItem("JBQ") && selection == 0) {
         cm.sendNext("去，和#b#p2030006#对话#k，然后给我带来#b#t4031058##k。");
+        cm.dispose();
+    } else if ((cm.getPlayer().gotPartyQuestItem("JB3") || cm.getPlayer().gotPartyQuestItem("JBP")) && selection == 0) {
+        cm.sendNext("去，和#b#p1022000#对话，然后给我带来#b#t4031057#。");
         cm.dispose();
     } else {
         if (sel == undefined) {

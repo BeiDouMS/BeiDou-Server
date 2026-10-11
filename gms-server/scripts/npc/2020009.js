@@ -74,6 +74,7 @@ function action(mode, type, selection) {
             if (cm.getJobId() % 10 == 0) {
                 cm.gainItem(4031058, -1);
                 cm.changeJobById(cm.getJobId() + 1);
+                cm.getPlayer().removePartyQuestItem("JB3");
                 cm.getPlayer().removePartyQuestItem("JBQ");
             }
 
@@ -94,16 +95,17 @@ function action(mode, type, selection) {
             if (cm.haveItem(4031057)) {
                 cm.gainItem(4031057, -1);
                 cm.getPlayer().setPartyQuestItemObtained("JBQ");
+                cm.getPlayer().removePartyQuestItem("JB3");
             }
             cm.sendNextPrev("Here's the 2nd half of the test. This test will determine whether you are smart enough to take the next step towards greatness. There is a dark, snow-covered area called the Holy Ground at the snowfield in Ossyria, where even the monsters can't reach. On the center of the area lies a huge stone called the Holy Stone. You'll need to offer a special item as the sacrifice, then the Holy Stone will test your wisdom right there on the spot.");
         } else if (status == 2) {
             cm.sendNextPrev("You'll need to answer each and every question given to you with honesty and conviction. If you correctly answer all the questions, then the Holy Stone will formally accept you and hand you #b#t4031058##k. Bring back the necklace, and I will help you to the next step forward. Good luck.");
         }
-    } else if (cm.getPlayer().gotPartyQuestItem("JB3") && selection == 0) {
-        cm.sendNext("Go, talk with #b#p1032001##k and bring me #b#t4031057##k.");
-        cm.dispose();
     } else if (cm.getPlayer().gotPartyQuestItem("JBQ") && selection == 0) {
         cm.sendNext("Go, talk with #b#p2030006##k and bring me #b#t4031058##k.");
+        cm.dispose();
+    } else if ((cm.getPlayer().gotPartyQuestItem("JB3") || cm.getPlayer().gotPartyQuestItem("JBP")) && selection == 0) {
+        cm.sendNext("Go, talk with #b#p1032001##k and bring me #b#t4031057##k.");
         cm.dispose();
     } else {
         if (sel == undefined) {
