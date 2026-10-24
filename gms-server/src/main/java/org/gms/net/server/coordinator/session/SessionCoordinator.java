@@ -20,6 +20,9 @@
 package org.gms.net.server.coordinator.session;
 
 import org.gms.client.Character;
+import org.gms.net.server.services.task.world.CharacterSaveService;
+import org.gms.exception.BizException;
+import org.gms.exception.BizExceptionEnum;
 import org.gms.client.Client;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.NpcId;
@@ -39,6 +42,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -66,10 +70,34 @@ public class SessionCoordinator {
 
     private final SessionInitialization sessionInit = new SessionInitialization();
     private final LoginStorage loginStorage = new LoginStorage();
-    private final Map<Integer, Client> onlineClients = new HashMap<>(); // Key: account id
-    private final Set<Hwid> onlineRemoteHwids = new HashSet<>(); // Hwid/nibblehwid
+    private final Map<Integer, Client> onlineClients = new ConcurrentHashMap<>(); // Key: account id
+    private final Set<Hwid> onlineRemoteHwids = ConcurrentHashMap.newKeySet(); // Hwid/nibblehwid
     private final Map<String, Client> loginRemoteHosts = new ConcurrentHashMap<>(); // Key: Ip (+ nibblehwid)
     private final HostHwidCache hostHwidCache = new HostHwidCache();
+
+    private final Map<Integer, AccountSession> accountSessions = new ConcurrentHashMap<>();
+
+    /** 每账号一份所有权；旧连接的延迟清理不能解锁后继连接。 */
+    public static final class AccountSession {
+        private long loginTime;
+        private boolean active;
+
+        private AccountSession() {}
+        public synchronized boolean owns(long expected) { return active && loginTime == expected; }
+        public synchronized boolean canClaim(long next) { return next > loginTime; }
+        public synchronized boolean canBegin(long next) { return next > loginTime || (next == loginTime && !active); }
+        public synchronized void claim(long next) { loginTime = next; active = true; }
+        public synchronized void retire() { active = false; }
+    }
+
+    public AccountSession getAccountSession(int accountId) {
+        if (accountId <= 0) throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS);
+        return accountSessions.computeIfAbsent(accountId, ignored -> new AccountSession());
+    }
+
+    public Client getClientByAccID(int accountId) {
+        return onlineClients.get(accountId);
+    }
 
     private SessionCoordinator() {
     }
@@ -113,11 +141,15 @@ public class SessionCoordinator {
      * Overwrites any existing online client for the account id, making sure to disconnect it as well.
      */
     public void updateOnlineClient(Client client) {
-        if (client != null) {
-            int accountId = client.getAccID();
-            disconnectClientIfOnline(accountId);
-            onlineClients.put(accountId, client);
+        if (client == null || client.getAccID() <= 0) return;
+        AccountSession account = getAccountSession(client.getAccID());
+        Client previous;
+        synchronized (account) {
+            if (!account.owns(client.getLoginTime())) return;
+            previous = onlineClients.put(client.getAccID(), client);
         }
+        // 关闭旧连接可能等待保存，绝不能放在账号锁内。
+        if (previous != null && previous != client) previous.forceDisconnect();
     }
 
     private void disconnectClientIfOnline(int accountId) {
@@ -164,14 +196,17 @@ public class SessionCoordinator {
         Hwid nibbleHwid = client.getHwid();
         client.setHwid(null);
         if (nibbleHwid != null) {
-            onlineRemoteHwids.remove(nibbleHwid);
+            Client current = onlineClients.get(client.getAccID());
+            if (current == null || current == client || !Objects.equals(nibbleHwid, current.getHwid())) {
+                onlineRemoteHwids.remove(nibbleHwid);
+            }
 
             if (client != null) {
                 Client loggedClient = onlineClients.get(client.getAccID());
 
                 // do not remove an online game session here, only login session
                 if (loggedClient != null && loggedClient.getSessionId() == client.getSessionId()) {
-                    onlineClients.remove(client.getAccID());
+                    onlineClients.remove(client.getAccID(), client);
                 }
             }
         }
@@ -179,8 +214,8 @@ public class SessionCoordinator {
 
     private void clearLoginRemoteHost(Client client) {
         String remoteHost = getSessionRemoteHost(client);
-        loginRemoteHosts.remove(client.getRemoteAddress());
-        loginRemoteHosts.remove(remoteHost);
+        loginRemoteHosts.remove(client.getRemoteAddress(), client);
+        loginRemoteHosts.remove(remoteHost, client);
     }
 
     public AntiMulticlientResult attemptLoginSession(Client client, Hwid hwid, int accountId, boolean routineCheck) {
@@ -302,18 +337,21 @@ public class SessionCoordinator {
         final Hwid hwid = client.getHwid();
         client.setHwid(null); // making sure to clean up calls to this function on login phase
         if (hwid != null) {
-            onlineRemoteHwids.remove(hwid);
+            Client current = onlineClients.get(client.getAccID());
+            if (current == null || current == client || !Objects.equals(hwid, current.getHwid())) {
+                onlineRemoteHwids.remove(hwid);
+            }
         }
 
         final boolean isGameSession = hwid != null;
         if (isGameSession) {
-            onlineClients.remove(client.getAccID());
+            onlineClients.remove(client.getAccID(), client);
         } else {
             Client loggedClient = onlineClients.get(client.getAccID());
 
             // do not remove an online game session here, only login session
             if (loggedClient != null && loggedClient.getSessionId() == client.getSessionId()) {
-                onlineClients.remove(client.getAccID());
+                onlineClients.remove(client.getAccID(), client);
             }
         }
 

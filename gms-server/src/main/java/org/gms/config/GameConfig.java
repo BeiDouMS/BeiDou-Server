@@ -6,6 +6,7 @@ import com.alibaba.fastjson2.TypeReference;
 import org.gms.dao.entity.GameConfigDO;
 import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
+import org.gms.net.server.services.task.world.CharacterSaveService;
 import org.gms.net.server.world.World;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.service.ConfigService;
@@ -120,6 +121,10 @@ public class GameConfig {
         }
         // 重载其余部分
         switch (gameConfigDO.getConfigCode()){
+            case "character_save_realtime_concurrency":
+            case "character_save_shared_concurrency":
+                CharacterSaveService.getInstance().refreshConcurrency();
+                break;
             case "allow_steal_quest_item":
                 MonsterInformationProvider.getInstance().clearDrops();
                 break;

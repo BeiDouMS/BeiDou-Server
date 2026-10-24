@@ -21,6 +21,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.client;
 
+import org.gms.net.server.services.task.world.CharacterSaveService;
+import org.gms.net.server.coordinator.session.SessionCoordinator.AccountSession;
+import org.gms.exception.BizException;
+import org.gms.exception.BizExceptionEnum;
+import java.util.concurrent.CompletableFuture;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+
 import lombok.Getter;
 import org.gms.client.inventory.InventoryType;
 import org.gms.config.GameConfig;
@@ -107,6 +121,10 @@ public class Client extends ChannelInboundHandlerAdapter {
     public static final int LOGIN_LOGGEDIN = 2;
 
     private final Type type;
+    private static final AtomicLong LAST_LOGIN_TIME = new AtomicLong();
+    private final long loginTime = LAST_LOGIN_TIME.updateAndGet(previous -> Math.max(System.currentTimeMillis(), previous + 1));
+    private volatile CharacterSaveService.Session characterSaveSession;
+    private volatile boolean inMemoryTransition;
     private final long sessionId;
     private final PacketProcessor packetProcessor;
 
@@ -135,7 +153,19 @@ public class Client extends ChannelInboundHandlerAdapter {
     private int picattempt = 0;
     private byte csattempt = 0;
     private byte gender = -1;
-    private boolean disconnecting = false;
+    private volatile boolean disconnecting = false;
+    private static final Set<Client> pendingDisconnects = ConcurrentHashMap.newKeySet();
+    private static final ScheduledExecutorService DISCONNECT_RETRIES = Executors.newSingleThreadScheduledExecutor(
+            Thread.ofPlatform().daemon().name("disconnect-save-retry").factory());
+    private final AtomicBoolean disconnectPersistenceAttempting = new AtomicBoolean();
+    private final AtomicBoolean disconnectPersistenceRetryScheduled = new AtomicBoolean();
+    private enum DisconnectPersistencePhase { NONE, CHARACTER_PENDING, RELEASE_PENDING, ACCOUNT_PENDING, COMPLETE }
+    private volatile DisconnectPersistencePhase disconnectPersistencePhase = DisconnectPersistencePhase.NONE;
+    private volatile Character disconnectingCharacter;
+    private final CompletableFuture<Void> disconnectCleanupFinished = new CompletableFuture<>();
+    private final CompletableFuture<Void> disconnectPersistenceFinished = new CompletableFuture<>();
+    private long disconnectRetryDelay = 1_000L;
+
     private final Semaphore actionsSemaphore = new Semaphore(7);
     private final Lock lock = new ReentrantLock(true);
     private final Lock encoderLock = new ReentrantLock(true);
@@ -205,6 +235,8 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (disconnecting || inTransition || (characterSaveSession != null
+                && CharacterSaveService.getInstance().isClosing(characterSaveSession))) return;
         if (!(msg instanceof InPacket packet)) {
             log.warn("收到无效封包: {}", msg);
             return;
@@ -263,21 +295,13 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     private void closeMapleSession() {
-        switch (type) {
-            case LOGIN -> SessionCoordinator.getInstance().closeLoginSession(this);
-            case CHANNEL -> SessionCoordinator.getInstance().closeSession(this, null);
-        }
-
         try {
-            // client freeze issues on session transition states found thanks to yolinlin, Omo Oppa, Nozphex
-            if (!inTransition) {
-                disconnect(false, false);
-            }
-        } catch (Throwable t) {
-            log.warn("账号卡住", t);
-        } finally {
-            closeSession();
-        }
+            if (type == Type.LOGIN) SessionCoordinator.getInstance().closeLoginSession(this);
+            // 同世界迁移的源连接在目标交接前保留 HWID，不能提前清掉共享设备名额。
+            if (!inTransition) disconnect(false, false);
+        } catch (Throwable failure) {
+            log.warn(I18nUtil.getLogMessage("CharacterSave.disconnectFailed"), getAccID(), sessionId, failure);
+        } finally { closeSession(); }
     }
 
     public void updateLastPacket() {
@@ -289,7 +313,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public void closeSession() {
-        ioChannel.close();
+        if (ioChannel != null) ioChannel.close();
     }
 
     public void disconnectSession() {
@@ -570,19 +594,71 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public int finishLogin() {
-        encoderLock.lock();
+        lockClient();
         try {
-            if (getLoginState() > LOGIN_NOTLOGGEDIN) { // 0 = LOGIN_NOTLOGGEDIN, 1= LOGIN_SERVER_TRANSITION, 2 = LOGIN_LOGGEDIN
-                loggedIn = false;
-                return 7;
-            }
-            updateLoginState(Client.LOGIN_LOGGEDIN);
-        } finally {
-            encoderLock.unlock();
-        }
-
+            if (getLoginState() != LOGIN_NOTLOGGEDIN || !beginAccountSession()) return 7;
+        } finally { unlockClient(); }
+        SessionCoordinator.getInstance().updateOnlineClient(this);
         return 0;
     }
+
+    private boolean beginAccountSession() {
+        AccountSession account = SessionCoordinator.getInstance().getAccountSession(getAccID());
+        synchronized (account) {
+            if (disconnecting || Server.getInstance().isShuttingDown() || !account.canBegin(loginTime)
+                    || CharacterSaveService.getInstance().hasUnfinishedSession(getAccID())) return false;
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin=?, lastlogin=? WHERE id=? AND loggedin=0")) {
+                ps.setInt(1, LOGIN_LOGGEDIN); ps.setTimestamp(2, new Timestamp(System.currentTimeMillis())); ps.setInt(3, getAccID());
+                if (ps.executeUpdate() != 1) return false;
+                account.claim(loginTime);
+                loggedIn = true;
+                serverTransition = false;
+                return true;
+            } catch (SQLException failure) {
+                log.error(I18nUtil.getLogMessage("CharacterSave.loginStateFailed"), getAccID(), sessionId, failure);
+                return false;
+            }
+        }
+    }
+
+    public boolean hasActiveConnection() { return ioChannel != null && ioChannel.isActive(); }
+
+    public void sendLoginFailure(int reason) {
+        if (reason == 7 && getAccID() > 0) {
+            CharacterSaveService.PendingFinalSave pending = CharacterSaveService.getInstance().pendingFinalSave(getAccID());
+            if (pending != null) {
+                log.info(I18nUtil.getLogMessage("CharacterSave.loginWaiting"), getAccID(), sessionId, pending);
+            }
+        }
+        sendPacket(PacketCreator.getLoginFailed(reason));
+    }
+
+    public long getLoginTime() { return loginTime; }
+    public CharacterSaveService.Session getCharacterSaveSession() { return characterSaveSession; }
+    public void acquireCharacterSaveSession(int accountId, int characterId) {
+        characterSaveSession = CharacterSaveService.getInstance().openSession(accountId, characterId, loginTime, sessionId);
+    }
+
+    public boolean isInMemoryTransition() { return inMemoryTransition && inTransition && serverTransition && !disconnecting; }
+
+    public void acquireMigratingCharacterSession(Client source, Character character) {
+        AccountSession account = SessionCoordinator.getInstance().getAccountSession(getAccID());
+        synchronized (account) {
+            if (source == this || character.getClient() != source || source.player != character
+                    || source.getAccID() != getAccID() || source.world != world || !source.isInMemoryTransition()
+                    || !account.owns(source.loginTime) || !account.canClaim(loginTime)) {
+                throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE);
+            }
+            characterSaveSession = CharacterSaveService.getInstance().openMigrationSession(
+                    source.characterSaveSession, getAccID(), character.getId(), loginTime, sessionId);
+            account.claim(loginTime);
+            birthday = source.birthday == null ? null : (Calendar) source.birthday.clone();
+            loggedIn = true;
+            serverTransition = false;
+        }
+    }
+
 
     public void setPin(String pin) {
         this.pin = pin;
@@ -823,79 +899,68 @@ public class Client extends ChannelInboundHandlerAdapter {
         return accId;
     }
 
-    public void updateLoginState(int newState) {
-        // rules out possibility of multiple account entries
-        if (newState == LOGIN_LOGGEDIN) {
-            SessionCoordinator.getInstance().updateOnlineClient(this);
+    public boolean updateLoginState(int newState) {
+        if (getAccID() <= 0) return false;
+        AccountSession account = SessionCoordinator.getInstance().getAccountSession(getAccID());
+        synchronized (account) {
+            boolean handoff = newState == LOGIN_LOGGEDIN && type == Type.CHANNEL
+                    && account.canClaim(loginTime)
+                    && !CharacterSaveService.getInstance().hasOtherUnfinishedSession(getAccID(), loginTime);
+            if (!account.owns(loginTime) && !handoff) return false;
+            if (newState == LOGIN_NOTLOGGEDIN && CharacterSaveService.getInstance().hasUnfinishedSession(getAccID())) return false;
+            if (newState == LOGIN_LOGGEDIN && characterSaveSession != null
+                    && !CharacterSaveService.getInstance().isCurrentSession(characterSaveSession)) return false;
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin=?, lastlogin=? WHERE id=?" + (handoff ? " AND loggedin=1" : ""))) {
+                ps.setInt(1, newState); ps.setTimestamp(2, new Timestamp(System.currentTimeMillis())); ps.setInt(3, getAccID());
+                if (ps.executeUpdate() != 1) return false;
+            } catch (SQLException failure) {
+                log.error(I18nUtil.getLogMessage("CharacterSave.loginStateFailed"), getAccID(), sessionId, failure);
+                return false;
+            }
+            if (handoff) account.claim(loginTime);
+            if (newState == LOGIN_NOTLOGGEDIN) {
+                account.retire(); loggedIn = false; serverTransition = false; setAccID(0);
+            } else { serverTransition = newState == LOGIN_SERVER_TRANSITION; loggedIn = !serverTransition; }
         }
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = ?, lastlogin = ? WHERE id = ?")) {
-            // using sql currenttime here could potentially break the login, thanks Arnah for pointing this out
-
-            ps.setInt(1, newState);
-            ps.setTimestamp(2, new java.sql.Timestamp(Server.getInstance().getCurrentTime()));
-            ps.setInt(3, getAccID());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (newState == LOGIN_NOTLOGGEDIN) {
-            loggedIn = false;
-            serverTransition = false;
-            setAccID(0);
-        } else {
-            serverTransition = (newState == LOGIN_SERVER_TRANSITION);
-            loggedIn = !serverTransition;
-        }
+        if (newState == LOGIN_LOGGEDIN) SessionCoordinator.getInstance().updateOnlineClient(this);
+        return true;
     }
 
-    public int getLoginState() {  // 0 = LOGIN_NOTLOGGEDIN, 1= LOGIN_SERVER_TRANSITION, 2 = LOGIN_LOGGEDIN
-        try (Connection con = DatabaseConnection.getConnection()) {
+    public int getLoginState() {
+        // 快速门控不等待持有账号锁的旧 SQL，避免慢保存阻塞新的登录事件循环。
+        CharacterSaveService saves = CharacterSaveService.getInstance();
+        if (getAccID() > 0 && (type == Type.LOGIN ? saves.hasUnfinishedSession(getAccID())
+                : saves.hasOtherUnfinishedSession(getAccID(), loginTime))) return LOGIN_LOGGEDIN;
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT loggedin, lastlogin, birthday FROM accounts WHERE id=?")) {
+            ps.setInt(1, getAccID());
             int state;
-            try (PreparedStatement ps = con.prepareStatement("SELECT loggedin, lastlogin, birthday FROM accounts WHERE id = ?")) {
-                ps.setInt(1, getAccID());
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (!rs.next()) {
-                        throw new RuntimeException("获取登录状态-客户端账号：" + getAccID());
-                    }
-
-                    birthday = Calendar.getInstance();
-                    try {
-                        birthday.setTime(rs.getDate("birthday"));
-                    } catch (SQLException e) {
-                    }
-
-                    state = rs.getInt("loggedin");
-                    if (state == LOGIN_SERVER_TRANSITION) {
-                        Timestamp lastlogin = rs.getTimestamp("lastlogin");
-                        // 兼容历史已经创建的账号，和自动注册但未登录的账号
-                        if (lastlogin == null || lastlogin.getTime() + 30000 < Server.getInstance().getCurrentTime()) {
-                            int accountId = accId;
-                            state = LOGIN_NOTLOGGEDIN;
-                            updateLoginState(Client.LOGIN_NOTLOGGEDIN);   // ACCID = 0, issue found thanks to Tochi & K u ssss o & Thora & Omo Oppa
-                            this.setAccID(accountId);
+            Timestamp lastLogin;
+            try (ResultSet rows = ps.executeQuery()) {
+                if (!rows.next()) throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE);
+                state = rows.getInt("loggedin"); lastLogin = rows.getTimestamp("lastlogin");
+                birthday = Calendar.getInstance();
+                if (rows.getDate("birthday") != null) birthday.setTime(rows.getDate("birthday"));
+            }
+            if (state == LOGIN_SERVER_TRANSITION && type == Type.LOGIN
+                    && (lastLogin == null || lastLogin.getTime() + 30_000L < System.currentTimeMillis())
+                    && !saves.hasUnfinishedSession(getAccID())) {
+                AccountSession account = SessionCoordinator.getInstance().getAccountSession(getAccID());
+                synchronized (account) {
+                    if ((account.owns(loginTime) || account.canClaim(loginTime)) && !saves.hasUnfinishedSession(getAccID())) {
+                        try (PreparedStatement reset = con.prepareStatement("UPDATE accounts SET loggedin=0 WHERE id=? AND loggedin=1 AND (lastlogin IS NULL OR lastlogin < ?)")) {
+                            reset.setInt(1, getAccID()); reset.setTimestamp(2, new Timestamp(System.currentTimeMillis()-30_000L));
+                            if (reset.executeUpdate() == 1) { account.retire(); state = LOGIN_NOTLOGGEDIN; }
                         }
                     }
                 }
             }
-            if (state == LOGIN_LOGGEDIN) {
-                loggedIn = true;
-            } else if (state == LOGIN_SERVER_TRANSITION) {
-                try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE id = ?")) {
-                    ps2.setInt(1, getAccID());
-                    ps2.executeUpdate();
-                }
-            } else {
-                loggedIn = false;
-            }
+            loggedIn = state == LOGIN_LOGGEDIN;
             return state;
-        } catch (SQLException e) {
-            loggedIn = false;
-            e.printStackTrace();
-            throw new RuntimeException("登录状态");
+        } catch (SQLException failure) {
+            log.error(I18nUtil.getLogMessage("CharacterSave.loginStateFailed"), getAccID(), sessionId, failure);
+            throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE, failure);
         }
     }
 
@@ -978,9 +1043,10 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public final void disconnect(final boolean shutdown, final boolean cashshop) {
-        if (canDisconnect()) {
-            ThreadManager.getInstance().newTask(() -> disconnectInternal(shutdown, cashshop));
-        }
+        if (!canDisconnect()) return;
+        pendingDisconnects.add(this);
+        try { ThreadManager.getInstance().newTask(() -> disconnectInternal(shutdown, cashshop)); }
+        catch (RuntimeException rejected) { disconnectInternal(shutdown, cashshop); }
     }
 
     public final void forceDisconnect() {
@@ -990,7 +1056,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public void timeoutDisconnect() {
-        disconnectInternal(false, true);
+        disconnect(false, true);
     }
 
     private synchronized boolean canDisconnect() {
@@ -1002,7 +1068,171 @@ public class Client extends ChannelInboundHandlerAdapter {
         return true;
     }
 
-    private void disconnectInternal(boolean shutdown, boolean cashshop) {//once per Client instance
+    private void disconnectInternal(boolean shutdown, boolean cashshop) {
+        pendingDisconnects.add(this);
+        lockClient();
+        try {
+            Character current = player;
+            if (current == null) {
+                if (inTransition) {
+                    Server.getInstance().freeCharacteridInTransition(this);
+                    inTransition = false; serverTransition = false;
+                }
+                releaseUnusedLoad();
+                disconnectInternalOwned(shutdown, cashshop);
+            } else {
+                synchronized (current) {
+                    if (!loggedIn && !serverTransition && characterSaveSession != null
+                            && CharacterSaveService.getInstance().abandonLoad(characterSaveSession)) {
+                        releaseUnusedLoad();
+                        current.setLoggedIn(false);
+                    }
+                    if (current.getClient() != this) {
+                        // 新连接继承了同一个 HWID，旧连接只移除自身身份。
+                        if (Objects.equals(getHwid(), current.getClient().getHwid())) setHwid(null);
+                        SessionCoordinator.getInstance().closeSession(this, true);
+                        Server.getInstance().unregisterLoginState(this);
+                        player = null;
+                        return;
+                    }
+                    if (inMemoryTransition) {
+                        // 强制断开无人接管的源连接必须改走最终保存；正常源 socket 关闭不会进入此分支。
+                        Server.getInstance().freeCharacteridInTransition(this);
+                        inMemoryTransition = false; inTransition = false; serverTransition = false; loggedIn = true;
+                    }
+                    disconnectInternalOwned(shutdown, cashshop);
+                }
+            }
+        } catch (Throwable failure) {
+            log.error(I18nUtil.getLogMessage("CharacterSave.disconnectFailed"), getAccID(), sessionId, failure);
+        } finally {
+            unlockClient();
+            disconnectCleanupFinished.complete(null);
+            if (disconnectPersistencePhase == DisconnectPersistencePhase.NONE) {
+                pendingDisconnects.remove(this);
+                disconnectPersistenceFinished.complete(null);
+            }
+        }
+        if (hasPendingDisconnectPersistence()) {
+            closeSession();
+            attemptDisconnectPersistence();
+        }
+    }
+
+    private void releaseUnusedLoad() {
+        CharacterSaveService saves = CharacterSaveService.getInstance();
+        if (characterSaveSession != null && !saves.abandonLoad(characterSaveSession)) return;
+        int accountId = getAccID() > 0 ? getAccID() : characterSaveSession == null ? 0 : characterSaveSession.accountId();
+        if (accountId <= 0) return;
+        AccountSession account = SessionCoordinator.getInstance().getAccountSession(accountId);
+        synchronized (account) {
+            if ((!account.owns(loginTime) && !account.canClaim(loginTime)) || saves.hasUnfinishedSession(accountId)) return;
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin=0 WHERE id=? AND loggedin=1")) {
+                ps.setInt(1, accountId);
+                if (ps.executeUpdate() == 1) { account.claim(loginTime); account.retire(); loggedIn = false; }
+            } catch (SQLException failure) {
+                log.error(I18nUtil.getLogMessage("CharacterSave.loginStateFailed"), accountId, sessionId, failure);
+            }
+        }
+    }
+
+    private void attemptDisconnectPersistence() {
+        if (!disconnectPersistenceAttempting.compareAndSet(false, true)) return;
+        try {
+            if (disconnectPersistencePhase == DisconnectPersistencePhase.CHARACTER_PENDING) {
+                Character current = disconnectingCharacter;
+                Character.SaveResult result = current == null ? Character.SaveResult.SAVED : current.saveForSessionHandoff();
+                if (result == Character.SaveResult.FAILED) { scheduleDisconnectRetry(); return; }
+                if (result == Character.SaveResult.DISCARDED) log.error(I18nUtil.getLogMessage("CharacterSave.finalDiscarded"), getAccID(), sessionId);
+                if (current != null) {
+                    current.logOff();
+                    if (result == Character.SaveResult.SAVED && GameConfig.getServerBoolean("instant_name_change")) current.doPendingNameChange();
+                }
+                // 先释放本连接的设备名额，再允许下一次登录读取 loggedin=0。
+                SessionCoordinator.getInstance().closeSession(this, false);
+                disconnectPersistencePhase = DisconnectPersistencePhase.RELEASE_PENDING;
+            }
+            if (disconnectPersistencePhase == DisconnectPersistencePhase.RELEASE_PENDING) {
+                // 共享家族等内存引用清理完再解锁，避免新角色读档后被旧 empty() 清成离线。
+                clear();
+                disconnectPersistencePhase = DisconnectPersistencePhase.ACCOUNT_PENDING;
+            }
+            if (disconnectPersistencePhase == DisconnectPersistencePhase.ACCOUNT_PENDING) {
+                if (!persistDisconnectLoginState()) { scheduleDisconnectRetry(); return; }
+                loggedIn = false; serverTransition = false;
+                setAccID(0); disconnectingCharacter = null;
+                disconnectPersistencePhase = DisconnectPersistencePhase.COMPLETE;
+                pendingDisconnects.remove(this);
+                disconnectPersistenceFinished.complete(null);
+            }
+        } catch (Throwable failure) {
+            log.error(I18nUtil.getLogMessage("CharacterSave.disconnectFailed"), getAccID(), sessionId, failure);
+            scheduleDisconnectRetry();
+        } finally { disconnectPersistenceAttempting.set(false); }
+    }
+
+    private boolean persistDisconnectLoginState() {
+        if (getAccID() <= 0) return true;
+        AccountSession account = SessionCoordinator.getInstance().getAccountSession(getAccID());
+        synchronized (account) {
+            if (!account.owns(loginTime)) return true;
+            if (CharacterSaveService.getInstance().hasUnfinishedSession(getAccID())) return false;
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin=0, lastlogin=? WHERE id=? AND loggedin IN (1,2)")) {
+                ps.setTimestamp(1, new Timestamp(System.currentTimeMillis())); ps.setInt(2, getAccID());
+                if (ps.executeUpdate() == 1) { account.retire(); return true; }
+                try (PreparedStatement check = con.prepareStatement("SELECT loggedin FROM accounts WHERE id=?")) {
+                    check.setInt(1, getAccID());
+                    try (ResultSet rows = check.executeQuery()) {
+                        if (rows.next() && rows.getInt(1) == 0) { account.retire(); return true; }
+                    }
+                }
+                return false;
+            } catch (SQLException failure) {
+                log.error(I18nUtil.getLogMessage("CharacterSave.loginStateFailed"), getAccID(), sessionId, failure);
+                return false;
+            }
+        }
+    }
+
+    private void scheduleDisconnectRetry() {
+        if (!hasPendingDisconnectPersistence()
+                || !disconnectPersistenceRetryScheduled.compareAndSet(false, true)) return;
+        long delay = disconnectRetryDelay;
+        disconnectRetryDelay = Math.min(60_000L, delay * 2L);
+        DISCONNECT_RETRIES.schedule(() -> {
+            disconnectPersistenceRetryScheduled.set(false);
+            Thread.startVirtualThread(this::attemptDisconnectPersistence);
+        }, delay, TimeUnit.MILLISECONDS);
+    }
+
+    public boolean hasPendingDisconnectPersistence() {
+        return disconnectPersistencePhase != DisconnectPersistencePhase.NONE
+                && disconnectPersistencePhase != DisconnectPersistencePhase.COMPLETE;
+    }
+
+    public static boolean hasPendingDisconnectForAccount(int accountId) {
+        return pendingDisconnects.stream().anyMatch(client -> client.getAccID() == accountId);
+    }
+
+    public static void flushPendingDisconnectsForMaintenance() {
+        for (Client client : List.copyOf(pendingDisconnects)) {
+            try {
+                client.disconnectCleanupFinished.get(15, TimeUnit.SECONDS);
+                client.attemptDisconnectPersistence();
+                client.disconnectPersistenceFinished.get(15, TimeUnit.SECONDS);
+            } catch (Exception failure) {
+                log.error(I18nUtil.getLogMessage("CharacterSave.disconnectFailed"), client.getAccID(), client.sessionId, failure);
+            }
+        }
+    }
+
+    private void disconnectInternalOwned(boolean shutdown, boolean cashshop) {//once per Client instance
+        if (!serverTransition && isLoggedIn() && disconnectPersistencePhase == DisconnectPersistencePhase.NONE) {
+            disconnectingCharacter = player;
+            disconnectPersistencePhase = DisconnectPersistencePhase.CHARACTER_PENDING;
+        }
         if (player != null && player.isLoggedIn() && player.getClient() != null) {
             final int messengerid = player.getMessenger() == null ? 0 : player.getMessenger().getId();
             //final int fid = player.getFamilyId();
@@ -1058,41 +1288,25 @@ public class Client extends ChannelInboundHandlerAdapter {
                     if (chrg != null) {
                         chrg.setCharacter(null);
                     }
-                    wserv.removePlayer(player);
+                    if (wserv != null) wserv.removePlayer(player);
                     //getChannelServer().removePlayer(player); already being done
 
                     player.saveCooldowns();
                     player.cancelAllDebuffs();
-                    player.saveCharToDB(true);
 
-                    player.logOff();
-                    if (GameConfig.getServerBoolean("instant_name_change")) {
-                        player.doPendingNameChange();
-                    }
-                    clear();
                 } else {
                     getChannelServer().removePlayer(player);
 
                     player.saveCooldowns();
                     player.cancelAllDebuffs();
-                    player.saveCharToDB();
+
                 }
             }
         }
 
-        SessionCoordinator.getInstance().closeSession(this, false);
-
-        if (!serverTransition && isLoggedIn()) {
-            updateLoginState(Client.LOGIN_NOTLOGGEDIN);
-
-            clear();
-        } else {
-            if (!Server.getInstance().hasCharacteridInTransition(this)) {
-                updateLoginState(Client.LOGIN_NOTLOGGEDIN);
-            }
-
-            engines = null; // thanks Tochi for pointing out a NPE here
-        }
+        if (hasPendingDisconnectPersistence()) return;
+        SessionCoordinator.getInstance().closeSession(this, true);
+        if (!serverTransition && !Server.getInstance().hasCharacteridInTransition(this)) updateLoginState(LOGIN_NOTLOGGEDIN);
     }
 
     private void clear() {
@@ -1112,9 +1326,52 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public void setCharacterOnSessionTransitionState(int cid) {
-        this.updateLoginState(Client.LOGIN_SERVER_TRANSITION);
-        this.inTransition = true;
-        Server.getInstance().setCharacteridInTransition(this, cid);
+        setCharacterOnSessionTransitionState(cid, true);
+    }
+
+    public void setCharacterOnSessionTransitionState(int cid, boolean reuseMemory) {
+        setCharacterOnSessionTransitionState(cid, reuseMemory, getChannel());
+    }
+
+    private void setCharacterOnSessionTransitionState(int cid, boolean reuseMemory, int targetChannel) {
+        if (player != null && type == Type.CHANNEL && reuseMemory) {
+            synchronized (player) {
+                if (player.getClient() != this || !player.prepareSaveForMigration()) {
+                    disconnect(false, false);
+                    throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE);
+                }
+                inMemoryTransition = true; inTransition = true; serverTransition = true;
+                try {
+                    Server.getInstance().setCharacteridInTransition(this, cid, targetChannel);
+                } catch (RuntimeException failure) {
+                    inMemoryTransition = false; inTransition = false; serverTransition = false; loggedIn = true;
+                    disconnect(false, false);
+                    throw failure;
+                }
+            }
+        } else {
+            if (player != null && player.saveForSessionHandoff() != Character.SaveResult.SAVED) {
+                forceDisconnect();
+                throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE);
+            }
+            if (!updateLoginState(LOGIN_SERVER_TRANSITION)) {
+                disconnect(false, false);
+                throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE);
+            }
+            inTransition = true;
+            Server.getInstance().setCharacteridInTransition(this, cid, targetChannel);
+        }
+    }
+
+    public void expireUnclaimedTransition(int cid) {
+        Character current = player;
+        if (current != null) {
+            synchronized (current) {
+                if (current.getId() != cid || current.getClient() != this) return;
+                inMemoryTransition = false; inTransition = false; serverTransition = false; loggedIn = true;
+            }
+        } else { inTransition = false; serverTransition = false; }
+        disconnect(false, false);
     }
 
     public int getChannel() {
@@ -1542,8 +1799,6 @@ public class Client extends ChannelInboundHandlerAdapter {
         player.clearBanishPlayerData();
         player.getClient().getChannelServer().removePlayer(player);
 
-        player.saveCharToDB();
-
         /*
          saveCharToDB后，数据库中的地图已经保存为ForcedReturnId，如果在当前地图下线，再上线，就会传送到ForcedReturnId对应的地图
          因为玩家登录时会优先取内存中的数据，没有才加载数据库，所以玩家切换频道取的是内存中的数据，而导致没有切换到ForcedReturnId对应的地图
@@ -1560,7 +1815,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             player.setMap(getChannelServer((byte) channel).getMapFactory().getMap(returnedMapId));
         }
 
-        player.setSessionTransitionState();
+        setCharacterOnSessionTransitionState(player.getId(), true, channel);
         try {
             sendPacket(PacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
         } catch (IOException e) {

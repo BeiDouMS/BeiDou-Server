@@ -1,5 +1,12 @@
 package org.gms.service;
 
+import org.gms.net.server.services.task.world.CharacterSaveService;
+import org.gms.net.server.coordinator.session.SessionCoordinator;
+import org.gms.net.server.coordinator.session.SessionCoordinator.AccountSession;
+import org.gms.client.Client;
+import org.gms.exception.BizException;
+import org.gms.exception.BizExceptionEnum;
+
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
@@ -199,11 +206,17 @@ public class AccountService {
 
     public void resetAllLoggedIn(int id) {
         RequireUtil.requireNotNull(findById(id), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
-
-        AccountsDO account = new AccountsDO();
-        account.setId(id);
-        account.setLoggedin(LOGIN_NOTLOGGEDIN);
-        accountsMapper.update(account);
+        AccountSession account = SessionCoordinator.getInstance().getAccountSession(id);
+        synchronized (account) {
+            Client registered = SessionCoordinator.getInstance().getClientByAccID(id);
+            if ((registered != null && registered.hasActiveConnection())
+                    || CharacterSaveService.getInstance().hasUnfinishedSession(id) || Client.hasPendingDisconnectForAccount(id)) {
+                throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE);
+            }
+            AccountsDO value = new AccountsDO(); value.setId(id); value.setLoggedin(LOGIN_NOTLOGGEDIN);
+            accountsMapper.update(value);
+            account.retire();
+        }
     }
 
     public void banAccount(int accountId, String reason) {
@@ -250,6 +263,7 @@ public class AccountService {
     }
 
     public void resetAllLoggedIn() {
+        if (CharacterSaveService.getInstance().hasUnfinishedSessions()) throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE);
         accountsMapper.updateAllLoggedIn(0);
     }
 

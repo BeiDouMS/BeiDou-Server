@@ -18,6 +18,9 @@
  */
 package org.gms.server;
 
+import org.gms.client.snapshot.CharacterSnapshot;
+import org.gms.client.snapshot.SnapshotCodecs;
+
 import org.gms.client.Client;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
@@ -363,4 +366,21 @@ public class Storage {
         }
     }
 
+
+    public CharacterSnapshot.StorageInfo toSnapshot() {
+        lock.lock();
+        try {
+            CharacterSnapshot.StorageInfo snapshot = new CharacterSnapshot.StorageInfo();
+            snapshot.storageid = id;
+            snapshot.slots = slots;
+            snapshot.meso = meso;
+            snapshot.items = new ArrayList<>();
+            for (Item item : items) {
+                snapshot.items.add(SnapshotCodecs.encodeItem(item, item.getInventoryType().getType()));
+            }
+            return snapshot;
+        } finally {
+            lock.unlock();
+        }
+    }
 }

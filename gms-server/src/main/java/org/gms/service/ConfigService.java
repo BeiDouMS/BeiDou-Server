@@ -92,6 +92,7 @@ public class ConfigService {
         RequireUtil.requireNotEmpty(condition.getConfigSubType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configSubType"));
         RequireUtil.requireNotEmpty(condition.getConfigCode(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configCode"));
         RequireUtil.requireNotEmpty(condition.getConfigValue(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configValue"));
+        validateCharacterSaveConcurrency(condition);
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .where(GAME_CONFIG_D_O.CONFIG_TYPE.eq(condition.getConfigType()))
                 .and(GAME_CONFIG_D_O.CONFIG_CODE.eq(condition.getConfigCode()));
@@ -118,6 +119,9 @@ public class ConfigService {
         RequireUtil.requireNotNull(condition.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
         RequireUtil.requireNotEmpty(condition.getConfigValue(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configValue"));
         GameConfigDO gameConfigDO = gameConfigMapper.selectOneById(condition.getId());
+        GameConfigDO validation = GameConfigDO.builder().configType(gameConfigDO.getConfigType())
+                .configCode(gameConfigDO.getConfigCode()).configValue(condition.getConfigValue()).build();
+        validateCharacterSaveConcurrency(validation);
         langResourceService.insertOrUpdateI18n(LangResourcesDO.builder()
                 .langBase("game_config")
                 .langCode(gameConfigDO.getConfigCode())
@@ -131,6 +135,18 @@ public class ConfigService {
                 .build());
         gameConfigDO.setConfigValue(condition.getConfigValue());
         GameConfig.update(gameConfigDO);
+    }
+
+    private static void validateCharacterSaveConcurrency(GameConfigDO config) {
+        if (!"server".equals(config.getConfigType())) return;
+        boolean realtime = "character_save_realtime_concurrency".equals(config.getConfigCode());
+        if (!realtime && !"character_save_shared_concurrency".equals(config.getConfigCode())) return;
+        try {
+            int value = Integer.parseInt(config.getConfigValue());
+            if (value < (realtime ? 0 : 1) || value > 8) throw new NumberFormatException();
+        } catch (NumberFormatException invalid) {
+            throw BizException.illegalArgument(I18nUtil.getExceptionMessage("CHARACTER_SAVE_CONCURRENCY_RANGE"));
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)

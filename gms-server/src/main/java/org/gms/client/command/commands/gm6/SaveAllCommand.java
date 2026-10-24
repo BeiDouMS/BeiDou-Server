@@ -25,6 +25,9 @@ package org.gms.client.command.commands.gm6;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import org.gms.client.command.Command;
 import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
@@ -41,14 +44,18 @@ public class SaveAllCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
+        List<CompletableFuture<Character.SaveResult>> saves = new ArrayList<>();
         for (World world : Server.getInstance().getWorlds()) {
             for (Character chr : world.getPlayerStorage().getAllCharacters()) {
-                chr.saveCharToDB();
+                saves.add(chr.requestAutosave());
             }
         }
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, I18nUtil.getMessage("SaveAllCommand.message2", player.getName())));
-        player.message(I18nUtil.getMessage("SaveAllCommand.message3"));
-        HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
-        hpMpAlertService.saveAll();
+        CompletableFuture.allOf(saves.toArray(CompletableFuture[]::new)).thenRunAsync(() -> {
+            long saved = saves.stream().map(CompletableFuture::join).filter(result -> result == Character.SaveResult.SAVED).count();
+            player.message(I18nUtil.getMessage("SaveAllCommand.result", saved, saves.size()-saved));
+            HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+            hpMpAlertService.saveAll();
+        });
     }
 }

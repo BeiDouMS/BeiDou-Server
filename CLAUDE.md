@@ -20,8 +20,7 @@ BeiDou-Server 是一个冒险岛（MapleStory v83，GMS 协议）私服服务端
 - 构建：在仓库根或 `gms-server/` 执行 `mvn clean package`，产物 `gms-server/target/BeiDou.jar`（spring-boot repackage，主类 `org.gms.ServerApplication`）。
 - 运行：`java -jar BeiDou.jar`，或 `gms-server/launch.bat`/`launch.sh`（脚本期望同目录下有捆绑 JRE `jdk-21.0.11+10-jre`）。
 - 开发调试：IDE 直接运行 `org.gms.ServerApplication.main`，**Working directory 必须设为 `gms-server`**（否则相对路径找 wz/scripts/logs 会错）。
-- 测试：`mvn test`。单个测试：`mvn -pl gms-server test -Dtest=CodeGen#genMapperAndEntity`。
-  - 注意：`src/test/java/` 下的 `CodeGen`、`ExportPatch`、`XmlDiff`、`XmlNode`、`XmlSort` 是**开发工具**而非 CI 单测——`CodeGen` 直连本地 `beidou` 库生成实体/Mapper，`ExportPatch`/`Xml*` 是 wz 补丁工具的 Java 版。无 MySQL 运行时 `mvn test` 会失败。
+- 验证：`mvn -o -pl gms-server -DskipTests compile`。仓库不保留 `src/test/`；需要额外验证时使用不生成测试文件的检查方式。
 
 ### 前端 gms-ui
 - Node 20.15.0 LTS + Yarn。
@@ -52,7 +51,7 @@ BeiDou-Server 是一个冒险岛（MapleStory v83，GMS 协议）私服服务端
 ### 数据库与持久层
 - MySQL 8+，库名 `beidou`（应用库）。Flyway 迁移脚本在 `src/main/resources/db/migration/V1.0.x__*.sql`，`validate-on-migrate: false`。新增表结构走新版本号迁移脚本。
 - 持久层用 **MyBatis-Flex**（不是 MyBatis-Plus）：实体在 `org.gms.dao.entity`，后缀 `DO`，`@Table` + Lombok `@Data/@Builder`；Mapper 在 `org.gms.dao.mapper`，启动 `@MapperScan("org.gms.dao.mapper")`。连接池 Druid。
-- 生成实体/Mapper：跑 `CodeGen#genMapperAndEntity`（test 作用域，mybatis-flex-codegen），改 `globalConfig.setGenerateTable(...)` 指定表名，实体后缀固定 `DO`。
+- 实体后缀固定 `DO`；新增实体/Mapper 按现有 MyBatis-Flex 结构维护。
 
 ### REST API 规范
 - 端口 8686。Swagger：`http://localhost:8686/swagger-ui/index.html`——**默认关闭**（`application.yml` 里 `springdoc.api-docs.enabled` 和 `swagger-ui.enabled` 都是 false），开发时需手动开。
@@ -91,7 +90,9 @@ BeiDou-Server 是一个冒险岛（MapleStory v83，GMS 协议）私服服务端
 
 ## 非显而易见的实现细节
 
-- **`saveCharToDB` 有两个版本**：角色保存实际生效的是 `UPDATE` 版本，而**不是** `CharacterService.insertSelective` 那版。排查角色存档问题时要认准实际写入路径。
+- **角色存档统一入口**：`Character` 先取得私有深快照，再提交进程级 `CharacterSaveService`，由 `CharacterSnapshotService` 使用同一事务更新角色、物品、商城及仓库；`CharacterService.saveCharToDB` 也委托到该入口。相同账号串行，不同账号有限并行。`game_config.character_save_realtime_concurrency` 独立设置实时专用并发数（0–8，默认 **2**），`character_save_shared_concurrency` 独立设置共享并发数（1–8，默认 **2**），总并发为两者之和，均可热调整。自动存档只用共享名额，实时存档可使用两类名额；普通磁盘应从低并发开始。
+- **登录与迁移**：普通重登必须等旧会话最终存档结束并释放账号；同世界切线/商城返回复用内存角色，后继会话的写入不能越过旧会话。GM 跨世界迁移等待最终保存后再读库。失败累计三次后丢弃最终存档并放行的策略沿用 datas-server，不能将其描述为持续数据库故障下也绝不丢进度。
+- **自动存档**：每个 World 使用 fixed-delay，首轮及每轮结束后间隔 **1 小时**。不要恢复为逐角色同步 SQL 或固定频率追赶积压。DDL/索引和参数迁移仍需在获准部署时执行。
 - **账号/角色级联删除有坑**：`deleteCharacterEntry` 存在 NPE 风险，扩展值表（`ExtendValue`）会被复用，且鉴权与删除逻辑分离。改动账号/角色删除流程前先把这条链路读全。
 
 ## wz 补丁工作流
@@ -109,7 +110,7 @@ BeiDou-Server 是一个冒险岛（MapleStory v83，GMS 协议）私服服务端
 ```bash
 # 服务端
 mvn clean package                          # 构建 gms-server/target/BeiDou.jar
-mvn -pl gms-server test -Dtest=CodeGen#genMapperAndEntity   # 跑单个测试/代码生成
+mvn -o -pl gms-server -DskipTests compile  # 编译验证，不连接数据库
 java -jar gms-server/target/BeiDou.jar     # 运行（需本地 MySQL 8 已启动）
 
 # 前端

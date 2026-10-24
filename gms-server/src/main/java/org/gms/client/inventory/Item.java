@@ -55,6 +55,14 @@ public class Item implements Comparable<Item> {
         this.flag = 0;
     }
 
+    /** 仅供脱离在线背包的持久化副本：保留原 petid/flag，不重新读宠物或应用 WZ 规则。 */
+    public static Item forPersistence(int id, short position, short quantity, int petId, short flag) {
+        Item item = new Item(id, position, quantity);
+        item.petid = petId;
+        item.flag = flag;
+        return item;
+    }
+
     public Item(int id, short position, short quantity, int petid) {
         this.id = id;
         this.position = position;

@@ -29,9 +29,13 @@ import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.service.HpMpAlertService;
 import org.gms.util.Pair;
+import org.gms.util.I18nUtil;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -43,7 +47,7 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
     // 不可重入保护：上一轮未结束/异常未退出时，下一轮直接跳过，
     // 避免 scheduleAtFixedRate/scheduleWithFixedDelay 在单轮卡顿后追赶积压，
     // 导致多个保存任务并发抢同一角色的 synchronized 锁或同时打满 DB 连接池。
-    private static final AtomicBoolean running = new AtomicBoolean(false);
+    private final AtomicBoolean running = new AtomicBoolean(false);
 
     @Override
     public void run() {
@@ -52,25 +56,30 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
         }
 
         if (!running.compareAndSet(false, true)) {
-            log.warn("CharacterAutosaverTask skipped: previous round still running");
+            log.warn(I18nUtil.getLogMessage("CharacterSave.autosaveSkipped"));
             return;
         }
 
         long startMs = System.currentTimeMillis();
         int onlineCount = 0;
         int savedCount = 0;
+        int failedCount = 0;
         try {
             PlayerStorage ps = wserv.getPlayerStorage();
             Collection<Character> all = ps.getAllCharacters();
+            List<CompletableFuture<Character.SaveResult>> saves = new ArrayList<>();
             for (Character chr : all) {
                 if (chr == null) {
                     continue;
                 }
                 onlineCount++;
                 if (chr.isLoggedIn()) {
-                    chr.saveCharToDB(false);
-                    savedCount++;
+                    saves.add(chr.requestAutosave());
                 }
+            }
+            for (CompletableFuture<Character.SaveResult> save : saves) {
+                if (save.join() == Character.SaveResult.SAVED) savedCount++;
+                else failedCount++;
             }
             HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
             hpMpAlertService.saveAll();
@@ -81,8 +90,8 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
             }
         } finally {
             long cost = System.currentTimeMillis() - startMs;
-            log.info("CharacterAutosaverTask done: world={}, online={}, saved={}, cost={}ms",
-                    wserv.getId(), onlineCount, savedCount, cost);
+            log.info(I18nUtil.getLogMessage("CharacterSave.autosaveDone"),
+                    wserv.getId(), onlineCount, savedCount, failedCount, cost);
             running.set(false);
         }
     }

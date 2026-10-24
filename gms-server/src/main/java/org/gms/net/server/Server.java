@@ -114,7 +114,10 @@ public class Server {
     private final Map<Integer, Set<Integer>> accountChars = new HashMap<>();
     private final Map<Integer, Short> accountCharacterCount = new HashMap<>();
     private final Map<Integer, Integer> worldChars = new HashMap<>();
-    private final Map<String, Integer> transitioningChars = new HashMap<>();
+    private final Map<Integer, CharacterTransition> transitioningChars = new HashMap<>();
+    private long nextTransitionGeneration;
+    private record CharacterTransition(Client source, String remoteHost, int targetWorld, int targetChannel,
+                                       long generation, long expiresAt) {}
     private final List<Pair<Integer, String>> worldRecommendedList = new LinkedList<>();
     private final Map<Integer, Guild> guilds = new HashMap<>(100);
     private final Map<Client, Long> inLoginState = new HashMap<>(100);
@@ -159,6 +162,10 @@ public class Server {
      * 用 volatile 标志让重入调用在 synchronized 外直接返回。
      */
     private volatile boolean shuttingDown = false;
+
+    public boolean isShuttingDown() {
+        return shuttingDown;
+    }
 
     private static final NpcService npcService = ServerManager.getApplicationContext().getBean(NpcService.class);
     private static final NxCouponService nxCouponService = ServerManager.getApplicationContext().getBean(NxCouponService.class);
@@ -1535,60 +1542,67 @@ public class Server {
     }
 
     public void setCharacteridInTransition(Client client, int charId) {
-        String remoteIp = getRemoteHost(client);
+        setCharacteridInTransition(client, charId, client.getChannel());
+    }
 
+    public void setCharacteridInTransition(Client client, int charId, int targetChannel) {
+        long generation;
         lgnWLock.lock();
         try {
-            transitioningChars.put(remoteIp, charId);
-        } finally {
-            lgnWLock.unlock();
+            if (transitioningChars.containsKey(charId)) throw new IllegalStateException(I18nUtil.getExceptionMessage("CHARACTER_SAVE_UNAVAILABLE"));
+            generation = ++nextTransitionGeneration;
+            int targetWorld = client.getPlayer() == null ? client.getWorld() : client.getPlayer().getWorld();
+            transitioningChars.put(charId, new CharacterTransition(client, getRemoteHost(client), targetWorld, targetChannel, generation,
+                    System.nanoTime() + SECONDS.toNanos(30)));
+        } finally { lgnWLock.unlock(); }
+        try {
+            TimerManager.getInstance().schedule(() -> {
+                boolean expired;
+                lgnWLock.lock();
+                try {
+                    CharacterTransition pending = transitioningChars.get(charId);
+                    expired = pending != null && pending.source() == client && pending.generation() == generation;
+                    if (expired) transitioningChars.remove(charId);
+                } finally { lgnWLock.unlock(); }
+                if (expired) Thread.startVirtualThread(() -> client.expireUnclaimedTransition(charId));
+            }, 30_000L);
+        } catch (RuntimeException failure) {
+            lgnWLock.lock();
+            try { transitioningChars.remove(charId); } finally { lgnWLock.unlock(); }
+            client.expireUnclaimedTransition(charId);
+            throw failure;
         }
     }
 
     public boolean validateCharacteridInTransition(Client client, int charId) {
-        if (!GameConfig.getServerBoolean("use_ip_validation")) {
-            return true;
-        }
-
-        String remoteIp = getRemoteHost(client);
-
         lgnWLock.lock();
         try {
-            Integer cid = transitioningChars.remove(remoteIp);
-            return cid != null && cid.equals(charId);
-        } finally {
-            lgnWLock.unlock();
-        }
+            CharacterTransition pending = transitioningChars.get(charId);
+            if (pending == null || System.nanoTime() - pending.expiresAt() >= 0
+                    || client.getSessionId() <= pending.source().getSessionId()
+                    || client.getWorld() != pending.targetWorld() || client.getChannel() != pending.targetChannel()
+                    || (GameConfig.getServerBoolean("use_ip_validation") && !pending.remoteHost().equals(getRemoteHost(client)))) return false;
+            client.setAccID(pending.source().getAccID());
+            transitioningChars.remove(charId);
+            return true;
+        } finally { lgnWLock.unlock(); }
     }
 
     public Integer freeCharacteridInTransition(Client client) {
-        if (!GameConfig.getServerBoolean("use_ip_validation")) {
-            return null;
-        }
-
-        String remoteIp = getRemoteHost(client);
-
         lgnWLock.lock();
         try {
-            return transitioningChars.remove(remoteIp);
-        } finally {
-            lgnWLock.unlock();
-        }
+            for (var iterator = transitioningChars.entrySet().iterator(); iterator.hasNext();) {
+                var entry = iterator.next();
+                if (entry.getValue().source() == client) { iterator.remove(); return entry.getKey(); }
+            }
+            return null;
+        } finally { lgnWLock.unlock(); }
     }
 
     public boolean hasCharacteridInTransition(Client client) {
-        if (!GameConfig.getServerBoolean("use_ip_validation")) {
-            return true;
-        }
-
-        String remoteIp = getRemoteHost(client);
-
         lgnRLock.lock();
-        try {
-            return transitioningChars.containsKey(remoteIp);
-        } finally {
-            lgnRLock.unlock();
-        }
+        try { return transitioningChars.values().stream().anyMatch(value -> value.source() == client); }
+        finally { lgnRLock.unlock(); }
     }
 
     public void registerLoginState(Client c) {
@@ -1676,9 +1690,24 @@ public class Server {
         if (getWorlds() == null) {
             return;//already shutdown
         }
+        List<Map.Entry<Integer, CharacterTransition>> unclaimed;
+        lgnWLock.lock();
+        try {
+            unclaimed = new ArrayList<>(transitioningChars.entrySet());
+            transitioningChars.clear();
+        } finally { lgnWLock.unlock(); }
+        for (var transition : unclaimed) transition.getValue().source().expireUnclaimedTransition(transition.getKey());
+        for (World world : getWorlds()) {
+            for (Character character : world.getPlayerStorage().getAllCharacters()) {
+                if (character.isLoggedIn() && !character.saveCharToDB(true)) {
+                    log.error(I18nUtil.getLogMessage("CharacterSave.shutdownFailed"), character.getId());
+                }
+            }
+        }
         for (World w : getWorlds()) {
             w.shutdown();
         }
+        Client.flushPendingDisconnectsForMaintenance();
 
         hpMpAlertService.saveAll();
         hpMpAlertService.clear();

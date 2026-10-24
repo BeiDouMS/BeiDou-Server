@@ -21,6 +21,9 @@
 */
 package org.gms.client.inventory;
 
+import lombok.extern.slf4j.Slf4j;
+import org.gms.util.I18nUtil;
+
 import org.gms.client.Character;
 import org.gms.util.CashIdGenerator;
 import org.gms.constants.game.ExpTable;
@@ -42,6 +45,7 @@ import java.util.List;
 /**
  * @author Matze
  */
+@Slf4j
 public class Pet extends Item {
     private String name;
     private int uniqueid;
@@ -107,8 +111,15 @@ public class Pet extends Item {
     }
 
     public void saveToDb() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, summoned = ?, flag = ? WHERE petid = ?")) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            saveToDbChecked(con);
+        } catch (SQLException failure) {
+            log.error(I18nUtil.getLogMessage("CharacterSave.petFailed"), getUniqueId(), failure);
+        }
+    }
+
+    public void saveToDbChecked(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("UPDATE pets SET name=?, level=?, closeness=?, fullness=?, summoned=?, flag=? WHERE petid=?")) {
             ps.setString(1, getName());
             ps.setInt(2, getLevel());
             ps.setInt(3, getTameness());
@@ -116,9 +127,7 @@ public class Pet extends Item {
             ps.setInt(5, isSummoned() ? 1 : 0);
             ps.setInt(6, getPetAttribute());
             ps.setInt(7, getUniqueId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            if (ps.executeUpdate() != 1) throw new SQLException(I18nUtil.getExceptionMessage("CHARACTER_SAVE_FAILED"));
         }
     }
 

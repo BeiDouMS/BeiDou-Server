@@ -17,9 +17,10 @@ import org.gms.model.dto.CharacterListItemDTO;
 import org.gms.model.dto.ChrOnlineListReqDTO;
 import org.gms.model.dto.ChrOnlineListRtnDTO;
 import org.gms.exception.BizException;
+import org.gms.exception.BizExceptionEnum;
+import org.gms.net.server.services.task.world.CharacterSaveService;
 import org.gms.model.pojo.SkillEntry;
 import org.gms.net.server.Server;
-import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.net.server.guild.GuildCharacter;
 import org.gms.net.server.world.Messenger;
 import org.gms.net.server.world.Party;
@@ -33,7 +34,6 @@ import org.gms.server.maps.*;
 import org.gms.util.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Connection;
@@ -253,6 +253,10 @@ public class CharacterService {
         if (charactersDO == null) {
             return;
         }
+        if (CharacterSaveService.getInstance().hasUnfinishedSession(charactersDO.getAccountid())
+                || Client.hasPendingDisconnectForAccount(charactersDO.getAccountid())) {
+            throw new BizException(BizExceptionEnum.CHARACTER_SAVE_UNAVAILABLE);
+        }
         int world = charactersDO.getWorld();
         // 删除guild（传 null character：跳过 setGuildMemberOnline，仍执行 leaveGuild/disbandGuild）
         if (Optional.ofNullable(charactersDO.getGuildid()).orElse(0) > 0) {
@@ -343,16 +347,8 @@ public class CharacterService {
         worldTransferService.cancelPendingWorldTransfer(cid, false);
     }
 
-    @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
     public void saveCharToDB(Character player, boolean notAutosave) {
-        if (!player.isLoggedIn()) {
-            return;
-        }
-        log.info(I18nUtil.getLogMessage(notAutosave ? "Character.saveCharToDB.info1" : "Character.saveCharToDB.info2"), player.getName());
-        Server.getInstance().updateCharacterEntry(player);
-
-        CharactersDO cdo = Character.toCharactersDO(player);
-        charactersMapper.insertSelective(cdo);
+        player.saveCharToDB(notAutosave);
     }
 
     public Character loadCharFromDB(int cid, Client client, boolean channelServer) {

@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.server;
 
+import org.gms.client.snapshot.CharacterSnapshot;
+import org.gms.client.snapshot.SnapshotCodecs;
+
 import lombok.Getter;
 import net.jcip.annotations.GuardedBy;
 import org.gms.client.inventory.Equip;
@@ -583,5 +586,26 @@ public class CashShop {
                 .priority(0)
                 .build()
                 .toItem();
+    }
+
+    public CharacterSnapshot.CashShopInfo toSnapshot() {
+        lock.lock();
+        try {
+            CharacterSnapshot.CashShopInfo info = new CharacterSnapshot.CashShopInfo();
+            info.nxCredit = nxCredit;
+            info.maplePoint = maplePoint;
+            info.nxPrepaid = nxPrepaid;
+            info.characterId = characterId;
+            info.factoryValue = factory != null ? factory.getValue() : 0;
+            info.items = new ArrayList<>();
+            for (Item item : inventory) {
+                InventoryType type = item.getInventoryType();
+                info.items.add(SnapshotCodecs.encodeItem(item, type != null ? type.getType() : InventoryType.CASH.getType()));
+            }
+            info.wishlists = new ArrayList<>(wishList);
+            return info;
+        } finally {
+            lock.unlock();
+        }
     }
 }

@@ -4,6 +4,7 @@ import org.gms.util.I18nUtil;
 
 public enum BizExceptionEnum implements BaseErrorInfoInterface {
 
+    CHARACTER_SAVE_UNAVAILABLE(50004, I18nUtil.getExceptionMessage("CHARACTER_SAVE_UNAVAILABLE")),
     SUCCESS(20000, I18nUtil.getExceptionMessage("SUCCESS")),
     BODY_NOT_MATCH(40000, I18nUtil.getExceptionMessage("BODY_NOT_MATCH")),
     REQUEST_METHOD_SUPPORT(40001, I18nUtil.getExceptionMessage("REQUEST_METHOD_SUPPORT")),
