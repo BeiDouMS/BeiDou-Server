@@ -24,6 +24,9 @@ package org.gms.client;
 import org.gms.server.StatEffect;
 import org.gms.server.life.Element;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,10 @@ public class Skill {
     private int animationTime;
     private final int job;
     private boolean action;
+
+    @Getter
+    @Setter 
+    private SkillSummonNode summonNode;
 
     public Skill(int id) {
         this.id = id;
