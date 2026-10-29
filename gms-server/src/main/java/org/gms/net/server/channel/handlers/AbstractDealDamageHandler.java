@@ -315,11 +315,12 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                     if (attack.magic) { // thanks BHB, Alex (CanIGetaPR) for noticing no immunity status check here
                         if (monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
-                            Collections.fill(onedList, 1);
+                            // 免疫只压低已命中的伤害，MISS 保持为 0，不能据此触发敛财。
+                            onedList.replaceAll(damage -> decodeDamage(damage) > 0 ? 1 : 0);
                         }
                     } else {
                         if (monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
-                            Collections.fill(onedList, 1);
+                            onedList.replaceAll(damage -> decodeDamage(damage) > 0 ? 1 : 0);
                         }
                     }
 
@@ -347,9 +348,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             int delay = 0;
                             final int maxmeso = player.getBuffedValue(BuffStat.PICKPOCKET);
                             for (Integer eachd : onedList) {
-                                if (pickpocket.getEffect(picklv).makeChanceResult()) {
-                                    final int eachdf = decodeDamage(eachd);
+                                // 先解码再排除 MISS：负数是暴击显示位，不能当成零伤害。
+                                final int eachdf = decodeDamage(eachd);
+                                if (eachdf <= 0) {
+                                    continue;
+                                }
 
+                                if (pickpocket.getEffect(picklv).makeChanceResult()) {
                                     TimerManager.getInstance().schedule(() -> map.spawnMesoDrop(Math.min((int) Math.max(((double) eachdf / (double) 20000) * (double) maxmeso, 1), maxmeso), new Point((int) (monster.getPosition().getX() + Randomizer.nextInt(100) - 50), (int) (monster.getPosition().getY())), monster, player, true, (byte) 2), delay);
                                     delay += 100;
                                 }
