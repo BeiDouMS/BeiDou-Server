@@ -136,22 +136,27 @@ function action(mode, type, selection) {
                         cm.dispose();
                         return;
                     }
-                    if (cm.partyMembersInMap() < 2) {
-                        cm.sendOk("请确认当前地图中有 2 名或更多队员。 ");
+                    const GameConfig = Java.type('org.gms.config.GameConfig');
+                    var minParty = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : 2;
+                    if (cm.partyMembersInMap() < minParty) {
+                        cm.sendOk("请确认当前地图中有 " + minParty + " 名或更多队员。 ");
                         cm.dispose();
                         return;
                     }
                 }
 
-                if (cm.getPlayer().getLevel() < 40) {
-                    cm.sendOk("你必须达到 40 级以上才能进入这个组队任务。 ");
-                    cm.dispose();
-                    return;
-                }
-                if (selection < 3 && cm.getPlayer().getLevel() > 60) {
-                    cm.sendOk("等级超过 60 级的玩家只能进入地狱模式。 ");
-                    cm.dispose();
-                    return;
+                const GameConfigLvl = Java.type('org.gms.config.GameConfig');
+                if (!GameConfigLvl.getServerBoolean("use_enable_party_level_limit_lift")) {
+                    if (cm.getPlayer().getLevel() < 40) {
+                        cm.sendOk("你必须达到 40 级以上才能进入这个组队任务。 ");
+                        cm.dispose();
+                        return;
+                    }
+                    if (selection < 3 && cm.getPlayer().getLevel() > 60) {
+                        cm.sendOk("等级超过 60 级的玩家只能进入地狱模式。 ");
+                        cm.dispose();
+                        return;
+                    }
                 }
                 if (selection == 1) {
                     mode = "NORMAL";
