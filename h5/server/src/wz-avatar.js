@@ -17,7 +17,7 @@ import * as wz from '@tybys/wz';
 import Jimp from 'jimp';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.resolve(__dirname, '../../../BeiDou-ClientV17/BeiDou-Client/Data');
+const DATA_DIR = path.resolve(__dirname, '../../../../BeiDou-ClientV17/BeiDou-Client/Data');
 
 /** 参与合成的装备目录（Character.wz 子目录名） */
 const EQUIP_DIRS = ['Cap', 'Accessory', 'Coat', 'Longcoat', 'Pants', 'Shoes', 'Glove', 'Cape', 'Shield', 'Weapon'];

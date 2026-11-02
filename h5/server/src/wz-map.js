@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import * as wz from '@tybys/wz';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.resolve(__dirname, '../../../BeiDou-ClientV17/BeiDou-Client/Data');
+const DATA_DIR = path.resolve(__dirname, '../../../../BeiDou-ClientV17/BeiDou-Client/Data');
 
 const pngCache = new Map();
 const fileCache = new Map();

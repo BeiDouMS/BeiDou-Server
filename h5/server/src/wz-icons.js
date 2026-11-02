@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import * as wz from '@tybys/wz';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.resolve(__dirname, '../../../BeiDou-ClientV17/BeiDou-Client/Data');
+const DATA_DIR = path.resolve(__dirname, '../../../../BeiDou-ClientV17/BeiDou-Client/Data');
 
 const CATEGORY_DIR = { 2: 'Consume', 3: 'Install', 4: 'Etc', 5: 'Cash', 9: 'Special' };
 const iconCache = new Map();
