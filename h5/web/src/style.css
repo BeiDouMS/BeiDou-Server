@@ -1,0 +1,177 @@
+:root {
+  --bg-deep: #07131f;
+  --bg-panel: #142c3c;
+  --bg-panel-2: #1c3a4c;
+  --line: #6d5734;
+  --line-soft: #31505e;
+  --text: #f3e9d5;
+  --text-dim: #9fb3b8;
+  --gold: #ffd15c;
+  --gold-deep: #d99a34;
+  --cyan: #6fe3ff;
+  --green: #83e39b;
+  --red: #ff756b;
+  --orange: #ff9e3d;
+  --blue-btn: #2f6fe0;
+  --blue-btn-dark: #1d4fa8;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--bg-deep);
+}
+
+body {
+  font-family: 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
+  color: var(--text);
+  font-size: 14px;
+  overscroll-behavior-y: none;
+}
+
+#app {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background:
+    radial-gradient(1000px 460px at 50% -90px, rgba(255, 158, 61, 0.16), transparent 70%),
+    radial-gradient(720px 420px at 100% 16%, rgba(64, 190, 190, 0.12), transparent 72%),
+    radial-gradient(620px 520px at -10% 82%, rgba(46, 120, 140, 0.16), transparent 70%),
+    linear-gradient(180deg, #0c2432 0%, #071420 55%, #050d16 100%);
+  position: relative;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+input {
+  font-family: inherit;
+  color: var(--text);
+  outline: none;
+}
+
+.pixel-img {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+}
+
+/* 客户端风格按钮 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border: 1px solid #ffdf9a;
+  background: linear-gradient(180deg, #ffe08a 0%, #ffbf4d 48%, #ee921d 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 3px 0 #8d5109, 0 6px 14px rgba(0, 0, 0, 0.38);
+  color: #3d2400;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.08s ease, filter 0.15s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+}
+
+.btn[disabled] {
+  opacity: 0.5;
+  filter: grayscale(0.4);
+  pointer-events: none;
+}
+
+.btn.gold {
+  border-color: #fff0b8;
+  background: linear-gradient(180deg, #fff0a8 0%, #ffd15c 48%, #f0a41e 100%);
+  color: #3b2500;
+  text-shadow: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 3px 0 #8d5109, 0 6px 14px rgba(0, 0, 0, 0.38);
+}
+
+.btn.ghost {
+  border-color: rgba(214, 166, 91, 0.55);
+  background: linear-gradient(180deg, #274b5c 0%, #142e3d 100%);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 3px 0 #081823, 0 5px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn.small {
+  min-height: 32px;
+  font-size: 13px;
+  padding: 0 12px;
+  border-radius: 5px;
+}
+
+.btn.block {
+  width: 100%;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(31, 58, 72, 0.97), rgba(13, 30, 42, 0.97));
+  border: 1px solid rgba(214, 166, 91, 0.48);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 224, 160, 0.14), inset 0 0 0 1px rgba(0, 0, 0, 0.16), 0 6px 18px rgba(0, 0, 0, 0.38);
+}
+
+.muted {
+  color: var(--text-dim);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid rgba(214, 166, 91, 0.42);
+  background: rgba(20, 44, 57, 0.72);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.chip.on {
+  color: #07351a;
+  border-color: #b8ffd0;
+  background: linear-gradient(180deg, #9df0b6, #4fc97c);
+  font-weight: 700;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(214, 166, 91, 0.55), transparent);
+  margin: 10px 0;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #6d5734;
+  border-radius: 4px;
+}

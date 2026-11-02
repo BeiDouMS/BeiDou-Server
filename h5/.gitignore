@@ -1,0 +1,17 @@
+# 依赖与构建产物
+node_modules/
+web/dist/
+
+# 运行时日志
+*.log
+
+# 临时调试/测试脚本与截图产物
+server/probe-avatar*.mjs
+server/render-test*.mjs
+server/parts-strip.mjs
+server/test-avatar.mjs
+server/avatar-*.png
+tools/probe*.js
+
+# 可再生成的挂机目录数据（tools/gen-catalog.js 生成）
+data/catalog.json

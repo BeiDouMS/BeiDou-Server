@@ -1,0 +1,18 @@
+{
+  "name": "beidou-h5-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "北斗冒险岛 H5 挂机后端：账号登录 + 转发游戏服权威接口 + WZ 图标",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@tybys/wz": "^1.7.1",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "express": "^4.19.2",
+    "mysql2": "^3.11.0"
+  }
+}
