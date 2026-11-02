@@ -687,6 +687,45 @@ public class AssignAPProcessor {
         }
     }
     /**
+     * 洗能力点卷轴（5050000）：一次性把四项基础属性上投入的 AP 全部返还为可用 AP。
+     * <p>
+     * 仅重置 STR/DEX/INT/LUK（每项还原到 4），不涉及 HP/MP 上已投的点，
+     * 因此不会改动最大 HP/MP 的计算结果，也就不会洗血、洗蓝。
+     *
+     * @param c 客户端连接对象
+     * @return 是否成功；没有可重置点数时返回 false，道具不被消耗
+     */
+    public static boolean APFullResetAction(Client c) {
+        reloadConfig();
+        c.lockClient();
+        try {
+            Character player = c.getPlayer();
+            int str = player.getStr();
+            int dex = player.getDex();
+            int intValue = player.getInt();
+            int luk = player.getLuk();
+
+            int refund = (str - 4) + (dex - 4) + (intValue - 4) + (luk - 4);
+            if (str < 4 || dex < 4 || intValue < 4 || luk < 4 || refund <= 0) {
+                player.message("当前没有可重置的能力点。");
+                c.sendPacket(PacketCreator.enableActions());
+                return false;
+            }
+
+            if (!player.assignStrDexIntLuk(4 - str, 4 - dex, 4 - intValue, 4 - luk)) {
+                player.message("AP重置操作执行失败。");
+                c.sendPacket(PacketCreator.enableActions());
+                return false;
+            }
+
+            player.dropMessage(6, "[洗能力点卷轴] 已返还 " + refund + " 点能力点，请重新分配。");
+            return true;
+        } finally {
+            c.unlockClient();
+        }
+    }
+
+    /**
      * 手动分配AP点到指定属性
      * 处理流程：
      * 1. 锁定客户端防止并发操作

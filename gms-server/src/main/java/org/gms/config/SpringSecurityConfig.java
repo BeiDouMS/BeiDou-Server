@@ -67,6 +67,8 @@ public class SpringSecurityConfig {
                 .sessionManagement((config) -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((config) -> config
                         .requestMatchers("/auth/**").permitAll()
+                        // H5 挂机接口使用独立的共享密钥鉴权，见 H5Controller
+                        .requestMatchers("/h5/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         // 允许访问前端web

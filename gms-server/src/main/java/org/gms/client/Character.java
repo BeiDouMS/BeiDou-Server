@@ -498,6 +498,7 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private float familyDrop = 1;
     private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+    private static final org.gms.service.H5HangupService h5HangupService = ServerManager.getApplicationContext().getBean(org.gms.service.H5HangupService.class);
     private static final NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
     private static final WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
     private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
@@ -9629,6 +9630,8 @@ public class Character extends AbstractCharacterObject {
                 .id(id)
                 .lastLogoutTime(new Timestamp(System.currentTimeMillis()))
                 .build());
+        // H5 挂机离线结算依赖登出时的战斗力快照
+        h5HangupService.snapshotOnLogout(this);
     }
 
 

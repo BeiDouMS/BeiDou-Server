@@ -55,6 +55,7 @@ import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
+import org.gms.service.H5HangupService;
 import org.gms.service.HpMpAlertService;
 import org.gms.util.I18nUtil;
 import org.gms.util.packets.WeddingPackets;
@@ -81,6 +82,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     private final NoteService noteService;
 
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+    private static final H5HangupService h5HangupService = ServerManager.getApplicationContext().getBean(H5HangupService.class);
 
     public PlayerLoggedinHandler(NoteService noteService) {
         this.noteService = noteService;
@@ -271,6 +273,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
             player.getMap().addPlayer(player);
             player.visitMap(player.getMap());
+
+            // H5 挂机待发放收益在登录完成时自动到账
+            h5HangupService.claimOnLogin(player);
 
             BuddyList bl = player.getBuddylist();
             int[] buddyIds = bl.getBuddyIds();

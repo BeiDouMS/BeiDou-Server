@@ -300,6 +300,7 @@ public class ItemId {
     public static final int CHALKBOARD_2 = 5370001;
     public static final int REMOTE_GACHAPON_TICKET = 5451000;
     public static final int AP_RESET = 5050000;
+    public static final int AP_FULL_RESET = 5050099;
     public static final int NAME_CHANGE = 5400000;
     public static final int WORLD_TRANSFER = 5401000;
     public static final int MAPLE_LIFE_B = 5432000;

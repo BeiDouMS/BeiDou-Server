@@ -178,7 +178,12 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 return;
             }
 
-            if (itemId > ItemId.AP_RESET) {
+            if (itemId == ItemId.AP_FULL_RESET) {
+                // AP重置卷轴（5050099）：一次性返还四项属性上投入的全部 AP，客户端不传 APTo/APFrom
+                if (!AssignAPProcessor.APFullResetAction(c)) {
+                    return;
+                }
+            } else if (itemId > ItemId.AP_RESET) {
                 int SPTo = p.readInt();
                 if (!AssignSPProcessor.canSPAssign(c, SPTo)) {  // exploit found thanks to Arnah
                     return;
@@ -225,10 +230,11 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     }
                 }
             } else {
-                int APTo = p.readInt();
-                int APFrom = p.readInt();
+                // 洗能力点卷轴（5050000）：客户端仍会传 APTo/APFrom，这里忽略其选择，直接返还四项属性上投入的全部 AP
+                p.readInt();
+                p.readInt();
 
-                if (!AssignAPProcessor.APResetAction(c, APFrom, APTo)) {
+                if (!AssignAPProcessor.APFullResetAction(c)) {
                     return;
                 }
             }

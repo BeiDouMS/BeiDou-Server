@@ -343,6 +343,11 @@ public class ItemInformationProvider {
     private static short getExtraSlotMaxFromPlayer(Client c, int itemId) {
         short ret = 0;
 
+        // 离线场景（如 H5 离线发放）没有 Client，个人加成为 0
+        if (c == null) {
+            return ret;
+        }
+
         // thanks GMChuck for detecting player sensitive data being cached into getSlotMax
         if (ItemConstants.isThrowingStar(itemId)) {
             if (c.getPlayer().getJob().isA(Job.NIGHTWALKER1)) {
@@ -1253,29 +1258,46 @@ public class ItemInformationProvider {
         return nEquip.copy();
     }
 
-    private static short getRandStat(short defaultValue, int maxRange) {
-        if (defaultValue == 0) {
-            return 0;
+    /** 掉落装备属性浮动区间：下限 -10%、上限 +50%，可用 server 配置 equip_drop_stat_min_percent / equip_drop_stat_max_percent 覆盖 */
+    private static final double DEFAULT_EQUIP_DROP_STAT_MIN_PERCENT = -0.10D;
+    private static final double DEFAULT_EQUIP_DROP_STAT_MAX_PERCENT = 0.50D;
+
+    /**
+     * 掉落装备属性按百分比浮动：在 [base×(1+min), base×(1+max)] 区间内均匀取值并四舍五入。
+     * 底装为 0 的属性保持 0；浮动后低于 1 的属性保底为 1。
+     */
+    private static short getRandStat(short defaultValue, double minPercent, double maxPercent) {
+        if (defaultValue == 0 || maxPercent <= minPercent) {
+            return defaultValue;
         }
-        int lMaxRange = (int) Math.min(Math.ceil(defaultValue * 0.1), maxRange);
-        return (short) ((defaultValue - lMaxRange) + Math.floor(Randomizer.nextDouble() * (lMaxRange * 2 + 1)));
+        double offset = minPercent + Randomizer.nextDouble() * (maxPercent - minPercent);
+        short result = (short) Math.round(defaultValue * (1 + offset));
+        return result < 1 ? 1 : result;
     }
 
     public Equip randomizeStats(Equip equip) {
-        equip.setStr(getRandStat(equip.getStr(), 5));
-        equip.setDex(getRandStat(equip.getDex(), 5));
-        equip.setInt(getRandStat(equip.getInt(), 5));
-        equip.setLuk(getRandStat(equip.getLuk(), 5));
-        equip.setMatk(getRandStat(equip.getMatk(), 5));
-        equip.setWatk(getRandStat(equip.getWatk(), 5));
-        equip.setAcc(getRandStat(equip.getAcc(), 5));
-        equip.setAvoid(getRandStat(equip.getAvoid(), 5));
-        equip.setJump(getRandStat(equip.getJump(), 5));
-        equip.setSpeed(getRandStat(equip.getSpeed(), 5));
-        equip.setWdef(getRandStat(equip.getWdef(), 10));
-        equip.setMdef(getRandStat(equip.getMdef(), 10));
-        equip.setHp(getRandStat(equip.getHp(), 10));
-        equip.setMp(getRandStat(equip.getMp(), 10));
+        Double minConfigured = GameConfig.getDouble("equip_drop_stat_min_percent");
+        Double maxConfigured = GameConfig.getDouble("equip_drop_stat_max_percent");
+        double minPercent = minConfigured == null ? DEFAULT_EQUIP_DROP_STAT_MIN_PERCENT : minConfigured;
+        double maxPercent = maxConfigured == null ? DEFAULT_EQUIP_DROP_STAT_MAX_PERCENT : maxConfigured;
+        if (maxPercent <= minPercent) {
+            minPercent = DEFAULT_EQUIP_DROP_STAT_MIN_PERCENT;
+            maxPercent = DEFAULT_EQUIP_DROP_STAT_MAX_PERCENT;
+        }
+        equip.setStr(getRandStat(equip.getStr(), minPercent, maxPercent));
+        equip.setDex(getRandStat(equip.getDex(), minPercent, maxPercent));
+        equip.setInt(getRandStat(equip.getInt(), minPercent, maxPercent));
+        equip.setLuk(getRandStat(equip.getLuk(), minPercent, maxPercent));
+        equip.setMatk(getRandStat(equip.getMatk(), minPercent, maxPercent));
+        equip.setWatk(getRandStat(equip.getWatk(), minPercent, maxPercent));
+        equip.setAcc(getRandStat(equip.getAcc(), minPercent, maxPercent));
+        equip.setAvoid(getRandStat(equip.getAvoid(), minPercent, maxPercent));
+        equip.setJump(getRandStat(equip.getJump(), minPercent, maxPercent));
+        equip.setSpeed(getRandStat(equip.getSpeed(), minPercent, maxPercent));
+        equip.setWdef(getRandStat(equip.getWdef(), minPercent, maxPercent));
+        equip.setMdef(getRandStat(equip.getMdef(), minPercent, maxPercent));
+        equip.setHp(getRandStat(equip.getHp(), minPercent, maxPercent));
+        equip.setMp(getRandStat(equip.getMp(), minPercent, maxPercent));
         return equip;
     }
 

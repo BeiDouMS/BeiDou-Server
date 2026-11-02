@@ -67,3 +67,8 @@ gms:
     localhost: 127.0.0.1
     # 客户端登录端口
     login-port: 8484
+
+h5:
+  # H5 挂机接口共享密钥，需与 H5 后端配置一致；留空则关闭该组接口
+  secret: "beidou-h5-hangup-secret"
+
