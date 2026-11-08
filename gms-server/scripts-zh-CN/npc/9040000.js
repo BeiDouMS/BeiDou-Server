@@ -94,11 +94,10 @@ function action(mode, type, selection) {
                     if (eim == null) {
                         cm.sendOk("你的公会目前不在此频道上进行战略时间。请再次检查你的公会是否正在计划公会任务，如果是的话，请确认他们分配的频道。");
                     } else {
-                        if (cm.isLeader()) {
-                            em.getEligibleParty(cm.getParty());
-                            eim.registerParty(cm.getPlayer());
+                        if(eim.getPlayerCount() + 1 > em.getIntProperty("maxPlayers")){
+                            cm.sendOk("参与人数已达到上限！")
                         } else {
-                            eim.registerPlayer(cm.getPlayer());
+                            eim.registerPlayer(ch);
                         }
                     }
                 } else {
