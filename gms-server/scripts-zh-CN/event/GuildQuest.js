@@ -76,7 +76,7 @@ function setEventRequirements() {
 
     reqStr += "\r\n   时间限制: ";
     reqStr += eventTime + " 分钟";
-
+    em.setIntProperty("maxPlayers" , maxPlayers);
     em.setProperty("party", reqStr);
 }
 
