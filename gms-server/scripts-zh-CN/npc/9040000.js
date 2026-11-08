@@ -84,8 +84,12 @@ function action(mode, type, selection) {
                         cm.sendOk("这个频道的队列已经满了。请耐心等待一会儿，然后再试一次，或者尝试在另一个频道。");
                         cm.dispose();
                     } else {
-                        var qsize = em.getQueueSize();
-                        cm.sendYesNo(((qsize > 0) ? "There is currently #r" + qsize + "#k guilds queued on. " : "") + "Do you wish for your guild to join this queue?");
+                        var text = ""
+                        if(qsize > 0){
+                            text += "当前已有 #r"+ qsize +"#k 个家族正在排队中。"
+                        }
+                        text += "\r\n你是否希望你的家族加入该队列？"
+                        cm.sendYesNo(text);
                     }
                 }
             } else if (selection == 1) {
@@ -94,11 +98,10 @@ function action(mode, type, selection) {
                     if (eim == null) {
                         cm.sendOk("你的公会目前不在此频道上进行战略时间。请再次检查你的公会是否正在计划公会任务，如果是的话，请确认他们分配的频道。");
                     } else {
-                        if (cm.isLeader()) {
-                            em.getEligibleParty(cm.getParty());
-                            eim.registerParty(cm.getPlayer());
+                        if(eim.getPlayerCount() + 1 > em.getIntProperty("maxPlayers")){
+                            cm.sendOk("参与人数已达到上限！")
                         } else {
-                            eim.registerPlayer(cm.getPlayer());
+                            eim.registerPlayer(ch);
                         }
                     }
                 } else {
