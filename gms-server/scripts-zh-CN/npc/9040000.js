@@ -101,7 +101,7 @@ function action(mode, type, selection) {
                         if(eim.getPlayerCount() + 1 > em.getIntProperty("maxPlayers")){
                             cm.sendOk("参与人数已达到上限！")
                         } else {
-                            eim.registerPlayer(ch);
+                            eim.registerPlayer(cm.getPlayer());
                         }
                     }
                 } else {
