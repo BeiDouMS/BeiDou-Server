@@ -92,6 +92,7 @@ public class Server {
     }
 
     private static final Logger log = LoggerFactory.getLogger(Server.class);
+    private static final long SPAM_CLOCK_ORIGIN_NANOS = System.nanoTime();
     private static Server instance = null;
 
     public static Server getInstance() {
@@ -141,6 +142,7 @@ public class Server {
 
     private final AtomicLong currentTime = new AtomicLong(0);
     private long serverCurrentTime = 0;
+    private volatile long spamWindowMillis = 1;
 
     private volatile boolean availableDeveloperRoom = false;
     @Getter
@@ -192,7 +194,9 @@ public class Server {
     }
 
     public int getCurrentTimestamp() {
-        return (int) (Server.getInstance().getCurrentTime() - Server.uptime);
+        // 使用单调时钟分桶，保留毫秒单位供恢复处理器计算间隔。
+        long elapsedMillis = NANOSECONDS.toMillis(System.nanoTime() - SPAM_CLOCK_ORIGIN_NANOS);
+        return (int) (elapsedMillis - elapsedMillis % spamWindowMillis);
     }
 
     public long getCurrentTime() {  // returns a slightly delayed time value, under frequency of UPDATE_INTERVAL
@@ -570,7 +574,7 @@ public class Server {
 
     public List<Integer> getActiveCoupons() {
         synchronized (activeCoupons) {
-            return activeCoupons;
+            return List.copyOf(activeCoupons);
         }
     }
 
@@ -594,9 +598,9 @@ public class Server {
                 } else {
                     activeCoupons.add(couponId);
                 }
-
-                commitActiveCoupons();
             }
+            // 角色刷新会读取活动券列表，遍历角色时先释放列表锁。
+            commitActiveCoupons();
         }
     }
 
@@ -793,7 +797,9 @@ public class Server {
         disconnectIdlesOnLoginTask();
 
         long timeLeft = getTimeLeftForNextHour();
-        tMan.register(new CharacterDiseaseTask(), GameConfig.getServerLong("update_interval"), GameConfig.getServerLong("update_interval"));
+        long updateIntervalMillis = GameConfig.getServerLong("update_interval");
+        tMan.register(new CharacterDiseaseTask(), updateIntervalMillis, updateIntervalMillis);
+        spamWindowMillis = updateIntervalMillis;
         tMan.register(new CouponTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new RankingCommandTask(), MINUTES.toMillis(5), MINUTES.toMillis(5));
         tMan.register(new RankingLoginTask(), HOURS.toMillis(1), timeLeft);

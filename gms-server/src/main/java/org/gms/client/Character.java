@@ -6178,42 +6178,47 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void setCouponRates() {
-        List<Integer> couponEffects;
-
-        Collection<Item> cashItems = this.getInventory(InventoryType.CASH).list();
-        chrLock.lock();
-        try {
-            setActiveCoupons(cashItems);
-            couponEffects = activateCouponsEffects();
-        } finally {
-            chrLock.unlock();
-        }
-
-        for (Integer couponId : couponEffects) {
-            commitBuffCoupon(couponId);
-        }
-    }
-
-    private void revertCouponRates() {
-        revertCouponsEffects();
+        refreshCouponRates(false);
     }
 
     public void updateCouponRates() {
+        refreshCouponRates(true);
+    }
+
+    private void refreshCouponRates(boolean replaceExisting) {
         Inventory cashInv = this.getInventory(InventoryType.CASH);
         if (cashInv == null) {
             return;
         }
 
+        // 与 Buff 到期取消保持相同锁序。
+        prtLock.lock();
         effLock.lock();
-        chrLock.lock();
-        cashInv.lockInventory();
         try {
-            revertCouponRates();
-            setCouponRates();
+            if (replaceExisting) {
+                dispelBuffCoupons();
+            }
+
+            // list() 取完快照就释放现金背包锁，属性重算可能读取消耗背包。
+            Collection<Item> cashItems = cashInv.list();
+            List<Integer> couponEffects;
+            chrLock.lock();
+            try {
+                if (replaceExisting) {
+                    revertCouponRates();
+                }
+                setActiveCoupons(cashItems);
+                couponEffects = activateCouponsEffects();
+            } finally {
+                chrLock.unlock();
+            }
+
+            for (Integer couponId : couponEffects) {
+                commitBuffCoupon(couponId);
+            }
         } finally {
-            cashInv.unlockInventory();
-            chrLock.unlock();
             effLock.unlock();
+            prtLock.unlock();
         }
     }
 
@@ -6240,9 +6245,7 @@ public class Character extends AbstractCharacterObject {
         this.mesoCoupon *= (getCouponMultiplier(couponId) * couponQty);
     }
 
-    private void revertCouponsEffects() {
-        dispelBuffCoupons();
-
+    private void revertCouponRates() {
         this.expRate /= this.expCoupon;
         this.dropRate /= this.dropCoupon;
         this.mesoRate /= this.mesoCoupon;
