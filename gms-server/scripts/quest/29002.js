@@ -45,7 +45,7 @@ function end(mode, type, selection) {
     }
 
     var questRecord = qm.getQuestRecord(qm.getQuest());
-    if (questRecord == null || System.currentTimeMillis() > questRecord.getCompletionTime() + challengeDurationMs) {
+    if (questRecord == null) {
         qm.sendOk("The 30-day challenge period has expired. Please restart the challenge if you want to try for the #b#t" + medalId + "##k again.");
         qm.dispose();
         return;
