@@ -130,46 +130,43 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         }
 
         if (itemType == 504) { // vip teleport rock//缩地石
-            String error1 = I18nUtil.getMessage("UseCashItemHandler.handlePacket.error1");
-            boolean vip = p.readByte() == 1 && itemId / 1000 >= 5041;
-            remove(c, position, itemId);
-            boolean success = false;
-            if (!vip) {
+            boolean warpPlayer = p.readByte() > 0;
+            // 高级瞬移之石
+            boolean vip = itemId / 1000 >= 5041;
+            MapleMap targetMap = null;
+
+            if (!warpPlayer) {
                 int mapId = p.readInt();
-                if (itemId / 1000 >= 5041 || mapId / 100000000 == player.getMapId() / 100000000) { //check vip or same continent
-                    MapleMap targetMap = c.getChannelServer().getMapFactory().getMap(mapId);
-                    if (!FieldLimit.CANNOTVIPROCK.check(targetMap.getFieldLimit()) && (targetMap.getForcedReturnId() == MapId.NONE || MapId.isMapleIsland(mapId))) {
-                        player.forceChangeMap(targetMap, targetMap.getRandomPlayerSpawnpoint());
-                        success = true;
-                    } else {
-                        player.dropMessage(1, error1);
-                    }
-                } else {
-                    player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message1"));
-                }
+                targetMap = c.getChannelServer().getMapFactory().getMap(mapId);
             } else {
                 String name = p.readString();
                 Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
-
-                if (victim != null) {
-                    MapleMap targetMap = victim.getMap();
-                    if (!FieldLimit.CANNOTVIPROCK.check(targetMap.getFieldLimit()) && (targetMap.getForcedReturnId() == MapId.NONE || MapId.isMapleIsland(targetMap.getId()))) {
-                        if (!victim.isGM() || victim.gmLevel() <= player.gmLevel()) {   // thanks Yoboes for noticing non-GM's being unreachable through rocks
-                            player.forceChangeMap(targetMap, targetMap.findClosestPlayerSpawnpoint(victim.getPosition()));
-                            success = true;
-                        } else {
-                            player.dropMessage(1, error1);
-                        }
-                    } else {
-                        player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message2"));
-                    }
-                } else {
+                if (victim == null) {
                     player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message3"));
+                    c.enableActions();
+                    return;
+                }
+
+                targetMap = victim.getMap();
+                if (victim.isGM() && victim.gmLevel() > player.gmLevel()) {   // thanks Yoboes for noticing non-GM's being unreachable through rocks
+                    player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.error1"));
+                    c.enableActions();
+                    return;
                 }
             }
 
-            if (!success) {
-                InventoryManipulator.addById(c, itemId, (short) 1);
+            if (!vip && targetMap.getId() / 100000000 != player.getMapId() / 100000000) {
+                player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message1"));
+                c.enableActions();
+                return;
+            } else if (FieldLimit.CANNOTVIPROCK.check(targetMap.getFieldLimit())) {
+                player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message2"));
+                c.enableActions();
+                return;
+            } else {
+                // 不理解为什么用这个 forceChangeMap，正常来说FB地图存在FieldLimit，不允许使用
+                player.forceChangeMap(targetMap, targetMap.getRandomPlayerSpawnpoint());
+                remove(c, position, itemId);
                 c.enableActions();
             }
         } else if (itemType == 505) { // AP/SP reset //能力、技能点重置卷轴
