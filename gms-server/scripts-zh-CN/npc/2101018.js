@@ -30,7 +30,10 @@
 status = -1;
 
 function start() {
-    if ((cm.getPlayer().getLevel() < 19 || cm.getPlayer().getLevel() > 30) && !cm.getPlayer().isGM()) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (!GameConfig.getServerBoolean("use_enable_party_level_limit_lift")
+            && (cm.getPlayer().getLevel() < 19 || cm.getPlayer().getLevel() > 30)
+            && !cm.getPlayer().isGM()) {
         cm.sendNext("你的等级不在20级到30级之间。抱歉，你不能参加。");
         cm.dispose();
         return;
