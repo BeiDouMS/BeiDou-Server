@@ -1427,7 +1427,11 @@ public class StatEffect {
                     hpchange /= 2;
                 }
             } else { // assumption: this is heal
-                float hpHeal = (applyfrom.getCurrentMaxHp() * (float) hp / (100.0f * affectedPlayers));
+                float hpHeal = hp;
+                
+                if (sourceid == Cleric.HEAL)
+                    hpHeal = (applyfrom.getCurrentMaxHp() * (float)hp / (100.0f * affectedPlayers));
+                
                 hpchange += hpHeal;
                 if (applyfrom.hasDisease(Disease.ZOMBIFY)) {
                     hpchange = -hpchange;
@@ -1778,10 +1782,7 @@ public class StatEffect {
         return morphId;
     }
 
-    private SummonMovementType getSummonMovementType() {
-        if (!skill) {
-            return null;
-        }
+    public static SummonMovementType getSummonMovementType(int sourceid) {
         switch (sourceid) {
             case Ranger.PUPPET:
             case Sniper.PUPPET:
@@ -1809,6 +1810,13 @@ public class StatEffect {
                 return SummonMovementType.FOLLOW;
         }
         return null;
+    }
+
+    private SummonMovementType getSummonMovementType() {
+        if (!skill) {
+            return null;
+        }
+        return getSummonMovementType(sourceid);
     }
 
     public boolean isSkill() {

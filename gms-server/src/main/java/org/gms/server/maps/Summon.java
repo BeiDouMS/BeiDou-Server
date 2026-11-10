@@ -23,8 +23,11 @@ package org.gms.server.maps;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.util.PacketCreator;
+
+import lombok.Getter;
 
 import java.awt.*;
 
@@ -37,16 +40,20 @@ public class Summon extends AbstractAnimatedMapObject {
     private final int skill;
     private int hp;
     private final SummonMovementType movementType;
+    @Getter 
+    private final SummonAssistantType assistantType;
 
     public Summon(Character owner, int skill, Point pos, SummonMovementType movementType) {
         this.owner = owner;
         this.skill = skill;
-        this.skillLevel = owner.getSkillLevel(SkillFactory.getSkill(skill));
+        Skill skillData = SkillFactory.getSkill(skill);
+        this.skillLevel = owner.getSkillLevel(skillData);
         if (skillLevel == 0) {
             throw new RuntimeException();
         }
 
         this.movementType = movementType;
+        this.assistantType = SummonAssistantType.getFromSummonData(skillData.getSummonNode());
         setPosition(pos);
     }
 
@@ -81,7 +88,7 @@ public class Summon extends AbstractAnimatedMapObject {
     }
 
     public boolean isStationary() {
-        return (skill == 3111002 || skill == 3211002 || skill == 5211001 || skill == 13111004);
+        return movementType == SummonMovementType.STATIONARY;
     }
 
     public byte getSkillLevel() {
@@ -94,6 +101,10 @@ public class Summon extends AbstractAnimatedMapObject {
     }
 
     public final boolean isPuppet() {
+        return isPuppet(skill);
+    }
+
+    public static boolean isPuppet(int skill) {
         switch (skill) {
             case 3111002:
             case 3211002:

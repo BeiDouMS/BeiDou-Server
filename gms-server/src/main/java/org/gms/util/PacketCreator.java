@@ -1142,11 +1142,13 @@ public class PacketCreator {
         p.writeInt(summon.getSkill());
         p.writeByte(0x0A); //v83
         p.writeByte(summon.getSkillLevel());
+
+        // CSummoned::Init
         p.writePos(summon.getPosition());
         p.writeByte(summon.getStance());    //bMoveAction & foothold, found thanks to Rien dev team
         p.writeShort(0);
         p.writeByte(summon.getMovementType().getValue()); // 0 = don't move, 1 = follow (4th mage summons?), 2/4 = only tele follow, 3 = bird follow
-        p.writeBool(!summon.isPuppet()); // 0 and the summon can't attack - but puppets don't attack with 1 either ^.-
+        p.writeByte(summon.getAssistantType().getValue()); // 0 and the summon can't attack - but puppets don't attack with 1 either ^.-
         p.writeBool(!animated);
         return p;
     }
@@ -4572,6 +4574,14 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.SUMMON_SKILL);
         p.writeInt(cid);
         p.writeInt(summonSkillId);
+        p.writeByte(newStance);
+        return p;
+    }
+
+    public static Packet summonSkillEffect(int cid, int summonOId, int newStance) {
+        final OutPacket p = OutPacket.create(SendOpcode.SUMMON_SKILL);
+        p.writeInt(cid);
+        p.writeInt(summonOId);
         p.writeByte(newStance);
         return p;
     }

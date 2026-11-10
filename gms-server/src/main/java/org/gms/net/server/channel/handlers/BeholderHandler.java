@@ -21,11 +21,16 @@
  */
 package org.gms.net.server.channel.handlers;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.Skill;
+import org.gms.client.SkillFactory;
 import org.gms.constants.skills.DarkKnight;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.server.StatEffect;
 import org.gms.server.maps.Summon;
+import org.gms.util.PacketCreator;
 
 import java.util.Collection;
 
@@ -37,6 +42,7 @@ public final class BeholderHandler extends AbstractPacketHandler {//Summon Skill
     @Override
     public final void handlePacket(InPacket p, Client c) {
         //System.out.println(slea.toString());
+        Character chr = c.getPlayer();
         Collection<Summon> summons = c.getPlayer().getSummonsValues();
         int oid = p.readInt();
         Summon summon = null;
@@ -47,13 +53,23 @@ public final class BeholderHandler extends AbstractPacketHandler {//Summon Skill
         }
         if (summon != null) {
             int skillId = p.readInt();
-            if (skillId == DarkKnight.AURA_OF_BEHOLDER) {
-                p.readShort(); //Not sure.
-            } else if (skillId == DarkKnight.HEX_OF_BEHOLDER) {
-                p.readByte(); //Not sure.
-            }            //show to others here
+            int chrSkillLevel = chr.getSkillLevel(skillId);
+            if (chrSkillLevel <= 0) {
+                return;
+            }
+            Skill skill = SkillFactory.getSkill(skillId);
+            if (skill == null) {
+                return;
+            }
+            StatEffect skillEffect = skill.getEffect(chrSkillLevel);
+            skillEffect.applyTo(chr);
+            byte stance = p.readByte();
+            
+            chr.getMap().broadcastMessage(PacketCreator.summonSkillEffect(chr.getId(), oid, stance));
+            chr.sendPacket(PacketCreator.showOwnBuffEffect(summon.getSkill(), 2));
+            chr.getMap().broadcastMessage(chr, PacketCreator.showBuffEffect(chr.getId(), summon.getSkill(), 2), false);
         } else {
-            c.getPlayer().clearSummons();
+            chr.clearSummons();
         }
     }
 }
