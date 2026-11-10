@@ -5,13 +5,10 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode <= 0) {
         cm.dispose();
     } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
+        
         if (mode == 1) {
             status++;
         } else {
@@ -31,6 +28,8 @@ function action(mode, type, selection) {
                 cm.getEventInstance().warpEventTeam(930000600);
             }
 
+            cm.dispose();
+        } else {
             cm.dispose();
         }
     }
