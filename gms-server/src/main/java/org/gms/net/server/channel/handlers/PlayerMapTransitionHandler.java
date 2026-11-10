@@ -53,7 +53,9 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
             chr.sendPacket(PacketCreator.giveBuff(1, beaconid, stat));
         }
 
-        if (!chr.isHidden()) {  // thanks Lame (Conrad) for noticing hidden characters controlling mobs
+        if (!chr.isHidden() && !chr.isWarping()) {  // thanks Lame (Conrad) for noticing hidden characters controlling mobs
+            // 这次确认到达时，上一次换图可能还在别的线程里执行（事件脚本/定时器传送），此刻
+            // chr.getMap() 仍是旧图：按它重发会把旧图的怪播到新图客户端上，故跳过这次重发
             for (MapObject mo : chr.getMap().getMonsters()) {    // thanks BHB, IxianMace, Jefe for noticing several issues regarding mob statuses (such as freeze)
                 Monster m = (Monster) mo;
                 if (m.getSpawnEffect() == 0 || m.getHp() < m.getMaxHp()) {     // avoid effect-spawning mobs
