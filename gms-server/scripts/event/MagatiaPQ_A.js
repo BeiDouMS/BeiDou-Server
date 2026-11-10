@@ -38,6 +38,12 @@ var eventTime = 45;     // 45 minutes
 
 const maxLobbies = 1;
 
+const GameConfig = Java.type('org.gms.config.GameConfig');
+minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;
+if (GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {
+    minLevel = 1, maxLevel = 999;
+}
+
 function init() {
     setEventRequirements();
 }
@@ -293,6 +299,61 @@ function playerLeft(eim, player) {
     }
 }
 
+function skipBeakerStage(eim) {
+    if (eim.getIntProperty("statusStg3") >= 3) {
+        return;
+    }
+    if (!(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1)) {
+        return;
+    }
+
+    eim.setIntProperty("statusStg3", 3);
+    eim.showClearEffect();
+    eim.giveEventPlayersStageReward(3);
+
+    var map = eim.getMapInstance(926110100);
+    map.killAllMonsters();
+    var door = map.getReactorByName("jnr2_door");
+    if (door != null) {
+        door.forceHitReactor(1);
+    }
+}
+
+function skipDualLabStage(eim) {
+    if (eim.getIntProperty("statusStg4") >= 1) {
+        return;
+    }
+    if (!(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1)) {
+        return;
+    }
+
+    eim.setIntProperty("statusStg4", 1);
+    eim.showClearEffect();
+    eim.giveEventPlayersStageReward(4);
+
+    var map = eim.getMapInstance(926110200);
+    map.killAllMonsters();
+    var door = map.getReactorByName("jnr3_out3");
+    if (door != null) {
+        door.forceHitReactor(1);
+    }
+}
+
+function skipMazeStage(eim, player) {
+    if (!(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1)) {
+        return;
+    }
+
+    if (eim.getIntProperty("statusStg6") == 0) {
+        eim.setIntProperty("statusStg6", 1);
+        eim.showClearEffect();
+        eim.giveEventPlayersStageReward(6);
+    }
+
+    var next = eim.getMapInstance(926110400);
+    player.changeMap(next, next.getPortal(0));
+}
+
 function changedMap(eim, player, mapid) {
     if (mapid < minMapId || mapid > maxMapId) {
         if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
@@ -302,6 +363,12 @@ function changedMap(eim, player, mapid) {
             eim.unregisterPlayer(player);
         }
 
+    } else if (mapid == 926110100) {
+        skipBeakerStage(eim);
+    } else if (mapid == 926110200) {
+        skipDualLabStage(eim);
+    } else if (mapid == 926110300 || (mapid >= 926110301 && mapid <= 926110304)) {
+        skipMazeStage(eim, player);
     } else if (mapid == 926110203 && eim.getIntProperty("yuleteTimeout") == 0) {
         eim.setIntProperty("yuleteTimeout", 1);
         eim.schedule("yuleteAction", 10 * 1000);
