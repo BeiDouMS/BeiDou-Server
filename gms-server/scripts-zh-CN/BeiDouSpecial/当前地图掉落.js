@@ -54,7 +54,6 @@ function action(mode, type, selection) {
         text += ""+ui+"当前金币：" + cm.getPlayer().getMeso() + "\r\n";
         text += " \r\n\r\n";
 		text += "#L1#当前地图爆率查询#l\r\n";
-		text += "#L2#系统物品爆率查询#l\r\n";
         cm.sendSimple(text);
     } else if (status === 1) {
         doSelect(selection);
@@ -68,9 +67,6 @@ function doSelect(selection) {
         // 非GM功能
         case 1:
             openNpc("当前地图掉落_当前地图");
-            break;
-        case 2:
-            openNpc("当前地图掉落_物品查询");
             break;
         
 
