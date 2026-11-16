@@ -93,6 +93,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -129,7 +130,9 @@ public class MapleMap {
     private Pair<Integer, Integer> xLimits;  // caches the min and max x's with available footholds
     private final Rectangle mapArea = new Rectangle();
     private final int mapid;
-    private final AtomicInteger runningOid = new AtomicInteger(1000000001);
+    // 对象 id 必须在一个频道内唯一：客户端（官方与我们）都只按 oid 索引怪/掉落等对象，
+    // 每张图各自从 1000000001 起发号的话，切图后新旧地图的同号对象会撞成同一个
+    private static final Map<Integer, AtomicInteger> CHANNEL_OID_COUNTERS = new ConcurrentHashMap<>();
     private final int returnMapId;
     private final int channel;
     private final int world;
@@ -439,6 +442,11 @@ public class MapleMap {
         }
 
         for (Character chr : inRangeCharacters) {
+            // 收件人是在锁内挑的、发送在锁外：这期间玩家可能已经切图，旧图的刷怪不能再发给他
+            if (chr.getMap() != this) {
+                continue;
+            }
+
             packetbakery.sendPackets(chr.getClient());
         }
     }
@@ -463,19 +471,29 @@ public class MapleMap {
         }
 
         for (Character chr : inRangeCharacters) {
+            // 同上：锁外发送前再确认一次收件人还在这张图上
+            if (chr.getMap() != this) {
+                continue;
+            }
+
             packetbakery.sendPackets(chr.getClient());
         }
+    }
+
+    private AtomicInteger channelOidCounter() {
+        return CHANNEL_OID_COUNTERS.computeIfAbsent((world << 8) | (channel & 0xFF), key -> new AtomicInteger(1000000001));
     }
 
     private int getUsableOID() {
         objectRLock.lock();
         try {
             int curOid;
+            AtomicInteger counter = channelOidCounter();
 
             // clashes with playernpc on curOid >= 2147000000, developernpc uses >= 2147483000
             do {
-                if ((curOid = runningOid.incrementAndGet()) >= 2147000000) {
-                    runningOid.set(curOid = 1000000001);
+                if ((curOid = counter.incrementAndGet()) >= 2147000000) {
+                    counter.set(curOid = 1000000001);
                 }
             } while (mapobjects.containsKey(curOid));
 
@@ -2776,6 +2794,16 @@ public class MapleMap {
                 this.broadcastGMPacket(chr, PacketCreator.removeDragon(chr.getId()));
             } else {
                 this.broadcastPacket(chr, PacketCreator.removeDragon(chr.getId()));
+            }
+        }
+
+        // 离开这张图的客户端不能再看到它的怪（官方协议里这是服务端发的 MOB_LEAVE_FIELD）。
+        // 必须排在 releaseControlledMonsters 之后：那一步会把旧图的怪"交还"控制权，客户端会
+        // 因此把它们建出来，这里紧接着停掉（animation 0 = 直接消失，不播死亡动作）；也必须在
+        // addPlayer 之前，那时新图的对象还没发给他。配合频道内唯一 oid，不会误删新图同号对象。
+        if (chr.getClient() != null) {
+            for (MapObject mo : getMonsters()) {
+                chr.sendPacket(PacketCreator.killMonster(mo.getObjectId(), 0));
             }
         }
     }
