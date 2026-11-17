@@ -21,26 +21,37 @@
 */
 package org.gms.net.server.channel.handlers;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.net.packet.InPacket;
+import org.gms.net.packet.Packet;
+import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
 import org.gms.exception.EmptyMovementException;
 
 public final class MovePlayerHandler extends AbstractMovementPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        p.skip(9);
+        Character mover = c.getPlayer();
+        int fieldKey = p.readUnsignedByte();
+        c.applyFieldMovement(mover, fieldKey, () -> move(p, mover));
+    }
+
+    private void move(InPacket p, Character mover) {
+        p.skip(8);
         try {   // thanks Sa for noticing empty movement sequences crashing players
             int movementDataStart = p.getPosition();
-            updatePosition(p, c.getPlayer(), 0);
+            updatePosition(p, mover, 0);
             long movementDataLength = p.getPosition() - movementDataStart; //how many bytes were read by updatePosition
             p.seek(movementDataStart);
 
-            c.getPlayer().getMap().movePlayer(c.getPlayer(), c.getPlayer().getPosition());
-            if (c.getPlayer().isHidden()) {
-                c.getPlayer().getMap().broadcastGMMessage(c.getPlayer(), PacketCreator.movePlayer(c.getPlayer().getId(), p, movementDataLength), false);
+            MapleMap map = mover.getMap();
+            map.movePlayer(mover, mover.getPosition());
+            Packet movement = PacketCreator.movePlayer(mover.getId(), p, movementDataLength);
+            if (mover.isHidden()) {
+                map.broadcastGMMessage(mover, movement, false);
             } else {
-                c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.movePlayer(c.getPlayer().getId(), p, movementDataLength), false);
+                map.broadcastMessage(mover, movement, false);
             }
         } catch (EmptyMovementException e) {
         }

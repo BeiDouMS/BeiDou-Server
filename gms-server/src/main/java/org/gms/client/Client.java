@@ -116,6 +116,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class Client extends ChannelInboundHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(Client.class);
 
+    public static final int INITIAL_FIELD_KEY = 1;
+
     public static final int LOGIN_NOTLOGGEDIN = 0;
     public static final int LOGIN_SERVER_TRANSITION = 1;
     public static final int LOGIN_LOGGEDIN = 2;
@@ -134,6 +136,9 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     private io.netty.channel.Channel ioChannel;
     private Character player;
+    private final Object fieldMovementLock = new Object();
+    private int fieldMovementGeneration = INITIAL_FIELD_KEY;
+    private boolean fieldMovementReady = true;
     private int channel = 1;
     private int accId = -4;
     private boolean loggedIn = false;
@@ -1737,6 +1742,37 @@ public class Client extends ChannelInboundHandlerAdapter {
             sendPacket(packet);
 
             player.setTargetHpBarTime(timeNow);
+        }
+    }
+
+    /**
+     * 切图前关闭移动入口；完整序号用于嵌套切图，仅低 8 位写入 v83 协议。
+     */
+    public int beginFieldMovementTransition() {
+        synchronized (fieldMovementLock) {
+            fieldMovementReady = false;
+            return ++fieldMovementGeneration;
+        }
+    }
+
+    public void finishFieldMovementTransition(int generation) {
+        synchronized (fieldMovementLock) {
+            if (fieldMovementGeneration == generation) {
+                fieldMovementReady = true;
+            }
+        }
+    }
+
+    /**
+     * 校验与坐标更新、广播使用同一把锁，避免校验后又切到另一张地图。
+     */
+    public void applyFieldMovement(Character mover, int fieldKey, Runnable movement) {
+        synchronized (fieldMovementLock) {
+            if (!fieldMovementReady || fieldKey != (fieldMovementGeneration & 0xFF)
+                    || mover == null || mover != player || mover.getClient() != this || mover.getMap() == null) {
+                return;
+            }
+            movement.run();
         }
     }
 

@@ -964,7 +964,7 @@ public class PacketCreator {
     public static Packet getCharInfo(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
         p.writeInt(chr.getClient().getChannel() - 1);
-        p.writeByte(1);
+        p.writeByte(Client.INITIAL_FIELD_KEY);
         p.writeByte(1);
         p.writeShort(0);
         for (int i = 0; i < 3; i++) {
@@ -1040,12 +1040,15 @@ public class PacketCreator {
      * @param to         The <code>MapleMap</code> to warp to.
      * @param spawnPoint The spawn portal number to spawn at.
      * @param chr        The character warping to <code>to</code>
+     * @param fieldKey   客户端后续移动包需回传的地图序号
      * @return The map change packet.
      */
-    public static Packet getWarpToMap(MapleMap to, int spawnPoint, Character chr) {
+    public static Packet getWarpToMap(MapleMap to, int spawnPoint, Character chr, int fieldKey) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
         p.writeInt(chr.getClient().getChannel() - 1);
-        p.writeInt(0);//updated
+        p.writeByte(fieldKey);
+        p.writeByte(0);
+        p.writeShort(0);
         p.writeByte(0);//updated
         p.writeInt(to.getId());
         p.writeByte(spawnPoint);
@@ -1060,10 +1063,12 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getWarpToMap(MapleMap to, int spawnPoint, Point spawnPosition, Character chr) {
+    public static Packet getWarpToMap(MapleMap to, int spawnPoint, Point spawnPosition, Character chr, int fieldKey) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
         p.writeInt(chr.getClient().getChannel() - 1);
-        p.writeInt(0);//updated
+        p.writeByte(fieldKey);
+        p.writeByte(0);
+        p.writeShort(0);
         p.writeByte(0);//updated
         p.writeInt(to.getId());
         p.writeByte(spawnPoint);
