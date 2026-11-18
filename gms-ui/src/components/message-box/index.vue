@@ -3,10 +3,10 @@
     <a-tabs v-model:activeKey="messageType" type="rounded" destroy-on-hide>
       <a-tab-pane v-for="item in tabList" :key="item.key">
         <template #title>
-          <span> {{ item.title }}{{ formatUnreadLength(item.key) }} </span>
+          <span> {{ $t(item.title) }}{{ formatUnreadLength(item.key) }} </span>
         </template>
         <a-result v-if="!renderList.length" status="404">
-          <template #subtitle>暂无内容</template>
+          <template #subtitle>{{ $t('component.messageBox.empty') }}</template>
         </a-result>
         <List
           :render-list="renderList"
@@ -15,7 +15,9 @@
         />
       </a-tab-pane>
       <template #extra>
-        <a-button type="text" @click="emptyList"> 清空 </a-button>
+        <a-button type="text" @click="emptyList">
+          {{ $t('component.messageBox.clear') }}
+        </a-button>
       </template>
     </a-tabs>
   </a-spin>
@@ -50,15 +52,15 @@
   const tabList: TabItem[] = [
     {
       key: 'message',
-      title: '消息',
+      title: 'component.messageBox.tab.message',
     },
     {
       key: 'notice',
-      title: '通知',
+      title: 'component.messageBox.tab.notice',
     },
     {
       key: 'todo',
-      title: '待办',
+      title: 'component.messageBox.tab.todo',
     },
   ];
   async function fetchSourceData() {

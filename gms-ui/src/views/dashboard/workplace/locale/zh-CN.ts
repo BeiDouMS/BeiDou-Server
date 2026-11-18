@@ -12,6 +12,7 @@ export default {
     '此操作将立即停止所有相关服务，需要在服务器中手动启动服务，确定停服吗？',
   'workplace.button.restart.confirm':
     '此操作将立即强制所有玩家下线并重新启动服务端，确定重启吗？',
+  'workplace.button.shutdown.success': '停服指令已发送',
   'workplace.stop.minutes': '倒计时分钟',
   'workplace.stop.shutdownMsg': '停服消息',
   'workplace.stop.showServerMsg': '顶部黄字公告',

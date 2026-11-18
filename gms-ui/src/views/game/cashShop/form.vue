@@ -5,100 +5,129 @@
     :on-before-ok="handleBeforeOk"
     @cancel="handleCancel"
   >
-    <template #title> 编辑商品 </template>
+    <template #title> {{ $t('cashShop.form.title') }} </template>
     <div>
       <a-form :model="formData">
         <a-form-item label="sn">
           {{ formData.sn }}
         </a-form-item>
-        <a-form-item label="物品">
+        <a-form-item :label="$t('cashShop.form.item')">
           <a-space>
             {{ formData.itemId }}
             <img :src="getIconUrl('item', formData.itemId)" alt="" />
           </a-space>
         </a-form-item>
-        <a-form-item label="数量">
+        <a-form-item :label="$t('cashShop.form.count')">
           <a-input-number v-model="formData.count" />
           <template v-if="tempData.defaultCount" #extra>
-            wz默认值 {{ tempData.defaultCount }}
+            {{
+              $t('cashShop.form.wzDefault', { value: tempData.defaultCount })
+            }}
           </template>
         </a-form-item>
-        <a-form-item label="价格">
+        <a-form-item :label="$t('cashShop.form.price')">
           <a-input-number v-model="formData.price" />
           <template v-if="tempData.defaultPrice" #extra>
-            wz默认值 {{ tempData.defaultPrice }}
+            {{
+              $t('cashShop.form.wzDefault', { value: tempData.defaultPrice })
+            }}
           </template>
         </a-form-item>
-        <a-form-item label="优先级">
+        <a-form-item :label="$t('cashShop.form.priority')">
           <a-input-number v-model="formData.priority" />
           <template v-if="tempData.defaultPriority" #extra>
-            wz默认值 {{ tempData.defaultPriority }}
+            {{
+              $t('cashShop.form.wzDefault', {
+                value: tempData.defaultPriority,
+              })
+            }}
           </template>
         </a-form-item>
-        <a-form-item label="有效期">
+        <a-form-item :label="$t('cashShop.form.period')">
           <a-input-number v-model="formData.period" />
           <template v-if="tempData.defaultPeriod" #extra>
-            wz默认值 {{ tempData.defaultPeriod }}
+            {{
+              $t('cashShop.form.wzDefault', { value: tempData.defaultPeriod })
+            }}
           </template>
         </a-form-item>
-        <a-form-item label="状态">
+        <a-form-item :label="$t('cashShop.form.status')">
           <a-switch
             v-model="formData.onSale"
             type="round"
             :checked-value="1"
             :unchecked-value="0"
           >
-            <template #checked> 上架中 </template>
-            <template #unchecked> 待售 </template>
+            <template #checked>
+              {{ $t('cashShop.column.onSale.true') }}
+            </template>
+            <template #unchecked>
+              {{ $t('cashShop.column.onSale.false') }}
+            </template>
           </a-switch>
           <template #extra>
-            wz默认值 {{ tempData.defaultOnSale ? '上架中' : '待售' }}
+            {{
+              tempData.defaultOnSale
+                ? $t('cashShop.column.onSale.true')
+                : $t('cashShop.column.onSale.false')
+            }}
           </template>
         </a-form-item>
         <a-form-item label="Bonus">
           <a-input-number v-model="formData.bonus" />
           <template v-if="tempData.defaultBonus" #extra>
-            wz默认值 {{ tempData.defaultBonus }}
+            {{
+              $t('cashShop.form.wzDefault', { value: tempData.defaultBonus })
+            }}
           </template>
         </a-form-item>
-        <a-form-item label="抵用券">
+        <a-form-item :label="$t('cashShop.form.maplePoint')">
           <a-input-number v-model="formData.maplePoint" />
           <template v-if="tempData.defaultMaplePoint" #extra>
-            wz默认值 {{ tempData.defaultMaplePoint }}
+            {{
+              $t('cashShop.form.wzDefault', {
+                value: tempData.defaultMaplePoint,
+              })
+            }}
           </template>
         </a-form-item>
-        <a-form-item label="金币">
+        <a-form-item :label="$t('cashShop.form.meso')">
           <a-input-number v-model="formData.meso" />
           <template v-if="tempData.defaultMeso" #extra>
-            wz默认值 {{ tempData.defaultMeso }}
+            {{ $t('cashShop.form.wzDefault', { value: tempData.defaultMeso }) }}
           </template>
         </a-form-item>
         <a-form-item label="PremiumUser">
           <a-input-number v-model="formData.forPremiumUser" />
           <template v-if="tempData.defaultForPremiumUser" #extra>
-            wz默认值 {{ tempData.defaultForPremiumUser }}
-          </template>
-        </a-form-item>
-        <a-form-item label="性别">
-          <a-select v-model="formData.commodityGender">
-            <a-option :value="0">男</a-option>
-            <a-option :value="1">女</a-option>
-            <a-option :value="2">通用</a-option>
-          </a-select>
-          <template #extra>
-            wz默认值
             {{
-              tempData.defaultGender === 0
-                ? '男'
-                : tempData.defaultGender === 1
-                ? '女'
-                : tempData.defaultGender === 2
-                ? '通用'
-                : ''
+              $t('cashShop.form.wzDefault', {
+                value: tempData.defaultForPremiumUser,
+              })
             }}
           </template>
         </a-form-item>
-        <a-form-item label="标签">
+        <a-form-item :label="$t('cashShop.form.gender')">
+          <a-select v-model="formData.commodityGender">
+            <a-option :value="0">
+              {{ $t('cashShop.column.gender.male') }}
+            </a-option>
+            <a-option :value="1">
+              {{ $t('cashShop.column.gender.female') }}
+            </a-option>
+            <a-option :value="2">
+              {{ $t('cashShop.column.gender.common') }}
+            </a-option>
+          </a-select>
+          <template #extra>
+            {{
+              $t('cashShop.form.wzDefault', {
+                value: genderText(tempData.defaultGender),
+              })
+            }}
+          </template>
+        </a-form-item>
+        <a-form-item :label="$t('cashShop.form.clz')">
           <a-select v-model="formData.clz" allow-clear>
             <a-option :value="0">NEW</a-option>
             <a-option :value="1">SALE</a-option>
@@ -106,48 +135,53 @@
             <a-option :value="3">EVENT</a-option>
           </a-select>
           <template v-if="tempData.defaultClz" #extra>
-            wz默认值
             {{
-              tempData.defaultClz === 0
-                ? 'NEW'
-                : tempData.defaultClz === 1
-                ? 'SALE'
-                : tempData.defaultClz === 2
-                ? 'HOT'
-                : tempData.defaultClz === 3
-                ? 'EVENT'
-                : ''
+              $t('cashShop.form.wzDefault', {
+                value: clzText(tempData.defaultClz),
+              })
             }}
           </template>
         </a-form-item>
         <a-form-item label="Limit">
           <a-input-number v-model="formData.limit" />
           <template v-if="tempData.defaultLimit" #extra>
-            wz默认值 {{ tempData.defaultLimit }}
+            {{
+              $t('cashShop.form.wzDefault', { value: tempData.defaultLimit })
+            }}
           </template>
         </a-form-item>
         <a-form-item label="pbCash">
           <a-input-number v-model="formData.pbCash" />
           <template v-if="tempData.defaultPBCash" #extra>
-            wz默认值 {{ tempData.defaultPBCash }}
+            {{
+              $t('cashShop.form.wzDefault', { value: tempData.defaultPBCash })
+            }}
           </template>
         </a-form-item>
         <a-form-item label="pbPoint">
           <a-input-number v-model="formData.pbPoint" />
           <template v-if="tempData.defaultPBPoint" #extra>
-            wz默认值 {{ tempData.defaultPBPoint }}
+            {{
+              $t('cashShop.form.wzDefault', { value: tempData.defaultPBPoint })
+            }}
           </template>
         </a-form-item>
         <a-form-item label="pbGift">
           <a-input-number v-model="formData.pbGift" />
           <template v-if="tempData.defaultPBGift" #extra>
-            wz默认值 {{ tempData.defaultPBGift }}
+            {{
+              $t('cashShop.form.wzDefault', { value: tempData.defaultPBGift })
+            }}
           </template>
         </a-form-item>
         <a-form-item label="packageSn">
           <a-input-number v-model="formData.packageSn" />
           <template v-if="tempData.defaultPackageSn" #extra>
-            wz默认值 {{ tempData.defaultPackageSn }}
+            {{
+              $t('cashShop.form.wzDefault', {
+                value: tempData.defaultPackageSn,
+              })
+            }}
           </template>
         </a-form-item>
       </a-form>
@@ -161,12 +195,28 @@
   import { cashShopFormState, offSale, onSale } from '@/api/cashShop';
   import useLoading from '@/hooks/loading';
   import { Message } from '@arco-design/web-vue';
+  import { useI18n } from 'vue-i18n';
   import { getIconUrl } from '@/utils/mapleStoryAPI';
 
+  const { t } = useI18n();
   const { setLoading, loading } = useLoading(false);
   const visible = ref<boolean>(false);
   const formData = ref<cashShopFormState>({ sn: -1, itemId: -1 });
   const tempData = ref<cashShopState>({ sn: -1, itemId: -1 });
+
+  const genderText = (gender?: number) => {
+    if (gender === 0) return t('cashShop.column.gender.male');
+    if (gender === 1) return t('cashShop.column.gender.female');
+    if (gender === 2) return t('cashShop.column.gender.common');
+    return '';
+  };
+  const clzText = (clz?: number) => {
+    if (clz === 0) return 'NEW';
+    if (clz === 1) return 'SALE';
+    if (clz === 2) return 'HOT';
+    if (clz === 3) return 'EVENT';
+    return '';
+  };
 
   const emit = defineEmits(['loadData']);
   const handleBeforeOk = async () => {
@@ -175,7 +225,7 @@
       if (formData.value.onSale) await onSale(formData.value);
       else await offSale(formData.value);
       visible.value = false;
-      Message.success('更新成功！');
+      Message.success(t('cashShop.message.updateSuccess'));
       emit('loadData');
     } finally {
       setLoading(false);

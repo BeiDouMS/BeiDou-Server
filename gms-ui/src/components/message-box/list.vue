@@ -9,10 +9,18 @@
       }"
     >
       <template #extra>
-        <a-tag v-if="item.messageType === 0" color="gray">未开始</a-tag>
-        <a-tag v-else-if="item.messageType === 1" color="green">已开通</a-tag>
-        <a-tag v-else-if="item.messageType === 2" color="blue">进行中</a-tag>
-        <a-tag v-else-if="item.messageType === 3" color="red">即将到期</a-tag>
+        <a-tag v-if="item.messageType === 0" color="gray">
+          {{ $t('component.messageBox.status.notStarted') }}
+        </a-tag>
+        <a-tag v-else-if="item.messageType === 1" color="green">
+          {{ $t('component.messageBox.status.opened') }}
+        </a-tag>
+        <a-tag v-else-if="item.messageType === 2" color="blue">
+          {{ $t('component.messageBox.status.inProgress') }}
+        </a-tag>
+        <a-tag v-else-if="item.messageType === 3" color="red">
+          {{ $t('component.messageBox.status.expiring') }}
+        </a-tag>
       </template>
       <div class="item-wrap" @click="onItemClick(item)">
         <a-list-item-meta>
@@ -56,10 +64,12 @@
         :class="{ 'add-border-top': renderList.length < showMax }"
       >
         <div class="footer-wrap">
-          <a-link @click="allRead">{{ $t('messageBox.allRead') }}</a-link>
+          <a-link @click="allRead">{{
+            $t('component.messageBox.allRead')
+          }}</a-link>
         </div>
         <div class="footer-wrap">
-          <a-link>{{ $t('messageBox.viewMore') }}</a-link>
+          <a-link>{{ $t('component.messageBox.viewMore') }}</a-link>
         </div>
       </a-space>
     </template>

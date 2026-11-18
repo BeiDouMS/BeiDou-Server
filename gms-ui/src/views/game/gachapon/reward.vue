@@ -4,7 +4,9 @@
     <a-row>
       <a-col>
         <a-space>
-          <a-button type="primary" @click="insertClick">新建</a-button>
+          <a-button type="primary" @click="insertClick">
+            {{ $t('gachapon.reward.button.create') }}
+          </a-button>
         </a-space>
       </a-col>
     </a-row>
@@ -36,41 +38,61 @@
           cell-class="td-nowrap"
         />
         <a-table-column
-          title="奖池ID"
+          :title="$t('gachapon.reward.column.poolId')"
           data-index="poolId"
           :width="80"
           align="center"
         />
-        <a-table-column title="物品ID" :width="100" align="center">
+        <a-table-column
+          :title="$t('gachapon.reward.column.itemId')"
+          :width="100"
+          align="center"
+        >
           <template #cell="{ record }">
             <span v-if="editId !== record.id"> {{ record.itemId }}</span>
             <a-input-number v-else v-model="record.itemId" />
           </template>
         </a-table-column>
-        <a-table-column title="物品名称" :width="140" align="center">
+        <a-table-column
+          :title="$t('gachapon.reward.column.itemName')"
+          :width="140"
+          align="center"
+        >
           <template #cell="{ record }">
             <span v-if="editId !== record.id"> {{ record.itemName }}</span>
             <a-input-number v-else v-model="record.itemId" />
           </template>
         </a-table-column>
-        <a-table-column title="物品图标" :width="90" align="center">
+        <a-table-column
+          :title="$t('gachapon.reward.column.itemIcon')"
+          :width="90"
+          align="center"
+        >
           <template #cell="{ record }">
             <img :src="getIconUrl('item', record.itemId)" alt="" />
           </template>
         </a-table-column>
-        <a-table-column title="数量" :width="80" align="center">
+        <a-table-column
+          :title="$t('gachapon.reward.column.quantity')"
+          :width="80"
+          align="center"
+        >
           <template #cell="{ record }">
             <span v-if="editId !== record.id"> {{ record.quantity }}</span>
             <a-input-number v-else v-model="record.quantity" />
           </template>
         </a-table-column>
-        <a-table-column title="备注" :width="220" align="center">
+        <a-table-column
+          :title="$t('gachapon.reward.column.comment')"
+          :width="220"
+          align="center"
+        >
           <template #cell="{ record }">
             <span v-if="editId !== record.id"> {{ record.comment }}</span>
             <a-input v-else v-model="record.comment" />
           </template>
         </a-table-column>
-        <a-table-column title="操作">
+        <a-table-column :title="$t('gachapon.reward.column.operate')">
           <template #cell="{ record }">
             <a-button
               v-if="editId !== record.id"
@@ -78,16 +100,16 @@
               size="mini"
               @click="editId = record.id"
             >
-              编辑
+              {{ $t('button.edit') }}
             </a-button>
             <a-popconfirm
               v-if="editId !== record.id"
               type="error"
-              content="你确定要删除这个奖品吗？"
+              :content="$t('gachapon.reward.deleteTips')"
               @ok="deleteClick(record)"
             >
               <a-button size="mini" status="danger" type="text">
-                删除
+                {{ $t('button.delete') }}
               </a-button>
             </a-popconfirm>
             <a-button
@@ -96,7 +118,7 @@
               size="mini"
               @click="saveClick(record)"
             >
-              保存
+              {{ $t('button.save') }}
             </a-button>
             <a-button
               v-if="editId === record.id"
@@ -104,7 +126,7 @@
               size="mini"
               @click="editId = -1"
             >
-              取消
+              {{ $t('button.cancel') }}
             </a-button>
           </template>
         </a-table-column>
@@ -123,14 +145,16 @@
   } from '@/store/modules/gachapon/type';
   import { deleteReward, getRewards, updateReward } from '@/api/gachapon';
   import { Message } from '@arco-design/web-vue';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const { setLoading, loading } = useLoading(false);
   const visible = ref<boolean>(false);
-  const title = ref<string>('奖品列表');
+  const title = ref<string>(t('gachapon.reward.title'));
 
   const curPool = ref<GachaponPoolState>({});
   const initForm = (data: GachaponPoolState) => {
-    title.value = `[${data.name}] 奖品列表`;
+    title.value = t('gachapon.reward.titleWithPool', { name: data.name });
     curPool.value = data;
     loadData();
     visible.value = true;
@@ -158,7 +182,7 @@
     setLoading(true);
     try {
       await updateReward(data);
-      Message.success('奖品已保存');
+      Message.success(t('gachapon.message.rewardSaved'));
       await loadData();
     } finally {
       setLoading(false);
@@ -174,7 +198,7 @@
     setLoading(true);
     try {
       await deleteReward(data);
-      Message.success('奖品已删除');
+      Message.success(t('gachapon.message.rewardDeleted'));
       await loadData();
     } finally {
       setLoading(false);

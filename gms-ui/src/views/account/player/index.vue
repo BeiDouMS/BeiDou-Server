@@ -405,7 +405,7 @@
   };
 
   const globalGiveClick = () => {
-    giveFormTitle.value = '全服发放资源';
+    giveFormTitle.value = t('account.player.button.globalGive');
     typeOptions.value = [
       { value: 0, label: t('account.player.nxCredit') },
       { value: 1, label: t('account.player.nxPrepaid') },
@@ -422,7 +422,7 @@
   };
 
   const giveClick = (data: any) => {
-    giveFormTitle.value = '发放资源';
+    giveFormTitle.value = t('account.player.button.give');
     typeOptions.value = [
       { value: 0, label: t('account.player.nxCredit') },
       { value: 1, label: t('account.player.nxPrepaid') },

@@ -10,37 +10,39 @@
         <a-col>
           <a-input-number
             v-model="condition.dropperId"
-            placeholder="怪物ID"
+            :placeholder="$t('drop.filter.mobId')"
             allow-clear
           />
           <a-input
             v-model="condition.dropperName"
-            placeholder="怪物名称"
+            :placeholder="$t('drop.filter.mobName')"
             allow-clear
           />
           <a-input-number
             v-model="condition.itemId"
-            placeholder="物品ID"
+            :placeholder="$t('drop.filter.itemId')"
             allow-clear
             @keydown.enter="loadData"
           />
           <a-input
             v-model="condition.itemName"
-            placeholder="物品名称"
+            :placeholder="$t('drop.filter.itemName')"
             allow-clear
             @keydown.enter="loadData"
           />
           <a-input-number
             v-model="condition.questId"
-            placeholder="任务ID"
+            :placeholder="$t('drop.filter.questId')"
             allow-clear
             @keydown.enter="loadData"
           />
           <a-space>
-            <a-button type="primary" @click="loadData">查询</a-button>
-            <a-button @click="resetClick">重置</a-button>
+            <a-button type="primary" @click="loadData">
+              {{ $t('drop.button.query') }}
+            </a-button>
+            <a-button @click="resetClick">{{ $t('button.reset') }}</a-button>
             <a-button type="primary" status="success" @click="insertClick">
-              新增
+              {{ $t('button.add') }}
             </a-button>
           </a-space>
         </a-col>
@@ -55,13 +57,13 @@
       >
         <template #columns>
           <a-table-column
-            title="ID"
+            :title="$t('drop.column.id')"
             data-index="id"
             :width="80"
             align="center"
           />
           <a-table-column
-            title="怪物ID"
+            :title="$t('drop.column.mobId')"
             data-index="mobid"
             :width="150"
             align="center"
@@ -75,7 +77,7 @@
             </template>
           </a-table-column>
           <a-table-column
-            title="怪物"
+            :title="$t('drop.column.mob')"
             :width="140"
             data-index="dropperName"
             align="center"
@@ -95,7 +97,11 @@
               </a-popover>
             </template>
           </a-table-column>
-          <a-table-column title="物品ID" :width="150" align="center">
+          <a-table-column
+            :title="$t('drop.column.itemId')"
+            :width="150"
+            align="center"
+          >
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -104,7 +110,11 @@
               <span v-else>{{ record.itemId }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="物品" :width="230" align="center">
+          <a-table-column
+            :title="$t('drop.column.item')"
+            :width="230"
+            align="center"
+          >
             <template #cell="{ record }">
               <a-button
                 v-if="record.itemId === 0"
@@ -113,7 +123,7 @@
                 status="warning"
                 @click="filterItemClick(record.itemId, record.itemName)"
               >
-                金币
+                {{ $t('drop.item.meso') }}
               </a-button>
               <a-popover v-else>
                 <a-button
@@ -129,7 +139,11 @@
               </a-popover>
             </template>
           </a-table-column>
-          <a-table-column title="最少" :width="100" align="center">
+          <a-table-column
+            :title="$t('drop.column.minimum')"
+            :width="100"
+            align="center"
+          >
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -139,7 +153,7 @@
             </template>
           </a-table-column>
           <a-table-column
-            title="最多"
+            :title="$t('drop.column.maximum')"
             data-index="maximumQuantity"
             :width="100"
             align="center"
@@ -152,7 +166,11 @@
               <span v-else>{{ record.maximumQuantity }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="爆率%" :width="120" align="right">
+          <a-table-column
+            :title="$t('drop.column.chance')"
+            :width="120"
+            align="right"
+          >
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -161,7 +179,11 @@
               <span v-else>{{ (record.chance / 10000).toFixed(4) }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="任务ID" :width="100" align="center">
+          <a-table-column
+            :title="$t('drop.column.questId')"
+            :width="100"
+            align="center"
+          >
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -171,12 +193,12 @@
             </template>
           </a-table-column>
           <a-table-column
-            title="任务"
+            :title="$t('drop.column.quest')"
             :width="200"
             data-index="questName"
             align="center"
           />
-          <a-table-column :width="80" title="操作">
+          <a-table-column :width="80" :title="$t('drop.column.operate')">
             <template #cell="{ record }">
               <a-button
                 v-if="editId !== record.id"
@@ -184,7 +206,7 @@
                 size="mini"
                 @click="editClick(record.id)"
               >
-                编辑
+                {{ $t('drop.button.edit') }}
               </a-button>
               <a-button
                 v-if="editId === record.id"
@@ -192,7 +214,7 @@
                 size="mini"
                 @click="cancelEditClick"
               >
-                取消
+                {{ $t('drop.button.cancel') }}
               </a-button>
               <a-button
                 v-if="editId === record.id"
@@ -201,16 +223,16 @@
                 status="success"
                 @click="saveClick(record)"
               >
-                保存
+                {{ $t('drop.button.save') }}
               </a-button>
               <a-popconfirm
                 v-if="editId === record.id"
-                content="确定要删除吗？"
+                :content="$t('drop.delete.confirm')"
                 position="left"
                 @ok="() => deleteClick(record)"
               >
                 <a-button type="text" size="mini" status="danger">
-                  删除
+                  {{ $t('drop.button.delete') }}
                 </a-button>
               </a-popconfirm>
             </template>
@@ -246,7 +268,9 @@
   import useLoading from '@/hooks/loading';
   import { getIconUrl } from '@/utils/mapleStoryAPI';
   import { Message } from '@arco-design/web-vue';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const { setLoading, loading } = useLoading(false);
   const condition = ref<DropConditionState>({
     dropperId: undefined,
@@ -299,15 +323,19 @@
   const filterMobClick = (mobId: number, mobName: string) => {
     condition.value.dropperId = mobId;
     condition.value.pageNo = 1;
-    Message.success(`已按[怪物] ${mobName} (${mobId}) 查询，其他条件不变`);
+    Message.success(
+      t('drop.message.filterByMob', { name: mobName, id: mobId })
+    );
     loadData();
   };
 
   const filterItemClick = (itemId: number, itemName: string) => {
     condition.value.itemId = itemId;
     condition.value.pageNo = 1;
-    if (itemId === 0) itemName = '金币';
-    Message.success(`已按[物品] ${itemName} (${itemId}) 查询，其他条件不变`);
+    if (itemId === 0) itemName = t('drop.item.meso');
+    Message.success(
+      t('drop.message.filterByItem', { name: itemName, id: itemId })
+    );
     loadData();
   };
 
@@ -324,10 +352,10 @@
     try {
       if (data.id === 0) {
         await insertDrop(data);
-        Message.success('数据已创建');
+        Message.success(t('drop.message.createSuccess'));
       } else {
         await updateDrop(data);
-        Message.success('数据已更新');
+        Message.success(t('drop.message.updateSuccess'));
       }
       await loadData();
     } finally {
@@ -339,7 +367,7 @@
     setLoading(true);
     try {
       await deleteDrop(data);
-      Message.success('数据已删除');
+      Message.success(t('drop.message.deleteSuccess'));
       await loadData();
     } finally {
       setLoading(false);

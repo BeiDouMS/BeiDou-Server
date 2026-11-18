@@ -10,6 +10,9 @@ export default {
   'workplace.button.shutdown': 'Shutdown',
   'workplace.button.shutdown.confirm':
     'This operation will immediately shutdown all services. You need to be manually start the services on the server. Are you sure you want to shutdown now?',
+  'workplace.button.restart.confirm':
+    'This will immediately force all players offline and restart the server. Are you sure you want to restart?',
+  'workplace.button.shutdown.success': 'Shutdown command sent',
   'workplace.dataReload': 'Data Reload',
   'workplace.unit.minutes': 'Minutes',
   'workplace.stop.minutes': 'Countdown Minutes',

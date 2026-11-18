@@ -235,7 +235,9 @@
   import { getIconUrl } from '@/utils/mapleStoryAPI';
   import GachaponRewardForm from '@/views/game/gachapon/reward.vue';
   import { Message } from '@arco-design/web-vue';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
   const tableData = ref<GachaponPoolState[]>([]);
   const condition = ref<GachaponPoolSearchCondition>({
@@ -292,7 +294,7 @@
     setLoading(true);
     try {
       await deletePool(record);
-      Message.success('奖池已删除');
+      Message.success(t('gachapon.message.poolDeleted'));
       await loadData();
     } finally {
       setLoading(false);

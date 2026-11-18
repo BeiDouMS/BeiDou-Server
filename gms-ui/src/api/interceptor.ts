@@ -3,6 +3,7 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Message } from '@arco-design/web-vue';
 import { useUserStore } from '@/store';
 import { getToken } from '@/utils/auth';
+import i18n from '@/locale';
 
 /* eslint-disable no-bitwise */
 function generateUUID() {
@@ -95,9 +96,9 @@ axios.interceptors.response.use(
     const status = error.response?.status;
     let errorMessage;
     if (error.message === 'Network Error') {
-      errorMessage = '无法连接到服务器';
+      errorMessage = i18n.global.t('message.networkError');
     } else {
-      errorMessage = error.message || 'Request Error';
+      errorMessage = error.message || i18n.global.t('message.requestError');
     }
     Message.error({
       content: errorMessage,
@@ -109,7 +110,7 @@ axios.interceptors.response.use(
       userStore.logoutCallBack();
       // window.location.reload();
       window.location.href = '/';
-      return Promise.reject(new Error('登录已过期'));
+      return Promise.reject(new Error(i18n.global.t('message.loginExpired')));
     }
     return Promise.reject(error);
   }

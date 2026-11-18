@@ -5,31 +5,31 @@
     :on-before-ok="handleBeforeOk"
     @cancel="handleCancel"
   >
-    <template #title> 编辑装备 </template>
+    <template #title> {{ $t('inventoryEquipForm.title') }} </template>
     <div>
       <a-form :model="formData">
-        <a-form-item label="装备表ID">
+        <a-form-item :label="$t('inventoryEquipForm.inventoryEquipmentId')">
           {{ formData.inventoryEquipment.id }}
         </a-form-item>
-        <a-form-item label="物品表ID">
+        <a-form-item :label="$t('inventoryEquipForm.inventoryItemId')">
           {{ formData.inventoryEquipment.inventoryItemId }}
         </a-form-item>
-        <a-form-item label="可升级次数">
+        <a-form-item :label="$t('inventoryEquipForm.upgradeSlots')">
           <a-input-number v-model="formData.inventoryEquipment.upgradeSlots" />
         </a-form-item>
-        <a-form-item label="升级次数">
+        <a-form-item :label="$t('inventoryEquipForm.level')">
           <a-input-number v-model="formData.inventoryEquipment.level" />
         </a-form-item>
-        <a-form-item label="力量">
+        <a-form-item :label="$t('inventoryEquipForm.attStr')">
           <a-input-number v-model="formData.inventoryEquipment.attStr" />
         </a-form-item>
-        <a-form-item label="敏捷">
+        <a-form-item :label="$t('inventoryEquipForm.attDex')">
           <a-input-number v-model="formData.inventoryEquipment.attDex" />
         </a-form-item>
-        <a-form-item label="智慧">
+        <a-form-item :label="$t('inventoryEquipForm.attInt')">
           <a-input-number v-model="formData.inventoryEquipment.attInt" />
         </a-form-item>
-        <a-form-item label="运气">
+        <a-form-item :label="$t('inventoryEquipForm.attLuk')">
           <a-input-number v-model="formData.inventoryEquipment.attLuk" />
         </a-form-item>
         <a-form-item label="HP">
@@ -38,31 +38,31 @@
         <a-form-item label="MP">
           <a-input-number v-model="formData.inventoryEquipment.mp" />
         </a-form-item>
-        <a-form-item label="物攻">
+        <a-form-item :label="$t('inventoryEquipForm.patk')">
           <a-input-number v-model="formData.inventoryEquipment.patk" />
         </a-form-item>
-        <a-form-item label="魔法力">
+        <a-form-item :label="$t('inventoryEquipForm.matk')">
           <a-input-number v-model="formData.inventoryEquipment.matk" />
         </a-form-item>
-        <a-form-item label="物防">
+        <a-form-item :label="$t('inventoryEquipForm.pdef')">
           <a-input-number v-model="formData.inventoryEquipment.pdef" />
         </a-form-item>
-        <a-form-item label="魔防">
+        <a-form-item :label="$t('inventoryEquipForm.mdef')">
           <a-input-number v-model="formData.inventoryEquipment.mdef" />
         </a-form-item>
-        <a-form-item label="命中率">
+        <a-form-item :label="$t('inventoryEquipForm.acc')">
           <a-input-number v-model="formData.inventoryEquipment.acc" />
         </a-form-item>
-        <a-form-item label="回避率">
+        <a-form-item :label="$t('inventoryEquipForm.avoid')">
           <a-input-number v-model="formData.inventoryEquipment.avoid" />
         </a-form-item>
-        <a-form-item label="手技">
+        <a-form-item :label="$t('inventoryEquipForm.hands')">
           <a-input-number v-model="formData.inventoryEquipment.hands" />
         </a-form-item>
-        <a-form-item label="移动速度">
+        <a-form-item :label="$t('inventoryEquipForm.speed')">
           <a-input-number v-model="formData.inventoryEquipment.speed" />
         </a-form-item>
-        <a-form-item label="跳跃力">
+        <a-form-item :label="$t('inventoryEquipForm.jump')">
           <a-input-number v-model="formData.inventoryEquipment.jump" />
         </a-form-item>
         <a-form-item label="locked">
@@ -71,10 +71,10 @@
         <a-form-item label="vicious">
           <a-input-number v-model="formData.inventoryEquipment.vicious" />
         </a-form-item>
-        <a-form-item label="道具等级">
+        <a-form-item :label="$t('inventoryEquipForm.itemLevel')">
           <a-input-number v-model="formData.inventoryEquipment.itemLevel" />
         </a-form-item>
-        <a-form-item label="道具经验">
+        <a-form-item :label="$t('inventoryEquipForm.itemExp')">
           <a-input-number v-model="formData.inventoryEquipment.itemExp" />
         </a-form-item>
         <a-form-item label="ringId">
@@ -91,7 +91,9 @@
   import { Message } from '@arco-design/web-vue';
   import { InventoryState } from '@/store/modules/inventory/type';
   import { updateInventory } from '@/api/inventory';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const { setLoading, loading } = useLoading(false);
   const visible = ref<boolean>(false);
   const formData = ref<InventoryState>({
@@ -143,7 +145,7 @@
     try {
       await updateInventory(formData.value);
       visible.value = false;
-      Message.success('更新成功！');
+      Message.success(t('inventory.message.updateSuccess'));
       emit('loadData');
     } finally {
       setLoading(false);
