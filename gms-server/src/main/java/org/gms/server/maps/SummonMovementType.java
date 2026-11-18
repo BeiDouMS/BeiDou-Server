@@ -21,8 +21,11 @@
 */
 package org.gms.server.maps;
 
+import org.gms.client.SkillSummonNode;
+
 public enum SummonMovementType {
     STATIONARY(0), FOLLOW(1), CIRCLE_FOLLOW(3);
+
     private final int val;
 
     SummonMovementType(int val) {
@@ -31,5 +34,15 @@ public enum SummonMovementType {
 
     public int getValue() {
         return val;
+    }
+
+    public static SummonMovementType getFromSummonData(SkillSummonNode node) {
+        if (!node.hasMoveNode() && !node.hasFlyNode()) {
+            return SummonMovementType.STATIONARY;
+        } else if (node.hasMoveNode()) {
+            return SummonMovementType.FOLLOW;
+        } else {
+            return SummonMovementType.CIRCLE_FOLLOW;
+        }
     }
 }
