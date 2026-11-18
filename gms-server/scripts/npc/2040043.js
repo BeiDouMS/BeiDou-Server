@@ -110,6 +110,14 @@ function action(mode, type, selection) {
                         return;
                     }
 
+                    const GameConfig = Java.type('org.gms.config.GameConfig');
+                    if (GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1) {
+                        eim.setProperty("statusStg" + stage, 1);
+                        clearStage(stage, eim, curMap);
+                        cm.dispose();
+                        return;
+                    }
+
                     objset = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                     var playersOnCombo = 0;
                     var map = cm.getPlayer().getMap();
