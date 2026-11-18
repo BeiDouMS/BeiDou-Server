@@ -136,8 +136,10 @@ function action(mode, type, selection) {
                         cm.dispose();
                         return;
                     }
-                    if (cm.partyMembersInMap() < 2) {
-                        cm.sendOk("Make sure that 2 or more party members are in your map.");
+                    const GameConfig = Java.type('org.gms.config.GameConfig');
+                    var minParty = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : 2;
+                    if (cm.partyMembersInMap() < minParty) {
+                        cm.sendOk("Make sure that " + minParty + " or more party members are in your map.");
                         cm.dispose();
                         return;
                     }
