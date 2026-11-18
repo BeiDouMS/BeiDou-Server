@@ -21,33 +21,33 @@ function action(mode, type, selection) {
         }
         if (status == 0) {
             if (cm.getLevel() < 20) {
-                cm.sendDimensionalMirror("#-1# There is no place for you to transport to from here.");
+                cm.sendDimensionalMirror("#-1# 这里没有你可以传送的地方。");
                 cm.dispose();
             } else {
                 var selStr = "";
                 if (cm.getLevel() >= 20 && cm.getLevel() <= 30) {
-                    selStr += "#0# Ariant Coliseum";
+                    selStr += "#0# 阿里安特竞技场";
                 }
 
                 if (cm.getLevel() >= 25) {
-                    selStr += "#1# Mu Lung Dojo";
+                    selStr += "#1# 武陵道场";
                 }
 
                 if (cm.getLevel() >= 30 && cm.getLevel() <= 50) {   // MC 1 & 2 recalled thanks to ---
-                    selStr += "#2# Monster Carnival 1";
+                    selStr += "#2# 怪物嘉年华";
                 }
 
                 if (cm.getLevel() >= 51 && cm.getLevel() <= 70) {
-                    selStr += "#3# Monster Carnival 2";
+                    selStr += "#3# 怪物嘉年华 2";
                 }
 
                 /*
                 if (cm.getLevel() >= 40) { NOT IMPLEMENTED
-                    selStr += "#5# Nett's Pyramid"; 
+                    selStr += "#5# 金字塔山丘"; 
                 } 
 
                 if (cm.getLevel() >= 25 && cm.getLevel() <= 30) { NOT IMPLEMENTED
-                    selStr += "#6# Construction Site"; 
+                    selStr += "#6# 废弃的地铁站"; 
                 } 
                 */
 
