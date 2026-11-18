@@ -101,7 +101,7 @@ public abstract class CharacterFactory {
 
         Server.getInstance().createCharacterEntry(newCharacter);
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[New Char]: " + c.getAccountName() + I18nUtil.getMessage("CharacterFactory.message1") + name));
-        log.info("账号 {} 创建了角色 {}", c.getAccountName(), name);
+        log.info(I18nUtil.getLogMessage("CharacterFactory.createCharacter.info1"), c.getAccountName(), name);
 
         return 0;
     }

@@ -37,6 +37,7 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.util.ArrayList;
@@ -190,7 +191,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
             // 修复思路及推测结论：直接给身上的装备砸卷，当砸卷次数为0时服务端会发送else里的Inventory封包，而匠人之魂在次数为0时没发这个包（>0时有），所以由此推测 ->
             // 砸卷操作无论装备剩余次数是否为0，客户端都会向服务器发起砸卷请求，在这个过程中客户端会给背包加锁，客户端收到Inventory封包才会解除这个锁，所以原来没有这个封包的时候客户端的锁就解不了，导致假死。
             c.sendPacket(PacketCreator.getScrollEffect(c.getPlayer().getId(), ScrollResult.FAIL, true, false));
-            c.getPlayer().message("由于砸卷次数不足或其他原因导致的砸卷失败，本次不消耗卷轴。");
+            c.getPlayer().message(I18nUtil.getMessage("ScrollHandler.announceCannotScroll.message1"));
         }
     }
 

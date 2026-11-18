@@ -4,6 +4,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.dao.mapper.HpMpAlertMapper;
 import org.gms.dao.entity.HpMpAlertDO;
+import org.gms.util.I18nUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -123,7 +124,7 @@ public class HpMpAlertService {
         for (int id : cacheMap.keySet()) {
             hpMpAlertMapper.insertOrUpdate(cacheMap.get(id));
         }
-        log.info("已保存 Hp Mp 警戒线到数据库");
+        log.info(I18nUtil.getLogMessage("HpMpAlertService.saveAll.info1"));
     }
 
     /**

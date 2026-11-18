@@ -340,7 +340,7 @@ public class CharacterService {
             ps.setInt(1, cid);
             ps.executeUpdate();
         } catch (SQLException e) {
-            log.error("删除 characterexplogs 失败, cid={}", cid, e);
+            log.error(I18nUtil.getLogMessage("CharacterService.deleteExplogs.error1"), cid, e);
         }
         // 补充heaven没有删除的2张表
         nameChangeService.cancelPendingNameChange(cid, false);

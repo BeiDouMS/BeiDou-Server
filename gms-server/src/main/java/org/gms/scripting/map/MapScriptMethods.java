@@ -29,13 +29,14 @@ import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.server.TimerManager;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.quest.Quest;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MapScriptMethods extends AbstractPlayerInteraction {
 
-    private final String rewardstring = " 勋章挑战已完成！请找勋章老人领取你的勋章。";
+    private final String rewardstring = I18nUtil.getMessage("MapScriptMethods.rewardstring");
 
     public MapScriptMethods(Client c) {
         super(c);
@@ -135,13 +136,13 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         StringBuilder smp = new StringBuilder();
         StringBuilder etm = new StringBuilder();
         if (status.equals(infoex)) {
-            etm.append("获得 ").append(questName).append(" 勋章！");
-            smp.append("你获得了 <").append(questName).append(">").append(rewardstring);
+            etm.append(I18nUtil.getMessage("MapScriptMethods.explorerQuest.message2", questName));
+            smp.append(I18nUtil.getMessage("MapScriptMethods.explorerQuest.message1", questName, rewardstring));
             getPlayer().sendPacket(PacketCreator.getShowQuestCompletion(quest.getId()));
         } else {
-            getPlayer().sendPacket(PacketCreator.earnTitleMessage(status + "/" + infoex + " 区域已探索"));
-            etm.append("正在挑战 ").append(questName).append(" 勋章");
-            smp.append("你正在挑战 ").append(questName).append(" 勋章。 ").append(status).append("/").append(infoex);
+            getPlayer().sendPacket(PacketCreator.earnTitleMessage(I18nUtil.getMessage("MapScriptMethods.explorerQuest.message3", status, infoex)));
+            etm.append(I18nUtil.getMessage("MapScriptMethods.explorerQuest.message4", questName));
+            smp.append(I18nUtil.getMessage("MapScriptMethods.explorerQuest.message5", questName, status, infoex));
         }
         getPlayer().sendPacket(PacketCreator.earnTitleMessage(etm.toString()));
         showInfoText(smp.toString());
@@ -160,13 +161,13 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         }
         String status = Integer.toString(qs.getMedalProgress());
         getPlayer().setQuestProgress(quest.getId(), (int)quest.getInfoNumber(qs.getStatus()), status);
-        getPlayer().sendPacket(PacketCreator.earnTitleMessage(status + "/5 已完成"));
-        getPlayer().sendPacket(PacketCreator.earnTitleMessage("站在巅峰的人 勋章挑战正在进行中"));
+        getPlayer().sendPacket(PacketCreator.earnTitleMessage(I18nUtil.getMessage("MapScriptMethods.touchTheSky.message1", status)));
+        getPlayer().sendPacket(PacketCreator.earnTitleMessage(I18nUtil.getMessage("MapScriptMethods.touchTheSky.message2")));
         if (Integer.toString(qs.getMedalProgress()).equals(qs.getInfoEx(0))) {
-            showInfoText("站在巅峰的人" + rewardstring);
+            showInfoText(I18nUtil.getMessage("MapScriptMethods.touchTheSky.message3", rewardstring));
             getPlayer().sendPacket(PacketCreator.getShowQuestCompletion(quest.getId()));
         } else {
-            showInfoText("站在巅峰的人 勋章挑战正在进行中。 " + status + "/5 已完成");
+            showInfoText(I18nUtil.getMessage("MapScriptMethods.touchTheSky.message4", status));
         }
     }
 }

@@ -45,12 +45,12 @@ import org.gms.server.CashShop;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.service.NoteService;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -78,7 +78,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
             return true;
         }
         c.sendPacket(PacketCreator.serverNotice(1,
-                "现金仓库已满，最多只能保留 " + cs.getInventoryLimit() + " 个道具。"));
+                I18nUtil.getMessage("CashOperationHandler.ensureCashInventoryCapacity.message1", cs.getInventoryLimit())));
         c.enableCSActions();
         return false;
     }
@@ -112,7 +112,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.enableCSActions();
                             return;
                         } else if (ItemConstants.isRateCoupon(cItem.getItemId()) && !GameConfig.getServerBoolean("use_supply_rate_coupons")) {
-                            chr.dropMessage(1, "当前无法购买倍率券。");
+                            chr.dropMessage(1, I18nUtil.getMessage("CashOperationHandler.handlePacket.message1"));
                             c.enableCSActions();
                             return;
                         } else if (ItemConstants.isMapleLife(cItem.getItemId()) && chr.getLevel() < 30) {
@@ -164,7 +164,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.showGiftSucceed(charactersDO.getName(), cItem));
                     c.sendPacket(PacketCreator.showCash(chr));
 
-                    String noteMessage = chr.getName() + " 给你送了一份礼物！快去现金商城查看吧。";
+                    String noteMessage = I18nUtil.getMessage("CashOperationHandler.handlePacket.message2", chr.getName());
                     noteService.sendNormal(noteMessage, chr.getName(), charactersDO.getName());
 
                     Character receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(charactersDO.getName());
@@ -330,11 +330,11 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.enableCSActions();
                         return;
                     } else if (c.getPlayer().getPetIndex(item.getPetId()) > -1) {
-                        chr.getClient().sendPacket(PacketCreator.serverNotice(1, "当前正在装备中的宠物无法放入现金仓库。"));
+                        chr.getClient().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("CashOperationHandler.handlePacket.message3")));
                         c.enableCSActions();
                         return;
                     } else if (ItemId.isWeddingRing(item.getItemId()) || ItemId.isWeddingToken(item.getItemId())) {
-                        chr.getClient().sendPacket(PacketCreator.serverNotice(1, "关系类道具无法放入现金仓库。"));
+                        chr.getClient().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("CashOperationHandler.handlePacket.message4")));
                         c.enableCSActions();
                         return;
                     }
@@ -354,7 +354,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         ModifiedCashItemDO itemRing = CashItemFactory.getItem(SN);
                         Character partner = c.getChannelServer().getPlayerStorage().getCharacterByName(recipientName);
                         if (partner == null) {
-                            chr.sendPacket(PacketCreator.serverNotice(1, "找不到你指定的对象。\r\n请确认对方在线且与你处于同一频道。"));
+                            chr.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("CashOperationHandler.handlePacket.message5")));
                         } else {
 
                           /*  if (partner.getGender() == chr.getGender()) {
@@ -532,7 +532,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
 
     private static boolean canBuy(Character chr, ModifiedCashItemDO item, int cash) {
         if (item != null && item.isSelling() && item.getPrice() <= cash) {
-            log.info("玩家 {} 购买了现金道具 {} (SN {}) 花费 {}", chr, ItemInformationProvider.getInstance().getName(item.getItemId()), item.getSn(), item.getPrice());
+            log.info(I18nUtil.getLogMessage("CashOperationHandler.canBuy.info1"), chr, ItemInformationProvider.getInstance().getName(item.getItemId()), item.getSn(), item.getPrice());
             return true;
         } else {
             return false;

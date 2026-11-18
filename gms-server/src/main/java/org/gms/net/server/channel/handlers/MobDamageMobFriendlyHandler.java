@@ -28,6 +28,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
@@ -54,19 +55,19 @@ public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
         if (monster.getHp() - damage < 1) {     // friendly dies
             switch (monster.getId()) {
                 case MobId.WATCH_HOG ->
-                        map.broadcastMessage(PacketCreator.serverNotice(5, mopName + " 被外星人殴打致重伤，已被兽医紧急拉走抢救。"));    //护卫用小浣猪
+                        map.broadcastMessage(PacketCreator.serverNotice(5, I18nUtil.getMessage("MobDamageMobFriendlyHandler.handlePacket.message1", mopName)));    //护卫用小浣猪
                 case MobId.MOON_BUNNY -> //moon bunny
-                        map.broadcastMessage(PacketCreator.serverNotice(5, mopName + " 因为重伤被抬回去休养了。")); //月妙
+                        map.broadcastMessage(PacketCreator.serverNotice(5, I18nUtil.getMessage("MobDamageMobFriendlyHandler.handlePacket.message2", mopName))); //月妙
                 case MobId.TYLUS -> //tylus
-                        map.broadcastMessage(PacketCreator.serverNotice(5, mopName + " 在伏击部队的强大攻势下倒下了。"));  //冒牌泰勒斯
+                        map.broadcastMessage(PacketCreator.serverNotice(5, I18nUtil.getMessage("MobDamageMobFriendlyHandler.handlePacket.message3", mopName)));  //冒牌泰勒斯
                 case MobId.JULIET -> //juliet
-                        map.broadcastMessage(PacketCreator.serverNotice(5, mopName + " 在战斗中晕倒了。")); //朱丽叶
+                        map.broadcastMessage(PacketCreator.serverNotice(5, I18nUtil.getMessage("MobDamageMobFriendlyHandler.handlePacket.message4", mopName))); //朱丽叶
                 case MobId.ROMEO -> //romeo
-                        map.broadcastMessage(PacketCreator.serverNotice(5, mopName + " 在战斗中晕倒了。")); //罗密欧
+                        map.broadcastMessage(PacketCreator.serverNotice(5, I18nUtil.getMessage("MobDamageMobFriendlyHandler.handlePacket.message5", mopName))); //罗密欧
                 case MobId.GIANT_SNOWMAN_LV1_EASY, MobId.GIANT_SNOWMAN_LV1_MEDIUM, MobId.GIANT_SNOWMAN_LV1_HARD ->
-                        map.broadcastMessage(PacketCreator.serverNotice(5, "雪人在战斗的热浪中融化了。"));
+                        map.broadcastMessage(PacketCreator.serverNotice(5, I18nUtil.getMessage("MobDamageMobFriendlyHandler.handlePacket.message6")));
                 case MobId.DELLI -> //delli
-                        map.broadcastMessage(PacketCreator.serverNotice(5, mopName + " 在伏击后消失了，只留下地上的被单..."));  //德里
+                        map.broadcastMessage(PacketCreator.serverNotice(5, I18nUtil.getMessage("MobDamageMobFriendlyHandler.handlePacket.message7", mopName)));  //德里
             }
             
             map.killFriendlies(monster);

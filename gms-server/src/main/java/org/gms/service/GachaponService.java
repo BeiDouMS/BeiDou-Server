@@ -49,15 +49,15 @@ public class GachaponService {
     public void updatePool(GachaponRewardPoolDO submit) {
         wLock.lock();
         try {
-            RequireUtil.requireNotNull(submit.getStartTime(), "生效时间不能为空");
+            RequireUtil.requireNotNull(submit.getStartTime(), I18nUtil.getExceptionMessage("GachaponService.updatePool.exception1"));
             if (submit.getIsPublic()) {
                 submit.setGachaponId(-1);
                 submit.setWeight(0);
-                RequireUtil.requireNotNull(submit.getProb(), "公共奖池中奖率不能为空");
+                RequireUtil.requireNotNull(submit.getProb(), I18nUtil.getExceptionMessage("GachaponService.updatePool.exception2"));
             } else {
                 submit.setProb(0);
-                RequireUtil.requireNotNull(submit.getGachaponId(), "百宝箱ID不能为空");
-                RequireUtil.requireNotNull(submit.getWeight(), "奖池权重不能为空");
+                RequireUtil.requireNotNull(submit.getGachaponId(), I18nUtil.getExceptionMessage("GachaponService.updatePool.exception3"));
+                RequireUtil.requireNotNull(submit.getWeight(), I18nUtil.getExceptionMessage("GachaponService.updatePool.exception4"));
             }
             // 校验城镇概率和是否大于100%
             gachaponRewardPoolMapper.insertOrUpdate(submit);
@@ -203,8 +203,8 @@ public class GachaponService {
         try {
             List<GachaponRewardPoolDO> pools = getActivePools(gachaponId); // 已按ID排序
             if (pools.isEmpty()) {
-                player.message("百宝箱为空，请联系管理员，百宝箱id: " + gachaponId);
-                log.error("百宝箱奖池为空，百宝箱id:{} 抽奖人:[{}] {}", gachaponId, player.getId(), player.getName());
+                player.message(I18nUtil.getMessage("GachaponService.doGachapon.message1", gachaponId));
+                log.error(I18nUtil.getLogMessage("GachaponService.doGachapon.error1"), gachaponId, player.getId(), player.getName());
                 return;
             }
 
@@ -252,8 +252,8 @@ public class GachaponService {
     private void doReward(Character player, GachaponRewardPoolDO pool) {
         List<GachaponRewardDO> poolRewards = getPoolRewards(pool.getId());
         if (poolRewards.isEmpty()) {
-            player.message("奖池为空，请联系管理员");
-            log.error("百宝箱奖池为空，奖池id:{} 抽奖人:[{}] {}", pool.getId(), player.getId(), player.getName());
+            player.message(I18nUtil.getMessage("GachaponService.doReward.message1"));
+            log.error(I18nUtil.getLogMessage("GachaponService.doReward.error1"), pool.getId(), player.getId(), player.getName());
             return;
         }
 

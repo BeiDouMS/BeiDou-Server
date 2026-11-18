@@ -41,6 +41,7 @@ import org.gms.constants.skills.Magician;
 import org.gms.constants.skills.ThunderBreaker;
 import org.gms.constants.skills.Warrior;
 import org.gms.net.packet.InPacket;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
@@ -427,10 +428,8 @@ public class AssignAPProcessor {
 
                 // 发送分配结果通知给玩家
                 c.sendPacket(PacketCreator.serverNotice(1,
-                        "检测到更优AP分配方案：\r\n力量(STR): +" + statGain[0] +
-                                "\r\n敏捷(DEX): +" + statGain[1] +
-                                "\r\n智力(INT): +" + statGain[3] +
-                                "\r\n运气(LUK): +" + statGain[2]));
+                        I18nUtil.getMessage("AssignAPProcessor.APAutoAssignAction.message1",
+                                statGain[0], statGain[1], statGain[3], statGain[2])));
             } else { // 不使用自动分配器的情况
                 if (inPacket.available() < 16) { // 检查数据包是否完整
                     AutobanFactory.PACKET_EDIT.alert(chr, "Auto Assign数据包不完整"); // 记录异常
@@ -563,48 +562,48 @@ public class AssignAPProcessor {
             switch (APFrom) {
                 case 64 -> { // str
                     if (player.getStr() < 5) {
-                        player.message("你的力量(STR)不足，无法进行重置。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message1"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     if (!player.assignStr(-1)) {
-                        player.message("AP重置操作执行失败。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message5"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                 }
                 case 128 -> { // dex
                     if (player.getDex() < 5) {
-                        player.message("你的敏捷(DEX)不足，无法进行重置。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message2"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     if (!player.assignDex(-1)) {
-                        player.message("AP重置操作执行失败。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message5"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                 }
                 case 256 -> { // int
                     if (player.getInt() < 5) {
-                        player.message("你的智力(INT)不足，无法进行重置。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message3"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     if (!player.assignInt(-1)) {
-                        player.message("AP重置操作执行失败。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message5"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                 }
                 case 512 -> { // luk
                     if (player.getLuk() < 5) {
-                        player.message("你的运气(LUK)不足，无法进行重置。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message4"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     if (!player.assignLuk(-1)) {
-                        player.message("AP重置操作执行失败。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message5"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
@@ -612,20 +611,20 @@ public class AssignAPProcessor {
                 case 2048 -> { // HP
                     if (useEnforceHpmpSwap) {
                         if (APTo != 8192) {
-                            player.message("你只能将HP能力点重置到MP。");
+                            player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message6"));
                             c.sendPacket(PacketCreator.enableActions());
                             return false;
                         }
                     }
                     if (player.getHpMpApUsed() < 1) {
-                        player.message("你没有足够的HP、MP属性点用于AP重置。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message7"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     int hp = player.getMaxHp();
                     int level_ = player.getLevel();
                     if (hp < level_ * 14 + 148) {
-                        player.message("你的HP总量不足，无法进行重置。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message8"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
@@ -639,13 +638,13 @@ public class AssignAPProcessor {
                 case 8192 -> { // MP
                     if (useEnforceHpmpSwap) {
                         if (APTo != 2048) {
-                            player.message("你只能将MP能力点重置到HP。");
+                            player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message9"));
                             c.sendPacket(PacketCreator.enableActions());
                             return false;
                         }
                     }
                     if (player.getHpMpApUsed() < 1) {
-                        player.message("你没有足够的HP、MP属性点用于AP重置。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message7"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
@@ -663,7 +662,7 @@ public class AssignAPProcessor {
                         canWash = mp >= level * 14 + 148;
                     }
                     if (!canWash) {
-                        player.message("你的MP总量不足，无法进行重置。");
+                        player.message(I18nUtil.getMessage("AssignAPProcessor.APResetAction.message10"));
                         c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
@@ -711,28 +710,28 @@ public class AssignAPProcessor {
         switch (apTo) {
             case 64 -> { // 力量(STR)
                 if (!chr.assignStr(1)) {
-                    chr.message("无法重新分配AP");
+                    chr.message(I18nUtil.getMessage("AssignAPProcessor.addStat.message1"));
                     chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
             }
             case 128 -> { // 敏捷(DEX)
                 if (!chr.assignDex(1)) {
-                    chr.message("无法重新分配AP");
+                    chr.message(I18nUtil.getMessage("AssignAPProcessor.addStat.message1"));
                     chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
             }
             case 256 -> { // 智力(INT)
                 if (!chr.assignInt(1)) {
-                    chr.message("无法重新分配AP");
+                    chr.message(I18nUtil.getMessage("AssignAPProcessor.addStat.message1"));
                     chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
             }
             case 512 -> { // 运气(LUK)
                 if (!chr.assignLuk(1)) {
-                    chr.message("无法重新分配AP");
+                    chr.message(I18nUtil.getMessage("AssignAPProcessor.addStat.message1"));
                     chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
@@ -740,21 +739,21 @@ public class AssignAPProcessor {
             case 2048 -> { // HP
                 maxHp = calcHpChange(chr, usedAPReset);
                 if (!chr.assignHP(maxHp, 1)) {
-                    chr.message("无法重新分配AP");
+                    chr.message(I18nUtil.getMessage("AssignAPProcessor.addStat.message1"));
                     chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 } else if (usedAPReset) {
-                    chr.dropMessage(6, "[重置卷轴] 最大HP +" + maxHp + " ↑");
+                    chr.dropMessage(6, I18nUtil.getMessage("AssignAPProcessor.addStat.message2", maxHp));
                 }
             }
             case 8192 -> { // MP
                 maxMp = calcMpChange(chr, usedAPReset);
                 if (!chr.assignMP(maxMp, 1)) {
-                    chr.message("无法重新分配AP");
+                    chr.message(I18nUtil.getMessage("AssignAPProcessor.addStat.message1"));
                     chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 } else if (usedAPReset) {
-                    chr.dropMessage(6, "[重置卷轴] 最大MP +" + maxMp + " ↑");
+                    chr.dropMessage(6, I18nUtil.getMessage("AssignAPProcessor.addStat.message3", maxMp));
                 }
             }
             default -> {

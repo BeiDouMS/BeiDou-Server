@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop;
 import org.gms.server.ItemInformationProvider;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -210,7 +211,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                     }
                     if (!cs.canAddToInventory(incomingCashItems)) {
                         c.sendPacket(PacketCreator.serverNotice(1,
-                                "现金仓库已满，最多只能保留 " + cs.getInventoryLimit() + " 个道具。"));
+                                I18nUtil.getMessage("CouponCodeHandler.handlePacket.message1", cs.getInventoryLimit())));
                         c.enableCSActions();
                         return;
                     }

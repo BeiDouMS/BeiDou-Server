@@ -34,6 +34,7 @@ import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -234,7 +235,7 @@ public class Storage {
 
     public void sendStorage(Client c, int npcId) {
         if (c.getPlayer().getLevel() < 15) {
-            c.getPlayer().dropMessage(1, "15级以后才可以使用仓库服务");
+            c.getPlayer().dropMessage(1, I18nUtil.getMessage("Storage.message1"));
             c.sendPacket(PacketCreator.enableActions());
             return;
         }

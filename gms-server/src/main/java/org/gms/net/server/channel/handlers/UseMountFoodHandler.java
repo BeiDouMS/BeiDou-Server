@@ -31,6 +31,7 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.game.ExpTable;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
@@ -79,7 +80,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
                                 }
                             //如果满级
                             } else if (level == maxMountLevel) {
-                                chr.dropMessage(5, "坐骑已达到最高等级");
+                                chr.dropMessage(5, I18nUtil.getMessage("UseMountFoodHandler.handlePacket.message1"));
                             }
 
                             mountLevelup = levelup;

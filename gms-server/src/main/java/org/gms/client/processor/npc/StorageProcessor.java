@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.Storage;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
@@ -50,12 +51,12 @@ public class StorageProcessor {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Character chr = c.getPlayer();
         Storage storage = chr.getStorage();
-        String gmBlockedStorageMessage = "当前GM级别禁止使用仓库";
+        String gmBlockedStorageMessage = I18nUtil.getMessage("Storage.message2");
 
         byte mode = p.readByte();
 
         if (chr.getLevel() < 15) {
-            chr.dropMessage(1, "15级以后才可以使用仓库服务");
+            chr.dropMessage(1, I18nUtil.getMessage("Storage.message1"));
             c.sendPacket(PacketCreator.enableActions());
             return;
         }

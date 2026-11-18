@@ -36,15 +36,15 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            logger.error("访问者的Token签名无效: {}", e.getMessage());
+            logger.error(I18nUtil.getLogMessage("JwtUtils.validateJwtToken.error1"), e.getMessage());
         } catch (MalformedJwtException e) {
-            logger.error("访问者的Token无效: {}", e.getMessage());
+            logger.error(I18nUtil.getLogMessage("JwtUtils.validateJwtToken.error2"), e.getMessage());
         } catch (ExpiredJwtException e) {
-            logger.error("访问者的Token已过期: {}", e.getMessage());
+            logger.error(I18nUtil.getLogMessage("JwtUtils.validateJwtToken.error3"), e.getMessage());
         } catch (UnsupportedJwtException e) {
-            logger.error("访问者的Token不被支持: {}", e.getMessage());
+            logger.error(I18nUtil.getLogMessage("JwtUtils.validateJwtToken.error4"), e.getMessage());
         } catch (IllegalArgumentException e) {
-            logger.error("访问者的Token参数为空: {}", e.getMessage());
+            logger.error(I18nUtil.getLogMessage("JwtUtils.validateJwtToken.error5"), e.getMessage());
         }
 
         return false;

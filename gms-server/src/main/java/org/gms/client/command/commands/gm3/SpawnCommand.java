@@ -45,7 +45,7 @@ public class SpawnCommand extends Command {
 
         Monster monster = LifeFactory.getMonster(Integer.parseInt(params[0]));
         if (monster == null) {
-            player.dropMessage(6,"怪物ID：[" + params[0] + "] 不存在，无法召唤。");
+            player.dropMessage(6, I18nUtil.getMessage("SpawnCommand.execute.message1", params[0]));
             return;
         }
         if (params.length == 2) {

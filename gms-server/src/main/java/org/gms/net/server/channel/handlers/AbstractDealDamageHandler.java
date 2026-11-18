@@ -55,6 +55,7 @@ import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 import org.slf4j.Logger;
@@ -528,7 +529,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                             api.gainItem(shellId, (short) -1, false);
                                             totDamageToOneMonster *= player.getLevel();
                                         } else {
-                                            player.dropMessage(5, "你的蜗牛壳已经用完了，无法使用蜗牛投掷术。");  //蜗牛壳消耗完了
+                                            player.dropMessage(5, I18nUtil.getMessage("AbstractDealDamageHandler.applyAttack.message1"));  //蜗牛壳消耗完了
                                             totDamageToOneMonster = 0;
                                         }
                                     } else {

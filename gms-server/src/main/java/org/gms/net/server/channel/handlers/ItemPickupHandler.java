@@ -26,6 +26,7 @@ import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.maps.MapObject;
@@ -57,7 +58,7 @@ public final class ItemPickupHandler extends AbstractPacketHandler {
 
 //            AutobanFactory.DISTANCE_HACK.alert(chr, "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + Math.abs(charPos.getX() - obPos.getX()) + " " + Math.abs(charPos.getY() - obPos.getY()));
             AutobanFactory.ITEM_VAC.addPoint(chr.getAutoBanManager(), "玩家" + chr.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + Math.abs(charPos.getX() - obPos.getX()) + " " + Math.abs(charPos.getY() - obPos.getY()));
-            log.warn("玩家{}地图ID：{}距离物品: {} {}", chr.getName(), chr.getMapId(), Math.abs(charPos.getX() - obPos.getX()), Math.abs(charPos.getY() - obPos.getY()));
+            log.warn(I18nUtil.getLogMessage("ItemPickupHandler.handlePacket.warn1"), chr.getName(), chr.getMapId(), Math.abs(charPos.getX() - obPos.getX()), Math.abs(charPos.getY() - obPos.getY()));
             return;
         }
 

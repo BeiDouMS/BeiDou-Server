@@ -3,6 +3,7 @@ package org.gms.service;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.exception.BizException;
 import org.gms.model.dto.FileTreeNodeDTO;
+import org.gms.util.I18nUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -36,7 +37,7 @@ public class FileTreeService {
 
     public String readFile(String currentKey, String filename) {
         File file = resolveByTreeKey(currentKey);
-        if (!filename.equals(file.getName())) throw new BizException("文件目录发生变动，请重新读取");
+        if (!filename.equals(file.getName())) throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.readFile.exception1"));
         try {
             return Files.readString(file.toPath(), UTF_8);
         } catch (MalformedInputException e) {
@@ -45,22 +46,22 @@ public class FileTreeService {
                 return Files.readString(file.toPath(), ISO_8859_1);
             } catch (IOException ex) {
                 log.error("io error", ex);
-                throw new BizException("读取文件异常");
+                throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.readFile.exception2"));
             }
         } catch (IOException e) {
             log.error("io error", e);
-            throw new BizException("读取文件异常");
+            throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.readFile.exception2"));
         }
     }
 
     public void writeFile(String currentKey, String filename, String content) {
         File file = resolveByTreeKey(currentKey);
-        if (!filename.equals(file.getName())) throw new BizException("文件目录发生变动，请重新写入");
+        if (!filename.equals(file.getName())) throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.writeFile.exception1"));
         try {
             Files.writeString(file.toPath(), content, UTF_8);
         } catch (IOException e) {
             log.error("io error", e);
-            throw new BizException("读取文件异常");
+            throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.writeFile.exception2"));
         }
     }
 
@@ -70,7 +71,7 @@ public class FileTreeService {
         boolean root = !StringUtils.hasText(currentKey);
         File current = root ? new File(FILE_TREE_BASE_DIR) : resolveByTreeKey(currentKey);
 
-        if (!current.isDirectory()) throw new BizException("请输入文件夹");
+        if (!current.isDirectory()) throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.tree.exception1"));
 
         boolean parentIsMatch = matchAnyLimitPattern(current.toPath());
 
@@ -102,7 +103,7 @@ public class FileTreeService {
             }
         } catch (NullPointerException | NumberFormatException | ArrayIndexOutOfBoundsException e) {
             log.error("file not exists", e);
-            throw new BizException("文件/文件夹不存在");
+            throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.resolveByTreeKey.exception1"));
         }
 
 
@@ -110,12 +111,12 @@ public class FileTreeService {
             Path userPath = current.toPath().toAbsolutePath().normalize();
             if (!userPath.startsWith(FILE_TREE_BASE_DIR_PATH)) {
                 log.error("file escape base dir : {}", userPath);
-                throw new BizException("检测到路径逃逸尝试");
+                throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.resolveByTreeKey.exception2"));
             }
 
             if (!matchAnyLimitPattern(userPath)) {
                 log.error("file escape limit pattern : {}", userPath);
-                throw new BizException("检测到路径逃逸尝试");
+                throw new BizException(I18nUtil.getExceptionMessage("FileTreeService.resolveByTreeKey.exception2"));
             }
         }
         return current;

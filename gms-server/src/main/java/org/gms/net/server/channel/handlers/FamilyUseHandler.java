@@ -32,6 +32,7 @@ import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.util.Objects;
@@ -93,7 +94,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
 
         } else {
             if (c.getPlayer().isFamilyBuff()) {
-                c.getPlayer().message("你已经有BUFF");
+                c.getPlayer().message(I18nUtil.getMessage("FamilyUseHandler.handlePacket.message1"));
                 return;
             }
 

@@ -387,7 +387,7 @@ public class Equip extends Item {
                 try {
                     chanceList = JSONObject.parseObject(chanceParam, double[][].class);
                 } catch (Throwable e) {
-                    log.warn("金锤子装备等级范围概率参数解析失败，请检查是否正确");
+                    log.warn(I18nUtil.getLogMessage("Equip.UpgradeSlotProcessing.error1"));
                 }
             }
             for(double[] obj : chanceList) {

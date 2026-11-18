@@ -25,6 +25,7 @@ import org.gms.constants.net.ServerConstants;
 import org.gms.net.netty.LoginServer;
 import org.gms.net.opcodes.Opcode;
 import org.gms.net.opcodes.RecvOpcode;
+import org.gms.util.I18nUtil;
 import org.gms.net.server.channel.handlers.*;
 import org.gms.net.server.handlers.CustomPacketHandler;
 import org.gms.net.server.handlers.KeepAliveHandler;
@@ -130,7 +131,7 @@ public final class PacketProcessor {
                 }
                 break;
             default:
-                log.warn("找不到指定的版本注册 Opcode Handler");
+                log.warn(I18nUtil.getLogMessage("PacketProcessor.reset.warn1"));
                 break;
         }
     }

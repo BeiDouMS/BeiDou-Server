@@ -29,6 +29,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,7 +137,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
         if (diffX > 800 || diffY > 600) {
             AutobanFactory.PET_ITEM_VAC.addPoint(chr.getAutoBanManager(),
                     "宠物" + pet.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + diffX + " " + diffY);
-            log.warn("宠物{}地图ID：{}距离物品: {} {}", pet.getName(), chr.getMapId(), diffX, diffY);
+            log.warn(I18nUtil.getLogMessage("PetLootHandler.handlePacket.warn1"), pet.getName(), chr.getMapId(), diffX, diffY);
             return false;
         }
 
@@ -144,7 +145,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
         if (diffX > 400 || diffY > 400) {
             AutobanFactory.PET_SHORT_ITEM_VAC.addPoint(chr.getAutoBanManager(),
                     "宠物" + pet.getName() + "地图ID：" + chr.getMapId() + "距离物品: " + diffX + " " + diffY);
-            log.warn("宠物{}地图ID：{}距离物品: {} {}", pet.getName(), chr.getMapId(), diffX, diffY);
+            log.warn(I18nUtil.getLogMessage("PetLootHandler.handlePacket.warn1"), pet.getName(), chr.getMapId(), diffX, diffY);
             return false;
         }
 

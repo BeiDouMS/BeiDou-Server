@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
 import org.gms.model.dto.*;
 import org.gms.service.FileTreeService;
+import org.gms.util.I18nUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -28,7 +29,7 @@ public class FileController {
     @PostMapping("/" + ApiConstant.LATEST + "/tree/write")
     public ResultBody<String> treeWrite(@RequestBody SubmitBody<FileWriteDTO> request) {
         fileTreeService.writeFile(request.getData().getCurrentKey(), request.getData().getTitle(), request.getData().getContent());
-        return ResultBody.success(request,"写入成功");
+        return ResultBody.success(request, I18nUtil.getMessage("FileController.treeWrite.message1"));
     }
 
     @Tag(name = "/file/" + ApiConstant.LATEST)

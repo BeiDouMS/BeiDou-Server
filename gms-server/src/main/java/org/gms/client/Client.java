@@ -232,7 +232,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         try {
             remoteAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
         } catch (NullPointerException npe) {
-            log.warn("无法获取客户端的远程地址", npe);
+            log.warn(I18nUtil.getLogMessage("Client.getRemoteAddress.warn1"), npe);
         }
 
         return remoteAddress;
@@ -243,7 +243,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         if (disconnecting || inTransition || (characterSaveSession != null
                 && CharacterSaveService.getInstance().isClosing(characterSaveSession))) return;
         if (!(msg instanceof InPacket packet)) {
-            log.warn("收到无效封包: {}", msg);
+            log.warn(I18nUtil.getLogMessage("Client.channelRead.warn1"), msg);
             return;
         }
 
@@ -251,7 +251,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         final PacketHandler handler = packetProcessor.getHandler(opcode);
 
         if (GameConfig.getServerBoolean("use_debug_show_rcvd_packet") && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
-            log.info("收到封包 包头ID [{}] 内容： {}", String.format("0x%02X", opcode),packet);
+            log.info(I18nUtil.getLogMessage("Client.channelRead.info1"), String.format("0x%02X", opcode),packet);
         }
 
         if (handler != null && handler.validateState(this)) {
@@ -260,8 +260,8 @@ public class Client extends ChannelInboundHandlerAdapter {
                 MonitoredChrLogger.logPacketIfMonitored(this, opcode, packet.getBytes());
                 handler.handlePacket(packet, this);
             } catch (final Throwable t) {
-                final String chrInfo = player != null ? player.getName() + " 地图 [" + player.getMap().getMapName() + "] (" + player.getMapId() + ")" : "?";
-                log.warn("封包处理器 {} 出错. 账号 {}, 玩家 {}. 封包: {}", handler.getClass().getSimpleName(),
+                final String chrInfo = player != null ? player.getName() + " " + I18nUtil.getLogMessage("Client.channelRead.chrInfo", player.getMap().getMapName(), player.getMapId()) : "?";
+                log.warn(I18nUtil.getLogMessage("Client.channelRead.warn2"), handler.getClass().getSimpleName(),
                         getAccountName(), chrInfo, packet, t);
                 enableActions();//解除客户端假死
             } finally {
@@ -440,7 +440,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 voteTime = rs.getInt("date");
             }
         } catch (SQLException e) {
-            log.error("获取投票时间时出错");
+            log.error(I18nUtil.getLogMessage("Client.getVoteTime.error1"));
             return -1;
         }
         return voteTime;
@@ -750,7 +750,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 if (rs.next()) {
                     accId = rs.getInt("id");
                     if (accId <= 0) {
-                        log.warn("尝试使用accId登录 {}", accId);
+                        log.warn(I18nUtil.getLogMessage("Client.login.warn1"), accId);
                         return 15;
                     }
 
@@ -851,7 +851,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     public static long dottedQuadToLong(String dottedQuad) throws RuntimeException {
         String[] quads = dottedQuad.split("\\.");
         if (quads.length != 4) {
-            throw new RuntimeException("IP地址格式无效。");
+            throw new RuntimeException(I18nUtil.getExceptionMessage("Client.dottedQuadToLong.exception1"));
         }
         long ipAddress = 0;
         for (int i = 0; i < 4; i++) {
@@ -1024,7 +1024,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             }
 
         } catch (final Throwable t) {
-            log.error("账号卡住 (玩家清理)", t);
+            log.error(I18nUtil.getLogMessage("Client.removePlayer.error1"), t);
         }
 
         // 地图移除必须独立保证执行：即便上面的清理抛异常，也要把玩家从地图摘除并触发怪物 controller 重分配，
@@ -1043,7 +1043,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             }
 
         } catch (final Throwable t) {
-            log.error("账号卡住 (地图移除)", t);
+            log.error(I18nUtil.getLogMessage("Client.removePlayer.error2"), t);
         }
     }
 
@@ -1287,7 +1287,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                     }
                 }
             } catch (final Exception e) {
-                log.error("账号卡住", e);
+                log.error(I18nUtil.getLogMessage("Client.disconnectInternalOwned.error1"), e);
             } finally {
                 if (!this.serverTransition) {
                     if (chrg != null) {
@@ -1449,7 +1449,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             try {
                 if (lastPong < pingedAt) {
                     if (ioChannel.isActive()) {
-                        log.info("由于空闲而断开连接 {}。原因：{}", remoteAddress, event.state());
+                        log.info(I18nUtil.getLogMessage("Client.checkIfIdle.info1"), remoteAddress, event.state());
 //                        updateLoginState(Client.LOGIN_NOTLOGGEDIN);
 //                        disconnectSession();
                         // 按正常的规则去移除这个客户端，避免client被close了，但是对象还在内存中引发后续报错
@@ -1531,7 +1531,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         for (World w : Server.getInstance().getWorlds()) {
             for (Character chr : w.getPlayerStorage().getAllCharacters()) {
                 if (accid == chr.getAccountId()) {
-                    log.warn("玩家 {} 已从世界 {} 中删除。可能存在重复尝试。", chr.getName(), GameConstants.WORLD_NAMES[w.getId()]);
+                    log.warn(I18nUtil.getLogMessage("Client.checkChar.warn1"), chr.getName(), GameConstants.WORLD_NAMES[w.getId()]);
                     chr.getClient().forceDisconnect();
                     w.getPlayerStorage().removePlayer(chr.getId());
                 }
@@ -1637,7 +1637,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             digester.update(password.getBytes(StandardCharsets.UTF_8), 0, password.length());
             return HexTool.toHexString(digester.digest()).replace(" ", "").toLowerCase().equals(hash);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("对字符串进行编码失败", e);
+            throw new RuntimeException(I18nUtil.getExceptionMessage("Client.checkHash.exception1"), e);
         }
     }
 
@@ -1800,14 +1800,14 @@ public class Client extends ChannelInboundHandlerAdapter {
             enableActions();
             return;
         } else if (MiniDungeonInfo.isDungeonMap(player.getMapId())) {
-            sendPacket(PacketCreator.serverNotice(5, "在迷你地牢内时，更改频道或进入现金商店或拍卖行将被禁用。"));
+            sendPacket(PacketCreator.serverNotice(5, I18nUtil.getMessage("Client.changeChannel.message1")));
             enableActions();
             return;
         }
 
         String[] socket = Server.getInstance().getInetSocket(this, getWorld(), channel);
         if (socket == null) {
-            sendPacket(PacketCreator.serverNotice(1, "频道 " + channel + " 当前已禁用。请尝试其他频道。"));
+            sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Client.changeChannel.message2", channel)));
             enableActions();
             return;
         }

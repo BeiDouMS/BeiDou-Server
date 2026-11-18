@@ -30,6 +30,7 @@ import org.gms.net.server.services.type.ChannelServices;
 import org.gms.scripting.reactor.ReactorScriptManager;
 import org.gms.server.TimerManager;
 import org.gms.server.partyquest.GuardianSpawnPoint;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -394,7 +395,7 @@ public class Reactor extends AbstractMapObject {
 
                     Character player = c.getPlayer();
                     if (GameConfig.getServerBoolean("use_debug") && player.isGM()) {
-                        player.dropMessage(5, "击中反应器 " + this.getId() + " 位置 " + charPos + " , 姿态 " + stance + " , 技能ID " + skillid + " , 状态 " + state + " 状态大小 " + stats.getStateSize(state));  // GM调试信息
+                        player.dropMessage(5, I18nUtil.getMessage("Reactor.hitReactor.message1", this.getId(), charPos, stance, skillid, state, stats.getStateSize(state)));  // GM调试信息
                     }
                     ReactorScriptManager.getInstance().onHit(c, this);  // 调用击中脚本
 

@@ -53,42 +53,42 @@ public final class CreateCharHandler extends AbstractPacketHandler {
         int gender = p.readByte();
 
         if (!ItemConstants.isNewCharDefaultFace(job, gender, face)) {
-            log.warn("非法创建角色，使用了非默认参数 职业 {} 性别 {} 脸型 {}", job, gender, face);
+            log.warn(I18nUtil.getLogMessage("CreateCharHandler.handlePacket.warnFace"), job, gender, face);
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }
         if (!ItemConstants.isNewCharDefaultHair(gender, hair)) {
-            log.warn("非法创建角色，使用了非默认参数 性别 {} 发型 {}", gender, hair);
+            log.warn(I18nUtil.getLogMessage("CreateCharHandler.handlePacket.warnHair"), gender, hair);
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }
         if (!ItemConstants.isNewCharDefaultHairColor(hairColor)) {
-            log.warn("非法创建角色，使用了非默认参数 发色 {}", hairColor);
+            log.warn(I18nUtil.getLogMessage("CreateCharHandler.handlePacket.warnHairColor"), hairColor);
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }
         if (!ItemConstants.isNewCharDefaultSkinColor(skinColor)) {
-            log.warn("非法创建角色，使用了非默认参数 肤色 {}", skinColor);
+            log.warn(I18nUtil.getLogMessage("CreateCharHandler.handlePacket.warnSkinColor"), skinColor);
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }
         if (!ItemConstants.isNewCharDefaultTop(job, gender, top)) {
-            log.warn("非法创建角色，使用了非默认参数 职业 {} 性别 {} 衣服 {}", job, gender, top);
+            log.warn(I18nUtil.getLogMessage("CreateCharHandler.handlePacket.warnTop"), job, gender, top);
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }
         if (!ItemConstants.isNewCharDefaultBottom(job, gender, bottom)) {
-            log.warn("非法创建角色，使用了非默认参数 职业 {} 性别 {} 裙裤 {}", job, gender, bottom);
+            log.warn(I18nUtil.getLogMessage("CreateCharHandler.handlePacket.warnBottom"), job, gender, bottom);
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }
         if (!ItemConstants.isNewCharDefaultShoes(job, shoes)) {
-            log.warn("非法创建角色，使用了非默认参数 职业 {} 鞋子 {}", job, shoes);
+            log.warn(I18nUtil.getLogMessage("CreateCharHandler.handlePacket.warnShoes"), job, shoes);
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }
         if (!ItemConstants.isNewCharDefaultWeapon(job, weapon)) {
-            log.warn("非法创建角色，使用了非默认参数 职业 {} 武器 {}", job, weapon);
+            log.warn(I18nUtil.getLogMessage("CreateCharHandler.handlePacket.warnWeapon"), job, weapon);
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }

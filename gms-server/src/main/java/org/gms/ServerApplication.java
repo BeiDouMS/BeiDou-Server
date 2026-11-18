@@ -2,6 +2,7 @@ package org.gms;
 
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +26,7 @@ public class ServerApplication {
         try {
             initDb(args);
         } catch (Exception e) {
-            log.error("自动创建数据库失败：", e);
+            log.error(I18nUtil.getLogMessage("ServerApplication.main.error1"), e);
             return;
         }
         SpringApplication.run(ServerApplication.class, args);

@@ -100,7 +100,7 @@ public class WorldTransferService {
     public void doWorldTransfer(WorldtransfersDO data) {
         // 获取人物信息
         CharactersDO charactersDO = charactersMapper.selectOneById(data.getCharacterid());
-        RequireUtil.requireNotNull(charactersDO, I18nUtil.getLogMessage("UNKNOWN_CHARACTER"));
+        RequireUtil.requireNotNull(charactersDO, I18nUtil.getExceptionMessage("UNKNOWN_CHARACTER"));
         charactersMapper.update(CharactersDO.builder()
                 .id(charactersDO.getId())
                 .world(data.getTo())

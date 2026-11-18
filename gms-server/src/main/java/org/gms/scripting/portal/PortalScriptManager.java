@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractScriptManager;
 import org.gms.server.maps.Portal;
+import org.gms.util.I18nUtil;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -70,7 +71,7 @@ public class PortalScriptManager extends AbstractScriptManager {
             String strPortalName = portal.getScriptName();
             if (GameConfig.getServerBoolean("use_debug") && c.getPlayer().isGM() )
             {
-                c.getPlayer().dropMessage("您已建立与传送门脚本: " + strPortalName + ".js 的关联。");
+                c.getPlayer().dropMessage(I18nUtil.getMessage("PortalScriptManager.loadScript.message1", strPortalName));
             }
             PortalScript script = getPortalScript(strPortalName);
             if (script != null) {

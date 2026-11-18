@@ -38,6 +38,7 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.server.maps.HiredMerchant;
 import org.gms.service.NoteService;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -100,9 +101,9 @@ public class FredrickProcessor {
         String msg;
 
         if (daynotes < 4) {
-            msg = "您好，亲爱的顾客! 我是弗兰德里, 雇佣商人工会的主席. 您的店铺已经关闭" + dailyReminders[daynotes] + " 天了. 请到自由市场入口找我取回存储的物品.";
+            msg = I18nUtil.getMessage("FredrickProcessor.fredrickReminderMessage.message1", dailyReminders[daynotes]);
         } else {
-            msg = "您好，亲爱的顾客! 我是弗兰德里, 雇佣商人工会的主席. 您的店铺已经关闭 " + dailyReminders[daynotes] + " 天了. 在我们撤走之前，请考虑索回这些物品";
+            msg = I18nUtil.getMessage("FredrickProcessor.fredrickReminderMessage.message2", dailyReminders[daynotes]);
         }
 
         return msg;

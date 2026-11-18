@@ -8,10 +8,8 @@ import org.gms.constants.game.GameConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class UseTreasureChestHandler extends AbstractPacketHandler {
 
@@ -40,12 +38,12 @@ public final class UseTreasureChestHandler extends AbstractPacketHandler {
             case 4280000:
                 reward = GameConstants.selectRandomReward(GameConstants.goldrewards);
                 keyIDforRemoval = 5490000;
-                box = "金宝箱";
+                box = I18nUtil.getMessage("UseTreasureChestHandler.handlePacket.box1");
                 break;
             case 4280001:
                 reward = GameConstants.selectRandomReward(GameConstants.goldrewards);
                 keyIDforRemoval = 5490001;
-                box = "银宝箱";
+                box = I18nUtil.getMessage("UseTreasureChestHandler.handlePacket.box2");
                 break;
             default:
                 return;
@@ -72,11 +70,11 @@ public final class UseTreasureChestHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.getShowItemGain(reward, (short) amount, true));
                 c.sendPacket(PacketCreator.UseTreasureBox(toUse.getItemId()));
             } else {
-                c.getPlayer().dropMessage(5, "你有一个栏位满了，请空出来再打开" + box + "！");
+                c.getPlayer().dropMessage(5, I18nUtil.getMessage("UseTreasureChestHandler.handlePacket.message1", box));
                 c.sendPacket(PacketCreator.enableActions());
             }
         } else {
-            c.getPlayer().dropMessage(5, "请确认是否有" + keyname);
+            c.getPlayer().dropMessage(5, I18nUtil.getMessage("UseTreasureChestHandler.handlePacket.message2", keyname));
             c.sendPacket(PacketCreator.enableActions());
         }
 

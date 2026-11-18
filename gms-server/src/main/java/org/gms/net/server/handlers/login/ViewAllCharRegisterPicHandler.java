@@ -10,6 +10,7 @@ import org.gms.net.server.coordinator.session.SessionCoordinator.AntiMulticlient
 import org.gms.net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
@@ -83,7 +84,7 @@ public final class ViewAllCharRegisterPicHandler extends AbstractPacketHandler {
         if (c.getPic() == null || c.getPic().isEmpty()) {
             c.setPic(pic);
         } else {
-            log.warn("账号 {} 试图通过 ViewAllCharRegisterPic 覆盖已有 PIC，断开会话", c.getAccountName());
+            log.warn(I18nUtil.getLogMessage("ViewAllCharRegisterPicHandler.handlePacket.warn1"), c.getAccountName());
             SessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
